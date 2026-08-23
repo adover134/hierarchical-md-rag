@@ -1,0 +1,71 @@
+# 오늘 세션에서 수정한 5개 버그(comparison_like 오판 x2, org_name 우선순위,
+# deadline 마커 오탐, 조사 미분리 키워드)가 실제로 일반화되는지 확인하기 위한
+# 신규 질문지. eval_dataset_57docs.yaml(q1~q8)과 겹치지 않는 문서로만 구성.
+# 모든 expected_answer는 data_index/chroma_B에 색인된 실제 청크 원문에서
+# 직접 확인한 값이다.
+
+- id: n1
+  question: "무공해차 충전인프라 보급 사업_14_아산여객_공사의 공사기간은 며칠인가요?"
+  expected_answer: "공사기간은 계약일로부터 40일입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "무공해차 충전인프라 보급 사업_14_아산여객_공사_엘에스이링크㈜"
+
+- id: n2
+  question: "AI기반 그룹웨어(전자결재)시스템 구축 사업의 예산금액은 얼마인가요?"
+  expected_answer: "예산금액은 200,000,000원(VAT포함)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "AI기반 그룹웨어(전자결재)시스템 구축_울산과학대학산학협력단"
+
+- id: n3
+  question: "선문대학교 전자공학과 교육용 기자재 구매 사업의 사업예산은 얼마인가요?"
+  expected_answer: "사업예산은 36,146,000원(부가가치세 포함)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "선문대학교 전자공학과 교육용 기자재 구매_선문대학교"
+
+- id: n4
+  question: "지역농업개발센터 시설개선 공사(본소)(전기)의 공사 기간은 며칠인가요?"
+  expected_answer: "공사 기간은 100일입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "지역농업개발센터 시설개선 공사(본소)(전기)_충청북도 옥천군 농업기술센터"
+
+- id: n5
+  question: "G램프사업단 3차년도 연구시설장비 구입(CPU서버) 사업의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 67,980,000원(추정가격 61,800,000원, 부가가치세 6,180,000원)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "G램프사업단 3차년도 연구시설장비 구입(CPU서버)_전북대학교 산학협력단"
+
+- id: n6
+  question: "AI기반 그룹웨어(전자결재)시스템 구축 사업과 선문대학교 전자공학과 교육용 기자재 구매 사업 중 예산 규모가 더 큰 사업은 무엇인가요?"
+  expected_answer: "AI기반 그룹웨어(전자결재)시스템 구축 사업(200,000,000원)이 선문대학교 전자공학과 교육용 기자재 구매 사업(36,146,000원)보다 예산이 더 큽니다."
+  query_type: multi_doc
+  ground_truth:
+    sources:
+      - "AI기반 그룹웨어(전자결재)시스템 구축_울산과학대학산학협력단"
+      - "선문대학교 전자공학과 교육용 기자재 구매_선문대학교"
+
+- id: n7
+  question: "선문대학교 전자공학과 교육용 기자재 구매 사업과 G램프사업단 3차년도 연구시설장비 구입(CPU서버) 사업 중 예산이 더 큰 사업은 무엇인가요?"
+  expected_answer: "G램프사업단 3차년도 연구시설장비 구입(CPU서버) 사업(67,980,000원)이 선문대학교 전자공학과 교육용 기자재 구매 사업(36,146,000원)보다 예산이 더 큽니다."
+  query_type: multi_doc
+  ground_truth:
+    sources:
+      - "선문대학교 전자공학과 교육용 기자재 구매_선문대학교"
+      - "G램프사업단 3차년도 연구시설장비 구입(CPU서버)_전북대학교 산학협력단"
+
+- id: n8
+  question: "지역농업개발센터 시설개선 공사(본소)(전기)의 낙찰자 결정 기준 비율은 몇 퍼센트 이상인가요?"
+  expected_answer: "예정가격 대비 89.745% 이상으로 제출한 자 중 최저가격을 제출한 자가 낙찰자가 됩니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "지역농업개발센터 시설개선 공사(본소)(전기)_충청북도 옥천군 농업기술센터"
