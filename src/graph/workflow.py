@@ -4212,8 +4212,7 @@ class RAGChatbotV17:
             question_plan.query_kind in {"multi_doc", "comparison"}
             or question_plan.is_comparison
             or self._is_comparison_query(query)
-            or len(direct_explicit_orgs) >= 2
-        )
+        ) and len(direct_explicit_orgs) >= 2
         if is_single_org_budget_query or is_single_org_non_comparison_query or is_single_org_visual_query:
             comparison_like_query = False
             question_plan.is_comparison = False
@@ -11597,14 +11596,54 @@ class RAGChatbotV17:
         if not candidates:
             return []
 
-        candidates.sort(key=lambda x: x[0], reverse=True)
+        best_lexical_score: dict[str, int] = {}
+        for score, org in candidates:
+            if score > best_lexical_score.get(org, -1):
+                best_lexical_score[org] = score
+        distinct_orgs = list(best_lexical_score.keys())
+
+        if len(distinct_orgs) >= 2:
+            distinct_orgs = self._rank_org_candidates_by_query_similarity(
+                query, distinct_orgs, best_lexical_score
+            )
+        else:
+            distinct_orgs.sort(key=lambda org: best_lexical_score[org], reverse=True)
+
         ordered: list[str] = []
-        for _, org in candidates:
+        for org in distinct_orgs:
             resolved = self._resolve_known_org_name(org) or org
             self._append_unique_org_name(ordered, resolved)
             if len(ordered) >= limit:
                 break
         return ordered
+
+    def _rank_org_candidates_by_query_similarity(
+        self,
+        query: str,
+        candidate_orgs: list[str],
+        lexical_scores: dict[str, int],
+    ) -> list[str]:
+        """기관명 후보가 여럿일 때, 매칭된 문자열 길이가 아니라 DB와 동일한 인코더로 계산한
+        쿼리-기관명 임베딩 유사도를 우선 기준으로 후보 순위를 재조정한다."""
+        try:
+            vectors = self.vector_store._create_embeddings([query, *candidate_orgs])
+        except Exception:
+            return sorted(candidate_orgs, key=lambda org: lexical_scores[org], reverse=True)
+
+        query_vec, org_vecs = vectors[0], vectors[1:]
+
+        def cosine(a: list[float], b: list[float]) -> float:
+            dot = sum(x * y for x, y in zip(a, b))
+            norm_a = sum(x * x for x in a) ** 0.5
+            norm_b = sum(y * y for y in b) ** 0.5
+            return dot / (norm_a * norm_b) if norm_a and norm_b else 0.0
+
+        similarity = {org: cosine(query_vec, vec) for org, vec in zip(candidate_orgs, org_vecs)}
+        return sorted(
+            candidate_orgs,
+            key=lambda org: (similarity[org], lexical_scores[org]),
+            reverse=True,
+        )
 
     def _extract_org_name_from_query(self, query: str) -> str | None:
         """질문에서 기관명을 단일값으로 추출합니다(호환용)."""
