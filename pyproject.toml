@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hierarchical-md-rag"
+version = "0.1.0"
+description = "Compare header-hierarchy-aware chunking against flat chunking for RAG retrieval quality"
+requires-python = ">=3.10"
+readme = "README.md"
+dependencies = [
+    "sentence-transformers>=3.0.0",
+    "numpy>=1.24.0",
+    "PyYAML>=6.0.0",
+]
+
+[project.scripts]
+mdrag-eval = "hierarchical_md_rag.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["hierarchical_md_rag*"]
