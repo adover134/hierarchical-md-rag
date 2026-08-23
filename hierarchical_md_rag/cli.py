@@ -1,5 +1,5 @@
 """`mdrag-eval <markdown_dir> <queries.yaml>` — 폴더 안의 모든 .md를 계층 기반/평문 두 방식으로
-각각 청킹·인덱싱한 뒤, 같은 질의셋으로 Recall@K/MRR을 비교해서 표로 출력한다.
+각각 청킹·인덱싱한 뒤, 같은 질의셋으로 Recall@K/MRR/Hit Position을 유형별로 비교해서 표로 출력한다.
 
 markdown 파일들은 이 도구가 만드는 게 아니다 — `#`/`##`/`###` 헤더가 이미 달린 markdown을
 준비해서 넣어야 한다(한글 공문서라면
@@ -14,7 +14,7 @@ from pathlib import Path
 import yaml
 
 from .chunk import chunk_flat, chunk_hierarchical
-from .eval import evaluate
+from .eval import QUERY_TYPES, Metrics, evaluate
 
 
 def load_queries(path: Path) -> list[dict]:
@@ -25,6 +25,9 @@ def load_queries(path: Path) -> list[dict]:
             raise ValueError(f"질의셋 형식 오류 — 'query'/'expected_contains' 필드가 필요함: {q}")
         if isinstance(q["expected_contains"], str):
             q["expected_contains"] = [q["expected_contains"]]
+        qtype = q.get("query_type")
+        if qtype is not None and qtype not in QUERY_TYPES:
+            raise ValueError(f"query_type은 {QUERY_TYPES} 중 하나여야 함 — 받은 값: {qtype!r} ({q['query']!r})")
     return queries
 
 
@@ -41,15 +44,22 @@ def load_markdown_chunks(markdown_dir: Path, strategy, max_chars: int, overlap: 
     return all_chunks
 
 
+def _fmt_metrics(m: Metrics, top_k: int) -> str:
+    hp = f"{m.avg_hit_position:.2f}" if m.avg_hit_position is not None else "-"
+    return f"n={m.count:<3} Recall@{top_k}={m.recall_at_k:.1%}  MRR={m.mrr:.3f}  avg_hit_pos={hp}"
+
+
 def print_report(name: str, chunk_count: int, result: dict, top_k: int) -> None:
     print(f"\n=== {name} (청크 {chunk_count}개) ===")
-    print(f"  Recall@{top_k}: {result['recall_at_k']:.1%}")
-    print(f"  MRR: {result['mrr']:.3f}")
+    print(f"  전체:  {_fmt_metrics(result['overall'], top_k)}")
+    for qtype in QUERY_TYPES:
+        if qtype in result["by_type"]:
+            print(f"  {qtype:<12} {_fmt_metrics(result['by_type'][qtype], top_k)}")
     misses = [r for r in result["results"] if not r.hit]
     if misses:
         print(f"  놓친 질의 {len(misses)}개:")
         for r in misses:
-            print(f"    - {r.query!r}")
+            print(f"    - [{r.query_type}] {r.query!r}")
 
 
 def main() -> None:
@@ -75,14 +85,15 @@ def main() -> None:
         print_report(name, len(chunks), result, args.top_k)
         report[name] = {
             "chunk_count": len(chunks),
-            "recall_at_k": result["recall_at_k"],
-            "mrr": result["mrr"],
+            "overall": vars(result["overall"]),
+            "by_type": {qtype: vars(m) for qtype, m in result["by_type"].items()},
         }
 
-    print(f"\n=== 요약 (top_k={args.top_k}) ===")
+    print(f"\n=== 요약 (top_k={args.top_k}, 전체) ===")
     print(f"{'전략':<14}{'청크 수':>8}{'Recall@K':>12}{'MRR':>8}")
     for name, r in report.items():
-        print(f"{name:<14}{r['chunk_count']:>8}{r['recall_at_k']:>11.1%}{r['mrr']:>8.3f}")
+        o = r["overall"]
+        print(f"{name:<14}{r['chunk_count']:>8}{o['recall_at_k']:>11.1%}{o['mrr']:>8.3f}")
 
     if args.json:
         Path(args.json).write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")

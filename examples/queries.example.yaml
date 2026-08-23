@@ -1,19 +1,46 @@
 # 질의셋 형식. 각 항목:
 #   query: 검색해볼 실제 질문
+#   query_type: fact_lookup / single_doc / multi_doc 중 하나 (선택 — 안 쓰면 "unspecified"로 처리)
 #   expected_contains: 정답 청크에 반드시 들어있어야 할 문자열(들). 하나면 문자열, 여러 개면 리스트
 #     — 리스트면 "그 중 하나라도" 포함되면 정답으로 인정한다.
 #
-# 판정을 "정답 chunk_id"가 아니라 "부분 문자열 포함"으로 하는 이유는 hierarchical_md_rag/eval.py
-# 상단 docstring 참고 — 청킹 전략마다 청크 경계 자체가 달라서 청크 ID로는 공정 비교가 안 된다.
+# query_type 셋을 두는 이유: 질의를 하나로 뭉쳐서 평균만 보면 어떤 유형에서 왜 차이가 나는지
+# 진단이 안 된다(hierarchical_md_rag/eval.py 모듈 docstring 참고). 세 유형을 고루 섞어서 작성할
+# 것을 권장한다:
+#   - fact_lookup: 문서 안 구체적인 값 하나(날짜/금액/수량 등)를 정확히 찾는 질의
+#   - single_doc:  한 문서 안의 여러 문장을 종합해야 답이 되는 질의 (가장 흔한 케이스)
+#   - multi_doc:   여러 문서에 걸친 내용을 종합해야 하는 질의
+#
+# 정답 판정을 "정답 chunk_id"가 아니라 "부분 문자열 포함"으로 하는 이유도 같은 모듈 docstring 참고
+# — 청킹 전략마다 청크 경계 자체가 달라서 청크 ID로는 공정 비교가 안 된다.
 #
 # 아래는 형식을 보여주는 예시일 뿐이며 실제 문서 내용과는 무관하다. 자신의 markdown 문서 내용에
-# 맞게 새로 작성해서 쓸 것.
+# 맞게 새로 작성해서 쓸 것 — 세 유형 비율은 자신의 질의 분포에 맞게 정하되, 하나에 쏠리지 않게
+# 최소 몇 개씩은 섞을 것을 권장한다.
 queries:
+  # fact_lookup — 구체적인 값 하나를 정확히 찾는지
+  - query: "낙찰 하한율은 몇 퍼센트인가요?"
+    query_type: fact_lookup
+    expected_contains: "낙찰하한율"
+  - query: "입찰보증금은 얼마를 납부해야 하나요?"
+    query_type: fact_lookup
+    expected_contains: "입찰보증금"
+
+  # single_doc — 한 문서 안 여러 문장을 종합해야 하는지
   - query: "입찰 참가 자격은 무엇인가요?"
+    query_type: single_doc
     expected_contains: "입찰참가자격"
+  - query: "제출 서류에는 어떤 것들이 있나요?"
+    query_type: single_doc
+    expected_contains: "제출서류"
   - query: "낙찰자는 어떻게 결정되나요?"
+    query_type: single_doc
     expected_contains:
       - "낙찰자 결정"
       - "낙찰자를 결정"
-  - query: "제출 서류에는 어떤 것들이 있나요?"
-    expected_contains: "제출서류"
+
+  # multi_doc — 여러 문서를 종합해야 하는지 (이 도구는 markdown_dir 안 모든 파일의 청크를 한
+  # 인덱스에 모아 검색하므로 이런 질의도 그대로 평가된다)
+  - query: "여러 공고 중 사업 예산이 가장 큰 것은 무엇인가요?"
+    query_type: multi_doc
+    expected_contains: "예정가격"
