@@ -7459,9 +7459,36 @@ class RAGChatbotV17:
     def _is_noise_line(line: str) -> bool:
         return util_is_noise_line(line)
 
+    def _get_kiwi_analyzer(self):
+        """build_db.py의 BM25 인덱싱과 동일한 Kiwi 형태소 분석기를 지연 초기화해 재사용한다."""
+        analyzer = getattr(self, "_kiwi_analyzer_cache", None)
+        if analyzer is None:
+            from kiwipiepy import Kiwi
+
+            analyzer = Kiwi()
+            self._kiwi_analyzer_cache = analyzer
+        return analyzer
+
+    def _extract_kiwi_noun_tokens(self, text: str) -> list[str]:
+        """조사가 붙은 채로 뭉쳐 있는 토큰(예: '납품기한은')에서 명사만 분리해 보완한다."""
+        if not text:
+            return []
+        try:
+            morphs = self._get_kiwi_analyzer().tokenize(text)
+        except Exception:
+            return []
+        return [
+            self._normalize_text_for_match(m.form.lower())
+            for m in morphs
+            if m.tag in ("NNG", "NNP", "NNB") and len(m.form) >= 2
+        ]
+
     def _extract_query_keywords(self, query: str, max_keywords: int = 10) -> list[str]:
         raw = unicodedata.normalize("NFKC", query.lower())
         tokens = re.findall(r"[0-9a-zA-Z가-힣]{2,}", raw)
+        for noun in self._extract_kiwi_noun_tokens(query):
+            if noun not in tokens:
+                tokens.append(noun)
         stopwords = {
             "무엇", "무엇인가", "무엇인가요", "알려줘", "알려주세요", "해주세요", "어떻게", "있나요", "있습니까",
             "인가요", "입니다", "그리고", "또한", "해당", "문서", "질문", "각각", "비교", "관련", "기준",
@@ -7646,7 +7673,7 @@ class RAGChatbotV17:
         ]
         unit_markers = ["원", "만원", "억원", "%", "명", "건", "개", "회", "시간", "일", "주", "개월", "년", "KB", "MB", "GB", "TB", "GHz", "Core", "mm"]
         numeric_focus_markers = ["이내", "이상", "이하", "최대", "최소", "가용성", "무중단", "주기", "횟수", "용량"]
-        deadline_focus_markers = ["마감", "기한", "일자", "제출", "까지", "이내", "착수", "완료", "사업기간", "계약체결일", "개월", "일"]
+        deadline_focus_markers = ["마감", "기한", "일자", "제출", "까지", "이내", "착수", "완료", "사업기간", "계약체결일", "개월"]
         requirement_markers = ["요구사항", "요건", "가용성", "무중단", "24시간", "운영", "정상상태", "통상적인 업무시간", "보장"]
         education_markers = ["교육", "정보보안교육", "보안교육", "교육결과", "결과", "확인", "월 1회", "월1회"]
         education_core_markers = ["정보보안교육", "보안교육", "교육", "훈련"]
