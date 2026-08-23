@@ -1,0 +1,71 @@
+# 새 파서(HWP/HWPX 42건) + 기존 PDF 경로(15건)로 구축한 57개 문서 인덱스용 평가셋.
+# 팀의 기존 eval_dataset.yaml은 이 57개 문서와 겹치는 게 하나도 없어서(완전히 다른 대형
+# IT시스템 RFP 문서 세트) 그대로 재사용할 수 없다 — 이 문서들 내용에 맞춰 직접 작성함.
+# query_type: single_doc(한 문서 안에서 답변) / multi_doc(여러 문서 종합)
+
+- id: q1
+  question: "G램프 3차년도 연구시설장비 구입(계산용클러스터 노드) 사업의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 89,925,000원입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "G램프 3차년도 연구시설장비 구입(계산용클러스터 노드)_전북대학교 산학협력단"
+
+- id: q2
+  question: "경성대학교 대형홀 LED월 구축 사업의 납품기한은 언제까지인가요?"
+  expected_answer: "2026년 8월 26일까지입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "경성대학교 대형홀 LED월 구축 입찰 (긴급) 공고_경성대학교 직속기관 산학협력단"
+
+- id: q3
+  question: "경성대학교 대형홀 LED월 구축 입찰의 낙찰하한율은 몇 퍼센트인가요?"
+  expected_answer: "낙찰하한율은 89.995%입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "경성대학교 대형홀 LED월 구축 입찰 (긴급) 공고_경성대학교 직속기관 산학협력단"
+
+- id: q4
+  question: "청주하이텍고등학교 교복 구매 입찰의 제안서 제출기간은 언제인가요?"
+  expected_answer: "2026년 8월 10일(월) 10:00부터 8월 19일(수) 11:00까지입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "2027학년도 청주하이텍고등학교 교복(동복·하복) 학교주관구매 입찰 공고_충청북도교육청 청주하이텍고등학교"
+
+- id: q5
+  question: "상계제일중학교 교복 구매 입찰의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 344,530원입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "2027학년도 상계제일중학교 교복(동복,하복) 학교주관구매 단가계약 입찰 공고_서울특별시북부교육청 상계제일중학교"
+
+- id: q6
+  question: "전북대학교 G램프 3차년도 연구시설장비 구입 사업과 경성대학교 대형홀 LED월 구축 사업 중 기초금액이 더 큰 사업은 무엇인가요?"
+  expected_answer: "경성대학교 대형홀 LED월 구축 사업(480,471,200원)이 전북대학교 G램프 사업(89,925,000원)보다 기초금액이 더 큽니다."
+  query_type: multi_doc
+  ground_truth:
+    sources:
+      - "G램프 3차년도 연구시설장비 구입(계산용클러스터 노드)_전북대학교 산학협력단"
+      - "경성대학교 대형홀 LED월 구축 입찰 (긴급) 공고_경성대학교 직속기관 산학협력단"
+
+- id: q7
+  question: "경성대학교의 대형홀 LED월 구축 사업과 하이플렉스 강의실 LED Display 구매 설치 사업 중 기초금액이 더 큰 사업은 무엇인가요?"
+  expected_answer: "하이플렉스 강의실 LED Display 구매 설치 사업(998,200,000원)이 대형홀 LED월 구축 사업(480,471,200원)보다 기초금액이 더 큽니다."
+  query_type: multi_doc
+  ground_truth:
+    sources:
+      - "경성대학교 대형홀 LED월 구축 입찰 (긴급) 공고_경성대학교 직속기관 산학협력단"
+      - "경성대학교 하이플렉스 강의실 LED Display 구매 설치 입찰 (긴급) 공고_경성대학교 직속기관 산학협력단"
+
+- id: q8
+  question: "상계제일중학교와 청주하이텍고등학교의 교복 구매 입찰은 공통적으로 예정가격을 어떤 방식으로 결정하나요?"
+  expected_answer: "두 입찰 모두 복수예비가격 방식으로 예정가격을 결정합니다."
+  query_type: multi_doc
+  ground_truth:
+    sources:
+      - "2027학년도 상계제일중학교 교복(동복,하복) 학교주관구매 단가계약 입찰 공고_서울특별시북부교육청 상계제일중학교"
+      - "2027학년도 청주하이텍고등학교 교복(동복·하복) 학교주관구매 입찰 공고_충청북도교육청 청주하이텍고등학교"
