@@ -3971,7 +3971,7 @@ class RAGChatbotV17:
                         query=query,
                     )
 
-                if self._is_single_value_query(query):
+                if self._is_single_value_query(query) and not self._has_comparison_structure(answer_text):
                     candidate_answer = polished_answer or answer_text
                     evidence_items = payload.get("evidence")
                     augmented = self._augment_answer_from_evidence_context(
@@ -4001,9 +4001,11 @@ class RAGChatbotV17:
                     payload["answer"] = polished_answer
                 if payload.get("answer"):
                     polished_final = self._enforce_honorific_tone(str(payload.get("answer", "")))
-                    if self._is_single_value_query(query):
+                    answer_is_comparison_shaped = self._has_comparison_structure(polished_final)
+                    if self._is_single_value_query(query) and not answer_is_comparison_shaped:
                         compact = unicodedata.normalize("NFKC", polished_final.replace("`", "")).strip()
                         compact = re.sub(r"(입니다|합니다)\.$", "", compact).strip()
+                        compact = self._extract_single_value_from_fact_answer(compact, query=query) or compact
                         if compact and re.fullmatch(r"[0-9A-Za-z가-힣,%./:+\- ]{1,40}", compact):
                             contextual = self._render_single_value_answer(query, compact, fallback="")
                             if contextual:
@@ -4018,7 +4020,7 @@ class RAGChatbotV17:
                                     polished_final = f"{lines[0]} {lines[1]}".strip()
                                 else:
                                     polished_final = lines[0]
-                    if "\n" in polished_final:
+                    if "\n" in polished_final and not answer_is_comparison_shaped:
                         lines = [ln.strip() for ln in polished_final.splitlines() if ln.strip()]
                         if len(lines) >= 2:
                             norm0 = re.sub(r"[^0-9a-zA-Z가-힣]+", "", unicodedata.normalize("NFKC", lines[0].lower()))
@@ -4756,7 +4758,10 @@ class RAGChatbotV17:
                         confidence=confidence,
                         evidence_spans=evidence_spans,
                 ))
-                extractive_draft = extractive_answer
+                if not self._extraction_is_implausible(
+                    query, extractive_answer, is_comparison_like=query_is_comparison_like
+                ):
+                    extractive_draft = extractive_answer
 
         # 추출 초안이 확보되면 LLM 재생성을 건너뛰고 그대로 정리해서 반환한다.
         # (생성 모델은 "보기 좋게 정리" 용도로만 제한)
@@ -4844,6 +4849,7 @@ class RAGChatbotV17:
             if (
                 fallback
                 and not self._looks_uncertain_answer(fallback)
+                and not self._extraction_is_implausible(query, fallback, is_comparison_like=query_is_comparison_like)
                 and (query_is_comparison_like or not self._has_comparison_structure(fallback))
             ):
                 answer = fallback
@@ -5422,6 +5428,8 @@ class RAGChatbotV17:
         """직접 추출 답변 문장에서 단일 값 부분만 추출합니다."""
         text = unicodedata.normalize("NFKC", str(answer or "")).strip()
         if not text:
+            return ""
+        if RAGChatbotV17._has_comparison_structure(text):
             return ""
         q_norm = unicodedata.normalize("NFKC", str(query or "").lower())
         asks_identifier = any(
@@ -7625,7 +7633,10 @@ class RAGChatbotV17:
         wants_project_period = "사업기간" in normalized_query or ("기간" in normalized_query and "사업" in normalized_query)
         wants_budget = self._is_budget_query(query)
         wants_capacity = any(token in normalized_query for token in ["용량", "mb", "gb", "kb"])
-        wants_unit_quantity = any(token in normalized_query for token in ["수량", "단위", "개수", "명", "건", "몇"])
+        wants_unit_quantity = (
+            any(token in normalized_query for token in ["수량", "단위", "개수", "명", "건", "몇"])
+            and not any(token in normalized_query for token in ["%", "퍼센트"])
+        )
         wants_charset = any(token in normalized_query for token in ["문자셋", "인코딩", "utf", "charset"])
         wants_recovery_deadline = (
             any(token in normalized_query for token in ["복구", "장애"])
@@ -9672,6 +9683,44 @@ class RAGChatbotV17:
     def _looks_uncertain_answer(answer: str) -> bool:
         """답변이 과도한 보수적 거절 형태인지 판별."""
         return eval_looks_uncertain_answer(answer)
+
+    @staticmethod
+    def _extraction_is_implausible(query: str, answer: str, *, is_comparison_like: bool = False) -> bool:
+        """규칙 기반 추출 답변이 질의 유형에 맞는 값 모양을 갖추지 못했는지 판별합니다.
+
+        정규식 커버리지를 계속 넓히는 대신, 결과물이 명백히 질의 유형과 안 맞는 모양이면
+        신뢰하지 않고 LLM 생성 경로로 넘기기 위한 게이트."""
+        text = unicodedata.normalize("NFKC", str(answer or ""))
+        if not text:
+            return False
+
+        # 선행 절이 조사로 끝나고 바로 이어지는 백틱 구간이 그 절과 거의 동일하게
+        # 시작하는 이중 래핑 패턴(예: "사업기간은 `사업기간은 40일`입니다.").
+        if re.search(r"([가-힣]{2,10}(?:은|는|이|가))\s*`\s*\1", text):
+            return True
+
+        q_norm = unicodedata.normalize("NFKC", str(query or "").lower())
+
+        if RAGChatbotV17._is_budget_query(query) and not re.search(
+            r"\d{1,3}(?:,\d{3})+\s*(?:원|만원|억원|천원)", text
+        ):
+            return True
+
+        if ("기간" in q_norm or "며칠" in q_norm) and not re.search(r"\d+\s*(일|개월|주|년|시간)", text):
+            return True
+
+        wants_percent = (
+            "퍼센트" in q_norm
+            or "%" in q_norm
+            or ("비율" in q_norm and any(token in q_norm for token in ["몇", "이상", "이하"]))
+        )
+        if wants_percent and "%" not in text:
+            return True
+
+        if is_comparison_like and not RAGChatbotV17._has_comparison_structure(text):
+            return True
+
+        return False
 
     @staticmethod
     def _infer_responsibility_owner(evidence_lines: list[str]) -> str:
