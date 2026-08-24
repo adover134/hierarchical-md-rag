@@ -5439,6 +5439,7 @@ class RAGChatbotV17:
         asks_dimension = any(token in q_norm for token in ["치수", "가로", "세로", "길이", "도면", "mm", "평면도"])
         asks_budget = any(token in q_norm for token in ["사업비", "예산", "금액", "원", "만원", "억원"])
         asks_deadline = any(token in q_norm for token in ["기한", "기간", "마감", "일자", "언제", "이내"])
+        asks_percent = any(token in q_norm for token in ["퍼센트", "%", "비율"])
 
         quoted_values = re.findall(r"`([^`\n]{1,120})`", text)
         for value in quoted_values:
@@ -5491,6 +5492,11 @@ class RAGChatbotV17:
             )
             if deadline_match:
                 return re.sub(r"\s+", "", deadline_match.group(1))
+
+        if asks_percent:
+            percent_match = re.search(r"(\d{1,3}(?:\.\d+)?)\s*%", text)
+            if percent_match:
+                return f"{percent_match.group(1)}%"
 
         pattern = re.compile(
             r"(?:번호|코드|id|아이디|값|치수|길이|금액|예산|사업비|기한|기간|문자셋|인코딩|용량|가로|세로)\s*(?:은|는|이|가)?\s*"
@@ -7593,7 +7599,7 @@ class RAGChatbotV17:
         wants_direct_fact = any(
             token in normalized_query
             for token in [
-                "얼마", "수량", "단위", "기한", "주기", "자주", "횟수", "시간", "이내",
+                "얼마", "수량", "단위", "기한", "기간", "며칠", "주기", "자주", "횟수", "시간", "이내",
                 "용량", "mb", "gb", "소유권", "검사", "제출", "저작권", "부담", "책임", "누가", "언제",
                 "가용성", "요구사항", "운영",
                 "문자셋", "인코딩", "utf",
@@ -7630,7 +7636,9 @@ class RAGChatbotV17:
                 "id",
             ]
         )
-        wants_project_period = "사업기간" in normalized_query or ("기간" in normalized_query and "사업" in normalized_query)
+        wants_project_period = "사업기간" in normalized_query or (
+            "기간" in normalized_query and any(token in normalized_query for token in ["사업", "공사", "며칠"])
+        )
         wants_budget = self._is_budget_query(query)
         wants_capacity = any(token in normalized_query for token in ["용량", "mb", "gb", "kb"])
         wants_unit_quantity = (
@@ -9696,7 +9704,7 @@ class RAGChatbotV17:
 
         # 선행 절이 조사로 끝나고 바로 이어지는 백틱 구간이 그 절과 거의 동일하게
         # 시작하는 이중 래핑 패턴(예: "사업기간은 `사업기간은 40일`입니다.").
-        if re.search(r"([가-힣]{2,10}(?:은|는|이|가))\s*`\s*\1", text):
+        if re.search(r"([가-힣]{1,10}(?:은|는|이|가))\s*`\s*\1", text):
             return True
 
         q_norm = unicodedata.normalize("NFKC", str(query or "").lower())
@@ -9706,7 +9714,7 @@ class RAGChatbotV17:
         ):
             return True
 
-        if ("기간" in q_norm or "며칠" in q_norm) and not re.search(r"\d+\s*(일|개월|주|년|시간)", text):
+        if ("기간" in q_norm or "며칠" in q_norm) and not re.search(r"(?<![\[\d])\d+\s*(일|개월|주|년|시간)", text):
             return True
 
         wants_percent = (
@@ -9993,7 +10001,7 @@ class RAGChatbotV17:
         )
         single_doc_focus = self._is_single_doc_focus_query(
             query,
-            target_org_count=len(resolved_targets),
+            target_org_count=(len(resolved_targets) if self._is_comparison_query(query) else min(1, len(resolved_targets))),
         )
         source_hints = self._extract_project_hints_from_query(query)
         strong_source_hint = any(len(self._normalize_text_for_match(hint)) >= 8 for hint in source_hints)
@@ -10065,7 +10073,18 @@ class RAGChatbotV17:
             "asset_sidecar_candidate": asset_sidecar_candidate,
             "asset_force": asset_force,
             "asset_top_k": asset_top_k,
-            "source_local_probe": bool(single_doc_focus and not comparison_like and (precision_fact_query or visual_fact_query or guide_reference_query)),
+            "source_local_probe": bool(
+                single_doc_focus
+                and not comparison_like
+                and (
+                    precision_fact_query
+                    or visual_fact_query
+                    or guide_reference_query
+                    or "퍼센트" in q_norm
+                    or "%" in q_norm
+                    or ("비율" in q_norm and any(token in q_norm for token in ["몇", "이상", "이하"]))
+                )
+            ),
             "promote_anchor_results": bool(precision_fact_query or visual_fact_query or guide_reference_query),
         }
 

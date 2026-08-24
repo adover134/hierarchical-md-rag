@@ -111,7 +111,13 @@ def is_comparison_query(query: str) -> bool:
     strong_markers = ["차이", "공통", "모두 고려", "동시에", "두 문서", "서로 다른", "어떻게 다른"]
     has_doc_a = bool(re.search(r"(?<![a-z0-9])a\s*문서", q))
     has_doc_b = bool(re.search(r"(?<![a-z0-9])b\s*문서", q))
-    if has_compare_token or any(marker in q for marker in strong_markers) or (has_doc_a and has_doc_b):
+    has_superlative_compare = bool(re.search(r"중.{0,20}더\s*(?:큰|많은|작은|높은|적은|긴|짧은)", q))
+    if (
+        has_compare_token
+        or any(marker in q for marker in strong_markers)
+        or (has_doc_a and has_doc_b)
+        or has_superlative_compare
+    ):
         return True
     if "각각" in q and (any(marker in q for marker in ["각 문서", "기관별", "두 문서"]) or has_doc_a or has_doc_b):
         return True
