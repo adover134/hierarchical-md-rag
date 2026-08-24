@@ -579,7 +579,7 @@ const weak = PQ.filter(q=>(q.correctness?.score??0)<=2).length;
 document.getElementById('insights').innerHTML = `
   <h2>핵심 인사이트</h2>
   <div class="insight-item"><div class="insight-icon">✅</div><div class="insight-text"><strong>Faithfulness ${{S.avg_faithfulness}}/5</strong> <span>— 환각이 거의 없음. context에 없는 정보를 만들어내지 않음</span></div></div>
-  <div class="insight-item"><div class="insight-icon">🎯</div><div class="insight-text"><strong>Correctness 만점 ${{perfect}}/20건</strong> <span>— single_doc 유형에서 특히 강함. 정답 청크가 검색되면 높은 정확도</span></div></div>
+  <div class="insight-item"><div class="insight-icon">🎯</div><div class="insight-text"><strong>Correctness 만점 ${{perfect}}/${{PQ.length}}건</strong> <span>— single_doc 유형에서 특히 강함. 정답 청크가 검색되면 높은 정확도</span></div></div>
   <div class="insight-item"><div class="insight-icon">⚠️</div><div class="insight-text"><strong>저조 항목 ${{weak}}건 (Correctness ≤ 2)</strong> <span>— 공통 원인: 정답 청크가 top-5에 미포함 → "근거 없음" 응답</span></div></div>
   <div class="insight-item"><div class="insight-icon">📊</div><div class="insight-text"><strong>유형별 격차</strong> <span>— single_doc > multi_doc 순. csv_match는 벡터 검색 미사용 (별도 판단 필요)</span></div></div>
   <div class="insight-item"><div class="insight-icon">🔍</div><div class="insight-text"><strong>병목: Retrieval 정밀도</strong> <span>— Hit Rate 90%이지만, 정답 "페이지"가 아닌 다른 페이지가 검색되어 Correctness 하락</span></div></div>

@@ -316,6 +316,7 @@ def format_answer_for_readability(
     if "확인되지 않습니다" not in primary and evidence_items:
         follow = ""
         needs_follow = looks_incomplete(primary)
+        primary_nums = _extract_numeric_markers(primary)
         for candidate in evidence_items:
             cand = candidate.strip()
             if not cand:
@@ -327,15 +328,18 @@ def format_answer_for_readability(
                 marker in cand_lower
                 for marker in ["경우", "다만", "단 ", "단,", "예외", "초과", "협의", "허용", "가능"]
             )
-            if not needs_follow and not has_context_marker:
+            cand_nums = _extract_numeric_markers(cand)
+            # primary가 문법적으로 "완결된 문장"이어도(needs_follow=False), 근거 줄에
+            # primary에는 없는 새 숫자(예: 총액 답변에 딸린 추정가격/부가세 내역)가 있으면
+            # 그건 별개 사실 정보이지 문장 이어붙이기가 아니므로 계속 살려서 붙인다.
+            has_new_numeric_detail = bool(cand_nums - primary_nums)
+            if not needs_follow and not has_context_marker and not has_new_numeric_detail:
                 continue
             primary_norm = _norm_compact(primary)
             cand_norm = _norm_compact(cand)
             if (primary_norm and cand_norm and (primary_norm in cand_norm or cand_norm in primary_norm)) or _overlap_ratio(primary, cand) >= 0.45:
                 continue
-            primary_nums = _extract_numeric_markers(primary)
-            cand_nums = _extract_numeric_markers(cand)
-            if primary_nums and cand_nums and (primary_nums & cand_nums):
+            if primary_nums and cand_nums and not has_new_numeric_detail:
                 continue
             if looks_incomplete(cand):
                 continuation = ""
