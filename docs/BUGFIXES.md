@@ -225,14 +225,89 @@ recall/답변 정합성을 분리 측정한 뒤, "규칙 기반 추출+근거검
 - **수정**: 비교 질의일 때 `results[:N]` 단순 절단 대신, org(기관) 단위로
   라운드로빈해서 양쪽이 컨텍스트 예산 안에 고르게 들어가도록 변경.
 
-## 최종 결과
+## 재검토: 문서 recall / 청크 recall / 답변 정합성 재측정 (추가 커밋 `0b25fae`)
 
-`eval_dataset_new8.yaml` 8문항 전부 correctness 4~5, **8/8 정답** —
-n6/n7(비교 질의)도 두 기관 금액을 정확히 비교하는 자연스러운 답변을 낸다.
-faithfulness 항목은 judge 모델의 변덕으로 낮게 나오는 경우가 있으나(정답인데도
-0점을 주는 사례 확인), 실제 생성 텍스트를 직접 대조해 정답임을 확인했다.
+위 "최종 결과"는 correctness 점수만 보고 낸 결론이었다. recall@5와
+faithfulness를 별도로 다시 재보니 실제로는 문제가 더 있었다 — 아래 3개.
 
-남은 문제 없음 — 이번 세션에서 다룬 범위 안에서는 전부 해결됨.
+### 16. `_diversify_comparison_results()`가 실제 비교 대상이 아닌 org를 고름
+- **증상**: n6/n7 recall@5=0.50, `hit_position=9` — 검색 자체(dense+lexical
+  rerank)는 정답을 2위에 올려놓는데, 그 다음 다양화 단계가 9위로 밀어냄.
+- **원인**: `diversify_comparison_results()`(`src/retrievers/result_postprocess.py`)가
+  상위 2개 org 버킷을 항목 개수 → (1차 수정 후) 버킷 내 최고 점수 기준으로
+  "추측"해서 골랐는데, 두 경우 다 실제로는 무관한 세 번째 org가 우연히 같은
+  기관명 접두어("선문대학교 반도체소재공학과..." vs 정답 "선문대학교
+  전자공학과...")를 공유하면서 개수/점수 모두 더 높게 나와 진짜 비교 대상을
+  밀어냈다. `_build_retrieval_strategy()`가 이미 계산해둔 `resolved_targets`
+  (질의에서 해석된 진짜 비교 대상 org 목록)를 이 함수에 아예 넘기지 않고
+  있었던 게 근본 원인 — 버킷 추측 자체가 불필요했다.
+- **수정**: `diversify_comparison_results()`에 `target_orgs` 파라미터를 추가해
+  `resolved_targets`를 그대로 전달, exact/substring 매칭으로 버킷을 직접
+  선택(2개 미만 매칭 시에만 점수 기반 추측으로 폴백). n6 target org가 9위 →
+  2위로 복귀, recall@5 0.50 → **1.00**(팀 프로젝트 자체 historical baseline과
+  동일).
+
+### 17. short-circuit 답변 경로가 `retrieved_docs`를 안 채워 recall 측정 불가
+- **증상**: n3/n5 `num_retrieved: 0` — 답변 자체는 정답인데 recall@5가 0으로
+  잡힘(측정 불가를 오답으로 카운트).
+- **원인**: `_finalize_payload()`의 backfill 로직이 `source_type == "csv"`일
+  때만 `payload["evidence"]`에서 `retrieved_docs`를 재구성했는데,
+  `_try_chunk_budget_short_circuit`(청크 예산 직접 조회 경로)은 진짜 근거를
+  갖고도 문서의 `doc_type` 메타데이터 공백 때문에 `source_type`이
+  `"unknown"`으로 떨어져 이 조건에 안 걸렸다.
+- **수정**: 조건을 `source_type` 라벨 대신 "evidence가 실제로 존재하는지"로
+  일반화 — 모든 short-circuit 경로가 공통으로 이득을 봄.
+
+### 18. LLM Judge가 좁은 `evidence`만 보고 "근거 없음"으로 오판
+- **증상**: Faithfulness 평균 2.75(팀 프로젝트 historical `avg_faithfulness:
+  4.45`와 큰 격차) — Correctness는 4.75로 높은데 Faithfulness만 유독 낮음.
+- **원인**: `eval_retrieval.py`의 judge 호출이 `context_text`로 `evidence`
+  (추출된 핵심 근거 요약, 짧음)만 넘기고 있었는데, 실제 답변 생성 LLM은 더
+  넓은 `_build_context()` 결과를 봤다. `evidence` 요약이 답변의 특정 수치를
+  우연히 담지 못한 경우, judge는 "context에 없는 값 = 환각"으로 오판했다 —
+  실제로는 생성 시점에 그 값을 본 게 맞는데도.
+- **수정**: `context_text`를 `evidence` + `retrieved_docs` 원문으로 확장. 단,
+  비교 질의는 `retrieved_docs`가 최대 24개까지 있어 그대로 다 이어붙이면 judge
+  프롬프트가 로컬 judge 모델(`gpt-oss:20b`/Ollama)의 토큰 한도(~4096)를 넘어
+  판정 자체가 실패했다(`total_tokens=4096`으로 파싱 실패, C/AC/F/CR 전부 0).
+  문자수 임의 절단 대신 `retrieved_docs[:top_k]`로 컷오프를 맞췄다 —
+  `calculate_recall_at_k()`(`src/evaluation/metrics.py`) 자체가 다중 GT
+  source(비교 질의)여도 top_k를 소스 수만큼 곱하지 않고 **단일 top-k 윈도우
+  안에서 strict-AND**로 판정하므로, judge에게 주는 컨텍스트도 recall@5가
+  실제로 채점하는 것과 정확히 같은 창으로 맞추는 게 원칙적으로 옳다. 결과:
+  Faithfulness 2.75 → **5.00**(8/8), 토큰 한도 실패 없음.
+
+### 19. 청크 예산 단축 경로가 chunk_id를 안 채워 청크 단위 recall 측정 불가
+- **증상**: §17 수정 후에도 청크 단위 Recall@5는 0.75(8문항 중 6/8) — n3/n5는
+  문서 단위(`source`)는 맞는데 그 문서의 몇 번째 청크인지는 GT와 매칭이 안 됨.
+- **원인**: `_finalize_payload`의 backfill(§17)이 evidence item에서
+  `source`/`page`/`score`/`content`는 옮기는데 `chunk_id`는 애초에 evidence
+  item 자체에 없었다. `_try_chunk_budget_short_circuit`이 근거를 채워오는
+  `_find_chunk_budget_for_org()`/`_ensure_chunk_budget_cache()`가
+  `vector_store.collection.get(include=["metadatas", "documents"])`로 순회할
+  때, 응답에 항상 같이 들어있는 실제 Chroma id(`ids`, include 목록과 무관하게
+  항상 반환됨 — 예: `"f830e1042ef485a6_1"`, GT `chunk_uids`와 동일한 포맷)를
+  그냥 안 잡고 버리고 있었다.
+- **수정**: "recall@1로 간주" 같은 가정 대신, 이미 순회하고 있는 zip에 `ids`를
+  같이 태워 캐시에 `chunk_id`로 저장 → `_try_chunk_budget_short_circuit`의
+  evidence item → `_finalize_payload` backfill까지 그대로 실어 날랐다. 즉
+  실제 Chroma 문서 id를 추측 없이 그대로 전달하는 것 — n3 직접 실행 결과
+  `chunk_id='f830e1042ef485a6_1'`, n5는 `'5604b6a8ec491991_1'`로 GT와 정확히
+  일치함을 확인.
+- **참고**: 이 경로와 별개인 진짜 CSV 단축 경로(`_try_csv_short_circuit`,
+  `data_list.csv` 행 기반 응답)는 건드리지 않았다 — CSV 행 자체가 source 단위
+  정답 단위라 애초에 "그 안의 몇 번째 청크"라는 개념이 성립하지 않고, 실제로
+  evidence 생성부 어디에도 chunk_id를 다루는 코드가 없다. `eval_dataset_new8.yaml`
+  GT에도 CSV 소스에 대한 `chunk_uids`가 없어 `calculate_recall_at_k_chunk`가
+  자연스럽게 `None`(미적용)을 반환한다 — 0(오답)으로도, 1(가정된 정답)으로도
+  취급하지 않는 게 맞다.
+
+## 최종 결과 (재검토 후)
+
+`eval_dataset_new8.yaml` 8문항: Correctness 4.75, Answer Coverage 4.50,
+**Faithfulness 5.00**, Context Relevance 5.00, **문서 단위 Recall@5 1.0000**,
+**청크 단위 Recall@5 1.0000**(둘 다 팀 프로젝트 historical baseline과 동일 또는
+그 이상), MRR 0.8750. 남은 문제 없음.
 
 재현 방법: `python scripts/eval_retrieval.py --dataset eval_resources/eval_dataset_new8.yaml --judge_model openai/gpt-oss-20b`
 (judge 모델은 Groq 엔드포인트 기준 `openai/gpt-oss-20b`로 지정해야 함 —

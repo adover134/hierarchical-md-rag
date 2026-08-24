@@ -2997,8 +2997,13 @@ class RAGChatbotV17:
 
         metadatas = payload.get("metadatas", []) or []
         documents = payload.get("documents", []) or []
+        # Chroma는 include 목록과 무관하게 ids를 항상 돌려준다 — 이 캐시가 담는
+        # source/page/line은 이미 이 zip으로 순회하고 있으므로, 같은 순서로
+        # 붙는 실제 chunk id(예: "f830e1042ef485a6_1")도 같이 잡아서 청크 단위
+        # recall 매칭에 쓸 수 있게 한다(추측이 아니라 실측값).
+        chunk_ids = payload.get("ids", []) or []
 
-        for meta, doc in zip(metadatas, documents):
+        for meta, doc, chunk_id in zip(metadatas, documents, chunk_ids):
             md = meta if isinstance(meta, dict) else {}
             text = str(doc or "")
             if not md or not text:
@@ -3042,6 +3047,7 @@ class RAGChatbotV17:
                 "line": best_line or f"사업비 {best_amount:,}원",
                 "project_name": project_name,
                 "doc_type": doc_type,
+                "chunk_id": str(chunk_id) if chunk_id else None,
             }
 
         self._chunk_budget_cache = cache
@@ -3126,6 +3132,7 @@ class RAGChatbotV17:
                     "text": evidence_line,
                     "slot": "budget",
                     "score": 0.9,
+                    "chunk_id": matched.get("chunk_id"),
                 }
             ],
             "chunk_budget_short_circuit": True,
@@ -4096,6 +4103,7 @@ class RAGChatbotV17:
                                 "source": source,
                                 "page": item.get("page"),
                                 "score": score,
+                                "chunk_id": item.get("chunk_id"),
                                 "content": str(item.get("text", "") or ""),
                             }
                         )
