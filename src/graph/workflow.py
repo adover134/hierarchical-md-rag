@@ -4509,6 +4509,10 @@ class RAGChatbotV17:
     ) -> str:
         """최종 답변에서 근거 텍스트와 정합성이 낮은 문장을 제거합니다."""
         text = str(answer or "").strip()
+        if not RAGChatbotV17._legacy_extraction_enabled():
+            # 근거 정합성 검사(자체적으로 취약한 키워드 휴리스틱)가 정답을 오히려
+            # 폐기하는 사례가 확인되어 기본적으로는 LLM 답변을 그대로 신뢰한다.
+            return text
         if not text:
             return text
         if not isinstance(evidence_items, list):
@@ -4703,7 +4707,11 @@ class RAGChatbotV17:
         is_multi_target = len(resolved_targets) >= 2
         is_summary_focus_query = self._is_summary_focus_query(query)
         extractive_draft = ""
-        if query_is_comparison_like and is_multi_target:
+        if (
+            query_is_comparison_like
+            and is_multi_target
+            and self._legacy_extraction_enabled()
+        ):
             if not self._has_comparison_coverage(
                 query, results, min_docs_per_org=1, explicit_orgs=resolved_targets[:2]
             ):
@@ -4919,6 +4927,11 @@ class RAGChatbotV17:
         intent: QueryIntent,
     ) -> str:
         """LLM 보완용 규칙 기반 답변 생성기."""
+        if not self._legacy_extraction_enabled():
+            # eval_dataset_new8.yaml 비교 실험 결과, 규칙 기반 추출/템플릿보다
+            # LLM의 context 기반 생성이 correctness/coverage 모두 더 높아 기본
+            # 비활성화함. HWP_RAG_ENABLE_LEGACY_EXTRACTIVE=1로 되살릴 수 있다.
+            return ""
         if not results:
             return ""
         if self._is_comparison_query(query):
@@ -5248,6 +5261,9 @@ class RAGChatbotV17:
     @staticmethod
     def _is_single_value_query(query: str) -> bool:
         """질문이 단일 값(숫자/식별자/짧은 속성값)만 요구하는지 판별합니다."""
+        if not RAGChatbotV17._legacy_extraction_enabled():
+            # 단일값 압축 템플릿도 기본 비활성화 — LLM 원문 답변을 그대로 사용.
+            return False
         normalized = unicodedata.normalize("NFKC", (query or "").lower()).strip()
         if not normalized:
             return False
@@ -7042,6 +7058,13 @@ class RAGChatbotV17:
         wants_unit_quantity = any(token in q_norm for token in ["단위", "수량", "개수", "명", "건", "몇"])
         wants_charset = any(token in q_norm for token in ["문자셋", "인코딩", "utf", "charset"])
         wants_deadline = any(token in q_norm for token in ["복구", "기한", "이내", "시간", "장애", "마감"])
+        wants_budget_evidence = self._is_budget_query(query)
+        wants_period_evidence = any(token in q_norm for token in ["기간", "며칠"])
+        wants_percent_evidence = (
+            "퍼센트" in q_norm
+            or "%" in q_norm
+            or ("비율" in q_norm and any(token in q_norm for token in ["몇", "이상", "이하"]))
+        )
         summary_content_query = self._is_summary_focus_query(query)
         req_mode = bool(re.search(r"[a-z]{2,5}\s*[-_ ]?\s*\d{2,3}", q_norm, flags=re.IGNORECASE))
         req_code_patterns: list[re.Pattern[str]] = []
@@ -7288,6 +7311,14 @@ class RAGChatbotV17:
                         score += 2
                     if any(marker in line_lower for marker in ["개선", "개선방안", "개선사항", "고도화", "통합", "연계", "모니터링", "to-be", "tobe"]):
                         score += 2
+                # 값 자체가 담긴 줄(금액/기간/퍼센트)은 제목/공고명처럼 질의 키워드를
+                # 그대로 반복하는 줄에 키워드 겹침 점수에서 밀리지 않도록 가산한다.
+                if wants_budget_evidence and re.search(r"\d{1,3}(?:,\d{3})+\s*(?:원|만원|억원|천원)", line):
+                    score += 6
+                if wants_period_evidence and re.search(r"(?<![\[\d])\d+\s*(일|개월|주|년|시간)", line):
+                    score += 6
+                if wants_percent_evidence and re.search(r"\d{1,3}(?:\.\d+)?\s*%", line):
+                    score += 6
 
                 if marker_hits > 0:
                     score += marker_hits * 2
@@ -9691,6 +9722,17 @@ class RAGChatbotV17:
     def _looks_uncertain_answer(answer: str) -> bool:
         """답변이 과도한 보수적 거절 형태인지 판별."""
         return eval_looks_uncertain_answer(answer)
+
+    @staticmethod
+    def _legacy_extraction_enabled() -> bool:
+        """규칙 기반 추출/근거검증 계층(레거시)을 쓸지 여부.
+
+        기본값은 비활성(LLM의 context 기반 생성을 그대로 신뢰) — eval_dataset_new8.yaml
+        비교 실험에서 이 쪽이 correctness/coverage 모두 더 높게 나왔고(문서/청크
+        recall은 두 모드에서 동일했음, 답변 생성 계층에서만 차이), 규칙 기반 근거검증이
+        자체 키워드 휴리스틱 결함으로 정답을 오히려 폐기하는 사례가 확인됐기 때문.
+        `HWP_RAG_ENABLE_LEGACY_EXTRACTIVE=1`로 이전 동작(비교/디버깅용)을 되살릴 수 있다."""
+        return os.environ.get("HWP_RAG_ENABLE_LEGACY_EXTRACTIVE") == "1"
 
     @staticmethod
     def _extraction_is_implausible(query: str, answer: str, *, is_comparison_like: bool = False) -> bool:
