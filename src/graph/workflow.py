@@ -11101,7 +11101,32 @@ class RAGChatbotV17:
         context_top_n = CONTEXT_TOP_RESULTS + 2 if is_comparison else CONTEXT_TOP_RESULTS
         context_max_chars = CONTEXT_MAX_CHARS + 200 if is_comparison else CONTEXT_MAX_CHARS
 
-        for r in results[: max(1, context_top_n)]:
+        context_results = results[: max(1, context_top_n)]
+        if is_comparison and len(results) > context_top_n:
+            # 비교 질의는 점수 상위 N개를 그대로 자르면 한쪽 기관의 청크가
+            # 겹치는 문서로 창을 다 채워 다른쪽 기관 근거가 아예 빠질 수 있다
+            # (예: 문서 B 청크 4개가 top-8을 채워 문서 A의 유일한 예산 청크가
+            # 9위로 밀려 컨텍스트에서 누락). org 단위로 라운드로빈해 균형을 맞춘다.
+            buckets: dict[str, list[dict[str, Any]]] = {}
+            order: list[str] = []
+            for r in results:
+                md = r.get("metadata", {}) or {}
+                key = str(md.get("org") or md.get("source") or "")
+                if key not in buckets:
+                    buckets[key] = []
+                    order.append(key)
+                buckets[key].append(r)
+            if len(order) >= 2:
+                balanced: list[dict[str, Any]] = []
+                while len(balanced) < context_top_n and any(buckets[k] for k in order):
+                    for key in order:
+                        if buckets[key]:
+                            balanced.append(buckets[key].pop(0))
+                        if len(balanced) >= context_top_n:
+                            break
+                context_results = balanced
+
+        for r in context_results:
             md = r.get("metadata", {}) or {}
             source = md.get("source", "Unknown")
             org = md.get("org", "")
