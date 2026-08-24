@@ -76,8 +76,15 @@ HWP_RAG_ENABLE_LEGACY_EXTRACTIVE=1 python ...
 ## 평가
 
 ```bash
-python scripts/eval_retrieval.py --dataset eval_resources/eval_dataset_new8.yaml --judge_model openai/gpt-oss-20b
+python scripts/eval_retrieval.py --dataset eval_resources/eval_dataset_new8.yaml --judge_model openai/gpt-oss-20b --label <라벨>
+python scripts/build_eval_report.py --label <라벨>   # eval_resources/eval_report_<라벨>.html 생성
 ```
+
+두 단계 다 팀 프로젝트(AI_7-team)와 동일한 방식이다 — `eval_retrieval.py`가
+`eval_resources/eval_results_<라벨>.json`을 쓰고, `build_eval_report.py`가 그걸
+읽어 HTML 대시보드로 만든다. `build_eval_report.py`는 표준 라이브러리만 써서
+(`src/` 비의존) 두 저장소 어디서 돌려도 그대로 동작한다. 결과 JSON/HTML은 둘 다
+gitignore됨(`eval_resources/eval_results_*.json`, `eval_resources/eval_report_*.html`).
 
 - `eval_resources/eval_dataset_57docs.yaml`(q1~q8) — 초기 재현 케이스 중심
 - `eval_resources/eval_dataset_new8.yaml`(n1~n8) — 문서/기관 겹치지 않는 신규
