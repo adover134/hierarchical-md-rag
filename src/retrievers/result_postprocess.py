@@ -10,7 +10,9 @@ from __future__ import annotations
 from typing import Any, Callable
 
 
-def diversify_comparison_results(results: list[dict[str, Any]], top_window: int = 10) -> list[dict[str, Any]]:
+def diversify_comparison_results(
+    results: list[dict[str, Any]], top_window: int = 10, target_orgs: list[str] | None = None
+) -> list[dict[str, Any]]:
     """비교 질의에서 상위 구간의 기관 편중을 완화한다."""
     if len(results) <= 2:
         return results
@@ -24,11 +26,52 @@ def diversify_comparison_results(results: list[dict[str, Any]], top_window: int 
     if len(buckets) < 2:
         return results
 
-    top_orgs = sorted(
-        buckets.keys(),
-        key=lambda k: len(buckets[k]),
-        reverse=True,
-    )[:2]
+    def _bucket_best_score(bucket: list[dict[str, Any]]) -> float:
+        best = 0.0
+        for item in bucket:
+            try:
+                score = float(item.get("score", 0.0) or 0.0)
+            except (TypeError, ValueError):
+                score = 0.0
+            if score > best:
+                best = score
+        return best
+
+    # 우선 실제 비교 대상 기관 목록(target_orgs, 질의에서 이미 해석된 것)이
+    # 있으면 그걸 그대로 쓴다 — count/score로 버킷을 추측하면, 우연히 같은
+    # 기관명 접두어를 공유하는 무관한 세 번째 문서가 개수든 점수든 더 높게
+    # 나와 진짜 비교 대상을 밀어낼 수 있기 때문(실측 확인됨). target_orgs가
+    # 없거나 버킷과 2개 이상 매칭이 안 되면 점수 기반 추측으로 폴백한다.
+    top_orgs: list[str] = []
+    if target_orgs:
+        bucket_keys = list(buckets.keys())
+        for target in target_orgs:
+            target_norm = target.strip()
+            if not target_norm:
+                continue
+            match = next(
+                (
+                    k
+                    for k in bucket_keys
+                    if k not in top_orgs and (k == target_norm or target_norm in k or k in target_norm)
+                ),
+                None,
+            )
+            if match:
+                top_orgs.append(match)
+            if len(top_orgs) >= 2:
+                break
+
+    if len(top_orgs) < 2:
+        # 버킷 개수(같은 org로 묶인 항목 수)가 아니라 버킷 내 최고 점수로
+        # 우선순위를 매긴다 — 개수 기준이면 우연히 같은 기관명 접두어를 공유하는
+        # 여러 문서가 하나의 버킷으로 묶여 항목 수만 많아진 경우, 실제로는 더
+        # 관련성 높은(점수가 더 높은) 다른 기관을 밀어내는 문제가 있었다.
+        top_orgs = sorted(
+            buckets.keys(),
+            key=lambda k: _bucket_best_score(buckets[k]),
+            reverse=True,
+        )[:2]
     selected: list[dict[str, Any]] = []
     used_ids: set[int] = set()
     round_limit = min(max(2, top_window), len(results))

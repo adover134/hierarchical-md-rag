@@ -4068,12 +4068,16 @@ class RAGChatbotV17:
                 "generate": round(_merge_latency(latencies.get("generate"), generation_elapsed), 4),
             }
 
-            # CSV short-circuit 응답은 실제 검색 호출이 없어 last_search_results가 비어도
-            # evidence에 source가 포함되어 있으면 source-level 평가가 가능하도록 채운다.
+            # short-circuit 응답(CSV/청크 예산 등)은 실제 검색 호출이 없어
+            # last_search_results가 비어도, evidence에 source가 포함되어 있으면
+            # source-level 평가가 가능하도록 채운다. source_type 라벨(csv/pdf/hwp/
+            # unknown)에 의존하지 않는다 — 예: _try_chunk_budget_short_circuit은
+            # 진짜 청크 근거를 갖고도 문서의 doc_type 메타데이터 공백 때문에
+            # source_type이 "unknown"으로 떨어지는 경우가 있어, 라벨 대신
+            # "evidence가 실제로 있는지"만으로 판단한다.
             if not isinstance(payload.get("retrieved_docs"), list):
-                source_type = str(payload.get("source_type", "") or "").lower()
                 evidence_items = payload.get("evidence")
-                if source_type == "csv" and isinstance(evidence_items, list):
+                if isinstance(evidence_items, list) and evidence_items:
                     csv_retrieved_docs: list[dict[str, Any]] = []
                     seen_sources: set[str] = set()
                     for item in evidence_items:
@@ -10426,7 +10430,9 @@ class RAGChatbotV17:
                 top_window=max(24, top_k * 3),
             )
         if comparison_like or self._is_comparison_query(query):
-            reranked = self._diversify_comparison_results(reranked, top_window=max(10, top_k))
+            reranked = self._diversify_comparison_results(
+                reranked, top_window=max(10, top_k), target_orgs=resolved_targets
+            )
         if debug_timing:
             total = time.perf_counter() - started
             budget_exhausted = bool(perf_stats and perf_stats.get("budget_exhausted"))
@@ -10437,8 +10443,10 @@ class RAGChatbotV17:
         return reranked[:top_k]
 
     @staticmethod
-    def _diversify_comparison_results(results: list[dict[str, Any]], top_window: int = 10) -> list[dict[str, Any]]:
-        return retriever_diversify_comparison_results(results, top_window=top_window)
+    def _diversify_comparison_results(
+        results: list[dict[str, Any]], top_window: int = 10, target_orgs: list[str] | None = None
+    ) -> list[dict[str, Any]]:
+        return retriever_diversify_comparison_results(results, top_window=top_window, target_orgs=target_orgs)
 
     def _rerank_results(
         self,

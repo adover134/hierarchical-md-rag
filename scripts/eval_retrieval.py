@@ -460,9 +460,22 @@ def evaluate_e2e(
         hit_positions.append(hit_pos)
 
         # 3) LLM Judge 채점
-        context_text = evidence if evidence else "\n\n".join(
-            doc.get("content", "") for doc in retrieved_docs
+        # evidence(추출된 핵심 근거 요약)만 주면, 실제 답변 생성에는 더 넓은
+        # context가 쓰였는데 evidence 요약이 그 값을 못 담은 경우 judge가
+        # "context에 없음(환각)"으로 오판할 수 있다 — evidence와 retrieved_docs
+        # 원문을 함께 넘겨 judge가 실제 생성 근거에 최대한 가깝게 보게 한다.
+        # 컷오프는 문자수 임의 절단이 아니라, recall@k가 실제로 채점하는 랭크
+        # 구간과 동일하게 맞춘다. calculate_recall_at_k()는 다중 GT source(비교
+        # 질의)여도 top_k를 소스 수만큼 곱하지 않고 단일 top-k 윈도우
+        # (retrieved_docs[:k]) 안에서만 strict-AND로 판정한다(src/evaluation/
+        # metrics.py 확인) — 그래서 judge context도 항상 top_k 그대로 슬라이스한다.
+        # retrieved_docs는 이미 rerank(+비교 diversify) 순서대로 정렬돼 있으므로
+        # 그 순서를 그대로 슬라이스.
+        context_docs = retrieved_docs[:top_k]
+        retrieved_text = "\n\n".join(
+            doc.get("content", "") for doc in context_docs if doc.get("content")
         )
+        context_text = "\n\n".join(part for part in (evidence, retrieved_text) if part)
 
         chunk_recall_text = (
             f" | ChunkR@{top_k}={chunk_recall:.3f}"
