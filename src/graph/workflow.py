@@ -173,6 +173,19 @@ class RAGChatbotV17:
         runtime_base_url = os.environ.get("HWP_RAG_LLM_BASE_URL") or None
         self.llm = None
         self.intent_llm = None
+        # Ollama의 OpenAI 호환 엔드포인트는 요청에 num_ctx를 안 주면 모델의 실제
+        # 컨텍스트 길이(gpt-oss:20b는 131072)와 무관하게 조용히 4096으로 제한한다
+        # (ollama ps로 실측 확인). 이 파이프라인의 답변 생성 프롬프트(시스템+템플릿+
+        # 검색 컨텍스트)는 단일 문서 질의에서도 4096자에 근접/초과하는 경우가 있어
+        # 이 기본값에서는 LLM 호출이 자주 잘리거나 실패한다 — Ollama 엔드포인트일
+        # 때만 extra_body로 num_ctx를 올려준다(진짜 OpenAI/Groq 엔드포인트는 인식
+        # 못 하는 필드를 거부할 수 있어 무조건 넘기지 않는다).
+        is_ollama_endpoint = bool(runtime_base_url) and (
+            "11434" in runtime_base_url or "ollama" in runtime_base_url.lower()
+        )
+        ollama_extra_kwargs: dict[str, Any] = (
+            {"extra_body": {"options": {"num_ctx": 16384}}} if is_ollama_endpoint else {}
+        )
         if runtime_api_key:
             reasoning_model = str(os.environ.get("REASONING_MODEL", "") or REASONING_MODEL or "").strip() or "gpt-5-mini"
             query_intent_model = str(
@@ -185,6 +198,7 @@ class RAGChatbotV17:
                 temperature=0.0,
                 timeout=OPENAI_TIMEOUT_SEC,
                 max_retries=OPENAI_MAX_RETRIES,
+                **ollama_extra_kwargs,
             )
             if query_intent_model == reasoning_model:
                 self.intent_llm = self.llm
@@ -196,6 +210,7 @@ class RAGChatbotV17:
                     temperature=0.0,
                     timeout=min(OPENAI_TIMEOUT_SEC, 15),
                     max_retries=OPENAI_MAX_RETRIES,
+                    **ollama_extra_kwargs,
                 )
 
         # 나중에 각 모듈에서 import

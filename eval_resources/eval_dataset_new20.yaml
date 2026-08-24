@@ -1,0 +1,211 @@
+# 팀 프로젝트(AI_7-team)가 원래 20문항 규모로 평가했던 것에 맞춰, hierarchical-md-rag
+# 코퍼스(57개 문서)에서 완전히 새로 작성한 20문항 평가셋. eval_dataset_new8.yaml(n1~n8),
+# eval_dataset_57docs.yaml(q1~q8)과 겹치는 문서를 의도적으로 하나도 쓰지 않았다 —
+# 두 파일은 형식/난이도 참고용으로만 봤고, 문항/문서는 전부 새로 골랐다.
+# 모든 expected_answer와 chunk_uids는 data_index/chroma_B에 색인된 실제 청크 원문에서
+# 직접 확인한 값이다(vector_store.collection.get(where={"source": ...})로 검증).
+# query_type: single_doc(한 문서 안에서 답변) / multi_doc(여러 문서 종합 비교)
+
+- id: m1
+  question: "SRT 감속기 모터피니언기어 구매 입찰의 낙찰자 결정 기준은 무엇인가요?"
+  expected_answer: "예정가격의 82.495% 이상으로 견적서를 제출한 자 중 최저가격 입찰자순으로 적격심사하여 종합평점이 85점 이상인 경우 낙찰자로 결정합니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "SRT 감속기 모터피니언 기어_주식회사 에스알"
+    chunk_uids:
+      - "4148b8ca50e7b083_8"
+
+- id: m2
+  question: "공항만 여행자 호흡기 감염병 검사 서비스 시약소모품 구매(2026년 3차) 입찰의 낙찰하한율은 몇 퍼센트인가요?"
+  expected_answer: "낙찰하한율은 86.245%입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "공항만 여행자 호흡기 감염병 검사 서비스 시약소모품 구매(2026년 3차)_질병관리청 수도권질병대응센터"
+    chunk_uids:
+      - "6b8839118a173d96_9"
+
+- id: m3
+  question: "한국마사회제주경마장 스마트워크 무선망 환경조성 도입 통신공사의 추정금액은 얼마인가요?"
+  expected_answer: "추정금액은 770,250,000원(추정가격 700,227,273원 + 부가가치세 70,022,727원)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "스마트워크 무선망 환경조성 도입 통신공사_한국마사회제주경마장"
+    chunk_uids:
+      - "8d112e98e864a788_2"
+
+- id: m4
+  question: "2026년 대전광역시립요양원 식자재 구매의 납품기한은 언제까지인가요?"
+  expected_answer: "납품기한은 2026년 12월 31일까지입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "2026년 대전광역시립요양원 식자재 구매_대전광역시립요양원"
+    chunk_uids:
+      - "6d5fdee2206ef071_1"
+
+- id: m5
+  question: "태화종합시장 공영 주차전용건물 건립공사 관급자재(탈형 데크플레이트) 구매의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 47,820,800원(추정가격 43,473,455원, 부가가치세 4,347,345원)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "태화종합시장 공영 주차전용건물 건립공사 관급자재(탈형 데크플레이트) 구매_울산광역시 중구"
+    chunk_uids:
+      - "8f29e5dab5cf9fd4_1"
+
+- id: m6
+  question: "서천읍 화성2리 마을만들기사업(토목)의 공사기간은 며칠인가요?"
+  expected_answer: "공사기간은 착공일로부터 180일입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "(긴급)서천읍 화성2리 마을만들기사업(토목)_충청남도 서천군 농업기술센터"
+    chunk_uids:
+      - "b33bceb2e452c732_1"
+
+- id: m7
+  question: "2025 사회복지시설평가 우수기관 실무자 해외연수(호주) 사업의 사업예산은 얼마인가요?"
+  expected_answer: "사업예산은 55,800,000원(부가세 포함)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "2025 사회복지시설평가 우수기관 실무자 해외연수(호주)_울산광역시사회복지협의회"
+    chunk_uids:
+      - "e19c1de79c203cb2_3"
+
+- id: m8
+  question: "㈜한성케미칼 스마트 생태공장 구축사업(태양광 발전설비)의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 631,400,000원(부가가치세 포함)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "스마트 생태공장 구축사업_태양광 발전설비_(주)한성케미칼"
+    chunk_uids:
+      - "e2e7e9f50050f1d2_2"
+
+- id: m9
+  question: "소상공인 상세페이지 제작지원을 위한 생성형 AI 콘텐츠 제작 서비스 공급 및 운영 용역의 전자입찰서 접수 마감일시는 언제인가요?"
+  expected_answer: "전자입찰서 접수 마감일시는 2026년 8월 12일 15:00입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "소상공인 상세페이지 제작지원을 위한 생성형 AI 콘텐츠 제작 서비스 공급 및 운영 용역_주식회사 홀릭디자인"
+    chunk_uids:
+      - "beaba6445d09a569_2"
+
+- id: m10
+  question: "제26차 한·중·일불교우호교류회의 한국대회의 행사 기간은 언제인가요?"
+  expected_answer: "행사 기간은 2026년 10월 20일(화)부터 10월 22일(수)까지 3일간입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "제26차 한·중·일불교우호교류회의 한국대회_(사）한국불교종단협의회"
+    chunk_uids:
+      - "b9470ab42aefbc36_1"
+
+- id: m11
+  question: "전주사랑의집 남자생활실 타일공사의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 50,000,000원(추정가격 45,454,545원, 부가세 4,545,455원)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "전주사랑의집 시설공사 소액수의 견적 제출 공고_전주사랑의집"
+    chunk_uids:
+      - "c1ee714a792489a3_2"
+
+- id: m12
+  question: "섬박람회 대비 주요 섬 편의시설 등 정비사업(삼산면 지하수 관정개발 공사)의 사업기간은 며칠인가요?"
+  expected_answer: "사업기간은 착공일로부터 60일간입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "섬박람회 대비 주요 섬 편의시설 등 정비사업(삼산면 지하수 관정개발 공사)_전남광주통합특별시 여수시 상하수도사업단"
+    chunk_uids:
+      - "5873e1f2b6f0e743_1"
+
+- id: m13
+  question: "용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(건축)의 공사기간은 며칠인가요?"
+  expected_answer: "공사기간은 착공일로부터 120일입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(건축)[민간입찰 대행]_충청북도 영동군"
+    chunk_uids:
+      - "41ae378d665fb2f2_1"
+
+- id: m14
+  question: "G램프사업단 연구시설장비 구입(컴퓨터외 1종) 사업의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 102,000,000원(추정가격 92,727,273원, 부가가치세 9,272,727원)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "G램프사업단 연구시설장비 구입(컴퓨터외 1종)_전북대학교 산학협력단"
+    chunk_uids:
+      - "0dd703316cf145af_1"
+
+- id: m15
+  question: "㈜헤르스 가스감지기(내압방폭형) 44SET 및 엣지컴퓨팅장비(THOR) 구매설치의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 78,364,000원(부가세 포함, 추정가격 71,240,000원 기준 — 가스감지기 66,440,000원 + THOR 6,150,000원)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "2026년 상생협력 실증 프로그램 - 가스감지기(내압방폭형) 44SET 및 엣지컴퓨팅장비(THOR) 구매설치_주식회사 헤르스"
+    chunk_uids:
+      - "b4adac0d5097e089_1"
+
+- id: m16
+  question: "영동 스마트복합쉼터 조성사업 건축공사(비상주) 감리용역의 과업기간은 며칠인가요?"
+  expected_answer: "과업기간은 착수일로부터 365일입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "영동 스마트복합쉼터 조성사업 건축공사(비상주) 감리용역_충청북도 영동군"
+    chunk_uids:
+      - "50e5f27e109f427c_1"
+
+- id: m17
+  question: "2026년 산지전용지(구촌) 대집행복구공사의 공사기간은 며칠인가요?"
+  expected_answer: "공사기간은 착공일로부터 60일입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "2026년 산지전용지(구촌) 대집행복구공사_충청북도 영동군"
+    chunk_uids:
+      - "b7c00a6680a3ca10_1"
+
+- id: m18
+  question: "G램프 3차년도 연구시설장비 구입(GPU그래픽카드) 사업의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 50,000,000원(추정가격 45,454,545원, 부가가치세 4,545,455원)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "G램프 3차년도 연구시설장비 구입(GPU그래픽카드)_전북대학교 산학협력단"
+    chunk_uids:
+      - "81a3686192ce1679_1"
+
+- id: m19
+  question: "장성경찰서 장애인승강기 설치공사(건축)와 (통신) 중 기초금액이 더 큰 공사는 무엇인가요?"
+  expected_answer: "장애인승강기 설치공사(건축)(368,467,000원)가 (통신)(24,867,000원)보다 기초금액이 더 큽니다."
+  query_type: multi_doc
+  ground_truth:
+    sources:
+      - "장성경찰서 장애인승강기 설치공사(건축)_경찰청 전남경찰청"
+      - "장성경찰서 장애인승강기 설치공사(통신)_경찰청 전남경찰청"
+    chunk_uids:
+      - "55e0137bca42b879_5"
+      - "48a806ec55c477a9_4"
+
+- id: m20
+  question: "2026년 한서대학교 산업디자인 개발 프로젝트 설계 컨설팅 및 목업 개발 용역과 2026 글로벌소상공인육성사업 자카르타국제프리미엄소비재전 용역 중 사업예산이 더 큰 사업은 무엇인가요?"
+  expected_answer: "2026년 한서대학교 산업디자인 개발 프로젝트(220,000,000원)가 2026 글로벌소상공인육성사업 자카르타국제프리미엄소비재전 용역(150,000,000원)보다 사업예산이 더 큽니다."
+  query_type: multi_doc
+  ground_truth:
+    sources:
+      - "2026년 한서대학교 산업디자인 개발 프로젝트 설계 컨설팅 및 목업 개발 용역_한서대학교 산학협력단"
+      - "2026 글로벌소상공인육성사업 자카르타국제프리미엄소비재전 용역_경기창조경제혁신센터"
+    chunk_uids:
+      - "d2d30dea14bb3078_1"
+      - "44d53fa91300a2f6_2"
