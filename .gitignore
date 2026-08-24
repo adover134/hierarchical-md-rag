@@ -10,3 +10,4 @@ output/
 pipeline/
 eval_resources/eval_results_*.json
 eval_resources/eval_report_*.html
+eval_resources/debug_logs/

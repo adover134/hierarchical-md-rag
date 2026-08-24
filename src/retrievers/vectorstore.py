@@ -443,7 +443,12 @@ class VectorStore:
         if selected_mode == "dynamic":
             selected_mode = self.select_dynamic_mode(query, hard_threshold=dynamic_hard_threshold)
 
-        n_results = max(top_k, candidate_k or max(top_k * 4, 40))
+        # 제목 반복 청크 리랭킹 버그: 정답 청크가 순수 dense 유사도에서 밀려나
+        # (재현 사례에서 원시 순위 40~120위대) 예전 후보군(top_k*4, 최소 40)
+        # 밖으로 배제되면 리랭킹 단계까지 아예 못 올라왔다. 코퍼스가 작아
+        # 후보군을 키워도 비용이 거의 안 드므로 넉넉하게 넓힌다.
+        default_candidate_k = min(self.count, max(top_k * 15, 150))
+        n_results = max(top_k, candidate_k or default_candidate_k)
 
         try:
             raw_rows = self._query_candidates(query, n_results=n_results)

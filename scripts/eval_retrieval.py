@@ -225,6 +225,7 @@ def run_rag_pipeline(question: str, metadata_filter: dict | None, top_k: int) ->
             "csv_short_circuit": bool(result.get("csv_short_circuit", False)),
             "source_type": str(result.get("source_type", "") or "").lower(),
             "latencies": result.get("latencies", {}),
+            "retrieval_debug": result.get("retrieval_debug", []),
         }
 
     global _CHATBOT_SINGLETON
@@ -365,6 +366,10 @@ def run_rag_pipeline(question: str, metadata_filter: dict | None, top_k: int) ->
         "csv_short_circuit": bool(response.get("csv_short_circuit", False)),
         "source_type": str(response.get("source_type", "") or "").lower(),
         "latencies": response.get("latencies", {}),
+        # 이 호출에서 _retrieve_results()가 실제로 DB에 던진 검색 쿼리 로그.
+        # LLM 기반 확장/타겟 분리로 매번 달라질 수 있어, eval 재실행 없이
+        # 그 당시 정확히 무엇을 검색했는지 사후 분석하려면 이게 있어야 한다.
+        "retrieval_debug": response.get("retrieval_debug", []),
     }
 
 
@@ -528,6 +533,24 @@ def evaluate_e2e(
             "ground_truth_sources": gt_sources,
             "retrieved_sources": retrieved_sources,
             "latencies": state.get("latencies", {}),
+            # source 이름만 남기는 retrieved_sources와 달리, 실제로 judge/답변
+            # 생성에 쓰인 top_k 청크의 chunk_id/score/본문 일부를 그대로 저장한다.
+            # 재실행 없이 "그때 어떤 청크가 컨텍스트에 들어갔는지" 바로 확인 가능.
+            "retrieved_chunks": [
+                {
+                    "rank": idx + 1,
+                    "source": doc.get("source"),
+                    "chunk_id": doc.get("chunk_id"),
+                    "chunk_index": doc.get("chunk_index"),
+                    "score": doc.get("score"),
+                    "content_excerpt": str(doc.get("content", ""))[:400],
+                }
+                for idx, doc in enumerate(context_docs)
+            ],
+            # _retrieve_results()가 이 질의에서 실제로 DB에 던진 검색 쿼리
+            # (LLM 기반 확장/타겟 분리 포함) — 재실행 시 달라질 수 있으므로
+            # 그 당시 실행된 쿼리 그대로를 남긴다.
+            "retrieval_debug": state.get("retrieval_debug", []),
         })
 
     # 집계

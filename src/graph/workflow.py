@@ -2974,6 +2974,15 @@ class RAGChatbotV17:
         if not any(token in lowered for token in budget_keywords):
             return []
 
+        # 적격심사 등급표/배점 구간표는 "추정가격 50억원 미만 10억원 이상"처럼
+        # budget_keywords를 그대로 담고 있으면서도 이 사업 자체의 금액이 아니라
+        # 구간 경계값을 나열한다 — 이런 줄은 후보에서 제외한다(실측: 한국마사회
+        # 사례에서 이 구간표 문구의 "50억원"이 실제 사업비 770,250,000원보다
+        # 커서 잘못 채택됨).
+        threshold_markers = ["미만", "이상", "이하", "초과", "적격심사", "세부기준", "별표", "배점", "등급"]
+        if any(marker in line for marker in threshold_markers):
+            return []
+
         candidates: list[int] = []
         labeled_pattern = re.compile(
             r"(?:총\s*사업비|사업\s*예산|사업비|예산|소요예산|추정가격|계약금액|사업\s*금액|금액)\s*[:：]?\s*(?:금)?\s*\(?\s*([\d][\d,]*(?:\.\d+)?)\s*(억원|억|백만원|천원|만원|만|원)?",
@@ -3917,6 +3926,9 @@ class RAGChatbotV17:
         analyze_elapsed = 0.0
         # 질의마다 검색 상태를 초기화해 이전 질의 결과가 재사용되지 않도록 한다.
         self.vector_store.last_search_results = []
+        # _retrieve_results()가 실제로 DB에 던진 검색 쿼리(확장/타겟 분리 포함)를
+        # 매 호출마다 여기에 기록한다 — eval 스크립트가 재실행 없이 그대로 저장.
+        self._retrieval_debug_log: list[dict[str, Any]] = []
         perf_stats: dict[str, float | int | bool] = {
             "llm_calls": 0,
             "hybrid_calls": 0,
@@ -4147,6 +4159,11 @@ class RAGChatbotV17:
                 if presence_answer:
                     payload["answer"] = self._enforce_honorific_tone(presence_answer)
                     payload["answer_mode"] = "extractive"
+            # 검색 쿼리는 LLM 기반 확장/타겟 분리로 호출마다 달라질 수 있어,
+            # eval 재실행 없이 "그 당시 실제로 어떤 쿼리를 DB에 던졌는지"를
+            # 사후 분석할 수 있도록 이번 answer() 호출에서 실제로 실행된
+            # 검색 쿼리 로그를 payload에 함께 담아 반환한다.
+            payload["retrieval_debug"] = list(self._retrieval_debug_log)
             return payload
 
         query = query.strip()
@@ -9811,6 +9828,46 @@ class RAGChatbotV17:
             return "양측 협의 또는 공동 부담"
         return "문서상 명시된 문구 해석 필요 (단정 불가)"
 
+    @staticmethod
+    def _build_target_scoped_query(query: str, target: str, all_targets: list[str]) -> str:
+        """비교 질의에서 다른 비교 대상 사업명을 제거해 target 단독 쿼리를 만든다.
+
+        두 사업명을 한 문장에 합쳐 검색하면 임베딩이 둘 사이에서 희석돼 각
+        사업의 구체적 수치 청크가 후보군 밖으로 밀려난다(검증됨: 합친 쿼리는
+        top-30에도 안 잡히던 청크가 target 단독 쿼리에선 7위로 잡힘).
+        """
+        scoped = query
+        # 사업명 사이에 조사가 공백 없이 붙어 있으면(예: "...용역과 2026...")
+        # 한쪽 사업명만 지웠을 때 조사가 고아로 남는다 — 제거 대상 뒤에 이어지는
+        # 조사("용역과" → 뒤: "과 2026...")뿐 아니라, 제거 대상 앞에 붙어 남는
+        # 조사("target1과 [제거될 target2]" → 앞: "target1과")도 같이 지운다.
+        particles = ("그리고", "또는", "혹은", "및", "과", "와")
+        for other in all_targets:
+            other = (other or "").strip()
+            if not other or other == target:
+                continue
+            idx = scoped.find(other)
+            while idx != -1:
+                start, end = idx, idx + len(other)
+                head = scoped[:start]
+                head_stripped = head.rstrip()
+                for particle in particles:
+                    if head_stripped.endswith(particle):
+                        start -= (len(head) - len(head_stripped)) + len(particle)
+                        break
+                tail = scoped[end:]
+                for particle in particles:
+                    if tail.startswith(particle):
+                        end += len(particle)
+                        break
+                scoped = scoped[:start] + " " + scoped[end:]
+                idx = scoped.find(other)
+        scoped = re.sub(r"\s+", " ", scoped).strip()
+        target = (target or "").strip()
+        if target and target not in scoped:
+            scoped = f"{target} {scoped}".strip()
+        return scoped or query
+
     def _expand_query_terms(self, query: str) -> list[str]:
         """질문 의미를 보강하는 확장 질의를 생성합니다."""
         expanded = [query]
@@ -10260,7 +10317,12 @@ class RAGChatbotV17:
         started = time.perf_counter()
         merged: list[dict[str, Any]] = []
         primary_types = list(doc_types) if doc_types else ["pdf", "hwp"]
-        per_call_k = max(8, int(top_k * 0.8))
+        # 예전 상한(top_k*0.8, 최소 8)은 VectorStore.search() 자체 내부
+        # dense+lexical 랭킹에서 정답 청크가 20~50위대에 있는 사례(m3, m9)를
+        # 리랭킹 단계까지 올리지 못했다 — pass가 1회뿐인 질의는 이 최초 요청
+        # 크기가 그대로 상한이 되므로 넉넉하게 올린다. 코퍼스가 작아 비용은
+        # 거의 안 든다.
+        per_call_k = max(24, int(top_k * 1.2))
         strategy = self._build_retrieval_strategy(
             query,
             org_name=org_name,
@@ -10280,49 +10342,77 @@ class RAGChatbotV17:
         pass_limit = int(strategy.get("pass_limit") or max(1, RETRIEVAL_SEARCH_PASSES))
         max_global_expansions = int(strategy.get("max_global_expansions") or 999)
 
-        for expanded_idx, q in enumerate(self._expand_query_terms(query), start=1):
-            if expanded_idx > max_global_expansions:
-                break
-            for pass_idx in range(pass_limit):
-                request_k = max(per_call_k, top_k // 2)
-                if high_recall_query:
-                    request_k = max(request_k, int(top_k * multiplier))
-                if pass_idx > 0:
-                    request_k = max(request_k, int(request_k * (1 + (0.35 * pass_idx))))
+        # 다중 문서 비교 질의는 사업명을 한 문장에 합쳐서 검색하면 임베딩이
+        # 두 사업명 사이에서 희석돼 한쪽 사업의 구체적 수치 청크가 후보군
+        # 밖으로 밀려난다(재현: 합친 쿼리는 top-30에도 안 잡히던 청크가,
+        # 해당 사업명만 단독으로 검색하면 7위로 잡힘). 타겟이 2개 이상이면
+        # 타겟별로 쿼리를 분리해 각각 top_k만큼 가져온 뒤 병합한다.
+        search_groups: list[str | None] = (
+            list(resolved_targets) if (comparison_like and len(resolved_targets) >= 2) else [None]
+        )
+        per_group_top_k = top_k if len(search_groups) <= 1 else max(top_k, per_call_k * 2)
+        queries_sent: list[dict[str, Any]] = []
 
-                call_types = list(primary_types)
-                if pass_idx > 0 and not doc_types and bool(strategy.get("expand_csv_in_pass")):
-                    call_types = ["pdf", "hwp", "csv"]
+        for group_target in search_groups:
+            if group_target is None:
+                base_query = query
+            else:
+                base_query = self._build_target_scoped_query(query, group_target, resolved_targets)
 
-                step_started = time.perf_counter()
-                results = self._run_retrieval_call(
-                    q,
-                    request_k=request_k,
-                    org_name=org_name,
-                    types=call_types,
-                    perf_stats=perf_stats,
-                )
-                if not results and perf_stats and perf_stats.get("budget_exhausted"):
+            for expanded_idx, q in enumerate(self._expand_query_terms(base_query), start=1):
+                if expanded_idx > max_global_expansions:
                     break
-                merged = self._merge_results(merged, results, top_k=top_k * 2)
-                if debug_timing:
-                    elapsed = time.perf_counter() - step_started
-                    print(
-                        f"[RETRIEVE] exp={expanded_idx} pass={pass_idx + 1}/{pass_limit} "
-                        f"types={call_types} k={request_k} elapsed={elapsed:.3f}s merged={len(merged)}"
+                for pass_idx in range(pass_limit):
+                    request_k = max(per_call_k, per_group_top_k // 2)
+                    if high_recall_query:
+                        request_k = max(request_k, int(per_group_top_k * multiplier))
+                    if pass_idx > 0:
+                        request_k = max(request_k, int(request_k * (1 + (0.35 * pass_idx))))
+
+                    call_types = list(primary_types)
+                    if pass_idx > 0 and not doc_types and bool(strategy.get("expand_csv_in_pass")):
+                        call_types = ["pdf", "hwp", "csv"]
+
+                    step_started = time.perf_counter()
+                    results = self._run_retrieval_call(
+                        q,
+                        request_k=request_k,
+                        org_name=org_name,
+                        types=call_types,
+                        perf_stats=perf_stats,
                     )
-                if self._should_stop_retrieval_early(
-                    query,
-                    merged,
-                    org_name=org_name,
-                    top_k=top_k,
-                    target_orgs=resolved_targets,
-                ):
-                    early_stopped = True
+                    queries_sent.append(
+                        {
+                            "target": group_target,
+                            "query": q,
+                            "request_k": request_k,
+                            "types": list(call_types),
+                            "hits": len(results),
+                        }
+                    )
+                    if not results and perf_stats and perf_stats.get("budget_exhausted"):
+                        break
+                    merged = self._merge_results(merged, results, top_k=top_k * 2)
+                    if debug_timing:
+                        elapsed = time.perf_counter() - step_started
+                        print(
+                            f"[RETRIEVE] target={group_target!r} exp={expanded_idx} pass={pass_idx + 1}/{pass_limit} "
+                            f"types={call_types} k={request_k} elapsed={elapsed:.3f}s merged={len(merged)}"
+                        )
+                    if len(search_groups) <= 1 and self._should_stop_retrieval_early(
+                        query,
+                        merged,
+                        org_name=org_name,
+                        top_k=top_k,
+                        target_orgs=resolved_targets,
+                    ):
+                        early_stopped = True
+                        break
+                    if perf_stats and perf_stats.get("budget_exhausted"):
+                        break
+                if early_stopped or (perf_stats and perf_stats.get("budget_exhausted")):
                     break
-                if perf_stats and perf_stats.get("budget_exhausted"):
-                    break
-            if early_stopped or (perf_stats and perf_stats.get("budget_exhausted")):
+            if perf_stats and perf_stats.get("budget_exhausted"):
                 break
 
         # CSV 보강 패스는 조건 충족 시에만 단일 호출로 수행
@@ -10463,7 +10553,29 @@ class RAGChatbotV17:
                 f"[RETRIEVE] total elapsed={total:.3f}s merged={len(merged)} "
                 f"reranked={len(reranked)} early_stop={early_stopped} budget_exhausted={budget_exhausted}"
             )
-        return reranked[:top_k]
+        final_results = reranked[:top_k]
+        debug_log = getattr(self, "_retrieval_debug_log", None)
+        if debug_log is not None:
+            debug_log.append(
+                {
+                    "input_query": query,
+                    "top_k": top_k,
+                    "comparison_like": comparison_like,
+                    "resolved_targets": list(resolved_targets),
+                    "queries_sent": queries_sent,
+                    "merged_pool_size": len(merged),
+                    "final_results": [
+                        {
+                            "rank": i + 1,
+                            "chunk_id": (item.get("chunk_id") or (item.get("metadata", {}) or {}).get("chunk_id")),
+                            "source": (item.get("metadata", {}) or {}).get("source") or item.get("source"),
+                            "score": item.get("score"),
+                        }
+                        for i, item in enumerate(final_results)
+                    ],
+                }
+            )
+        return final_results
 
     @staticmethod
     def _diversify_comparison_results(
@@ -10698,11 +10810,14 @@ class RAGChatbotV17:
         elif org_query_key and org_key and org_query_key in org_key:
             score += 3.0
 
-        for keyword in keywords:
-            if keyword in text_key:
-                score += 1.4
-            if keyword in source_key:
-                score += 0.8
+        # 키워드 매치는 개수에 상한을 둔다: 질문이 사업명 전체를 그대로 반복하면
+        # 그 사업명을 담은 서두 청크가 키워드 10여 개를 전부 맞혀 점수가 무한정
+        # 쌓이는 문제(제목 반복 청크가 실제 정답 청크를 압도)가 있었음. 3개 매치
+        # 이상부터는 체감 수익 없이 상한(4.2/1.6)에서 멈춘다.
+        text_keyword_matches = sum(1 for keyword in keywords if keyword in text_key)
+        source_keyword_matches = sum(1 for keyword in keywords if keyword in source_key)
+        score += min(text_keyword_matches * 1.4, 4.2)
+        score += min(source_keyword_matches * 0.8, 1.6)
 
         for hint in source_hints:
             if hint and hint in source_key:
@@ -11737,11 +11852,17 @@ class RAGChatbotV17:
                     candidates.append((score, org_name))
 
         # 4.5) 영문 약어(예: KOICA) 기반 기관 복원
-        if query_ascii_tokens:
+        # "ai", "it", "pc"처럼 2글자짜리 흔한 영문 토큰은 실제 기관 약어가
+        # 아니라 일반 단어일 확률이 높다("생성형 AI 콘텐츠"의 AI가 전혀
+        # 무관한 "AI기반 그룹웨어" 기관과 매칭되어 가짜 두 번째 비교 대상으로
+        # 잡히는 버그가 있었다) — 아래 두 번째 fallback 분기와 동일하게
+        # 3글자 이상만 약어로 인정한다.
+        query_ascii_tokens_specific = {t for t in query_ascii_tokens if len(t) >= 3}
+        if query_ascii_tokens_specific:
             for org_name in self.vector_store.org_registry.keys():
                 normalized_org_name = self._normalize_legal_name_tokens(org_name)
                 org_ascii_tokens = set(re.findall(r"[a-z]{2,12}", normalized_org_name.lower()))
-                overlap_ascii = query_ascii_tokens.intersection(org_ascii_tokens)
+                overlap_ascii = query_ascii_tokens_specific.intersection(org_ascii_tokens)
                 if overlap_ascii:
                     score = 720 + len(org_name) + (len(overlap_ascii) * 40)
                     candidates.append((score, org_name))
