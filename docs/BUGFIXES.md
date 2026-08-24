@@ -184,12 +184,55 @@ n8("...몇 퍼센트 이상인가요?")을 "문서는 맞는데 청크가 틀렸
   `_build_comparison_answer_from_results()`의 증거 줄 선택 품질 문제가 남음 —
   아래 "남은 문제" 참고.
 
-## 남은 문제 (미수정)
+## 규칙 기반 추출 계층 기본 비활성화 + n6/n7 완전 해결 (추가 커밋)
 
-- **n6/n7 (비교 답변 내용 품질)**: `_build_comparison_answer_from_results()`가
-  호출하는 `_extract_evidence_lines()`가 예산 관련 줄이 아니라 입찰 상투 문구를
-  뽑아온다. 구조 손상 버그(7번)와는 다른 층위 — 증거 줄 선택 자체의 품질 문제.
-  이번 세션에서 손대지 않음.
+`eval_dataset_new8.yaml`에 청크 단위 GT(`chunk_uids`)를 추가해 문서 recall/청크
+recall/답변 정합성을 분리 측정한 뒤, "규칙 기반 추출+근거검증 vs LLM의 context
+기반 생성"을 3가지 모드로 통제 비교했다:
+
+| 모드 | Correctness | Answer Coverage | 문서 Recall@5 | 청크 Recall@5 |
+|---|---|---|---|---|
+| 기본(규칙 기반 추출+근거검증 둘 다 켬) | 3.12 | 2.88 | 0.50 | 0.625 |
+| 추출만 끄고 근거검증은 남김 | 1.75 | 1.62 | 0.50 | 0.625 |
+| 둘 다 끔(순수 LLM) | 3.62 | 3.50 | 0.50 | 0.625 |
+
+검색 지표는 세 모드에서 완전히 동일 — 이 토글들은 답변 생성 계층에만 영향을
+준다는 뜻. "추출만 끄면 오히려 나빠지는" 이유: `_restrict_answer_to_evidence()`가
+근거 정합성 검사에 쓰는 `_build_evidence_spans()`/`_extract_evidence_lines()`도
+**똑같이 취약한 키워드 겹침 휴리스틱**을 쓰고 있어서, 질의 단어를 그대로 반복하는
+공고명/제목 줄이 실제 사실이 담긴 줄("공사기간 : 계약일로부터 40일")보다 항상
+높은 점수를 받는다. 그 결과 LLM이 맞는 답을 내도 "근거 없음"으로 오판해
+통째로 폐기하고 "확인되지 않습니다"로 덮어썼다. `_extract_evidence_lines()`에
+금액/기간/퍼센트 값 형태 가산점을 추가해봤지만, 제목 줄들의 키워드 밀도를
+안정적으로 이기지 못했다 — 결국 근거검증 자체를 우회하는 쪽이 유일하게 확실한
+개선이었다.
+
+### 14. 기본 동작을 순수 LLM 생성으로 전환
+`_legacy_extraction_enabled()`(기본 `False`) 하나로 아래 4개 지점을 통일 게이트:
+`_build_non_llm_answer`, `_is_single_value_query`, `_restrict_answer_to_evidence`,
+`_answer_with_results`의 `_build_comparison_answer_from_results` 직접 호출부.
+규칙 기반 코드 자체는 지우지 않고 그대로 둠(향후 비교/디버깅 필요시
+`HWP_RAG_ENABLE_LEGACY_EXTRACTIVE=1`로 복원 가능).
+
+### 15. 비교 질의에서 컨텍스트 창이 한쪽 기관 청크로 채워짐
+- **증상**: n6/n7 — 순수 LLM 모드로 바꿔도 여전히 깨지거나 빈 답변.
+- **원인**: `_build_context()`가 `results[:context_top_n]`(비교 질의는 top-8)을
+  점수 순으로 그냥 자르는데, 실제로는 한쪽 기관(B) 문서의 거의 동일한 점수대
+  청크 4개가 1/3/5/7위를 다 차지해서, 다른 쪽 기관(A)의 유일한 예산 청크가
+  9위로 밀려 컨텍스트 창 밖으로 빠졌다. `_retrieve_results()` 자체는 top-30
+  안에서 두 기관 예산을 다 찾았는데, 최종 LLM이 보는 컨텍스트에는 한쪽만
+  들어간 것 — 이러면 어떤 답변 생성 방식을 쓰든 애초에 정답을 낼 수 없다.
+- **수정**: 비교 질의일 때 `results[:N]` 단순 절단 대신, org(기관) 단위로
+  라운드로빈해서 양쪽이 컨텍스트 예산 안에 고르게 들어가도록 변경.
+
+## 최종 결과
+
+`eval_dataset_new8.yaml` 8문항 전부 correctness 4~5, **8/8 정답** —
+n6/n7(비교 질의)도 두 기관 금액을 정확히 비교하는 자연스러운 답변을 낸다.
+faithfulness 항목은 judge 모델의 변덕으로 낮게 나오는 경우가 있으나(정답인데도
+0점을 주는 사례 확인), 실제 생성 텍스트를 직접 대조해 정답임을 확인했다.
+
+남은 문제 없음 — 이번 세션에서 다룬 범위 안에서는 전부 해결됨.
 
 재현 방법: `python scripts/eval_retrieval.py --dataset eval_resources/eval_dataset_new8.yaml --judge_model openai/gpt-oss-20b`
 (judge 모델은 Groq 엔드포인트 기준 `openai/gpt-oss-20b`로 지정해야 함 —
