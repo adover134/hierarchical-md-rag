@@ -46,6 +46,56 @@ def _is_key_value_table(headers: list[str]) -> bool:
     return len(headers) == 2
 
 
+# 순수 숫자/금액/기호로만 이루어진 셀 — 라벨이 아니라 값으로 본다("368,467,000",
+# "-", "334,970,000" 등). 컬럼당 표본이 적을 때(예: 남은 데이터 행이 1개뿐인
+# 경우) 우연히 "라벨과 다른 값 하나"만으로 반복 그리드로 오판하는 걸 막는다.
+_LOOKS_LIKE_VALUE_RE = re.compile(r"^[\-\d,.:%()원억만천\s]+$")
+
+
+def _looks_like_repeating_kv_grid(headers: list[str], data_rows: list[list[str]]) -> bool:
+    """헤더가 없는 "라벨|값|라벨|값" 반복 그리드인지 판별한다.
+
+    GFM 마크다운은 헤더+구분선 행을 강제하는데, 원본 HWP 표가 애초에 헤더 없이
+    "라벨: 값"을 나열만 하는 표면(hwp2md가 이런 표도 만든다), 어쩔 수 없이 첫
+    데이터 행이 헤더 자리에 찍힌다. 이런 표는 짝수 컬럼(0, 2, ...) 자리에 오는
+    문자열이 행마다 계속 달라진다 — 진짜 헤더 열이라면 같은 자리에 고정된
+    카테고리명(예: "품명", "규격")이 반복돼야 하는데, 값 자체가 행마다 다르다는
+    건 그 컬럼이 고정 카테고리가 아니라 가변 필드명이라는 뜻이다.
+
+    단, 표본이 3개 미만인 컬럼(대개 표의 "두 번째 라벨:값 쌍" 자리처럼 일부
+    행만 채워진 보조 열)은 판단 근거로 안 쓴다 — 첫 번째 라벨열(항상 채워짐)
+    하나만으로도 충분히 신뢰할 수 있고, 표본이 적은 보조 열까지 강제로 통과
+    시키면 "데이터 행이 1개뿐이라 라벨과 값이 우연히 다름"만으로 오탐하기
+    쉽다(실측: 헤더 복제 행 제거 후 데이터 1행만 남는 표에서 발생).
+
+    또한, 헤더 행의 "값 자리"(홀수 인덱스: 헤더가 첫 데이터 행이라면 그 자리에
+    와야 할 실제 값)가 전부 "수량"/"단가(원)"처럼 짧은 일반 열 제목처럼 보이면
+    반복 그리드로 보지 않는다 — 진짜 2단 헤더 표(예: "시설명|수량|시설명|수량"
+    처럼 품목을 2개씩 나란히 나열하는 표)에서, 데이터 행의 품목명(미단뜨기
+    미싱/오버로크 등)이 우연히 서로 다 다르다는 이유만으로 "라벨이 행마다
+    바뀐다"고 오판하는 걸 막는다(실측 확인). 반대로 진짜 헤더 없는 KV 표라면
+    첫 데이터 행이 헤더 자리에 찍힌 것이므로 그 값 자리에는 사업명처럼 구체적이고
+    긴 실제 값이 온다.
+    """
+    if len(headers) < 4 or len(headers) % 2 != 0:
+        return False
+    value_slot_cells = [headers[i] for i in range(1, len(headers), 2) if i < len(headers) and headers[i]]
+    if not value_slot_cells or all(len(v) <= 8 for v in value_slot_cells):
+        return False
+    all_rows = [headers, *data_rows]
+    checked_any = False
+    for idx in range(0, len(headers), 2):
+        values_at_col = [row[idx] for row in all_rows if idx < len(row) and row[idx]]
+        if len(values_at_col) < 3:
+            continue
+        checked_any = True
+        if any(_LOOKS_LIKE_VALUE_RE.match(v) for v in values_at_col):
+            return False
+        if len(set(values_at_col)) < len(values_at_col) * 0.6:
+            return False
+    return checked_any
+
+
 def flatten_table(table_text: str) -> str:
     """마크다운 테이블을 자연어 텍스트로 변환한다.
 
@@ -105,12 +155,19 @@ def flatten_table(table_text: str) -> str:
 
     placeholder = _is_placeholder_header(headers)
     kv_table = _is_key_value_table(headers) and not placeholder
+    repeating_kv_grid = (
+        not kv_table and not placeholder and _looks_like_repeating_kv_grid(headers, data_rows)
+    )
 
     # KV 테이블에서는 헤더 행도 데이터 — 단, 일반적 열 제목은 제외
     if kv_table:
         header_vals = {h.strip() for h in headers if h.strip()}
         if not header_vals.issubset(_GENERIC_KV_HEADERS):
             data_rows.insert(0, headers)
+    elif repeating_kv_grid:
+        # 이 표는 애초에 헤더가 없고 첫 데이터 행이 GFM 문법 때문에 어쩔 수 없이
+        # 헤더 자리에 찍힌 것이므로, 헤더 행도 그대로 데이터로 취급한다.
+        data_rows.insert(0, headers)
 
     result_lines: list[str] = []
 
@@ -130,6 +187,21 @@ def flatten_table(table_text: str) -> str:
                 result_lines.append(key)
             elif val:
                 result_lines.append(val)
+    elif repeating_kv_grid:
+        # 라벨:값이 반복되는 그리드 — 컬럼 인덱스(짝수=라벨/홀수=값)를 고정
+        # 신뢰하지 않는다. HWP 병합 셀이 마크다운으로 복원될 때 값 칸이 한 칸
+        # 밀려 빈 칸이 끼는 경우(예: |c| |c'| |, 원래는 한 쌍인데 두 번째 자리로
+        # 밀림)가 있어서, 컬럼 위치가 아니라 "실제 값이 있는 칸"만 왼쪽부터
+        # 순서대로 모아 (1,2)/(3,4)... 로 순차 페어링한다.
+        for row in data_rows:
+            non_empty = [v for v in row if v]
+            pairs: list[str] = []
+            it = iter(non_empty)
+            for label in it:
+                val = next(it, None)
+                pairs.append(f"{label}: {val}" if val is not None else label)
+            if pairs:
+                result_lines.append(", ".join(pairs))
     elif placeholder:
         # 플레이스홀더 헤더: 값만 콤마로 연결
         for row in data_rows:
@@ -137,14 +209,23 @@ def flatten_table(table_text: str) -> str:
             if values:
                 result_lines.append(", ".join(values))
     else:
-        # 다열 테이블: "header: value" 쌍을 콤마로 연결
+        # 다열 테이블: "header: value" 쌍을 콤마로 연결.
+        # 원본 HWP 표가 2행짜리 헤더(대분류+소분류)일 때, hwp2md가 소분류 행을
+        # 헤더 다음에 데이터처럼 한 번 더 찍어내는 경우가 있다 — 그 소분류 행은
+        # 일부(또는 전부) 칸이 자기 컬럼의 헤더 라벨과 완전히 같은 문자열을
+        # 그대로 반복한다. 행 전체가 헤더와 동일한지가 아니라(부분만 겹치는
+        # 경우가 실제로 있음 — 실측 확인) 칸 단위로, 값이 자기 컬럼 헤더와
+        # 같으면 그 칸만 "라벨: 라벨" 형태로 찍히지 않도록 건너뛴다.
         for row in data_rows:
             pairs: list[str] = []
             for j, val in enumerate(row):
                 if not val:
                     continue
-                if j < len(headers) and headers[j]:
-                    pairs.append(f"{headers[j]}: {val}")
+                header_j = headers[j] if j < len(headers) else ""
+                if header_j and val == header_j:
+                    continue
+                if header_j:
+                    pairs.append(f"{header_j}: {val}")
                 else:
                     pairs.append(val)
             if pairs:
