@@ -127,17 +127,74 @@
 - 재현 쿼리("경성대학교 대형홀...")도 재확인: `기한은 \`2026.8.26\`입니다.` —
   깨끗하게 유지됨.
 
-## 남은 문제 (미수정, 오늘 범위 밖으로 새로 확인됨)
+## retrieval depth + 최종 검증 (추가 커밋)
 
-- **n6/n7 (비교 답변 내용 품질)**: 답변 구조("A 문서/B 문서/공통/차이")는 이제
-  온전하지만, `_build_comparison_answer_from_results()`가 호출하는
-  `_extract_evidence_lines()`가 예산 관련 줄이 아니라 입찰 상투 문구를 뽑아온다.
-  구조 손상 버그(7번)와는 다른 층위 — 증거 줄 선택 자체의 품질 문제.
-- **n8 (retrieval depth)**: `top_k=5`로는 정답이 담긴 "5. 낙찰자결정방법" 청크가
-  아예 후보에 안 들어감(같은 문서의 "1. 입찰에 부치는 사항" 개요 청크만 상위
-  5개에 포함). 8번 수정 덕분에 이제 틀린 값 대신 정직하게 "확인 안 됨"으로
-  답하지만, 근본 원인(문서 내 청크 단위 retrieval depth 부족)은 그대로 남음.
+n8("...몇 퍼센트 이상인가요?")을 "문서는 맞는데 청크가 틀렸다" 패턴으로 진단 —
+`top_k=5`로는 정답이 담긴 "5. 낙찰자결정방법" 청크가 후보에 안 들어가고, 같은
+문서의 "1. 입찰에 부치는 사항" 개요 청크만 상위 5개에 포함되는 문제였다. 이미
+있던 `_probe_source_local_candidates()`("먼저 문서를 찾고, 그 문서 내부를 다시
+훑는" 메커니즘, 정밀사실/시각/가이드 질의에만 연결돼 있었음)를 확장해 퍼센트/비율
+질의도 이 재탐색을 타도록 했다. 그 과정에서 이 메커니즘이 애초에 `single_doc_focus`
+플래그에 의존하는데, 그 플래그가 **거의 항상 False**로 계산되고 있었다는 걸
+발견 — 후속 항목 참고.
+
+### 10. `single_doc_focus`가 org 후보 2개 강제 패딩 때문에 거의 항상 False
+- **원인**: `resolved_targets`는 "비교 대상 org 복원"용 함수가 항상 최소 2개까지
+  강제로 채워서 반환하는데(진짜 비교 질의인지와 무관하게), 이 패딩된 개수를
+  그대로 `single_doc_focus` 판정에 `target_org_count >= 2 → False`로 재사용하고
+  있었다. 57개 문서 코퍼스에서는 거의 모든 질문이 org 후보 2개는 우연히 찾아지므로,
+  `single_doc_focus`가 사실상 항상 False가 되어 `source_local_probe`를 포함한
+  여러 다운스트림 로직이 조용히 무력화되고 있었다.
+- **수정**: 질의 텍스트 자체가 진짜 비교형(`_is_comparison_query`)일 때만 패딩된
+  개수를 신뢰하고, 아니면 최소 1개로 취급하도록 변경.
+
+### 11. `is_comparison_query`가 "~중 ~가 더 큰/많은 것은?" 표현을 놓침
+- 10번 수정 직후 n6/n7(진짜 비교 질의)이 오히려 회귀 — 이 문구가
+  `is_comparison_query`의 좁은 마커 목록("비교"/"차이"/"A 문서"/"B 문서" 등)에
+  안 걸려서 `single_doc_focus=True`(틀림)로 오판된 것. 한국어 비교급 표현
+  "중 ... 더 큰/많은/작은/높은/적은/긴/짧은"에 대한 정규식 추가 — org 매칭
+  개수에 의존하지 않는 순수 텍스트 신호라 오늘 아침 고친 오탐 방지 로직과
+  충돌하지 않음(회귀 없이 재확인).
+
+### 12. `wants_direct_fact`/`wants_project_period`에 "기간"/"며칠" 누락
+- 함수 최상단 게이트(`wants_direct_fact`) 키워드 목록에 "기간"/"며칠"이 아예
+  없어서, 기간을 묻는 질의(n1, n4)가 `_extract_direct_fact_from_results`의
+  첫 줄에서 바로 `None`을 반환하고 있었다. `wants_project_period`도 "사업"
+  리터럴에 고정돼 있어서 "공사기간"류 표현(건설 RFP에 흔함)을 놓쳤다. 둘 다
+  키워드 추가로 해결.
+
+### 13. `_extraction_is_implausible`가 "[26년 브랜드사업]" 같은 연도 표기를 기간 값으로 오인
+- 대괄호 바로 뒤 숫자를 제외하는 부정 lookbehind를 넣었었는데, 정규식 엔진이
+  그 매칭에 실패하면 숫자 중간(예: "26" 중 "6")부터 다시 시도해서 우회해버리는
+  걸 놓쳤다. `[`뿐 아니라 앞 문자가 숫자인 경우도 lookbehind에서 제외하도록
+  보강(`(?<![\[\d])`).
+
+## 최종 검증
+
+이번 검증 도중 Groq 일일 토큰 한도(200,000 TPD)를 거의 다 써서 rate limit이
+반복적으로 걸렸다. 로컬 Ollama로 전환했는데 처음엔 이미 받아져 있던 `qwen3.5:9b`를
+썼다가 빈 응답만 반환 — 이후 qwen3.5는 VLM 계열이라 이 순수 텍스트 2단계 프롬프트에
+안 맞았을 가능성이 높다는 게 확인되어, 실제 프로덕션에서 쓰는 것과 동일한
+`gpt-oss:20b`를 Ollama로 새로 받아 재검증(타임아웃 20분으로 설정, `OPENAI_TIMEOUT_SEC`
+환경변수로 조정 가능).
+
+**`eval_dataset_new8.yaml` 8문항 최종 결과 (gpt-oss:20b, 로컬)**:
+- n1, n2, n3, n4, n5, n8: **전부 정답**, 라벨 중복 없이 깨끗함.
+- n6, n7: 답변 구조(A 문서/B 문서/공통/차이)는 온전하지만, 여전히
+  `_build_comparison_answer_from_results()`의 증거 줄 선택 품질 문제가 남음 —
+  아래 "남은 문제" 참고.
+
+## 남은 문제 (미수정)
+
+- **n6/n7 (비교 답변 내용 품질)**: `_build_comparison_answer_from_results()`가
+  호출하는 `_extract_evidence_lines()`가 예산 관련 줄이 아니라 입찰 상투 문구를
+  뽑아온다. 구조 손상 버그(7번)와는 다른 층위 — 증거 줄 선택 자체의 품질 문제.
+  이번 세션에서 손대지 않음.
 
 재현 방법: `python scripts/eval_retrieval.py --dataset eval_resources/eval_dataset_new8.yaml --judge_model openai/gpt-oss-20b`
 (judge 모델은 Groq 엔드포인트 기준 `openai/gpt-oss-20b`로 지정해야 함 —
-기본값 `gpt-5-mini`는 Groq에 존재하지 않아 판정 자체가 실패함)
+기본값 `gpt-5-mini`는 Groq에 존재하지 않아 판정 자체가 실패함). Groq 한도
+소진 시 로컬 Ollama로 전환: `HWP_RAG_LLM_BASE_URL=http://localhost:11434/v1
+OPENAI_API_KEY=ollama-local REASONING_MODEL=gpt-oss:20b QUERY_INTENT_MODEL=gpt-oss:20b
+OPENAI_TIMEOUT_SEC=1200` — 반드시 같은 모델(`gpt-oss:20b`, `ollama pull gpt-oss:20b`로
+받기)을 써야 결과가 비교 가능하다.
