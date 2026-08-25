@@ -18,6 +18,29 @@ try:
 except ImportError:
     UTILS_AVAILABLE = False
 
+_RATE_LIMITER = None
+_RATE_LIMITER_INITIALIZED = False
+
+
+def _get_rate_limiter():
+    """LLM_RATE_LIMIT_SECONDS가 설정된 경우 프로세스 전체에서 공유하는 rate limiter를
+    반환한다. judge_rag_response()가 질문마다 새 ChatOpenAI를 만들기 때문에, limiter
+    인스턴스 자체를 매번 새로 만들면 버킷 상태가 리셋돼 호출 간 조절이 안 된다."""
+    global _RATE_LIMITER, _RATE_LIMITER_INITIALIZED
+    if _RATE_LIMITER_INITIALIZED:
+        return _RATE_LIMITER
+    _RATE_LIMITER_INITIALIZED = True
+    rate_limit_seconds = float(os.environ.get("LLM_RATE_LIMIT_SECONDS", "0") or 0)
+    if rate_limit_seconds > 0:
+        from langchain_core.rate_limiters import InMemoryRateLimiter
+
+        _RATE_LIMITER = InMemoryRateLimiter(
+            requests_per_second=1.0 / rate_limit_seconds,
+            check_every_n_seconds=0.1,
+            max_bucket_size=1,
+        )
+    return _RATE_LIMITER
+
 JUDGE_SYSTEM_PROMPT = """\
 당신은 RAG(Retrieval-Augmented Generation) 시스템의 응답 품질을 평가하는 전문 심사관입니다.
 
@@ -154,7 +177,9 @@ def judge_rag_response(
         )
 
     # HWP_RAG_LLM_BASE_URL: OpenAI 호환 엔드포인트로 리다이렉트(예: Groq) — workflow.py의 동일한
-    # 확장점과 짝을 이룬다.
+    # 확장점과 짝을 이룬다. LLM_RATE_LIMIT_SECONDS도 workflow.py와 동일하게 지원
+    # (judge 호출은 answer() 호출과 별도 클라이언트라 워크플로우 쪽 rate limiter가
+    # 안 잡아준다 — 클라우드 TPM 한도 회피용, 기본 비활성).
     llm = ChatOpenAI(
         model=model or llm_cfg.get("model", "gpt-5-mini"),
         temperature=0.0,
@@ -162,6 +187,7 @@ def judge_rag_response(
         api_key=api_key,
         base_url=os.environ.get("HWP_RAG_LLM_BASE_URL") or None,
         model_kwargs={"response_format": {"type": "json_object"}},
+        rate_limiter=_get_rate_limiter(),
     )
 
     # 컨텍스트가 너무 길면 잘라서 JSON 응답 안정성 확보

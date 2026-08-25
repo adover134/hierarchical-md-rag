@@ -186,6 +186,21 @@ class RAGChatbotV17:
         ollama_extra_kwargs: dict[str, Any] = (
             {"extra_body": {"options": {"num_ctx": 16384}}} if is_ollama_endpoint else {}
         )
+        # 클라우드 엔드포인트(Groq 등)는 분당 토큰(TPM) 한도가 있는데, 질문 하나가
+        # 이미 순차 호출 4번(질의분석+근거압축+답변생성+judge)을 쓰는 reasoning
+        # 모델이라 텀 없이 쏘면 문항 하나만으로도 한도를 넘긴다. LLM_RATE_LIMIT_SECONDS
+        # 설정 시에만 호출 사이에 그만큼 간격을 강제한다(기본 비활성 — 로컬 Ollama는
+        # 이런 한도가 없어 불필요하게 느려지지 않도록).
+        rate_limit_seconds = float(os.environ.get("LLM_RATE_LIMIT_SECONDS", "0") or 0)
+        rate_limiter = None
+        if rate_limit_seconds > 0:
+            from langchain_core.rate_limiters import InMemoryRateLimiter
+
+            rate_limiter = InMemoryRateLimiter(
+                requests_per_second=1.0 / rate_limit_seconds,
+                check_every_n_seconds=0.1,
+                max_bucket_size=1,
+            )
         if runtime_api_key:
             reasoning_model = str(os.environ.get("REASONING_MODEL", "") or REASONING_MODEL or "").strip() or "gpt-5-mini"
             query_intent_model = str(
@@ -198,6 +213,7 @@ class RAGChatbotV17:
                 temperature=0.0,
                 timeout=OPENAI_TIMEOUT_SEC,
                 max_retries=OPENAI_MAX_RETRIES,
+                rate_limiter=rate_limiter,
                 **ollama_extra_kwargs,
             )
             if query_intent_model == reasoning_model:
@@ -207,6 +223,7 @@ class RAGChatbotV17:
                     api_key=runtime_api_key,
                     base_url=runtime_base_url,
                     model=query_intent_model,
+                    rate_limiter=rate_limiter,
                     temperature=0.0,
                     timeout=min(OPENAI_TIMEOUT_SEC, 15),
                     max_retries=OPENAI_MAX_RETRIES,

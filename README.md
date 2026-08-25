@@ -59,6 +59,14 @@ REASONING_MODEL=gpt-oss:20b QUERY_INTENT_MODEL=gpt-oss:20b OPENAI_TIMEOUT_SEC=12
 python scripts/eval_retrieval.py --dataset eval_resources/eval_dataset_new8.yaml --judge_model gpt-oss:20b
 ```
 
+`gpt-oss:20b` 정도 크기의 로컬 reasoning 모델은 검색(retrieval)이 완벽해도
+답변 생성 단계에서 실행마다 결과가 달라질 수 있다 — 동일한 컨텍스트에
+정답이 명확히 들어있는데도 어떨 때는 정확히 답하고 어떨때는 "확인되지
+않습니다"로 놓치는 사례가 확인됐다(`docs/BUGFIXES.md`의 "다른 모델로
+m2/m19 교차검증" 참고, 같은 컨텍스트를 OpenAI/Claude로 재현하면 매번
+정답). retrieval 관련 회귀를 진단할 때 recall@k가 이미 만점인데 correctness만
+낮다면, 먼저 리트리벌 코드가 아니라 이 모델 자체의 편차를 의심할 것.
+
 ### 답변 생성 방식: 기본은 순수 LLM
 
 정규식으로 값을 뽑아 템플릿에 끼워넣는 규칙 기반 추출 계층이 원본에 있었지만,

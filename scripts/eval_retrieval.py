@@ -377,6 +377,7 @@ def evaluate_e2e(
     eval_items: list[dict],
     top_k: int = 5,
     judge_model: str | None = None,
+    sleep_between: float = 0.0,
 ) -> dict:
     """E2E 평가: RAG 파이프라인 실행 → LLM Judge 채점."""
     per_query_results: list[dict] = []
@@ -391,6 +392,11 @@ def evaluate_e2e(
     total = len(eval_items)
 
     for i, item in enumerate(eval_items, start=1):
+        if sleep_between > 0 and i > 1:
+            # 클라우드 judge/LLM 엔드포인트(Groq 등)의 분당 요청/토큰 제한을
+            # 문항 하나가 이미 4콜(질의분석+근거압축+답변생성+judge)을 쓰는데
+            # 문항 사이 텀 없이 20개를 연속 호출하면 바로 넘는다.
+            time.sleep(sleep_between)
         question = item["question"]
         expected_answer = item.get("expected_answer", "")
         gt = item.get("ground_truth", {})
@@ -588,6 +594,10 @@ def main() -> None:
     parser.add_argument("--top_k", type=int, default=5, help="검색 top-K (기본: 5)")
     parser.add_argument("--dataset", type=str, default=None, help="평가셋 경로")
     parser.add_argument("--judge_model", type=str, default=None, help="Judge LLM 모델 (기본: config 모델)")
+    parser.add_argument(
+        "--sleep_between", type=float, default=0.0,
+        help="문항 사이 대기 시간(초). 클라우드 엔드포인트 분당 제한 회피용 (기본: 0)",
+    )
     args = parser.parse_args()
 
     load_env()
@@ -611,6 +621,7 @@ def main() -> None:
         eval_items,
         top_k=args.top_k,
         judge_model=args.judge_model,
+        sleep_between=args.sleep_between,
     )
     elapsed = time.time() - start
 
