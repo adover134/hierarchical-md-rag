@@ -33,11 +33,6 @@ LANGSMITH_TRACING: bool = os.environ.get("LANGSMITH_TRACING", "false").lower() =
 LANGSMITH_ENDPOINT: str = os.environ.get("LANGSMITH_ENDPOINT", "https://api.smith.langchain.com/")
 LANGSMITH_PROJECT: str = os.environ.get("LANGSMITH_PROJECT", "biddingmate_ai7")
 
-# Langfuse (대안 트레이싱)
-LANGFUSE_PUBLIC_KEY: str | None = os.environ.get("LANGFUSE_PUBLIC_KEY")
-LANGFUSE_SECRET_KEY: str | None = os.environ.get("LANGFUSE_SECRET_KEY")
-LANGFUSE_BASE_URL: str = os.environ.get("LANGFUSE_BASE_URL", "https://cloud.langfuse.com")
-
 # HuggingFace
 HF_TOKEN: str | None = os.environ.get("HF_TOKEN")
 
