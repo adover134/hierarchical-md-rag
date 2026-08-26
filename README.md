@@ -99,6 +99,13 @@ python scripts/api.py --port 8001
 |---|---|---|
 | `RAG_API_KEYS` | - | 쉼표로 구분한 허용 API 키 목록. 미설정 시 인증 없이 열린 상태로 동작(로컬 개발용) — 실제 배포 시 반드시 설정할 것 |
 
+인증/요청 검증 배선(실제 챗봇은 목으로 대체 — LLM 호출 없이 즉시 실행됨)은
+`tests/test_api.py`로 배포 전에 바로 돌려볼 수 있다:
+
+```bash
+pytest tests/test_api.py
+```
+
 엔드포인트:
 - `GET /v1/health` — DB/챗봇 초기화 상태 점검(인증 불필요)
 - `POST /v1/query` — `{"query": "...", "top_k": 24}` -> `RAGChatbotV17.answer()`의 반환 dict
