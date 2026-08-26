@@ -21,6 +21,9 @@ markdown으로 변환하는 파싱 단계만
 - `scripts/parser_bridge.py` — 새 skill 파서를 팀 파이프라인에 연결하는 통합 지점
   (재매핑 없이 완전 대체 — 상세는 파일 내 docstring 참고)
 - `scripts/build_index_new_parser.py` / `scripts/index_pdf_originals.py` — DB 구축
+- `scripts/api.py` — 검색(질의응답) API. UI가 실제로 붙는 지점은 이거 하나뿐 —
+  DB 구축은 위 스크립트를 서비스 제공자가 직접/자동화로 돌리는 별개 작업(CLI 전용,
+  API로 노출하지 않음)
 - `scripts/eval_retrieval.py` — E2E 평가(검색 recall + LLM-as-Judge 4축 채점)
 - `docs/BUGFIXES.md` / `docs/BUGFIXES_PLAIN.md` — 버그 수정 기록(상세/쉬운 설명)
 
@@ -80,6 +83,36 @@ m2/m19 교차검증" 참고, 같은 컨텍스트를 OpenAI/Claude로 재현하�
 ```bash
 HWP_RAG_ENABLE_LEGACY_EXTRACTIVE=1 python ...
 ```
+
+## 검색 API
+
+`RAGChatbotV17.answer()`를 HTTP로 노출하는 질의응답 전용 API(`scripts/api.py`,
+FastAPI + `uvicorn`, `langc` conda 환경에 이미 설치돼 있음). DB 구축(위 "DB 구축" 절)과는
+완전히 별개다 — 이 API에는 문서 업로드/인덱싱 엔드포인트가 없고, 서비스 사용자용 UI가
+붙는 지점이 여기 하나뿐이라는 게 설계 원칙이다.
+
+```bash
+python scripts/api.py --port 8001
+```
+
+| 변수 | 기본값 | 설명 |
+|---|---|---|
+| `RAG_API_KEYS` | - | 쉼표로 구분한 허용 API 키 목록. 미설정 시 인증 없이 열린 상태로 동작(로컬 개발용) — 실제 배포 시 반드시 설정할 것 |
+
+엔드포인트:
+- `GET /v1/health` — DB/챗봇 초기화 상태 점검(인증 불필요)
+- `POST /v1/query` — `{"query": "...", "top_k": 24}` -> `RAGChatbotV17.answer()`의 반환 dict
+  그대로(`answer`/`evidence`/`confidence`/`retrieved_docs` 등)
+
+```bash
+curl -X POST http://localhost:8001/v1/query \
+  -H "Authorization: Bearer $RAG_API_KEYS" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "사업비가 가장 높은 공고는?", "top_k": 10}'
+```
+
+rate limit은 아직 없다(hwp-hierarchical-md-service의 rate_limit.py는 Langfuse 트레이스를
+근거로 세는데, 이 저장소는 Langfuse를 아직 안 씀 — 필요해지면 추가 검토).
 
 ## 평가
 
