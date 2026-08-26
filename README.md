@@ -145,3 +145,17 @@ gitignore됨(`eval_resources/eval_results_*.json`, `eval_resources/eval_report_*
 `docs/BUGFIXES.md`에 오늘까지 추적·수정한 근본원인 15개가 전부 기록돼 있다
 (검색 순위 오판, org 해석 우선순위, retrieval depth, 답변 생성 방식 전환,
 비교 질의 컨텍스트 불균형 등). 두 평가셋 모두 현재 전 문항 정답 상태다.
+
+## 참조
+
+본 프로젝트는 [공공 입찰 데이터 RAG 시스템 개발 프로젝트](https://github.com/Loah-Lee/AI_7-team)에 대해 개선한 버전으로,
+HWP(X) 파일 파싱 및 로딩 프로세스 및 검색 과정의 개선을 수행하였다.
+
+기존 프로젝트를 함께 진행한 아래 팀원들에게 감사를 전한다.
+@youuuchul (이메일: dbcjf25@gmail.com)
+@Loah-Lee (이메일: sims0724@gmail.com)
+@wwwwkjh1022-art
+@dinu1108
+
+문의는 아래 이메일로
+adfsfsf@naver.com
