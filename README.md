@@ -27,6 +27,31 @@ markdown으로 변환하는 파싱 단계만
 - `scripts/eval_retrieval.py` — E2E 평가(검색 recall + LLM-as-Judge 4축 채점)
 - `docs/BUGFIXES.md` / `docs/BUGFIXES_PLAIN.md` — 버그 수정 기록(상세/쉬운 설명)
 
+## 아키텍처
+
+DB 구축(오프라인, CLI 전용)과 검색(온라인, 유일한 사용자용 접점)은 완전히 분리된 두 흐름이다 —
+문서를 채워 넣는 일은 서비스 제공자만 하는 운영 작업이고, API는 "LLM을 통한 검색"이라는
+사용자용 기능 하나만 가진다.
+
+```mermaid
+flowchart LR
+    subgraph OFFLINE["DB 구축 — 오프라인, CLI 전용, 운영자가 직접/자동화로 실행"]
+        direction TB
+        A1["HWP/HWPX 원본"] -->|"외부 파서 CLI 호출(hwp2md convert, subprocess)"| A2["Markdown"]
+        A2 --> A3["청킹\n표 평탄화 · 텍스트 정리 · 섹션 분할"]
+        A3 --> A4["Hybrid 임베딩\ndense(ko-sroberta) + sparse(BM25/Kiwi)"]
+        A4 --> A5[("ChromaDB")]
+    end
+    subgraph ONLINE["검색 — 온라인, 유일한 사용자용 접점"]
+        direction TB
+        B1["사용자 질의"] -->|"POST /v1/query"| B2["Authorization: Bearer 검증\nRAG_API_KEYS"]
+        B2 -->|"401 미인증 거부"| BX["요청 거부"]
+        B2 -->|"인증 통과"| B3["RAGChatbotV17.answer()\n검색 + LLM 답변 생성"]
+        B3 --> B4["답변 + 근거 evidence 응답"]
+    end
+    A5 -.->|"같은 컬렉션을 읽음(구축과 검색은 별도 프로세스)"| B3
+```
+
 ## DB 구축
 
 ```bash
