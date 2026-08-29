@@ -26,6 +26,10 @@ from src.prompts.templates import (
     ANSWER_GENERATION_FROM_EVIDENCE_PROMPT,
     EVIDENCE_REFINEMENT_PROMPT,
     RFP_SYSTEM_PROMPT,
+    STEP_PLANNER_PROMPT,
+    STEP_QUERY_PROMPT,
+    STEP_ANSWER_EXTRACTION_PROMPT,
+    MULTI_AGENT_ANSWER_PROMPT,
 )
 from src.graph.state import QueryIntent, QuestionPlan
 
@@ -595,6 +599,130 @@ class RFPAnswerGenerator:
             if indicator in answer:
                 return answer.split(indicator)[-1].strip()
         return answer
+
+    @staticmethod
+    def _safe_load_steps_json(payload: str) -> list[Any] | None:
+        """plan_steps()의 JSON 응답을 관대하게 파싱합니다(코드블록 래핑 등 허용)."""
+        text = str(payload or "").strip()
+        if not text:
+            return None
+        if text.startswith("```"):
+            text = text.strip("`")
+            if text.lower().startswith("json"):
+                text = text[4:]
+            text = text.strip()
+        try:
+            data = json.loads(text)
+        except Exception:
+            match = re.search(r"\{[\s\S]*\}", text)
+            if not match:
+                return None
+            try:
+                data = json.loads(match.group(0))
+            except Exception:
+                return None
+        if not isinstance(data, dict):
+            return None
+        steps = data.get("steps")
+        return steps if isinstance(steps, list) else None
+
+    def plan_steps(self, query: str) -> list[str]:
+        """질의를 1~3개의 검색 step으로 분해합니다(HWP_RAG_ANSWER_STRATEGY=multi_agent 전용).
+
+        LLM 호출 1회. 파싱 실패/빈 결과/LLM 없음이면 원본 질의 그대로 1-step으로 안전하게
+        저하한다 — 이 메서드가 실패해도 multi_agent 경로가 완전히 죽지 않고, 기존 단일
+        검색과 동등한 동작(step 1개 = 원본 질의 그대로 검색)으로 되돌아간다."""
+        if not self.llm:
+            return [query]
+        try:
+            prompt = STEP_PLANNER_PROMPT.format(query=query)
+            messages = [
+                SystemMessage(content="JSON 객체 하나만 출력하세요. 설명 문장과 코드블록은 금지입니다."),
+                HumanMessage(content=prompt),
+            ]
+            response = self.llm.invoke(messages)
+            steps_raw = self._safe_load_steps_json(getattr(response, "content", ""))
+            if not steps_raw:
+                return [query]
+            steps = [str(s).strip() for s in steps_raw if str(s).strip()]
+            return steps[:3] if steps else [query]
+        except Exception:
+            return [query]
+
+    def refine_step_query(self, original_query: str, step: str) -> str:
+        """검색 step 하나를 실제 벡터 검색에 쓸 구체적인 쿼리 문장으로 재생성합니다
+        (kt2의 prepare_step_node 대응, LLM 호출 1회 — step당 호출됨).
+
+        kt2는 dense_query/sparse_query를 별도 생성하지만(Group A + Group C, step당 2회),
+        이 저장소의 VectorStore.search()는 쿼리 문자열 하나만 받으므로 1회로 충분하다.
+        비용 절감을 이유로 이 단계 자체를 생략하지 않는다 — plan_steps()와 함께 이 경로가
+        검증하려는 kt2 기법의 핵심 부분이다. LLM이 없거나 실패하면 step 텍스트를 그대로
+        반환한다(안전한 저하)."""
+        if not self.llm:
+            return step
+        try:
+            prompt = STEP_QUERY_PROMPT.format(original_query=original_query, step=step)
+            response = self.llm.invoke([HumanMessage(content=prompt)])
+            text = str(getattr(response, "content", "") or "").strip()
+            text = text.strip('"').strip("'").strip()
+            return text or step
+        except Exception:
+            return step
+
+    def extract_step_value(self, step: str, context: str) -> str:
+        """step(하위 질문)에 대한 사실을 그 step에 매칭된 컨텍스트에서 짧게 추출합니다
+        (LLM 호출 1회, step당). kt2에는 없던 역할이지만, step별로 매칭된 원본 청크
+        더미(수~수십 개)를 그대로 라벨만 붙여 넘기면 최종 생성 단계가 여전히
+        "읽기+추출+비교"를 한 번에 다 해야 한다 — m19(비교 질의)에서 정답 청크가
+        컨텍스트 상단에 있는데도(재현·확인됨, 버림 위치 문제 아님) 이 통합 부담 때문에
+        실패가 반복됐다. step마다 미리 사실 하나를 뽑아두면 최종 호출은 이미 추출된
+        값끼리 비교만 하면 되므로 부담이 크게 줄어든다. LLM이 없거나 실패하면
+        빈 컨텍스트와 동일하게 "문서에 명시되어 있지 않음"으로 안전하게 저하한다."""
+        if not self.llm or not context:
+            return "문서에 명시되어 있지 않음"
+        try:
+            prompt = STEP_ANSWER_EXTRACTION_PROMPT.format(step=step, context=context)
+            response = self.llm.invoke([HumanMessage(content=prompt)])
+            text = str(getattr(response, "content", "") or "").strip()
+            text = text.strip('"').strip("'").strip()
+            return text or "문서에 명시되어 있지 않음"
+        except Exception:
+            return "문서에 명시되어 있지 않음"
+
+    def generate_multi_agent(
+        self,
+        query: str,
+        ranked_context: str,
+        history: str = "",
+    ) -> str:
+        """이미 결정론적으로 랭킹된 컨텍스트로 곧바로 답을 생성합니다(LLM 호출 1회).
+
+        기존 generate()의 Stage 1(EVIDENCE_REFINEMENT_PROMPT — LLM이 "관련 근거만 추려서
+        압축")을 건너뛴다 — 검색 랭킹(dense+lexical hybrid)이 이미 같은 일을 결정론적으로
+        하고 있는데, 그 위에 로컬 모델(gpt-oss:20b)에서 실행마다 흔들리는 재판단 단계를
+        하나 더 얹는 게 문제였다(docs/BUGFIXES.md "m2/m19 교차검증" 참고)."""
+        started = time.perf_counter()
+        llm_calls = 0
+        try:
+            if not self.llm:
+                return "LLM 클라이언트가 없습니다."
+            prompt = MULTI_AGENT_ANSWER_PROMPT.format(
+                query=query,
+                history=history or "",
+                ranked_context=ranked_context or "(검색 결과 없음)",
+            )
+            messages = [
+                SystemMessage(content=RFP_SYSTEM_PROMPT),
+                HumanMessage(content=prompt),
+            ]
+            llm_calls += 1
+            response = self.llm.invoke(messages)
+            return self._clean_final_answer(str(getattr(response, "content", "") or ""))
+        except Exception as e:
+            return f"오류: {str(e)}"
+        finally:
+            self.last_generation_elapsed = time.perf_counter() - started
+            self.last_generation_llm_calls = llm_calls
 
 
 def _token_limit_arg(model: str, max_tokens: int) -> dict[str, int]:

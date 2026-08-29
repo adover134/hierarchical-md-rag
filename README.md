@@ -106,6 +106,43 @@ m2/m19 교차검증" 참고, 같은 컨텍스트를 OpenAI/Claude로 재현하�
 HWP_RAG_ENABLE_LEGACY_EXTRACTIVE=1 python ...
 ```
 
+### 답변 생성 전략: multi_agent(CoT 분해, m2/m19 근본 원인 해결)
+
+기본 경로(`two_stage`)는 EVIDENCE_REFINEMENT_PROMPT로 검색 컨텍스트를 LLM이 다시 "관련
+근거만 추려서" 압축한 뒤 답을 생성한다. 로컬 gpt-oss:20b에서는 이 압축 단계가 같은
+입력·temperature=0.0에서도 실행마다 정답 근거를 놓치는 사례가 실측됐다(`docs/BUGFIXES.md`
+"다른 모델로 m2/m19 교차검증" 참고 — Claude/OpenAI로 동일 프롬프트를 재현하면 매번 성공).
+
+`HWP_RAG_ANSWER_STRATEGY=multi_agent`는 AI_7-team `feature/kt2` 브랜치
+(`version1/phase2_mvp_report.md`)의 CoT 분해 기법을 이식한 대체 경로다 — 질의를 1~3개
+검색 step으로 나누고(`plan_steps`), step마다 이미 확보된 근거로 커버되는지 실제로 갭
+체크한 뒤(`_find_step_matches` — kt2 step_router 대응, 갭이 없으면 재검색을 건너뛴다),
+갭이 있는 step만 구체적인 검색 쿼리로 재검색하고(`refine_step_query`), step마다 값을
+미리 추출해(`extract_step_value`) "이미 확인된 값"으로 명시한 컨텍스트를 구성한 뒤, 그
+컨텍스트를 다시 추려내는 재판단 없이 곧바로 답변을 생성한다(`generate_multi_agent`).
+이 경로는 비용 절감이 아니라 기법 자체의 효과 검증이 목적이라 kt2의 에이전트 역할을
+생략하지 않는다 — 복합 질의는 기본 경로보다 LLM 호출이 더 늘 수 있다.
+
+최초 이식은 여러 겹의 회귀(검색 파라미터 축소, LLM 쿼리 재작성이 검색 트리거 키워드를
+지움, comparison 질의 중복 검색, 대화 이력 중복 삽입, 노이즈 청크가 최종 생성을
+방해)를 거쳐 실측으로 하나씩 고쳤다 — 특히 갭 체크에 "그 갭을 메우는 청크를 좁혀
+확보"하는 역할까지 통합하는 과정에서 한국어 조사(의/은/는 등)가 검색 트리거 문자열
+매칭을 깨는 버그를 발견·수정했다. 전체 과정은 `docs/BUGFIXES.md`
+"`multi_agent` 경로 구현 및 m2/m19 근본 원인 재해결" 절 참고.
+
+**검증 결과**(`eval_dataset_new20.yaml` 20문항 전체, `multiagent_new20_run3_final`):
+Correctness **4.95**(`two_stage` 기준선 4.30 대비 상승), 문서/청크 Recall@5 전부
+**1.0000**, 20문항 중 19문항 Correctness=5 — comparison 질의(m19)를 포함해 문서화된
+실패 사례 전부 해결.
+
+```bash
+HWP_RAG_ANSWER_STRATEGY=multi_agent python ...
+```
+
+디버깅에는 `scripts/debug_multiagent_gapcheck.py`를 쓴다 — 문항 하나를 이 경로로
+돌리며 gap-check 로그·검색 호출·최종 생성 컨텍스트·답변을
+`eval_resources/debug_logs/multiagent_runs/`에 JSON으로 자동 저장한다.
+
 ## 검색 API
 
 `RAGChatbotV17.answer()`를 HTTP로 노출하는 질의응답 전용 API(`scripts/api.py`,

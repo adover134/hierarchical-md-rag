@@ -485,3 +485,102 @@ retrieval/reranking 쪽 수정으로 대응할 수 있는 종류가 아니어서
 20문항 전부에 대해 완전히 검증됐다.** m2/m19의 근본 원인(로컬 20B
 reasoning 모델의 실행 간 편차)은 별개 이슈로 남아있고, 이번 세션 수정
 범위 밖이다.
+
+## `multi_agent` 경로 구현 및 m2/m19 근본 원인 재해결 (`multi-agent` 브랜치)
+
+바로 위에서 "별개 이슈, 이번 세션 수정 범위 밖"으로 남겨둔 m2/m19의 근본
+원인(로컬 20B 모델의 실행 간 편차)을 정면으로 겨냥한 후속 세션. AI_7-team
+`feature/kt2`(`version1/phase2_mvp_report.md`)의 6-agent CoT 파이프라인을
+이식해, 기존 `generate()`의 Stage 1(EVIDENCE_REFINEMENT_PROMPT — LLM이 이미
+랭킹된 컨텍스트를 다시 "관련 근거만 추려서" 압축하는 재판단 단계, 실행마다
+흔들리는 게 근본 원인으로 지목됐던 부분)을 아예 없애고, 랭킹된 컨텍스트로
+곧바로 답변을 생성하는 `HWP_RAG_ANSWER_STRATEGY=multi_agent` 경로를 새로
+만들었다. `src/graph/workflow.py`의 `_answer_with_multi_agent()`,
+`src/graph/nodes.py`의 `RFPAnswerGenerator.plan_steps/refine_step_query/
+extract_step_value/generate_multi_agent`, `src/prompts/templates.py`의
+`STEP_PLANNER_PROMPT/STEP_QUERY_PROMPT/STEP_ANSWER_EXTRACTION_PROMPT/
+MULTI_AGENT_ANSWER_PROMPT`로 구현했다. 최초 구현은 여러 겹의 회귀와
+설계 결함을 만들었는데, 실측으로 하나씩 원인을 좁혀 고쳤다:
+
+1. **검색 단계 회귀(m1/m2/m9, ChunkR@5 0.825→1.00으로 회귀)**: step마다
+   검색을 원시 `_run_retrieval_call()`(`vector_store.search()` 직접 호출,
+   top_k 고정·org 필터 없음)로 구현했더니, 원래 `answer()`가 쓰는
+   `_retrieve_results()`(org 스코프·top_k 확대·쿼리 확장까지 갖춘 실제
+   프로덕션 검색 엔진)보다 훨씬 얇아서 m1/m9는 top_k=6에 원래 top-5 안에
+   있던 정답 청크가 빠졌고, m2는 org 필터가 없어 무관한 문서들과 섞였다.
+   `_retrieve_results()`로 교체하고 org_name/top_k 스케일링 규칙을 원본
+   `answer()`와 동일하게 계산해서 해결.
+2. **LLM 쿼리 재작성이 검색 트리거 키워드를 지움(m2)**: `refine_step_query()`
+   (kt2의 prepare_step 대응)가 "불필요한 조사/어미를 정리"하며 "몇
+   퍼센트인가요?"에서 "퍼센트"를 지워버렸는데, `_retrieve_results()`
+   내부 `_build_retrieval_strategy()`는 "퍼센트"/"%" 같은 리터럴
+   문자열이 있어야 단일문서 로컬 탐색 모드(`source_local_probe`)가
+   켜진다 — 이게 없으면 후보군이 21개→1개로 붕괴했다(실측). `plan_steps()`
+   자체 출력도 같은 정리를 거쳐 트리거 단어를 지우므로, step이 아니라
+   원본 `query`로 검색하도록 변경. `refine_step_query()` 호출 자체는
+   비용/이식 충실도 유지를 위해 그대로 남기고, 검색에는 그 출력을
+   쓰지 않는다.
+3. **comparison 질의에서 검색 중복·컨텍스트 폭증(m19/m20)**: `answer()`의
+   업스트림 로직이 이미 `_ensure_org_coverage()`로 두 대상 기관을 각각
+   스코프 검색해 완전한 커버리지를 만들어 두는데, `_answer_with_multi_agent()`가
+   이 결과(`results` 인자)를 버리고 step마다 다시 검색해 중복 호출(m19
+   기준 최대 6회)과 노이즈가 쌓였다. `results`를 `accumulated` 시드로
+   재사용하고, `_find_step_matches()`(step_router 대응 실제 갭 체크)가
+   "이 step의 대상이 이미 accumulated에 있는가"를 판단해 있으면 재검색을
+   건너뛰도록 수정. 갭이 실제로 있을 때만 검색하되, comparison류는
+   `_ensure_org_coverage()`와 같은 원칙(대상별 스코프 검색, 합친 쿼리로
+   검색하면 임베딩이 희석됨)을 따라 `_resolve_step_target_org()`로 그
+   step의 특정 대상 기관을 찾아 스코프를 좁힌다.
+4. **대화 이력 중복 삽입**: step별로 `_build_context()`를 반복 호출하면서
+   매번 "# 이전 대화"를 다시 넣어, 앞선 문항의 무관한 Q/A가 다음 문항
+   컨텍스트에 섞여 들어갔다(실측: 같은 챗봇 인스턴스로 m2→m19→m20을
+   순차 실행했더니 m19/m20 컨텍스트에 m2 얘기가 끼어듦). `_build_context()`에
+   `include_history=False` 옵션을 추가해 step별 블록 생성 시에는 history를
+   빼도록 수정 — `history`는 이미 `generate_multi_agent(query, context,
+   history)`가 별도 인자로 받아 프롬프트에 채운다.
+5. **검색·정답 위치는 정상인데 최종 생성이 여전히 실패(m19)**: 위 수정
+   전부 적용 후에도 m19는 컨텍스트에 정답 두 수치(368,467,000원/24,867,000원)가
+   각 step 블록 맨 앞부분에 있는데도(위치 확인됨, "묻힘" 문제 아님)
+   최종 답변은 컨텍스트 어디에도 없는 문장("계약금액은 계약서에 명시된
+   금액과 동일합니다")을 5회 중 4회 반복했다(1회는 빈 답변) — 질문을
+   프롬프트 맨 끝에 한 번 더 반복해도 개선되지 않고 오히려 더 나빠짐
+   (5회 중 4회 빈 답변). `generate_multi_agent()` 하나가 "읽기+추출+비교"를
+   전부 떠맡는 부담이 원인으로 보고, `extract_step_value()`(step당 LLM
+   1회)를 추가해 step마다 값을 미리 뽑아 "확인된 값"으로 명시하는
+   `_build_step_structured_context()`를 만들었다. 값 추출 자체는 두
+   step 모두 정확했지만(건축 368,467,000원, 통신 24,867,000원) 최종
+   생성은 여전히 실패 — 원인은 값이 아니라 각 step 블록에 여전히 딸려
+   있던 6개 청크 분량(대부분 청렴계약/국가계약법 등 무관한 절차 텍스트)의
+   노이즈였다.
+6. **갭 체크에 trimming을 통합, 그리고 한국어 조사 버그**: "갭 체크가
+   커버 여부만이 아니라 그 갭을 메우는 청크까지 같이 확보해야 한다"는
+   원칙으로 `_find_step_matches()`를 재설계 — org 매칭 후, step 문구에서
+   org명을 뺀 나머지("주제어", 예: "기초금액")가 본문에 실제로 있는
+   청크만 남기도록 좁혔다. 처음 구현에서 m20(주제어 "예산", 조사 없이
+   org명 뒤에 바로 붙음)은 정확히 좁혀져 통과했는데 m19(주제어가
+   "건축**의** 기초금액"처럼 조사 "의"가 붙어 남음)는 필터가 하나도
+   안 걸려 원본 그대로 폴백돼 전혀 좁혀지지 않았다 — 한국어는 조사가
+   공백 없이 붙고 원문에는 "의기초금액"이 아니라 "기초금액"으로만
+   나오므로, org명을 잘라낸 자리에 남는 조사(의/은/는/이/가/을/를/에/와/과)를
+   마저 제거해야 했다. 이 particle-stripping을 추가하자 m19 컨텍스트가
+   step당 3780~3788자→1211~1073자로 좁혀졌고, 최종 답변도 정답으로
+   바뀌었다("장성경찰서 장애인승강기 설치공사(건축)의 기초금액이 더
+   큽니다. 건축 공사 기초금액은 368,467,000원입니다").
+
+**최종 검증(`multiagent_new20_run3_final`, `eval_dataset_new20.yaml` 20문항 전체)**:
+Correctness **4.95**(기존 `two_stage` 기준선 4.30, 최초 buggy multi_agent
+구현 4.15 대비 상승), Answer Coverage 4.75, Faithfulness 4.80, Context
+Relevance 5.00, 문서/청크 Recall@5 전부 **1.0000**(청크 recall은 최초 buggy
+구현에서 0.825까지 떨어졌던 것). 20문항 중 19문항이 Correctness=5, 나머지
+1문항(m7)도 4점. m19(비교 질의, 이번 세션의 핵심 재현 사례)도 Correctness=5
+로 완전히 통과했다. 남은 자잘한 문제: m19는 Answer Coverage=3(패자 쪽 수치도
+같이 언급했으면 더 좋았을 것), m20은 Faithfulness=2(완결된 정답 뒤에
+모순되는 "문서에서 확인되지 않습니다" 문장이 덧붙는 경우가 있음) — 둘 다
+정답 여부 자체는 흔들지 않는 마무리 수준의 결함으로 남겨둠.
+
+디버깅 도구: `scripts/debug_multiagent_gapcheck.py`가 문항 하나를
+`multi_agent` 경로로 돌리며 gap-check 로그(step별 covered 여부·매칭
+청크 수)·검색 호출(org_name/top_k/결과 수)·최종 생성 프롬프트 컨텍스트
+전체·답변을 `eval_resources/debug_logs/multiagent_runs/`에 JSON으로
+자동 저장한다 — 매번 임시 스크립트를 새로 만드는 대신 이 하네스를
+재사용해 실행 기록을 남긴다.

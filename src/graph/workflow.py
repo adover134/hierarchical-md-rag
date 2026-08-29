@@ -4749,6 +4749,13 @@ class RAGChatbotV17:
             payload["answer_style_hint"] = answer_style_hint
             return payload
 
+        if self._answer_strategy() == "multi_agent" and self.llm:
+            # search_and_rerank 대응: 업스트림에서 이미 받은 results(org 해석·
+            # top_k 스케일링·_ensure_org_coverage까지 끝난 검색 결과)를 그대로
+            # accumulated 시드로 넘긴다 — step_router가 실제 갭 체크를 하도록
+            # _answer_with_multi_agent 참고.
+            return self._answer_with_multi_agent(query, results, intent, question_plan, perf_stats)
+
         query_is_comparison_like = (
             question_plan.is_comparison
             or question_plan.query_kind in {"multi_doc", "comparison"}
@@ -4980,6 +4987,263 @@ class RAGChatbotV17:
             confidence=confidence,
             evidence_spans=evidence_spans,
         ))
+
+    def _find_step_matches(self, step: str, accumulated: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        """kt2 step_router 대응 실제 갭 체크: `step`이 가리키는 대상 문서(org/source)가
+        이미 `accumulated`(업스트림 검색 결과 포함) 안에 있는지 확인하고, "그 갭을
+        실제로 메우는" 청크를 골라 돌려준다.
+
+        갭 체크의 역할에는 trimming도 포함된다 — 단순히 org만 맞으면 그 문서의 청크
+        전부(수~십여 개, 대부분 청렴계약/국가계약법 등 무관한 절차 텍스트)를 "커버됨"
+        으로 반환하던 이전 구현은, 최종 답변 생성이 그 노이즈 속에서 다시 읽기+추출을
+        해야 하는 부담을 그대로 넘겼다(실측: m19). org 매칭 후, step에서 org명을 뺀
+        나머지(주제어, 예: "기초금액")가 본문에도 있는 청크만 "이 갭을 메우는 청크"로
+        더 좁힌다 — 주제어가 없는 step(주제어 없이 org명만 있는 경우)이거나 주제어
+        매칭 결과가 하나도 없으면 org 매칭 전체로 안전하게 폴백한다.
+
+        org 매칭은 토큰 집합 교집합이 아니라 정규화된 문자열의 부분 문자열 포함
+        여부로 판단한다 — 한국어는 조사가 공백 없이 붙어("건축의") 토큰 경계가
+        깨지므로, "건축(org) in 건축의기초금액(step)"처럼 substring 방식이라야
+        "장성경찰서 ...(건축)"과 "...(통신)"처럼 이름이 거의 같고 괄호 한 단어만
+        다른 두 문서를 정확히 구분한다(토큰 교집합 방식은 두 org 모두 동일 overlap이
+        나와 구분 실패, 실측 확인됨)."""
+        if not accumulated:
+            return []
+        step_key = self._normalize_text_for_match(step)
+        if not step_key:
+            return []
+        org_matches: list[dict[str, Any]] = []
+        longest_org_key = ""
+        for item in accumulated:
+            if not isinstance(item, dict):
+                continue
+            md = item.get("metadata", {}) or {}
+            for candidate in (md.get("org"), md.get("source"), item.get("source")):
+                candidate_key = self._normalize_text_for_match(str(candidate or ""))
+                if candidate_key and candidate_key in step_key:
+                    org_matches.append(item)
+                    if len(candidate_key) > len(longest_org_key):
+                        longest_org_key = candidate_key
+                    break
+        if not org_matches:
+            return []
+
+        topic_residual = step_key.replace(longest_org_key, "", 1) if longest_org_key else step_key
+        # org명을 잘라낸 자리에 조사가 그대로 남는다("...건축" 제거 후 "의기초금액"
+        # 처럼 "의"가 앞에 붙음) — 원문에는 "의기초금액"이 아니라 "기초금액"으로만
+        # 나오므로 이 조사를 안 떼면 주제어 매칭이 전부 실패해 좁히기가 무력화된다
+        # (실측: m19는 실패해 원본 그대로 폴백, m20은 조사가 안 붙는 phrasing이라
+        # 우연히 성공). 흔한 조사 몇 개만 앞에서 떼어낸다.
+        for particle in ("의", "은", "는", "이", "가", "을", "를", "에", "와", "과"):
+            if topic_residual.startswith(particle):
+                topic_residual = topic_residual[len(particle):]
+                break
+        if not topic_residual:
+            return org_matches
+
+        topic_matches = [
+            item for item in org_matches
+            if topic_residual in self._normalize_text_for_match(str(item.get("text") or ""))
+        ]
+        return topic_matches or org_matches
+
+    def _resolve_step_target_org(self, step: str, resolved_targets: list[str]) -> str | None:
+        """comparison류 질의에서 이 step이 가리키는 특정 대상 기관을 substring 매칭으로
+        찾는다 — `_find_step_matches`와 같은 이유로 토큰 교집합이 아니라 부분 문자열
+        포함 여부를 쓴다."""
+        step_key = self._normalize_text_for_match(step)
+        if not step_key:
+            return None
+        for target in resolved_targets:
+            target_key = self._normalize_text_for_match(target)
+            if target_key and target_key in step_key:
+                return target
+        return None
+
+    def _build_step_structured_context(
+        self,
+        query: str,
+        step_evidence: list[tuple[str, str, str]],
+        accumulated: list[dict[str, Any]],
+    ) -> str:
+        """step별로 미리 추출한 값(`extract_step_value`)과 원본 근거 블록을
+        "이미 확인된 근거 — {step}" 라벨과 함께 구조화해 최종 생성 프롬프트로 넘긴다.
+
+        `step_evidence`는 (step, extracted_value, block_text) 튜플 목록 —
+        block_text가 비어 있으면 그 step은 건너뛴다(매칭된 근거가 아예 없던 경우).
+        모든 step이 비면 accumulated 전체를 미분화된 한 덩어리로 폴백한다.
+
+        예전에는 accumulated 전체를 미분화된 한 덩어리로 넘겼는데, m19/m20에서 정답
+        청크가 컨텍스트에 확실히 있는데도(재현·확인됨) LLM이 "이 근거가 어느 하위
+        질문에 대한 답인지" 스스로 매칭하지 못하고 "확인할 수 없다"는 답을 반복했다.
+        step 라벨만 붙여도(값 추출 없이) 일부는 고쳐졌지만(m20) m19는 여전히 실패했다
+        — 컨텍스트 위치를 확인해보니 정답 수치가 각 step 블록 맨 앞부분에 있어
+        "묻혀서 못 찾은" 문제가 아니었다. 남은 부담은 최종 호출이 각 step 블록 안에서
+        직접 읽기+추출+비교를 전부 해야 한다는 점이었다 — step마다 값을 미리 뽑아
+        "확인된 값"으로 명시하면 최종 호출은 이미 추출된 값끼리 비교만 하면 된다."""
+        blocks: list[str] = []
+        for step, extracted_value, block_text in step_evidence:
+            if not block_text.strip():
+                continue
+            blocks.append(
+                f"## 이미 확인된 근거 — {step}\n### 확인된 값: {extracted_value}\n\n{block_text}"
+            )
+        if not blocks:
+            return self._build_context(query, accumulated)
+        return "\n\n".join(blocks)
+
+    def _answer_with_multi_agent(
+        self,
+        query: str,
+        results: list[dict[str, Any]],
+        intent: QueryIntent,
+        question_plan: QuestionPlan,
+        perf_stats: dict[str, float | int | bool] | None = None,
+    ) -> dict[str, Any]:
+        """`HWP_RAG_ANSWER_STRATEGY=multi_agent` 경로 — AI_7-team `feature/kt2`
+        (`version1/phase2_mvp_report.md`)의 CoT 분해 파이프라인을 이식한다.
+
+        기존 `generate()`의 Stage 1(EVIDENCE_REFINEMENT_PROMPT — LLM이 이미 랭킹된
+        컨텍스트를 다시 "관련 근거만 추려서" 압축)을 건너뛴다. 대신:
+          1) plan_steps()로 질의를 1~3개 검색 step으로 분해(LLM 1회, kt2의 build_cot 대응)
+          2) step마다 refine_step_query()로 구체적인 검색 쿼리 재생성(LLM 1회, prepare_step
+             대응 — 비용/이식 충실도 유지를 위해 호출은 하되, 검색에는 그 출력을 쓰지 않는다.
+             `_retrieve_results()`(`_build_retrieval_strategy()`)는 퍼센트/비율/단일문서
+             포커스 등 원본 질의의 정확한 표면형에 의존하는 문자열 휴리스틱이 많아, "불필요한
+             조사/어미를 정리"하며 이 트리거 단어를 지우면(실측: m2 "퍼센트" 소실, m9는 트리거
+             단어 없이도 조사 제거만으로) 같은 org_name/top_k에서도 후보군이 21개→1~2개로
+             붕괴한다 — 검색에는 원본 `query`를 쓴다)
+          3) step_router 대응 실제 갭 체크(`_step_covered_by_accumulated`, LLM 0회): 이미
+             업스트림 결과(answer()가 넘겨준 results, org 해석·top_k 확대·
+             _ensure_org_coverage까지 끝난 결과)나 이전 step에서 이 step의 대상이 커버됐으면
+             재검색을 건너뛴다. 커버 안 됐을 때만 `_retrieve_results()`로 검색(kt2의
+             search_and_rerank 대응) 후 `_merge_results()`로 누적 — 이전 구현은 이 갭 체크가
+             없어 매 step마다 무조건 재검색해 comparison류 질의(m19/m20)에서 이미 충분한
+             upstream 결과 위에 중복 검색을 쌓아 컨텍스트가 노이즈로 부풀고(실측: 6~52개 청크)
+             생성이 무너졌다(빈 답변/거절).
+          4) 누적된 랭킹 컨텍스트로 generate_multi_agent() 1회 호출(infer_answer 대응) —
+             재판단 없이 곧바로 답변을 생성한다.
+        비용 절감을 위해 이 역할들을 생략하지 않는다 — 이 경로의 목적은 kt2 기법이 로컬
+        gpt-oss:20b 신뢰성을 실제로 개선하는지 충실하게 검증하는 것이다."""
+        source_type = "unknown"
+        answer_style_hint = self._infer_answer_style(query, question_plan=question_plan)
+        llm_calls = 0
+        generation_started = time.perf_counter()
+
+        # search_and_rerank 대응 검색 파라미터를 two_stage 경로(`answer()`)와 동일한
+        # 규칙으로 계산한다 — org 필터/top_k 확대 없이 `_run_retrieval_call()`(원시
+        # `vector_store.search()`)만 top_k=6으로 쓰면 m1/m2/m9처럼 원래 top-5 안에
+        # 잡히던 정답 청크가 애초에 후보군에서 빠진다(실측: 20문항 중 3문항
+        # ChunkR@5=0으로 회귀, two_stage 기준선은 0.825→1.00). `_retrieve_results()`가
+        # 실제 프로덕션 검색 엔진(org 스코프, top_k 확대, 쿼리 확장)이다.
+        org_name = intent.org_name if intent.org_name in self.vector_store.org_registry else None
+        is_comparison_query = self._is_comparison_query(query)
+        precision_fact_query = self._is_precision_fact_query(query)
+        accuracy_mode = self._is_accuracy_mode_enabled()
+        prefer_original = self._needs_original_priority(query) or bool(org_name) or is_comparison_query
+        retrieval_top_k = max(CONTEXT_TOP_RESULTS, 30) if is_comparison_query else CONTEXT_TOP_RESULTS
+        if question_plan.query_kind in {"multi_doc", "comparison"}:
+            retrieval_top_k = max(retrieval_top_k, 30)
+        if question_plan.query_kind in {"fact_numeric", "deadline", "owner"}:
+            retrieval_top_k = max(retrieval_top_k, 22)
+        if accuracy_mode and precision_fact_query:
+            retrieval_top_k = max(retrieval_top_k, 36)
+
+        steps = self.answer_generator.plan_steps(query)
+        llm_calls += 1
+
+        # comparison류 질의는 기존 _ensure_org_coverage()와 같은 원칙을 쓴다: 대상을
+        # 하나로 합친 질의로 검색하면 임베딩이 두 사업명 사이에서 희석되므로(기존
+        # _retrieve_results()의 comparison_like 분기에 있는 원인 설명과 동일), 갭이 있는
+        # step은 org_name=None 전역 검색이 아니라 그 step이 가리키는 특정 기관으로
+        # 스코프를 좁혀 검색한다.
+        resolved_targets: list[str] = (
+            self._resolve_query_target_orgs(query, explicit_orgs=[], min_targets=2)
+            if is_comparison_query else []
+        )
+
+        # search_and_rerank 시드: answer()가 이미 수행한 업스트림 검색 결과를 그대로
+        # 재사용한다(중복 검색 방지) — kt2의 search_and_rerank_node를 "다시 실행"이
+        # 아니라 "재사용"으로 대응시킨다.
+        accumulated: list[dict[str, Any]] = list(results) if results else []
+        # step별로 "이미 확인된 근거"를 값까지 함께 남긴다 — covered 여부를 True/False로만
+        # 두거나 매칭된 청크를 라벨만 붙여 넘기면(이전 구현), 최종 생성 프롬프트는 여전히
+        # 그 블록 안에서 스스로 읽기+추출+비교를 다 해야 한다. m19에서 정답 수치가 각
+        # step 블록 맨 앞부분에 있는데도(묻힘 문제 아님, 위치 확인됨) 실패가 반복됐는데,
+        # step마다 extract_step_value()로 값을 미리 뽑아 "확인된 값"으로 명시하면 최종
+        # 호출은 이미 추출된 값끼리 비교만 하면 된다.
+        step_evidence: list[tuple[str, str, str]] = []  # (step, extracted_value, block_text)
+        for step in steps:
+            self.answer_generator.refine_step_query(query, step)
+            llm_calls += 1
+            matches = self._find_step_matches(step, accumulated)
+            if not matches:
+                step_target_org = self._resolve_step_target_org(step, resolved_targets) if resolved_targets else None
+                if step_target_org:
+                    step_results = self._retrieve_results(
+                        query,
+                        org_name=step_target_org,
+                        top_k=max(6, retrieval_top_k // 4),
+                        prefer_original=prefer_original,
+                        doc_types=["pdf", "hwp"],
+                        perf_stats=perf_stats,
+                    )
+                else:
+                    step_results = self._retrieve_results(
+                        query,
+                        org_name=org_name,
+                        top_k=retrieval_top_k,
+                        prefer_original=prefer_original,
+                        perf_stats=perf_stats,
+                    )
+                accumulated = self._merge_results(accumulated, step_results, top_k=retrieval_top_k * max(1, len(steps)))
+                # 새로 검색된 결과에도 갭 체크와 동일한 주제어 좁히기를 적용한다 —
+                # accumulated에서 이미 커버된 경우와 신규 검색된 경우 모두 "이 갭을
+                # 메우는 청크"만 남기는 기준이 같아야 한다.
+                matches = self._find_step_matches(step, step_results) or step_results
+
+            block_text = self._build_context(step, matches, include_history=False) if matches else ""
+            extracted_value = self.answer_generator.extract_step_value(step, block_text) if block_text.strip() else "문서에 명시되어 있지 않음"
+            llm_calls += 1
+            step_evidence.append((step, extracted_value, block_text))
+
+        source_type = self._infer_source_type(accumulated)
+        evidence_spans = self._build_evidence_spans(
+            accumulated,
+            question_plan=question_plan,
+            query=query,
+            max_items=5,
+        )
+        retrieved_docs_payload = self._serialize_retrieved_docs(accumulated)
+
+        context = self._build_step_structured_context(query, step_evidence, accumulated)
+        history = self.conversation.get_context_summary()
+        answer = self.answer_generator.generate_multi_agent(query, context, history)
+        llm_calls += int(getattr(self.answer_generator, "last_generation_llm_calls", 1) or 1)
+
+        if perf_stats is not None:
+            perf_stats["generation_elapsed"] = perf_stats.get("generation_elapsed", 0.0) + (
+                time.perf_counter() - generation_started
+            )
+            perf_stats["llm_calls"] = int(perf_stats.get("llm_calls", 0)) + llm_calls
+
+        found = bool(answer) and "오류:" not in answer
+        answer_mode = "generative"
+        self.conversation.add_exchange(query, answer, intent)
+        slot_fill_rate = self._estimate_slot_fill_rate(question_plan, answer, evidence_spans)
+        confidence = self._estimate_confidence(slot_fill_rate, evidence_spans, answer_mode=answer_mode)
+        payload = self._build_answer_payload(
+            answer=answer,
+            found=found,
+            source_type=source_type,
+            answer_mode=answer_mode,
+            slot_fill_rate=slot_fill_rate,
+            confidence=confidence,
+            evidence_spans=evidence_spans,
+        )
+        payload["retrieved_docs"] = retrieved_docs_payload
+        payload["answer_style_hint"] = answer_style_hint
+        return payload
 
     def _build_non_llm_answer(
         self,
@@ -9796,6 +10060,19 @@ class RAGChatbotV17:
         return os.environ.get("HWP_RAG_ENABLE_LEGACY_EXTRACTIVE") == "1"
 
     @staticmethod
+    def _answer_strategy() -> str:
+        """`_answer_with_results()`가 어느 답변 생성 경로를 쓸지.
+
+        기본값 `two_stage`는 기존 동작(EVIDENCE_REFINEMENT_PROMPT로 근거 압축 →
+        ANSWER_GENERATION_FROM_EVIDENCE_PROMPT로 최종 생성, `RFPAnswerGenerator.generate()`).
+        `HWP_RAG_ANSWER_STRATEGY=multi_agent`는 AI_7-team `feature/kt2` 브랜치의 CoT 분해
+        기법을 이식한 대체 경로(`_answer_with_multi_agent()`) — 로컬 gpt-oss:20b에서 Stage 1
+        근거 압축이 실행마다 흔들리는 문제(docs/BUGFIXES.md "m2/m19 교차검증") 대응 실험용.
+        매 호출 시 새로 읽는다(`_legacy_extraction_enabled()`와 동일 패턴 — eval 스크립트가
+        챗봇 재구성 없이 토글할 수 있어야 함)."""
+        return os.environ.get("HWP_RAG_ANSWER_STRATEGY", "two_stage").strip().lower()
+
+    @staticmethod
     def _extraction_is_implausible(query: str, answer: str, *, is_comparison_like: bool = False) -> bool:
         """규칙 기반 추출 답변이 질의 유형에 맞는 값 모양을 갖추지 못했는지 판별합니다.
 
@@ -11253,9 +11530,16 @@ class RAGChatbotV17:
             needs_original_priority_fn=self._needs_original_priority,
         )
 
-    def _build_context(self, query: str, results: list[dict[str, Any]]) -> str:
-        """LLM 입력용 컨텍스트를 구성합니다."""
-        history = self.conversation.get_context_summary()
+    def _build_context(self, query: str, results: list[dict[str, Any]], include_history: bool = True) -> str:
+        """LLM 입력용 컨텍스트를 구성합니다.
+
+        `include_history=False`는 `_build_step_structured_context()`가 step별로
+        이 함수를 반복 호출할 때 쓴다 — 매 호출마다 "# 이전 대화"를 다시 넣으면
+        step 수만큼 동일한 대화 이력이 중복돼 컨텍스트가 불필요하게 부풀고(실측:
+        m19에서 무관한 이전 턴이 각 step 블록에 두 번 반복 삽입됨), history는 이미
+        `generate_multi_agent(query, context, history)`가 별도 인자로 받아
+        프롬프트의 `{history}`에 채우므로 여기서 또 넣을 필요가 없다."""
+        history = self.conversation.get_context_summary() if include_history else ""
         context_parts: list[str] = []
         if history:
             context_parts.append(f"# 이전 대화\n{history}")

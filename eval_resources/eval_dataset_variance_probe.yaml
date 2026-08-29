@@ -1,0 +1,26 @@
+# gpt-oss:20b 실행 간 편차 실측용 소규모 probe 세트 — docs/BUGFIXES.md에 문서화된
+# m2/m19(eval_dataset_new20.yaml)를 그대로 뽑았다. two_stage(기존)와 multi_agent(신규,
+# HWP_RAG_ANSWER_STRATEGY=multi_agent) 각각 여러 번 반복 실행해 정답률/편차를 비교하는
+# 용도 — 전체 20문항을 매번 돌리기엔 비싸서(질문당 1~2분) 문서화된 실패 케이스만 추렸다.
+
+- id: m2
+  question: "공항만 여행자 호흡기 감염병 검사 서비스 시약소모품 구매(2026년 3차) 입찰의 낙찰하한율은 몇 퍼센트인가요?"
+  expected_answer: "낙찰하한율은 86.245%입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "공항만 여행자 호흡기 감염병 검사 서비스 시약소모품 구매(2026년 3차)_질병관리청 수도권질병대응센터"
+    chunk_uids:
+      - "6b8839118a173d96_9"
+
+- id: m19
+  question: "장성경찰서 장애인승강기 설치공사(건축)와 (통신) 중 기초금액이 더 큰 공사는 무엇인가요?"
+  expected_answer: "장애인승강기 설치공사(건축)(368,467,000원)가 (통신)(24,867,000원)보다 기초금액이 더 큽니다."
+  query_type: multi_doc
+  ground_truth:
+    sources:
+      - "장성경찰서 장애인승강기 설치공사(건축)_경찰청 전남경찰청"
+      - "장성경찰서 장애인승강기 설치공사(통신)_경찰청 전남경찰청"
+    chunk_uids:
+      - "55e0137bca42b879_5"
+      - "48a806ec55c477a9_4"
