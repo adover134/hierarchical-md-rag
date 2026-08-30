@@ -111,7 +111,11 @@ def is_comparison_query(query: str) -> bool:
     strong_markers = ["차이", "공통", "모두 고려", "동시에", "두 문서", "서로 다른", "어떻게 다른"]
     has_doc_a = bool(re.search(r"(?<![a-z0-9])a\s*문서", q))
     has_doc_b = bool(re.search(r"(?<![a-z0-9])b\s*문서", q))
-    has_superlative_compare = bool(re.search(r"중.{0,20}더\s*(?:큰|많은|작은|높은|적은|긴|짧은)", q))
+    # "더 큰"(비교급, 2곳 비교)과 "가장 큰"(진짜 최상급, 3곳+ 비교)을 둘 다 잡는다 —
+    # 변수명은 "최상급"이었지만 정규식은 원래 비교급("더")만 잡고 있었다(실측: "쏘유팜,
+    # 영남영농조합법인, 진주올팜 중 예산이 가장 큰 곳은?" 같은 3곳 비교가 "가장"이라
+    # is_comparison_query에서 False로 나와 비교 로직을 아예 못 탐).
+    has_superlative_compare = bool(re.search(r"중.{0,20}(?:더|가장)\s*(?:큰|많은|작은|높은|적은|긴|짧은)", q))
     if (
         has_compare_token
         or any(marker in q for marker in strong_markers)

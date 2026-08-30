@@ -84,6 +84,8 @@ def process_file_no_regex_reextraction(file_path: Path) -> list[dict]:
     name = source.rsplit(".", 1)[0] if "." in source else source
     institution, project_name = "N/A", "N/A"
     if "_" in name:
+        # `src/parsers/chunker.py::process_file()`와 동일하게 맞춘다 — 자세한 이유는
+        # chunker.py 쪽 주석 참고.
         institution, project_name = name.split("_", 1)
 
     chunks: list[dict] = []

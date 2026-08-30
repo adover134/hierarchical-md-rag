@@ -180,18 +180,39 @@ def judge_rag_response(
     # 확장점과 짝을 이룬다. LLM_RATE_LIMIT_SECONDS도 workflow.py와 동일하게 지원
     # (judge 호출은 answer() 호출과 별도 클라이언트라 워크플로우 쪽 rate limiter가
     # 안 잡아준다 — 클라우드 TPM 한도 회피용, 기본 비활성).
+    # Ollama의 OpenAI 호환 엔드포인트는 요청에 num_ctx를 안 주면 실제 컨텍스트
+    # 길이(gpt-oss:20b는 131072)와 무관하게 조용히 4096으로 제한한다(workflow.py의
+    # 동일 이슈 참고, 176-187행). judge 프롬프트도 reasoning 모델의 사고 과정이
+    # 길어지면 prompt+completion이 4096을 넘어 응답이 중간에 잘려 파싱 실패/
+    # AttributeError로 이어지는 사례가 실측됐다(이 세션에서 4회 반복 재현: n3/n5/
+    # n20/n4) — Ollama 엔드포인트일 때만 num_ctx를 올린다.
+    judge_base_url = os.environ.get("HWP_RAG_LLM_BASE_URL") or None
+    is_ollama_endpoint = bool(judge_base_url) and (
+        "11434" in judge_base_url or "ollama" in judge_base_url.lower()
+    )
     llm = ChatOpenAI(
         model=model or llm_cfg.get("model", "gpt-5-mini"),
         temperature=0.0,
         max_tokens=4096,
         api_key=api_key,
-        base_url=os.environ.get("HWP_RAG_LLM_BASE_URL") or None,
+        base_url=judge_base_url,
         model_kwargs={"response_format": {"type": "json_object"}},
         rate_limiter=_get_rate_limiter(),
+        **({"extra_body": {"options": {"num_ctx": 16384}}} if is_ollama_endpoint else {}),
     )
 
-    # 컨텍스트가 너무 길면 잘라서 JSON 응답 안정성 확보
-    max_context_len = 6000
+    # 컨텍스트가 너무 길면 잘라서 JSON 응답 안정성 확보. num_ctx를 올려도(위) 이미
+    # 로드된 Ollama 모델 인스턴스에는 반영 안 되는 경우가 실측됐다(요청별 num_ctx
+    # 오버라이드가 무시되고 여전히 4096에서 끊김) — 실제로 안정적으로 통하는 건
+    # 컨텍스트 자체를 줄이는 것뿐이었다(2200자로 줄여서 검증됨). 기존 6000자는
+    # judge 시스템 프롬프트+질문/기대답변/생성답변까지 합치면 reasoning 모델의
+    # 사고 과정 토큰과 함께 4096 토큰을 넘기기 쉬워 자주 실패했다(이 세션에서
+    # n3/n5/n20/n4 4회 재현).
+    max_context_len = 2200
+    # (3000자로 처음 낮췄을 때도 재현됨: n4 재실행에서 prompt_tokens=4011/총 4096으로
+    # 여전히 거의 꽉 차 완료 토큰이 85개뿐이라 잘림 — judge 시스템 프롬프트(채점
+    # 기준 4개 설명, 꽤 김) 자체가 이미 커서 컨텍스트 예산을 더 보수적으로 잡아야
+    # 했다. 2200자는 이 세션에서 여러 번 개별 검증된 값.)
     trimmed_context = context[:max_context_len] if context else "(검색 결과 없음)"
     if context and len(context) > max_context_len:
         trimmed_context += "\n\n... (이하 생략)"

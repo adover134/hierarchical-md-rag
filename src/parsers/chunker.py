@@ -536,6 +536,14 @@ def process_file(file_path: Path) -> List[Dict]:
     institution = 'N/A'
     project_name = 'N/A'
     if '_' in name:
+        # 파일명 규칙은 "{공고제목/사업명}_{실제 기관명}"이다. org 필드는 검색
+        # 매칭에 쓰는 식별 라벨(공고제목/사업명)을 담고, project_name은 실제
+        # 기관명을 담는다 — 이 둘을 뒤바꾸는 시도(org=기관명, project_name=
+        # 공고제목)는 전체 코퍼스 회귀 검증(40문항 중 32문항 org 후보 소실)으로
+        # 실패해 되돌렸다. project_name 필드에 이미 기관명이 들어있으므로,
+        # 기관명을 새 매칭 신호로 쓰고 싶으면 org 소비 코드를 건드리지 않고
+        # project_name을 추가로 조회하는 쪽으로 확장한다(_org_scope_matches
+        # 등 참고).
         institution, project_name = name.split('_', 1)
 
     chunks: List[Dict] = []

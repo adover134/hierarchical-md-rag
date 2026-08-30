@@ -2982,12 +2982,33 @@ class RAGChatbotV17:
             return int(base * 1_000)
         return int(base)
 
+    _BUDGET_LABEL_PRIORITY = ["기초금액", "사업비", "총사업비", "사업예산", "사업 예산", "예산"]
+
+    def _parse_amount_from_value(self, value: str) -> int:
+        """`_parse_labeled_fields()`가 뽑은 값 문자열(예: "금26,750,000원(부가세
+        포함)") 하나에서 첫 금액을 원 단위 정수로 변환한다. 이미 라벨로 격리된
+        값이라 후보가 여러 개 나올 걱정 없이 첫 매치만 쓰면 된다."""
+        m = re.search(
+            r"(?:금\s*)?([\d][\d,]*(?:\.\d+)?)\s*(억원|억|백만원|천원|만원|만|원)?",
+            value or "",
+            re.IGNORECASE,
+        )
+        if not m:
+            return 0
+        return self._convert_budget_unit_to_won(m.group(1), m.group(2) or "")
+
     def _extract_budget_candidates_from_line(self, line: str) -> list[int]:
         """문장 한 줄에서 사업비 후보 금액(원 단위)을 추출합니다."""
         if not line:
             return []
         lowered = unicodedata.normalize("NFKC", line.lower())
-        budget_keywords = ["사업비", "총사업비", "사업 예산", "예산", "소요예산", "추정가격", "계약금액", "사업 금액"]
+        # "금액" 하나로 "계약금액"/"사업 금액"은 물론 "기초금액"/"추정금액"/"도급금액" 등
+        # "-금액"으로 끝나는 모든 필드 라벨을 포괄한다 — 전에는 "추정가격"만 있고
+        # "기초금액"/"추정금액"이 빠져 있어서, 두 라벨이 같은 줄에 있어도 그 줄 자체가
+        # 필터를 통과 못 하고 통째로 버려지는 사례가 실측됐다("추정금액: 4천만원,
+        # 기초금액: 2675만원" 줄은 통째로 스킵되고, 그다음 "추정가격" 줄이 대신 캐싱됨).
+        # 개별 필드명을 나열하는 대신 공통 접미사로 일반화해 같은 종류 누락을 막는다.
+        budget_keywords = ["사업비", "총사업비", "사업 예산", "예산", "소요예산", "추정가격", "금액"]
         if not any(token in lowered for token in budget_keywords):
             return []
 
@@ -3059,26 +3080,63 @@ class RAGChatbotV17:
             project_name = str(md.get("project_name") or md.get("document_title") or "").strip()
             doc_type = self._infer_metadata_doc_type(md)
 
+            # tier 0: "라벨: 값"에서 정확한 필드명(우선순위: 기초금액 > 사업비 >
+            # ... > 예산)이 일치하는 값을 결정론적으로 먼저 찾는다 — "그 줄에서
+            # 가장 큰 숫자"를 예산으로 치는 이전 방식은 "추정금액: 4천만원,
+            # 기초금액: 2675만원"처럼 비슷한 금액 필드가 한 줄에 나란히 있으면
+            # 더 큰(엉뚱한) 필드를 채택하는 사례가 실측됐다("기초금액"을 물었는데
+            # "추정가격"/"추정금액"이 캐싱됨). 정확한 라벨이 없을 때만(tier 1)
+            # 기존 "budget_keywords 줄 중 최댓값" 폴백으로 내려간다.
             best_amount = 0
             best_line = ""
-            for raw_line in text.split("\n"):
-                line = raw_line.strip()
-                if len(line) < 4:
-                    continue
-                amounts = self._extract_budget_candidates_from_line(line)
-                if not amounts:
-                    continue
-                local_max = max(amounts)
-                if local_max > best_amount:
-                    best_amount = local_max
-                    best_line = line[:240]
+            tier = 1
+            fields = self._parse_labeled_fields(text)
+            for priority_label in self._BUDGET_LABEL_PRIORITY:
+                priority_key = self._normalize_text_for_match(priority_label)
+                labeled_amount = 0
+                labeled_line = ""
+                for label, value in fields:
+                    if self._normalize_text_for_match(label) != priority_key:
+                        continue
+                    amount = self._parse_amount_from_value(value)
+                    if amount >= 1_000_000:
+                        labeled_amount = amount
+                        labeled_line = f"{label}: {value}"[:240]
+                        break
+                if labeled_amount:
+                    best_amount = labeled_amount
+                    best_line = labeled_line
+                    tier = 0
+                    break
+
+            if best_amount <= 0:
+                for raw_line in text.split("\n"):
+                    line = raw_line.strip()
+                    if len(line) < 4:
+                        continue
+                    amounts = self._extract_budget_candidates_from_line(line)
+                    if not amounts:
+                        continue
+                    local_max = max(amounts)
+                    if local_max > best_amount:
+                        best_amount = local_max
+                        best_line = line[:240]
+                tier = 1
 
             if best_amount <= 0:
                 continue
 
             existing = cache.get(org_name)
-            if existing and int(existing.get("amount_numeric", 0) or 0) >= best_amount:
-                continue
+            if existing:
+                existing_tier = int(existing.get("_tier", 1))
+                existing_amount = int(existing.get("amount_numeric", 0) or 0)
+                # tier 0(정확한 라벨 일치)는 tier 1(최댓값 폴백)을 항상 이긴다 —
+                # 기존 후보가 이미 tier 0인데 신규 후보가 tier 1이면 무조건 유지.
+                if existing_tier < tier:
+                    continue
+                # 같은 tier끼리는 기존처럼 더 큰 금액을 우선한다.
+                if existing_tier == tier and existing_amount >= best_amount:
+                    continue
 
             cache[org_name] = {
                 "org_name": org_name,
@@ -3089,6 +3147,7 @@ class RAGChatbotV17:
                 "project_name": project_name,
                 "doc_type": doc_type,
                 "chunk_id": str(chunk_id) if chunk_id else None,
+                "_tier": tier,
             }
 
         self._chunk_budget_cache = cache
@@ -3108,6 +3167,20 @@ class RAGChatbotV17:
                 )
                 org_info.amount_numeric = amount_numeric
                 self.vector_store.register_org(org_info)
+
+    @staticmethod
+    def _count_explicit_comparison_targets(query: str) -> int:
+        """질의가 비교 대상을 몇 곳으로 스스로 명시했는지 센다(예: "A, B, C의" -> 3,
+        "A와 B의" -> 2). 공유 접미구("의"/"중"/"에서") 앞부분만 보고, 그 안에서
+        쉼표·"와"/"과" 접속조사로 나뉜 세그먼트 수를 센다. 못 세면 0을 돌려줘
+        호출부가 기본값(2)으로 폴백하게 한다 — 이 카운트는 상한을 "늘리는" 용도로만
+        쓴다(대상을 스스로 명시하지 않은 질의까지 무리하게 넓게 잡지 않기 위해)."""
+        if not query:
+            return 0
+        head = re.split(r"의|중|에서", query, maxsplit=1)[0]
+        segments = re.split(r"[,，]|와|과", head)
+        segments = [s.strip() for s in segments if s.strip()]
+        return len(segments)
 
     def _find_chunk_budget_for_org(self, org_name: str) -> dict[str, Any] | None:
         """기관명으로 chunk 기반 사업비 캐시를 조회합니다."""
@@ -3132,7 +3205,43 @@ class RAGChatbotV17:
         intent: QueryIntent,
         org_name: str,
     ) -> dict[str, Any] | None:
-        """CSV 단축 경로 미적중 시 chunk 기반 사업비 응답을 시도합니다."""
+        """CSV 단축 경로 미적중 시 chunk 기반 사업비 응답을 시도합니다.
+
+        비교 질의(기관 2곳 이상을 지목)면 각 기관의 캐시된 사업비를 전부 찾아 비교
+        답을 만든다 — 예전에는 org_name 하나만 받아 그 기관만 답하고 끝났는데, 이
+        경로는 검색기를 거치지 않는 순수 캐시 조회라 multi_agent의 비교 로직(2-step
+        결정론적 비교)이 아예 개입할 기회가 없었다(실측: "쏘유팜, 영남영농조합법인,
+        진주올팜 중 예산이 가장 큰 곳은?" 같은 3기관 비교가 이 숏컷에 가로채여 기관
+        하나("진주올팜")만 답하고 끝남 — multi_agent로 넘어가지도 못했다). 캐시에
+        이미 정확한 값이 다 있으니(기관별 조회는 원래도 맞았음) 여기서 바로 비교
+        답을 만드는 게 검색기를 거쳐 multi_agent로 보내는 것보다 더 결정론적이고
+        저렴하다."""
+        if self._is_budget_query(query) and self._is_comparison_query(query):
+            # 무작정 후보를 다 모으면(예전 시도) "히트펌프 물품 구매"처럼 여러 기관이
+            # 공유하는 상투어 때문에, 질의가 딱 2곳만 지목했는데("쏘유팜과
+            # 영남영농조합법인의...") 3번째(진주올팜)까지 딸려 들어오는 문제가
+            # 실측됐다 — 질의가 "비교 대상을 몇 곳으로 명시했는가"를 먼저 세고,
+            # 그 개수만큼만 찾아야 한다(질의가 대상을 스스로 명시하는 경우와, 대상을
+            # 시스템이 알아서 찾아야 하는 경우를 구분 안 한 게 근본 원인). 쉼표/접속
+            # 조사로 나열된 개수를 세서 `_resolve_query_target_orgs()`의 조기 종료
+            # 상한(min_targets)에 그대로 넘긴다 — 딴 호출부의 기본 동작(2곳)은
+            # 안 건드리고, 명시된 개수가 그보다 많을 때만 상한을 올려준다.
+            explicit_count = self._count_explicit_comparison_targets(query)
+            target_orgs = self._resolve_query_target_orgs(
+                query, explicit_orgs=[], min_targets=max(2, explicit_count)
+            )
+            if len(target_orgs) >= 2:
+                resolved_items: list[tuple[str, dict[str, Any], int]] = []
+                for target_org in target_orgs:
+                    org_matched = self._find_chunk_budget_for_org(target_org)
+                    org_amount = int((org_matched or {}).get("amount_numeric", 0) or 0)
+                    if not org_matched or org_amount <= 0:
+                        resolved_items = []
+                        break
+                    resolved_items.append((target_org, org_matched, org_amount))
+                if len(resolved_items) == len(target_orgs) and len(resolved_items) >= 2:
+                    return self._build_multi_org_budget_comparison_payload(query, intent, resolved_items)
+
         if not org_name or not self._is_budget_query(query):
             return None
 
@@ -3177,6 +3286,56 @@ class RAGChatbotV17:
                 }
             ],
             "chunk_budget_short_circuit": True,
+        }
+        self.conversation.add_exchange(query, payload["answer"], intent)
+        return payload
+
+    def _build_multi_org_budget_comparison_payload(
+        self,
+        query: str,
+        intent: QueryIntent,
+        resolved_items: list[tuple[str, dict[str, Any], int]],
+    ) -> dict[str, Any]:
+        """기관 2곳 이상의 캐시된 사업비를 비교하는 답을 결정론적으로 만든다
+        (LLM 호출 없음) — `_deterministic_numeric_comparison_answer()`와 같은
+        원칙을 캐시 조회 경로에 적용한 것."""
+        resolved_sorted = sorted(resolved_items, key=lambda x: x[2], reverse=True)
+        winner_org, _winner_matched, _winner_amount = resolved_sorted[0]
+        lines = [f"- {org}: {amount:,}원" for org, _, amount in resolved_sorted]
+        josa = self._josa_i_ga(winner_org)
+        answer = f"{winner_org}{josa} 사업비가 가장 큽니다.\n" + "\n".join(lines)
+
+        evidence = []
+        for org, matched, amount in resolved_sorted:
+            source = str(matched.get("source", "Unknown")).strip() or "Unknown"
+            evidence.append(
+                {
+                    "source": source,
+                    "page": matched.get("page"),
+                    "text": str(matched.get("line", "")).strip() or f"{org} 사업비: {amount:,}원",
+                    "slot": "budget",
+                    "score": 0.9,
+                    "chunk_id": matched.get("chunk_id"),
+                }
+            )
+
+        payload = {
+            "answer": answer,
+            "found": True,
+            "source_type": "unknown",
+            "answer_mode": "extractive",
+            "slot_fill_rate": 1.0,
+            "evidence_count": len(evidence),
+            "confidence": 0.9,
+            "evidence": evidence,
+            "chunk_budget_short_circuit": True,
+            # `answer()`의 `_finalize_payload()`가 모든 답을 무조건 `_compact_answer_
+            # sections()`에 통과시키는데, 기본(concise) 스타일은 줄을 딱 2개까지만
+            # 남긴다(핵심 문장 1 + 근거 1) — 우승 기관 문장 뒤에 비교 대상 전원의
+            # 금액을 나열해야 하는 이 답은 3곳 이상이면 무조건 잘린다(실측: 3기관
+            # 비교에서 목록이 우승 기관 한 줄로 뭉개짐). "guide" 스타일은 최대 6줄까지
+            # 보존하므로 이 답에는 guide가 맞는다.
+            "answer_style_hint": "guide",
         }
         self.conversation.add_exchange(query, payload["answer"], intent)
         return payload
@@ -4318,6 +4477,15 @@ class RAGChatbotV17:
                 self._log_perf_stats(query, perf_stats, total_elapsed=time.perf_counter() - answer_started)
                 return _finalize_payload(self._build_org_not_found_payload(org_name))
 
+        # 이 4개 숏컷(csv/org_overview/chunk_budget/org_document_scan)은 "검색기를
+        # 굳이 쓰지 않아도 결정론적으로 답할 수 있는 경우"를 처리한다 — CSV/캐시
+        # 조회만으로 끝나는 경로이지, two_stage/multi_agent가 갈리는 지점(검색기를
+        # 쓸 때 그 결과를 어떻게 답변으로 만드는가)과는 별개다. 그래서 전략과
+        # 무관하게 항상 먼저 시도한다(이 판단을 되돌리기 전에 잠깐 strategy로
+        # 게이팅했었으나, "두 모드의 차이는 검색기 사용 시의 차이"라는 게 맞는
+        # 프레이밍이라 원복함 — 실제 버그였던 것은 _ensure_chunk_budget_cache()의
+        # 필드 혼동 쪽이었지, 이 숏컷들이 전략과 무관하게 실행된다는 사실 자체가
+        # 아니었다).
         bypass_short_circuit = self._should_bypass_short_circuit_for_query(query)
         if bypass_short_circuit and self._can_override_short_circuit_bypass(query, intent, org_name=org_name):
             bypass_short_circuit = False
@@ -5009,35 +5177,11 @@ class RAGChatbotV17:
         나와 구분 실패, 실측 확인됨)."""
         if not accumulated:
             return []
-        step_key = self._normalize_text_for_match(step)
-        if not step_key:
-            return []
-        org_matches: list[dict[str, Any]] = []
-        longest_org_key = ""
-        for item in accumulated:
-            if not isinstance(item, dict):
-                continue
-            md = item.get("metadata", {}) or {}
-            for candidate in (md.get("org"), md.get("source"), item.get("source")):
-                candidate_key = self._normalize_text_for_match(str(candidate or ""))
-                if candidate_key and candidate_key in step_key:
-                    org_matches.append(item)
-                    if len(candidate_key) > len(longest_org_key):
-                        longest_org_key = candidate_key
-                    break
+        org_matches, _longest_org_key = self._org_scope_matches(step, accumulated)
         if not org_matches:
             return []
 
-        topic_residual = step_key.replace(longest_org_key, "", 1) if longest_org_key else step_key
-        # org명을 잘라낸 자리에 조사가 그대로 남는다("...건축" 제거 후 "의기초금액"
-        # 처럼 "의"가 앞에 붙음) — 원문에는 "의기초금액"이 아니라 "기초금액"으로만
-        # 나오므로 이 조사를 안 떼면 주제어 매칭이 전부 실패해 좁히기가 무력화된다
-        # (실측: m19는 실패해 원본 그대로 폴백, m20은 조사가 안 붙는 phrasing이라
-        # 우연히 성공). 흔한 조사 몇 개만 앞에서 떼어낸다.
-        for particle in ("의", "은", "는", "이", "가", "을", "를", "에", "와", "과"):
-            if topic_residual.startswith(particle):
-                topic_residual = topic_residual[len(particle):]
-                break
+        topic_residual = self._step_topic_residual(step, _longest_org_key)
         if not topic_residual:
             return org_matches
 
@@ -5046,6 +5190,197 @@ class RAGChatbotV17:
             if topic_residual in self._normalize_text_for_match(str(item.get("text") or ""))
         ]
         return topic_matches or org_matches
+
+    def _org_scope_matches(
+        self, step: str, accumulated: list[dict[str, Any]]
+    ) -> tuple[list[dict[str, Any]], str]:
+        """`accumulated`에서 step이 가리키는 org/source에 속하는 항목만 추리고,
+        매칭에 쓰인 가장 긴 org 문자열(정규화됨)도 함께 돌려준다 — 후자는
+        `_step_topic_residual()`이 step에서 org명을 잘라낼 때 필요하다.
+
+        1차로 전체 문자열 포함 매칭을 시도하고, 실패하면 토큰 겹침으로 보정한다.
+        metadata.org/source는 파싱 시점의 원문 표기를 그대로 담고 있어("2027년도
+        신목중학교 교복구매") 질의/step의 표기("2027학년도 ...")와 "학년도"/"년도",
+        공백 유무 등에서 갈릴 수 있다 — 이 경우 전체 문자열 포함 매칭은 실패하지만
+        실제로는 같은 기관이다(실측: n4 — "신목중학교" 질의가 이 표기 차이 때문에
+        갭체크에서 매칭 0건으로 나와, 정답 청크가 이미 검색됐는데도 못 씀). 토큰
+        겹침도 `_extract_org_names_from_query()`와 같은 이유로 상투어만 겹치는 건
+        인정하지 않는다 — 그래야 서로 다른 기관의 비슷한 템플릿 문서끼리 오매칭되지
+        않는다.
+
+        후보 문자열에 `project_name`도 포함한다 — 이 저장소의 파일명 규칙("{공고
+        제목/사업명}_{실제 기관명}")상 metadata.project_name에는 실제 기관명(예:
+        "서울특별시강서교육청 신목중학교")이 이미 들어 있다. org/source(공고제목
+        중심)만으로는 못 잡는 "기관명 리터럴 일치"를 이 필드로 추가 확보한다 —
+        기존 org/source 소비 로직·org_registry는 전혀 건드리지 않는 순수 추가
+        신호다.
+
+        2단계로 나눠 돈다 — 먼저 전체 문자열 포함 매칭만으로 훑고, "이 배치
+        안에서 전체 포함 매칭에 성공한 항목이 하나라도 있으면" 토큰 겹침
+        폴백은 아예 건너뛴다. 두 단계를 한 루프에서 항목별로 독립 판정하면,
+        "장성경찰서 장애인승강기 설치공사(건축)"처럼 접미어 하나로만 갈리는
+        형제 문서(...(건축) vs ...(통신))에서 한쪽은 전체 포함 매칭으로 정확히
+        잡히는데, 다른 쪽도 "장성경찰서/장애인승강기/설치공사" 같은 공통 상위
+        토큰이 겹친다는 이유만으로 토큰 겹침 폴백에 걸려 같이 섞여 들어온다
+        (실측: m19 — "건축" step인데 "통신" 청크까지 매칭돼 두 step의
+        추출값이 통신 값으로 동일하게 나옴). 전체 포함 매칭이 이 배치에서
+        전혀 안 나올 때만(=n4처럼 표기 차이로 매칭 후보가 아예 없을 때만)
+        토큰 겹침으로 보정한다."""
+        step_key = self._normalize_text_for_match(step)
+        if not step_key:
+            return [], ""
+        step_tokens = set(re.findall(r"[0-9a-zA-Z가-힣]{2,}", unicodedata.normalize("NFKC", step.lower())))
+
+        def _candidates(item: dict[str, Any]) -> tuple[str, ...]:
+            md = item.get("metadata", {}) or {}
+            return (
+                str(md.get("org") or ""),
+                str(md.get("source") or ""),
+                str(item.get("source") or ""),
+                str(md.get("project_name") or ""),
+            )
+
+        # 1단계: 전체 문자열 포함 매칭
+        exact_matches: list[dict[str, Any]] = []
+        longest_org_key = ""
+        for item in accumulated:
+            if not isinstance(item, dict):
+                continue
+            for candidate_str in _candidates(item):
+                candidate_key = self._normalize_text_for_match(candidate_str)
+                if candidate_key and candidate_key in step_key:
+                    exact_matches.append(item)
+                    if len(candidate_key) > len(longest_org_key):
+                        longest_org_key = candidate_key
+                    break
+        if exact_matches:
+            return exact_matches, longest_org_key
+
+        # 2단계: 전체 포함 매칭이 이 배치 전체에서 전무할 때만 토큰 겹침 폴백
+        fuzzy_matches: list[dict[str, Any]] = []
+        for item in accumulated:
+            if not isinstance(item, dict):
+                continue
+            for candidate_str in _candidates(item):
+                candidate_tokens = set(
+                    re.findall(r"[0-9a-zA-Z가-힣]{2,}", unicodedata.normalize("NFKC", candidate_str.lower()))
+                )
+                meaningful_overlap = {
+                    t for t in candidate_tokens.intersection(step_tokens) if not self._is_generic_rfp_token(t)
+                }
+                if meaningful_overlap:
+                    fuzzy_matches.append(item)
+                    longest_meaningful = max(meaningful_overlap, key=len)
+                    if len(longest_meaningful) > len(longest_org_key):
+                        longest_org_key = longest_meaningful
+                    break
+        return fuzzy_matches, longest_org_key
+
+    def _step_topic_residual(self, step: str, longest_org_key: str) -> str:
+        """step 문구에서 org명을 뺀 나머지(주제어, 예: "기초금액")를 계산한다.
+
+        org명을 잘라낸 자리에 조사가 그대로 남는다("...건축" 제거 후 "의기초금액"
+        처럼 "의"가 앞에 붙음) — 원문에는 "의기초금액"이 아니라 "기초금액"으로만
+        나오므로 이 조사를 안 떼면 주제어 매칭이 전부 실패해 좁히기가 무력화된다
+        (실측: m19는 실패해 원본 그대로 폴백, m20은 조사가 안 붙는 phrasing이라
+        우연히 성공). 흔한 조사 몇 개만 앞에서 떼어낸다."""
+        step_key = self._normalize_text_for_match(step)
+        topic_residual = step_key.replace(longest_org_key, "", 1) if longest_org_key else step_key
+        for particle in ("의", "은", "는", "이", "가", "을", "를", "에", "와", "과"):
+            if topic_residual.startswith(particle):
+                topic_residual = topic_residual[len(particle):]
+                break
+        return topic_residual
+
+    # step 텍스트 끝에 흔히 붙는 질문 주제어 — 비교 답변 템플릿에서 엔터티 라벨을
+    # 뽑을 때(_step_entity_label) 잘라낸다. 못 자르면 원문을 그대로 쓴다(안전한 폴백).
+    _STEP_TOPIC_SUFFIXES = [
+        "의 기초금액", "기초금액", "의 예산", "예산", "의 사업비", "사업비",
+        "의 설치대수", "설치대수", "의 계약금액", "계약금액", "의 총사업비", "총사업비",
+    ]
+
+    def _step_entity_label(self, step: str) -> str:
+        """비교 답변 템플릿의 주어 자리에 쓸 짧은 엔터티 라벨을 step 텍스트에서
+        뽑는다 — 흔한 질문 주제어 접미사를 잘라 "장성경찰서 장애인승강기
+        설치공사(건축)"처럼 엔터티만 남긴다."""
+        text = (step or "").strip()
+        for suffix in self._STEP_TOPIC_SUFFIXES:
+            if text.endswith(suffix):
+                return text[: -len(suffix)].strip().rstrip("의").strip()
+        return text
+
+    @staticmethod
+    def _josa_i_ga(word: str) -> str:
+        """받침 유무에 따라 "이"/"가" 조사를 고른다. 한글 음절이 아니면(영문/숫자/
+        괄호 등으로 끝나는 경우) 무난한 "가"로 폴백한다."""
+        word = (word or "").rstrip()
+        if not word:
+            return "가"
+        code = ord(word[-1])
+        if 0xAC00 <= code <= 0xD7A3:
+            return "이" if (code - 0xAC00) % 28 != 0 else "가"
+        return "가"
+
+    def _deterministic_numeric_comparison_answer(
+        self, step_evidence: list[tuple[str, str, str]]
+    ) -> str | None:
+        """이미 확정된 두 step 값을 금액으로 파싱해 결정론적으로 비교한 문장을
+        만든다. 두 값 모두 유효한 금액으로 파싱될 때만 답을 만들고, 그렇지 않으면
+        None을 돌려줘 호출부가 generate_multi_agent() 폴백을 쓰게 한다."""
+        if len(step_evidence) != 2:
+            return None
+        (step1, value1, _), (step2, value2, _) = step_evidence
+        for value in (value1, value2):
+            if not value or value == "문서에 명시되어 있지 않음" or value.startswith("오류"):
+                return None
+        amount1 = self._parse_amount_from_value(value1)
+        amount2 = self._parse_amount_from_value(value2)
+        if amount1 <= 0 or amount2 <= 0 or amount1 == amount2:
+            return None
+
+        entity1, entity2 = self._step_entity_label(step1), self._step_entity_label(step2)
+        if amount1 > amount2:
+            winner_entity, loser_entity = entity1, entity2
+        else:
+            winner_entity, loser_entity = entity2, entity1
+        josa = self._josa_i_ga(winner_entity)
+        return (
+            f"{winner_entity}{josa} {loser_entity}보다 더 큽니다.\n"
+            f"- {step1}: {value1}\n"
+            f"- {step2}: {value2}"
+        )
+
+    _LABEL_VALUE_RE = re.compile(
+        r"([가-힣][가-힣\s]{0,18}[가-힣])\s*[:：]\s*([^\n]+?)"
+        r"(?=,\s*[가-힣][가-힣\s]{0,18}[가-힣]\s*[:：]|\n|$)"
+    )
+
+    def _parse_labeled_fields(self, text: str) -> list[tuple[str, str]]:
+        """"라벨: 값" 형태의 필드를 원문에서 그대로 파싱한다(LLM 호출 없음, 컨텍스트
+        분석/분해 단계). RFP 문서(특히 영동군류 소액수의계약 템플릿)는 "추정금액:
+        금40,000,000원, 기초금액: 금26,750,000원 / 추정가격: 금24,318,182원,
+        도급자관급자재: 금13,250,000원"처럼 비슷한 금액 필드를 한 줄에 나란히
+        적는다 — `extract_step_value()` 하나의 LLM 판단만으로는 이런 경우 필드를
+        혼동해 실제 정답 대신 다른 필드 숫자를 인용하는 사례가 실측됐다(예: "기초금액"을
+        물었는데 "추정가격"을 답함, 둘 다 같은 청크의 인접한 값). 정규식으로 결정론적
+        후보를 먼저 뽑아, 라벨이 확실히 일치하면 LLM 없이 그 값을 바로 쓸 수 있게 한다."""
+        return [(m.group(1).strip(), m.group(2).strip()) for m in self._LABEL_VALUE_RE.finditer(text or "")]
+
+    def _match_field_by_residual(self, topic_residual: str, fields: list[tuple[str, str]]) -> str | None:
+        """근거 추출 단계: topic_residual(예: "기초금액")과 정규화 후 정확히 일치하는
+        라벨을 찾아 그 값을 반환한다. 라벨이 여러 번 등장(같은 라벨의 필드가 중복
+        매칭)하면 어느 쪽인지 확신할 수 없으므로 None을 돌려줘 `extract_step_value()`
+        LLM 폴백으로 넘긴다 — 애매한 경우까지 억지로 결정론적으로 풀지 않는다."""
+        if not topic_residual:
+            return None
+        residual_key = self._normalize_text_for_match(topic_residual)
+        matches = [
+            value for label, value in fields
+            if self._normalize_text_for_match(label) == residual_key
+        ]
+        if len(matches) == 1:
+            return matches[0]
+        return None
 
     def _resolve_step_target_org(self, step: str, resolved_targets: list[str]) -> str | None:
         """comparison류 질의에서 이 step이 가리키는 특정 대상 기관을 substring 매칭으로
@@ -5121,8 +5456,12 @@ class RAGChatbotV17:
              없어 매 step마다 무조건 재검색해 comparison류 질의(m19/m20)에서 이미 충분한
              upstream 결과 위에 중복 검색을 쌓아 컨텍스트가 노이즈로 부풀고(실측: 6~52개 청크)
              생성이 무너졌다(빈 답변/거절).
-          4) 누적된 랭킹 컨텍스트로 generate_multi_agent() 1회 호출(infer_answer 대응) —
-             재판단 없이 곧바로 답변을 생성한다.
+          4) generate_multi_agent() 자체가 비결정적이라고 실측된 경우를 우회: step이 1개뿐이고
+             그 값이 이미 확정돼 있으면 generate_multi_agent() 호출 자체를 생략하고 그 값을
+             그대로 답으로 쓴다(LLM 0회, 라우팅 문제가 아니라 생성기 자체의 신뢰성 문제라
+             호출을 안 쓰는 쪽으로 우회한 것). step이 여러 개일 때만 누적된 랭킹 컨텍스트로
+             generate_multi_agent() 1회 호출(infer_answer 대응)해 재판단 없이 곧바로 답변을
+             생성한다.
         비용 절감을 위해 이 역할들을 생략하지 않는다 — 이 경로의 목적은 kt2 기법이 로컬
         gpt-oss:20b 신뢰성을 실제로 개선하는지 충실하게 검증하는 것이다."""
         source_type = "unknown"
@@ -5203,8 +5542,25 @@ class RAGChatbotV17:
                 matches = self._find_step_matches(step, step_results) or step_results
 
             block_text = self._build_context(step, matches, include_history=False) if matches else ""
-            extracted_value = self.answer_generator.extract_step_value(step, block_text) if block_text.strip() else "문서에 명시되어 있지 않음"
-            llm_calls += 1
+            # 근거 추출 단계: "라벨: 값" 필드가 여러 개 나란히 있는 청크(영동군류
+            # 소액수의계약 템플릿 등)는 extract_step_value() 하나의 LLM 판단만으로
+            # 필드를 혼동하는 사례가 실측됐다(실제로는 "기초금액"을 물었는데 같은
+            # 줄의 "추정가격"을 인용). 컨텍스트 분석/분해(_parse_labeled_fields, LLM
+            # 호출 없음)로 필드를 결정론적으로 먼저 뽑고, topic_residual과 라벨이
+            # 정확히 일치하면 LLM 호출 없이 그 값을 바로 쓴다 — 라벨이 애매하거나
+            # 여러 개면(None 반환) 기존처럼 extract_step_value() LLM 폴백으로 넘긴다.
+            if block_text.strip():
+                _, _longest_org_key = self._org_scope_matches(step, matches)
+                _residual = self._step_topic_residual(step, _longest_org_key)
+                _fields = self._parse_labeled_fields(block_text)
+                deterministic_value = self._match_field_by_residual(_residual, _fields)
+                if deterministic_value:
+                    extracted_value = deterministic_value
+                else:
+                    extracted_value = self.answer_generator.extract_step_value(step, block_text)
+                    llm_calls += 1
+            else:
+                extracted_value = "문서에 명시되어 있지 않음"
             step_evidence.append((step, extracted_value, block_text))
 
         source_type = self._infer_source_type(accumulated)
@@ -5217,9 +5573,48 @@ class RAGChatbotV17:
         retrieved_docs_payload = self._serialize_retrieved_docs(accumulated)
 
         context = self._build_step_structured_context(query, step_evidence, accumulated)
-        history = self.conversation.get_context_summary()
-        answer = self.answer_generator.generate_multi_agent(query, context, history)
-        llm_calls += int(getattr(self.answer_generator, "last_generation_llm_calls", 1) or 1)
+
+        # generate_multi_agent() 자체가 신뢰할 수 없다고 실측된 경우를 우회한다(라우팅
+        # 문제가 아니다 — search/gap-check 단계는 정상이었고, 문제는 마지막 생성 LLM
+        # 호출 그 자체다). step이 1개뿐이고 그 값이 이미 확정돼 있으면(정보 없음/오류가
+        # 아니면) generate_multi_agent()를 아예 호출하지 않고 그 값을 그대로 답으로 쓴다.
+        # 이미 결정론적 필드 매칭이나 단일 근거 추출로 값이 확정된 상태에서, 그 위에
+        # generate_multi_agent() 재판단을 얹으면 Stage 1 근거압축과 같은 종류의 비결정성이
+        # 이 마지막 생성 단계에서 재발한다(실측: n3 — 확정값 "기초금액은 금 390,000원이다"가
+        # 컨텍스트에 명시돼 있었는데도, generate_multi_agent()가 같은 컨텍스트에 섞여 있던
+        # 무관한 서식의 미기재 칸("계약금액(백만원): OOOO원")을 대신 답으로 냄. n17 — 확정값
+        # "240kW 파워뱅크 1기, 디스펜서 2기" 중 뒷부분을 generate_multi_agent()가 재현마다
+        # 누락. 둘 다 프롬프트 보강 후에도 재현 2/2로 반복돼, 프롬프트만으로는 못 고치는
+        # generate_multi_agent() 자체의 비결정성으로 판단했다 — 그래서 "더 나은 라우팅"이
+        # 아니라 "이 경우엔 그 호출을 아예 쓰지 않는다"로 우회한다).
+        # step이 여러 개(비교/복합 질의)면 여전히 generate_multi_agent()가 필요하다 — 블록
+        # 간 종합·비교 문장을 만드는 건 값 그대로 옮기기가 아니라 실제 합성 작업이기 때문이다.
+        single_step_answer: str | None = None
+        if len(steps) == 1:
+            _step, _value, _ = step_evidence[0]
+            if _value and _value != "문서에 명시되어 있지 않음" and not _value.startswith("오류"):
+                single_step_answer = _value
+
+        # 2-step 숫자 비교 질의도 같은 이유로 우회한다 — "어느 쪽이 더 큰가"는 이미
+        # 확정된 두 금액을 비교하는 결정론적 연산이지, generate_multi_agent()의 재판단이
+        # 필요한 합성이 아니다. 실측: m19/n20 둘 다 step_evidence는 두 값 모두 정확했는데
+        # (368,467,000원/24,867,000원, 245,339,600원/608,881,900원) generate_multi_agent()가
+        # "문서에서 확인되지 않습니다"나 뜻 없는 조각글("- 쏘유팜입니다.\n- 예산입니다.")을
+        # 냈다 — 프롬프트 보강 후에도 반복. 값이 정확히 2개고 둘 다 금액으로 파싱되며
+        # 비교 질의로 분류된 경우에만 적용한다(비교가 아닌 2-step 복합 질의는 여전히
+        # generate_multi_agent()로 진짜 합성이 필요할 수 있어 건드리지 않는다).
+        comparison_answer: str | None = None
+        if single_step_answer is None and is_comparison_query and len(step_evidence) == 2:
+            comparison_answer = self._deterministic_numeric_comparison_answer(step_evidence)
+
+        if single_step_answer is not None:
+            answer = single_step_answer
+        elif comparison_answer is not None:
+            answer = comparison_answer
+        else:
+            history = self.conversation.get_context_summary()
+            answer = self.answer_generator.generate_multi_agent(query, context, history)
+            llm_calls += int(getattr(self.answer_generator, "last_generation_llm_calls", 1) or 1)
 
         if perf_stats is not None:
             perf_stats["generation_elapsed"] = perf_stats.get("generation_elapsed", 0.0) + (
@@ -12081,6 +12476,29 @@ class RAGChatbotV17:
 
         return merged
 
+    # RFP 문서 제목에 흔히 반복되는 상투어 — "기관명" 매칭인데 이 단어들만으로
+    # 겹침을 인정하면 서로 다른 학교/기관의 거의 동일한 템플릿 제목(예: "OOOO학년도
+    # OO학교 교복(동복,하복) 학교주관구매 단가계약 입찰 공고")끼리 기관명 자체는
+    # 하나도 안 겹치는데도 후보로 뽑히는 버그가 생긴다(실측: "신목중학교" 질의가
+    # "상계제일중학교" 문서로 오탐 — 두 문서 모두 이 상투어들만 겹쳤을 뿐, 실제
+    # 학교명은 겹치지 않았다). 아래 겹침 fallback에서 이 단어들만으로는 후보 자격을
+    # 인정하지 않는다.
+    _GENERIC_RFP_TITLE_TOKENS = {
+        "학년도", "년도", "교복", "동복", "하복", "구매", "구매의", "입찰", "공고",
+        "학교주관구매", "단가계약", "재공고", "재입찰", "선정", "용역", "공사",
+        "사업", "물품", "견적", "계약",
+    }
+
+    def _is_generic_rfp_token(self, token: str) -> bool:
+        """토큰이 상투어 목록에 없어도, 토큰화 정규식이 앞의 4자리 연도를 붙여서
+        하나로 묶는 경우가 많다(예: "2027학년도"가 "2027"+"학년도"로 안 나뉘고
+        한 토큰으로 잡힘) — 이 때문에 `_GENERIC_RFP_TITLE_TOKENS`의 "학년도"가
+        그대로는 안 걸러진다. 앞의 4자리 숫자를 뗀 뒤에도 비교한다."""
+        if token in self._GENERIC_RFP_TITLE_TOKENS:
+            return True
+        stripped = re.sub(r"^\d{4}", "", token)
+        return stripped in self._GENERIC_RFP_TITLE_TOKENS
+
     def _extract_org_names_from_query(
         self,
         query: str,
@@ -12139,6 +12557,9 @@ class RAGChatbotV17:
                 candidates.append((len(relaxed_key), org_name))
 
         # 4) 토큰 겹침 기반 유사 매칭 (긴 기관명/괄호 표기 보정)
+        # 겹치는 토큰이 전부 _GENERIC_RFP_TITLE_TOKENS(학년도/교복/입찰/공고 등
+        # 템플릿 상투어)뿐이면 후보로 인정하지 않는다 — 실제 기관 고유명이 최소
+        # 하나는 겹쳐야 "이 기관에 대한 질의"라고 볼 수 있다.
         if query_tokens:
             for org_name in self.vector_store.org_registry.keys():
                 org_tokens = set(
@@ -12147,8 +12568,10 @@ class RAGChatbotV17:
                         self._normalize_legal_name_tokens(org_name.lower()),
                     )
                 )
-                overlap = len(org_tokens.intersection(query_tokens))
-                if overlap >= 2:
+                overlap_tokens = org_tokens.intersection(query_tokens)
+                overlap = len(overlap_tokens)
+                meaningful_overlap = {t for t in overlap_tokens if not self._is_generic_rfp_token(t)}
+                if overlap >= 2 and meaningful_overlap:
                     score = overlap * 100 + len(org_name)
                     candidates.append((score, org_name))
 
