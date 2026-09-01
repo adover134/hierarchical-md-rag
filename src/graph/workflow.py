@@ -4479,21 +4479,25 @@ class RAGChatbotV17:
                 self._log_perf_stats(query, perf_stats, total_elapsed=time.perf_counter() - answer_started)
                 return _finalize_payload(self._build_org_not_found_payload(org_name))
 
-        # (미해결 — 아래 안전성 실측 참고) 위 블록은 org_name이 "무언가로는 채워졌지만
-        # org_registry에 없는" 경우만 잡는다. "호호주식회사의 계약기간은..."처럼
-        # org_name이 끝까지 빈 문자열로 남는 경우(_extract_org_names_from_query 자체가
-        # 후보를 하나도 못 낸 경우)는 이 블록을 안 타서, org_name="" 그대로 전역
-        # 검색으로 흘러가 무관한 청크로 생성을 시도해 엉뚱한 답을 낸다(실측: "호호
-        # 주식회사의 계약기간은 언제인가요?" -> 전혀 무관한 답변). 여기에 사전 차단
-        # 게이트를 넣어봤으나(질의에서 조사 앞 "주어처럼 보이는" 구를 뽑아 파서 실행
-        # 요약 CSV에 없으면 즉시 "못 찾음"), 검색 자체를 하기 전에 막는 방식이라
-        # 실측에서 n4(신목중학교) 같은 진짜 정상 케이스까지 오탐으로 막는 게 확인돼
-        # 되돌렸다 — n4는 org_registry 표기 차이 때문에 이 단계의 후보 추출 자체가
-        # 실패하고, 검색이 일단 돌고 난 뒤 갭 체크(project_name 신호)에서야 정답을
-        # 찾는 구조라, 검색 이전에 차단하면 그 경로 자체가 막힌다. 안전하게 다시
-        # 만들려면 "검색 이후" 단계에서 판단해야 한다 — 검색된 결과들이 질의와 토큰
-        # 하나도 안 겹치는지(진짜 무관한지)를 봐야, n4(겹침 있음)와 호호주식회사
-        # (겹침 없음)를 구분할 수 있다. 다음에 다시 다룰 것.
+        # 위 블록은 org_name이 "무언가로는 채워졌지만 org_registry에 없는" 경우만
+        # 잡는다. "호호주식회사의 계약기간은..."처럼 org_name이 끝까지 빈 문자열로
+        # 남는 경우(_extract_org_names_from_query 자체가 후보를 하나도 못 낸 경우)는
+        # 이 블록을 안 타서, org_name="" 그대로 전역 검색으로 흘러가 무관한 청크로
+        # 생성을 시도해 엉뚱한 답을 낸다(실측: "호호주식회사의 계약기간은
+        # 언제인가요?" -> 전혀 무관한 답변). 애초 설계 원칙(기관명이 있는지 먼저
+        # 보고, 있으면 관련 문서 존재 여부를 검색 전에 확인)이 한 번도 구현된 적이
+        # 없었던 게 근본 원인 — 아래에서 이를 구현한다.
+        #
+        # 1차 시도는 label 전체를 그대로 매칭해 실패해 n4(신목중학교) 같은 정상
+        # 케이스를 오탐으로 막았다 — 표기 차이(예: "학년도" vs "년도") 섞인 긴 구
+        # 전체를 문자열로 매칭하면 실패하기 때문. `_document_exists_for_label()`을
+        # 상투어를 뺀 토큰 단위 폴백까지 포함하도록 고친 뒤 재검증(전체 40문항
+        # 회귀 + 이 케이스들 개별 확인)해 문제 없음을 확인하고 다시 넣는다.
+        if not org_name:
+            raw_subject = self._extract_raw_subject_phrase(query)
+            if raw_subject and not self._document_exists_for_label(raw_subject):
+                self._log_perf_stats(query, perf_stats, total_elapsed=time.perf_counter() - answer_started)
+                return _finalize_payload(self._build_org_not_found_payload(raw_subject))
 
         # 이 4개 숏컷(csv/org_overview/chunk_budget/org_document_scan)은 "검색기를
         # 굳이 쓰지 않아도 결정론적으로 답할 수 있는 경우"를 처리한다 — CSV/캐시
@@ -12544,18 +12548,51 @@ class RAGChatbotV17:
         self._known_document_labels_cache = labels
         return labels
 
+    # RFP 상투어(_GENERIC_RFP_TITLE_TOKENS)엔 없지만 "이 시스템은", "예산이 가장 큰
+    # 사업" 같은 광범위 메타 질의에서 주어 자리에 자주 오는 일반명사 — 이런 토큰만
+    # 남으면 특정 문서를 지목한 게 아니라고 본다.
+    _GENERIC_META_TOKENS = {
+        "시스템", "예산", "정보", "문서", "기능", "질문", "답변", "사업들",
+        "공고", "자료", "내용", "결과", "전체", "목록",
+    }
+
     def _document_exists_for_label(self, label: str) -> bool:
         """label(질의에서 뽑은 주어 후보)이 실제 색인 문서 목록(org_registry 또는
-        파서 실행 요약 CSV) 어디에도 안 나오면 False. 판단 불가(빈 label 등)일 때는
-        True로 안전하게 폴백한다 — 존재하는 문서를 "못 찾음"으로 잘못 막는 게, 없는
-        문서를 못 거르는 것보다 더 나쁘다."""
+        파서 실행 요약 CSV)에 있는지 확인한다. 판단 불가(빈 label, 유의미한 토큰
+        없음 등)일 때는 True로 안전하게 폴백한다 — 존재하는 문서를 "못 찾음"으로
+        잘못 막는 게, 없는 문서를 못 거르는 것보다 더 나쁘다.
+
+        1차로 label 전체를 그대로 시도한다(짧고 정확한 기관명이면 바로 잡힘).
+        실패하면 토큰 단위로 다시 본다 — label이 "2027학년도 신목중학교 교복(동복
+        및 하복) 구매"처럼 상투어가 잔뜩 섞인 긴 구일 때, 전체 문자열 포함 매칭은
+        표기 차이(예: "학년도" vs "년도", "교복" vs "교복구매")로 실패하지만, 상투어를
+        뺀 핵심 토큰("신목중학교")만 놓고 보면 실제로 존재를 확인할 수 있다(실측:
+        전체 구는 매칭 실패, "신목중학교" 단독은 성공). 상투어를 뺀 뒤 남는 토큰이
+        하나도 없으면(진짜 고유명사가 없는 메타 질의) 판별 불가로 보고 안전 폴백한다."""
         if not label:
             return True
+        known_docs = self._load_known_document_labels()
         for org in self.vector_store.org_registry.keys():
             if self._org_names_loosely_match(label, org):
                 return True
-        for doc_label in self._load_known_document_labels():
+        for doc_label in known_docs:
             if self._org_names_loosely_match(label, doc_label):
+                return True
+
+        label_tokens = set(re.findall(r"[0-9a-zA-Z가-힣]{2,}", unicodedata.normalize("NFKC", label.lower())))
+        # "시스템에"처럼 조사가 토큰 뒤에 그대로 붙어(중간 공백 없음) 정확 일치가
+        # 깨지는 경우가 있어(오늘 여러 번 재현된 문제 패턴), 메타 토큰은 접두어
+        # 일치로 본다("시스템에".startswith("시스템") == True).
+        meaningful_tokens = {
+            t for t in label_tokens
+            if not self._is_generic_rfp_token(t) and not any(t.startswith(meta) for meta in self._GENERIC_META_TOKENS)
+        }
+        if not meaningful_tokens:
+            return True
+        normalized_orgs = [unicodedata.normalize("NFKC", o.lower()) for o in self.vector_store.org_registry.keys()]
+        normalized_docs = [unicodedata.normalize("NFKC", d.lower()) for d in known_docs]
+        for token in meaningful_tokens:
+            if any(token in o for o in normalized_orgs) or any(token in d for d in normalized_docs):
                 return True
         return False
 
