@@ -6,6 +6,7 @@ from __future__ import annotations
 import sys
 import os
 import re
+import csv
 import json
 import time
 import inspect
@@ -279,6 +280,7 @@ class RAGChatbotV17:
         self._chunk_budget_cache: dict[str, dict[str, Any]] = {}
         self._chunk_budget_cache_ready = False
         self._summary_section_line_cache: dict[str, list[str]] = {}
+        self._known_document_labels_cache: list[str] | None = None
 
         self._load_documents()
 
@@ -4476,6 +4478,22 @@ class RAGChatbotV17:
             elif intent.query_type == "org":
                 self._log_perf_stats(query, perf_stats, total_elapsed=time.perf_counter() - answer_started)
                 return _finalize_payload(self._build_org_not_found_payload(org_name))
+
+        # (미해결 — 아래 안전성 실측 참고) 위 블록은 org_name이 "무언가로는 채워졌지만
+        # org_registry에 없는" 경우만 잡는다. "호호주식회사의 계약기간은..."처럼
+        # org_name이 끝까지 빈 문자열로 남는 경우(_extract_org_names_from_query 자체가
+        # 후보를 하나도 못 낸 경우)는 이 블록을 안 타서, org_name="" 그대로 전역
+        # 검색으로 흘러가 무관한 청크로 생성을 시도해 엉뚱한 답을 낸다(실측: "호호
+        # 주식회사의 계약기간은 언제인가요?" -> 전혀 무관한 답변). 여기에 사전 차단
+        # 게이트를 넣어봤으나(질의에서 조사 앞 "주어처럼 보이는" 구를 뽑아 파서 실행
+        # 요약 CSV에 없으면 즉시 "못 찾음"), 검색 자체를 하기 전에 막는 방식이라
+        # 실측에서 n4(신목중학교) 같은 진짜 정상 케이스까지 오탐으로 막는 게 확인돼
+        # 되돌렸다 — n4는 org_registry 표기 차이 때문에 이 단계의 후보 추출 자체가
+        # 실패하고, 검색이 일단 돌고 난 뒤 갭 체크(project_name 신호)에서야 정답을
+        # 찾는 구조라, 검색 이전에 차단하면 그 경로 자체가 막힌다. 안전하게 다시
+        # 만들려면 "검색 이후" 단계에서 판단해야 한다 — 검색된 결과들이 질의와 토큰
+        # 하나도 안 겹치는지(진짜 무관한지)를 봐야, n4(겹침 있음)와 호호주식회사
+        # (겹침 없음)를 구분할 수 있다. 다음에 다시 다룰 것.
 
         # 이 4개 숏컷(csv/org_overview/chunk_budget/org_document_scan)은 "검색기를
         # 굳이 쓰지 않아도 결정론적으로 답할 수 있는 경우"를 처리한다 — CSV/캐시
@@ -12498,6 +12516,66 @@ class RAGChatbotV17:
             return True
         stripped = re.sub(r"^\d{4}", "", token)
         return stripped in self._GENERIC_RFP_TITLE_TOKENS
+
+    def _load_known_document_labels(self) -> list[str]:
+        """파서 실행 요약 CSV(`output/execution_summary_*.csv`)에서 실제로 성공적으로
+        색인된 문서의 파일명을 전부 모은다 — 이 코퍼스에 진짜로 존재하는 문서 목록의
+        ground truth(나라장터 원본 엑셀 export는 이 코퍼스와 겹치지 않는 별도 데이터셋
+        이라 실측 확인 후 배제 — `data_list.xlsx` 100건 중 이 코퍼스 기관명과 하나도
+        안 겹침). org_registry는 청크 메타데이터에서 파생되므로 보통 같은 정보를
+        담지만, 이 CSV는 파싱 단계 자체의 원본 기록이라 더 직접적인 근거다."""
+        if self._known_document_labels_cache is not None:
+            return self._known_document_labels_cache
+        labels: list[str] = []
+        for csv_name in ("execution_summary_new_parser.csv", "execution_summary_pdf_originals.csv"):
+            csv_path = PROJECT_ROOT / "output" / csv_name
+            if not csv_path.exists():
+                continue
+            try:
+                with open(csv_path, encoding="utf-8-sig", newline="") as f:
+                    for row in csv.DictReader(f):
+                        if str(row.get("status", "")).strip().lower() != "success":
+                            continue
+                        filename = str(row.get("file", "")).strip()
+                        if filename:
+                            labels.append(filename.rsplit(".", 1)[0] if "." in filename else filename)
+            except Exception:
+                continue
+        self._known_document_labels_cache = labels
+        return labels
+
+    def _document_exists_for_label(self, label: str) -> bool:
+        """label(질의에서 뽑은 주어 후보)이 실제 색인 문서 목록(org_registry 또는
+        파서 실행 요약 CSV) 어디에도 안 나오면 False. 판단 불가(빈 label 등)일 때는
+        True로 안전하게 폴백한다 — 존재하는 문서를 "못 찾음"으로 잘못 막는 게, 없는
+        문서를 못 거르는 것보다 더 나쁘다."""
+        if not label:
+            return True
+        for org in self.vector_store.org_registry.keys():
+            if self._org_names_loosely_match(label, org):
+                return True
+        for doc_label in self._load_known_document_labels():
+            if self._org_names_loosely_match(label, doc_label):
+                return True
+        return False
+
+    _GENERIC_SUBJECT_LEADS = {"이", "그", "저", "여기", "거기", "무엇", "어디", "언제", "누구", "어느", "우리"}
+
+    def _extract_raw_subject_phrase(self, query: str) -> str:
+        """org_registry 매칭 여부와 무관하게, 질의에서 "주어처럼 보이는" 앞부분
+        고유명사구를 뽑는다(예: "호호주식회사의 계약기간은..." -> "호호주식회사").
+        흔한 조사(의/은/는/이/가) 바로 앞의 구를 뽑는 가벼운 휴리스틱이다 — 이 조사가
+        문장 앞부분에 없거나(광범위 질의 등) 뽑힌 구가 흔한 지시어/의문사면 빈
+        문자열을 돌려줘 이 게이트 자체가 발동하지 않게 한다(안전한 폴백)."""
+        if not query:
+            return ""
+        m = re.match(r"^([가-힣0-9a-zA-Z()·\s]{2,30}?)(의|은는|은|는|이|가)\s", query.strip())
+        if not m:
+            return ""
+        phrase = m.group(1).strip()
+        if len(phrase) < 2 or phrase in self._GENERIC_SUBJECT_LEADS:
+            return ""
+        return phrase
 
     def _extract_org_names_from_query(
         self,
