@@ -6,9 +6,16 @@
 `eval_resources/gradio_flagged/`에 자동 저장된다. 정성 평가(전체 인상/사용 의향 등)는
 별도 Google Form으로 받고, 여기서는 "이 답변 하나가 쓸만했는가"만 가볍게 기록한다.
 
+**전략/모델 고정**: 이번 세션 전체가 `HWP_RAG_ANSWER_STRATEGY=multi_agent` +
+`gpt-oss:20b`(로컬 Ollama) 조합으로 검증한 결과다 — 테스터가 다른 조합(예: two_stage,
+다른 모델)을 실제로 겪으면 그 검증이 무의미해진다. 그래서 이 값들은 실행 환경변수로
+덮어쓸 수 없게 스크립트 안에서 직접 고정한다(아래 `_ENFORCED_ENV`, `os.environ[k] = v`로
+설정 — `setdefault`가 아님). 로컬 실험용으로 다른 조합을 쓰고 싶으면 이 딕셔너리를
+직접 고쳐서 실행할 것.
+
 사용법:
     conda activate langc
-    HWP_RAG_ANSWER_STRATEGY=multi_agent python scripts/gradio_app.py [--share] [--port 7860]
+    python scripts/gradio_app.py [--share] [--port 7860]
 
 `--share`를 주면 Gradio가 공개 임시 링크를 만들어준다(테스터에게 바로 공유 가능,
 별도 호스팅 불필요) — 링크는 72시간 후 만료된다.
@@ -23,11 +30,22 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-# Gradio는 launch() 시점에 텔레메트리 핑을 보내는데, 이 환경(샌드박스/제한된
-# 아웃바운드 네트워크)에서는 이게 응답 없이 그냥 멈춰버린다(실측: launch() 호출이
-# "Running on local URL" 배너도 못 찍고 60초+ 무응답 — GRADIO_ANALYTICS_ENABLED=False로
-# 우회하면 즉시 뜬다). import 이전에 설정해야 확실히 반영된다.
-os.environ.setdefault("GRADIO_ANALYTICS_ENABLED", "False")
+# 이번 세션 내내 검증한 정확한 조합 — 환경변수로 덮어쓸 수 없도록 직접 대입한다
+# (setdefault가 아니다: 실행 셸에 이미 다른 값이 있어도 무조건 이걸로 강제한다).
+# import 이전에 설정해야 확실히 반영된다(GRADIO_ANALYTICS_ENABLED은 gradio import
+# 시점에 읽히고, 나머지는 RAGChatbotV17 지연 임포트 시점에 읽힌다 — 어느 쪽이든
+# main()이 서버를 실제로 띄우기 전에 끝나므로 순서상 안전하다).
+_ENFORCED_ENV = {
+    "GRADIO_ANALYTICS_ENABLED": "False",  # launch() 텔레메트리 핑이 샌드박스에서 무응답으로 멈춤(아래 launch() 주석 참고)
+    "HWP_RAG_ANSWER_STRATEGY": "multi_agent",
+    "HWP_RAG_LLM_BASE_URL": "http://localhost:11434/v1",
+    "OPENAI_API_KEY": "ollama-local",
+    "REASONING_MODEL": "gpt-oss:20b",
+    "QUERY_INTENT_MODEL": "gpt-oss:20b",
+    "OPENAI_TIMEOUT_SEC": "1200",
+}
+for _k, _v in _ENFORCED_ENV.items():
+    os.environ[_k] = _v
 
 import gradio as gr
 
@@ -74,6 +92,30 @@ def respond(message: str, history: list[dict[str, str]]) -> str:
     return str(result.get("answer") or "답변을 찾지 못했습니다.")
 
 
+def _check_ollama_ready() -> str | None:
+    """`_ENFORCED_ENV`가 고정한 gpt-oss:20b/Ollama 조합이 실제로 떠 있는지 확인한다.
+    안 띄우고 그냥 서버를 열면, 테스터가 첫 질문에서야 모호한 예외 메시지를 받게
+    된다 — 그 대신 실행 시점에 바로 실패 사유를 알려준다. 문제없으면 None을
+    돌려준다."""
+    import urllib.error
+    import urllib.request
+
+    base_url = os.environ["HWP_RAG_LLM_BASE_URL"]
+    tags_url = base_url.rsplit("/v1", 1)[0] + "/api/tags"
+    try:
+        with urllib.request.urlopen(tags_url, timeout=5) as resp:
+            import json as _json
+
+            names = [m.get("name", "") for m in _json.load(resp).get("models", [])]
+    except (urllib.error.URLError, OSError) as e:
+        return f"Ollama({base_url})에 연결할 수 없습니다({e}). `ollama serve`가 떠 있는지 확인하세요."
+
+    target = os.environ["REASONING_MODEL"]
+    if not any(n == target or n.startswith(target + ":") for n in names):
+        return f"Ollama에 '{target}' 모델이 없습니다(설치된 모델: {names or '없음'}). `ollama pull {target}`로 받으세요."
+    return None
+
+
 def build_app() -> gr.ChatInterface:
     return gr.ChatInterface(
         fn=respond,
@@ -96,7 +138,10 @@ def main() -> None:
     ap.add_argument("--share", action="store_true", help="Gradio 공개 임시 링크 생성(72시간 만료)")
     args = ap.parse_args()
 
-    os.environ.setdefault("HWP_RAG_ANSWER_STRATEGY", "multi_agent")
+    error = _check_ollama_ready()
+    if error:
+        print(f"[gradio_app] 실행 중단: {error}", file=sys.stderr)
+        raise SystemExit(1)
 
     demo = build_app()
     # 이 환경에서는 launch()를 기본(블로킹) 모드로 부르면 "Running on local URL" 배너도
