@@ -12522,15 +12522,34 @@ class RAGChatbotV17:
         return stripped in self._GENERIC_RFP_TITLE_TOKENS
 
     def _load_known_document_labels(self) -> list[str]:
-        """파서 실행 요약 CSV(`output/execution_summary_*.csv`)에서 실제로 성공적으로
-        색인된 문서의 파일명을 전부 모은다 — 이 코퍼스에 진짜로 존재하는 문서 목록의
-        ground truth(나라장터 원본 엑셀 export는 이 코퍼스와 겹치지 않는 별도 데이터셋
-        이라 실측 확인 후 배제 — `data_list.xlsx` 100건 중 이 코퍼스 기관명과 하나도
-        안 겹침). org_registry는 청크 메타데이터에서 파생되므로 보통 같은 정보를
-        담지만, 이 CSV는 파싱 단계 자체의 원본 기록이라 더 직접적인 근거다."""
+        """이 코퍼스에 진짜로 존재하는 문서 목록의 ground truth를 모은다.
+
+        1순위: `data_index/나라장터_RFP_메타데이터.xlsx`(나라장터 원본 export —
+        `사업명`/`발주 기관`이 이미 분리된 컬럼이라 파일명을 "_"로 쪼개 추측할 필요가
+        없다. 실측 확인됨: 57건 전부 이 코퍼스의 실제 문서와 일치, 앞서 시도했던
+        `data_list.xlsx`(100건, 이 코퍼스와 전혀 안 겹침 — 별도 데이터셋으로 판명돼
+        폐기)와는 다른 파일이다).
+        2순위(보조 폴백): 파서 실행 요약 CSV(`output/execution_summary_*.csv`) — 엑셀이
+        없거나 일부만 있을 때를 대비해 계속 합쳐서 쓴다(라벨이 더 느는 방향이라
+        안전 — 존재 판정을 더 관대하게 만들 뿐, 더 엄격하게 만들지 않는다)."""
         if self._known_document_labels_cache is not None:
             return self._known_document_labels_cache
         labels: list[str] = []
+
+        xlsx_path = PROJECT_ROOT / "data_index" / "나라장터_RFP_메타데이터.xlsx"
+        if xlsx_path.exists():
+            try:
+                import pandas as pd
+
+                df = pd.read_excel(xlsx_path, sheet_name=0)
+                for col in ("사업명", "발주 기관", "파일명"):
+                    if col in df.columns:
+                        labels.extend(
+                            str(v).strip() for v in df[col].dropna().tolist() if str(v).strip()
+                        )
+            except Exception:
+                pass
+
         for csv_name in ("execution_summary_new_parser.csv", "execution_summary_pdf_originals.csv"):
             csv_path = PROJECT_ROOT / "output" / csv_name
             if not csv_path.exists():

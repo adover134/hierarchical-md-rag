@@ -59,11 +59,11 @@ INTRO_MARKDOWN = """\
 - "OO 공고의 입찰 마감일은 언제인가요?"
 - "A 사업과 B 사업 중 예산이 더 큰 곳은 어디인가요?"
 
-⚠️ 이 챗봇은 **테스트 배포**입니다 — 실제 입찰 의사결정에 이 답변만으로 의존하지 마시고,
-반드시 원문 공고문을 함께 확인해 주세요. 답변 옆의 👍/👎로 평가를 남겨주시면
-개선에 큰 도움이 됩니다.
+⚠️ 이 챗봇은 **테스트 배포**입니다 — 실제 입찰 의사결정에 이 답변만으로 의존하지 마시고, 반드시 원문 공고문을 함께 확인해 주세요.\n
+답변 옆의 👍/👎로 평가를 남겨주시면 개선에 큰 도움이 됩니다.
 
-테스트 후에는 [설문 양식](여기에_구글폼_링크_입력) 작성도 부탁드립니다.
+추가 예상 질문은 [테스트 시나리오](https://github.com/adover134/hierarchical-md-rag/blob/multi-agent/TEST_SCENARIOS.md)를 참조하세요.\n
+테스트 후에는 [설문 양식](https://docs.google.com/forms/d/e/1FAIpQLSeh_riFvFTR2JHFZN6h_0SalJ-37RTYqPQiuZ80QVXJmspfGQ/viewform?usp=header) 작성도 부탁드립니다.
 """
 
 _chatbot: Any = None
