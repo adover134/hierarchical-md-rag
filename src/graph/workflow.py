@@ -12319,7 +12319,7 @@ class RAGChatbotV17:
     def _build_org_not_found_payload(org_name: str) -> dict[str, Any]:
         return {
             "answer": (
-                f"제공된 문서에서 `{org_name}` 관련 정보를 찾지 못했습니다.\n"
+                f"보유한 문서에서 `{org_name}` 관련 정보를 찾지 못했습니다.\n"
                 "해당 기관 문서가 인덱싱되어 있는지 확인해 주세요."
             ),
             "found": False,
