@@ -97,6 +97,33 @@ sudo systemctl enable --now ollama
 systemctl show ollama -p Environment   # OLLAMA_HOST=0.0.0.0가 보이면 반드시 제거
 ```
 
+**병렬 처리(다중 사용자)**: `scripts/gradio_app.py`는 기본적으로 챗봇 인스턴스를
+2개(`GRADIO_APP_POOL_SIZE`, 기본값 2) 준비해 테스터 2명까지는 동시에 응답을 생성할
+수 있다. 하지만 이건 앱 쪽 큐일 뿐이고, Ollama 서버 자체도 `OLLAMA_NUM_PARALLEL`을
+그만큼 올려주지 않으면 Ollama가 내부에서 다시 요청을 직렬화해 버려 체감 이득이 없다.
+systemd로 띄운다면 override로 추가한다:
+
+```bash
+sudo systemctl edit ollama
+```
+
+편집기가 열리면 다음을 추가(저장하면 자동으로 override 파일 생성):
+
+```ini
+[Service]
+Environment="OLLAMA_NUM_PARALLEL=2"
+```
+
+```bash
+sudo systemctl restart ollama
+systemctl show ollama -p Environment   # OLLAMA_NUM_PARALLEL=2 확인
+```
+
+L4(24GB) 기준 모델(~14GB)을 빼면 ~10GB가 남는데, 병렬 슬롯마다 KV 캐시가 늘어나므로
+2가 안전한 기본값이다. `GRADIO_APP_POOL_SIZE`와 `OLLAMA_NUM_PARALLEL`은 반드시 같은
+값으로 맞출 것 — 한쪽만 올리면 남는 이득이 없거나(Ollama만 올림) 요청이 쌓이기만
+한다(앱만 올림).
+
 모델 pull(최초 1회, ~13GB):
 
 ```bash

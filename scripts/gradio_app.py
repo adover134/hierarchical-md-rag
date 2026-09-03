@@ -29,7 +29,9 @@ from __future__ import annotations
 
 import argparse
 import os
+import queue
 import sys
+import threading
 from pathlib import Path
 from typing import Any
 
@@ -84,33 +86,52 @@ INTRO_MARKDOWN = """\
 테스트 후에는 [설문 양식](https://docs.google.com/forms/d/e/1FAIpQLSeh_riFvFTR2JHFZN6h_0SalJ-37RTYqPQiuZ80QVXJmspfGQ/viewform?usp=header) 작성도 부탁드립니다.
 """
 
-_chatbot: Any = None
+# 동시에 처리할 요청 수 — Ollama가 병렬로 생성을 처리하려면 서버 쪽에도
+# OLLAMA_NUM_PARALLEL을 이 값 이상으로 맞춰야 실제 병렬 처리가 된다(TEST_SCENARIOS.md
+# 배포 가이드 참고). L4(24GB) 기준 모델(~14GB)을 빼면 ~10GB가 남는데, 병렬 슬롯마다
+# KV 캐시가 늘어나므로 기본 2로 잡는다 — 늘리려면 VRAM 여유를 먼저 확인할 것.
+POOL_SIZE = int(os.environ.get("GRADIO_APP_POOL_SIZE", "2"))
+
+_chatbot_pool: "queue.Queue[Any]" = queue.Queue()
+_pool_lock = threading.Lock()
+_pool_ready = False
 
 
-def _get_chatbot() -> Any:
-    """RAGChatbotV17 인스턴스를 지연 생성해 프로세스 전체에서 재사용한다
-    (scripts/api.py의 `_get_chatbot()`과 동일한 패턴 — 임베딩 모델/DB 커넥션
-    초기화 비용을 요청마다 물지 않기 위함)."""
-    global _chatbot
-    if _chatbot is None:
+def _ensure_pool() -> None:
+    """`RAGChatbotV17` 인스턴스를 `POOL_SIZE`개 미리 만들어 큐에 채운다.
+
+    처음엔 인스턴스 하나를 전역에서 공유했는데(`chatbot.conversation`을 요청마다
+    바꿔치기하는 방식), 그건 큐 동시성이 1(직렬 처리)일 때만 안전했다 — 병렬로
+    처리하려면(동시성 > 1) 요청 A가 자기 세션 컨텍스트를 심자마자 요청 B가 같은
+    인스턴스에 자기 컨텍스트를 덮어써버리는 race condition이 생긴다. 인스턴스를
+    아예 여러 개 만들어 요청마다 하나씩 '독점 대여'하는 방식(Queue.get/put)으로
+    바꾸면, 동시에 처리 중인 요청끼리는 서로 다른 인스턴스를 쓰게 되어 문제가
+    구조적으로 사라진다."""
+    global _pool_ready
+    if _pool_ready:
+        return
+    with _pool_lock:
+        if _pool_ready:
+            return
         from src.graph.workflow import RAGChatbotV17
 
-        _chatbot = RAGChatbotV17()
-    return _chatbot
+        for _ in range(POOL_SIZE):
+            _chatbot_pool.put(RAGChatbotV17())
+        _pool_ready = True
 
 
 def _session_conversation(history: list[dict[str, str]]) -> Any:
     """Gradio가 이미 세션별로 격리해주는 `history`로부터, 이번 요청 전용
     `ConversationContext`를 매번 새로 만든다.
 
-    `_get_chatbot()`이 돌려주는 `RAGChatbotV17`은 프로세스 전체에서 공유하는
-    전역 싱글턴이라, 그 인스턴스의 `self.conversation`(대화 이력/`last_org`)을
-    그대로 재사용하면 서로 다른 테스터의 대화 맥락이 섞인다 — 실측: A가 "SRT
-    감속기..." 질문 후 last_org가 SRT로 남은 상태에서, 전혀 무관한 B가 "그거
-    언제까지야?"처럼 후속질문형 어휘("그거")를 쓰면 `get_follow_up_context()`가
-    B의 질문을 A의 SRT 맥락에 대한 후속질문으로 오판한다. Gradio의 `history`는
-    세션(브라우저)마다 이미 올바르게 격리돼 있으므로, 매 요청마다 그 history로
-    새 컨텍스트를 만들어 전역 인스턴스에 주입하면 별도 세션 상태 없이 격리된다."""
+    풀에서 대여한 인스턴스라도 그 `self.conversation`(대화 이력/`last_org`)을 그대로
+    쓰면, 같은 인스턴스를 나중에 대여한 '다른' 테스터에게 이전 대화 맥락이 남아있게
+    된다 — 실측: A가 "SRT 감속기..." 질문 후 last_org가 SRT로 남은 상태에서, 전혀
+    무관한 B가 "그거 언제까지야?"처럼 후속질문형 어휘("그거")를 쓰면
+    `get_follow_up_context()`가 B의 질문을 A의 SRT 맥락에 대한 후속질문으로 오판한다.
+    Gradio의 `history`는 세션(브라우저)마다 이미 올바르게 격리돼 있으므로, 매 요청마다
+    그 history로 새 컨텍스트를 만들어 대여한 인스턴스에 주입하면 별도 세션 상태 없이
+    격리된다."""
     from src.graph.state import ConversationContext
 
     conv = ConversationContext(max_history=5)
@@ -154,22 +175,27 @@ def respond(message: str, history: list[dict[str, str]]) -> str:
     if not message:
         return "질문을 입력해 주세요."
 
-    chatbot = _get_chatbot()
-    # 이 요청을 처리하는 동안만 이번 세션의 대화 맥락으로 바꿔치기한다. 큐
-    # 동시성이 1(아래 launch()의 concurrency_limit 참고)이라 요청이 직렬로만
-    # 처리되므로 안전하다 — 동시성을 늘릴 경우 이 스왑 방식은 더 이상 안전하지
-    # 않으므로 반드시 세션별 인스턴스 분리 등으로 다시 설계해야 한다.
-    chatbot.conversation = _session_conversation(history)
-    started = time.perf_counter()
+    _ensure_pool()
+    # 풀에서 인스턴스를 하나 독점 대여한다 — POOL_SIZE개가 전부 대여 중이면 여기서
+    # 블로킹돼 자연스럽게 백프레셔가 걸린다(Gradio 큐의 concurrency_limit과 이중으로
+    # 안전장치 역할). 반드시 finally에서 반납해야 다음 요청이 쓸 수 있다.
+    chatbot = _chatbot_pool.get()
     try:
-        result = chatbot.answer(message, top_k=24)
-    except Exception as e:  # noqa: BLE001 — 테스트 배포라 예외를 그대로 노출하지 않고 안내문으로 감싼다
-        error_reply = f"죄송합니다, 답변 생성 중 오류가 발생했습니다({type(e).__name__}). 다른 방식으로 질문해 주시겠어요?"
-        _log_query(message, error_reply, time.perf_counter() - started, error=f"{type(e).__name__}: {e}")
-        return error_reply
-    answer = str(result.get("answer") or "답변을 찾지 못했습니다.")
-    _log_query(message, answer, time.perf_counter() - started)
-    return answer
+        # 대여한 인스턴스에 이번 세션 전용 대화 맥락을 주입 — 이 인스턴스를 이전에
+        # 대여했던 '다른' 테스터의 맥락이 남아있으면 안 되므로 매번 새로 만든다.
+        chatbot.conversation = _session_conversation(history)
+        started = time.perf_counter()
+        try:
+            result = chatbot.answer(message, top_k=24)
+        except Exception as e:  # noqa: BLE001 — 테스트 배포라 예외를 그대로 노출하지 않고 안내문으로 감싼다
+            error_reply = f"죄송합니다, 답변 생성 중 오류가 발생했습니다({type(e).__name__}). 다른 방식으로 질문해 주시겠어요?"
+            _log_query(message, error_reply, time.perf_counter() - started, error=f"{type(e).__name__}: {e}")
+            return error_reply
+        answer = str(result.get("answer") or "답변을 찾지 못했습니다.")
+        _log_query(message, answer, time.perf_counter() - started)
+        return answer
+    finally:
+        _chatbot_pool.put(chatbot)
 
 
 def _check_ollama_ready() -> str | None:
@@ -223,18 +249,25 @@ def main() -> None:
         print(f"[gradio_app] 실행 중단: {error}", file=sys.stderr)
         raise SystemExit(1)
 
+    # 첫 테스터가 풀 초기화 비용(POOL_SIZE개 인스턴스 생성)을 그대로 떠안지 않도록
+    # 서버를 열기 전에 미리 채워둔다.
+    print(f"[gradio_app] 챗봇 인스턴스 {POOL_SIZE}개 준비 중...")
+    _ensure_pool()
+    print("[gradio_app] 준비 완료.")
+
     demo = build_app()
-    # 다중 사용자: Gradio queue의 default_concurrency_limit=1(명시 안 하면 gradio
-    # 기본값)로 여러 테스터의 요청을 거부하지 않고 전부 큐에 받되 한 번에 하나씩만
-    # 처리한다 — 어차피 백엔드가 로컬 Ollama 단일 GPU라 실제 생성도 직렬로만
-    # 가능하므로 이 기본값이 맞다. 값을 그대로 두는 대신 명시해 의도임을 남긴다.
-    # (동시성을 올리려면 respond()의 conversation 스왑 방식부터 다시 설계해야 함.)
+    # 다중 사용자: Gradio queue의 concurrency를 POOL_SIZE에 맞춘다 — 풀에 있는
+    # 인스턴스 수만큼만 실제 병렬 처리가 가능하므로 그 이상 동시에 들여보내봐야
+    # respond() 내부의 Queue.get()에서 그냥 대기하게 될 뿐이다. Ollama 쪽도
+    # OLLAMA_NUM_PARALLEL을 POOL_SIZE 이상으로 맞춰야 실제로 병렬 생성이 된다
+    # (TEST_SCENARIOS.md 배포 가이드 참고 — 안 맞추면 여기서만 병렬로 보내고
+    # Ollama가 자체적으로 다시 직렬화해 체감 이득이 없다).
     #
     # 이 환경에서는 launch()를 기본(블로킹) 모드로 부르면 "Running on local URL" 배너도
     # 못 찍고 응답 없이 멈춘다(실측: 60초+ 무응답, GRADIO_ANALYTICS_ENABLED 여부와 무관).
     # prevent_thread_lock=True로 즉시 반환시킨 뒤 block_thread()로 직접 블로킹하면
     # 정상 동작한다.
-    demo.queue(default_concurrency_limit=1).launch(
+    demo.queue(default_concurrency_limit=POOL_SIZE).launch(
         server_name=args.host, server_port=args.port, share=args.share, prevent_thread_lock=True
     )
     demo.block_thread()
