@@ -71,13 +71,27 @@ python scripts/gradio_app.py --port 7860
   쪽에서 임베딩 모델 CPU 연산 + nginx + Gradio가 같이 돌아가는 정도 여유만 있으면 됨).
 - 도메인의 A 레코드가 이 서버의 공인 IP를 가리키도록 설정(DNS 전파는 수 분~수십 분
   걸릴 수 있음 — `dig <도메인>`으로 확인).
-- 방화벽에서 80(HTTP), 443(HTTPS), 22(SSH)만 열고 나머지는 닫는다.
+- **방화벽은 두 겹이다 — 둘 다 해야 한다.** GCP는 OS 방화벽(`ufw`)과 별개로
+  VPC 자체 방화벽(네트워크 레벨, 트래픽이 서버에 도달하기도 전에 막거나 허용)이
+  있다. `ufw`만 설정하고 GCP 쪽 방화벽 규칙을 안 건드리면, VPC 기본 규칙이 뭘
+  허용/차단하느냐에 따라 (a) `ufw`가 막아도 원래 다 막혀 있던 거라 의미가 없거나
+  (b) 반대로 `ufw`로 막았다고 생각한 포트가 VPC 레벨에서 이미 열려 있어서 실제로는
+  안 막힐 수 있다 — 둘 다 명시적으로 확인해야 한다.
   ```bash
+  # OS 레벨(ufw)
   sudo ufw allow 22/tcp
   sudo ufw allow 80/tcp
   sudo ufw allow 443/tcp
   sudo ufw enable
   sudo ufw status  # 7860, 11434가 목록에 없어야 정상
+
+  # GCP VPC 레벨 — 인스턴스에 붙은 네트워크 태그 기준으로 80/443만 허용하는 규칙 생성
+  gcloud compute firewall-rules create allow-rag-web \
+    --network=default --direction=INGRESS --action=ALLOW \
+    --rules=tcp:80,tcp:443 --target-tags=rag-gradio --source-ranges=0.0.0.0/0
+  gcloud compute instances add-tags <인스턴스명> --tags=rag-gradio --zone=<존>
+  gcloud compute firewall-rules list  # 7860/11434를 여는 규칙이 없는지, default-allow-* 중
+                                       # 의도치 않게 넓게 열린 규칙이 없는지 확인
   ```
 
 ## 0.5) 코드·데이터 이전, 파이썬 환경 준비
@@ -171,6 +185,11 @@ ollama list   # gpt-oss:20b가 보이면 완료
 SSH 세션이 끊겨도 계속 돌고, 크래시 시 자동 재시작되도록 systemd unit을 만든다.
 `--host 127.0.0.1`로 바인딩해 nginx를 거치지 않은 직접 접근을 막는다.
 
+**인증 필수**: 도메인이 뜨는 순간 이 앱은 인터넷에 공개된다 — `GRADIO_APP_SHARED_PASSWORD`를
+반드시 설정할 것. 안 하면 시작 로그에 경고가 찍히고 그대로 인증 없이 열린다(로컬
+단독 확인용 예외 처리이지, 실제 배포에서 무시해도 되는 경고가 아니다). 테스터
+전원이 같은 계정(아이디 `tester`)을 공유한다.
+
 `/etc/systemd/system/rag-gradio.service`:
 
 ```ini
@@ -183,12 +202,24 @@ Requires=ollama.service
 Type=simple
 User=<실행할 사용자명>
 WorkingDirectory=/home/<사용자>/project/hierarchical-md-rag
+Environment="GRADIO_APP_SHARED_PASSWORD=<테스터에게 공유할 비밀번호>"
 ExecStart=/home/<사용자>/project/hierarchical-md-rag/.venv/bin/python scripts/gradio_app.py --host 127.0.0.1 --port 7860
 Restart=on-failure
 RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
+```
+
+systemd unit 파일은 보통 다른 로컬 사용자도 읽을 수 있어(`644`), 비밀번호를 위처럼
+바로 적기보다 별도 파일로 분리하고 권한을 잠그는 게 더 안전하다(같은 서버를 혼자
+쓰는 전용 인스턴스라면 생략해도 되는 정도지만, 습관으로 들이는 게 낫다):
+
+```bash
+echo 'GRADIO_APP_SHARED_PASSWORD=<비밀번호>' | sudo tee /etc/rag-gradio.env
+sudo chmod 600 /etc/rag-gradio.env
+# unit 파일에서 Environment= 줄을 아래로 교체:
+#   EnvironmentFile=/etc/rag-gradio.env
 ```
 
 ```bash
@@ -215,6 +246,15 @@ nginx를 권장한다. 아래는 nginx 기준.
 sudo apt install nginx   # 데비안/우분투 기준
 ```
 
+**요청 속도 제한**: 인증을 걸어도(2번 항목) 계정 하나를 테스터 전원이 공유하다 보니,
+악의적/실수로 반복 요청이 몰리면 GPU가 계속 점유돼 다른 테스터가 못 쓰게 된다.
+`/etc/nginx/conf.d/rag-gradio-ratelimit.conf`(반드시 `http {}` 컨텍스트, 즉
+`sites-available` 파일이 아니라 `conf.d`에 별도로):
+
+```nginx
+limit_req_zone $binary_remote_addr zone=rag_limit:10m rate=6r/m;
+```
+
 `/etc/nginx/sites-available/rag-gradio`:
 
 ```nginx
@@ -235,6 +275,11 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+
+        # IP당 분당 6회(버스트 10)로 제한 — 질문 하나가 1분 가까이 걸릴 수 있는
+        # 앱 특성상 너무 빡빡하게 잡으면 정상 사용도 막히니 넉넉하게. WebSocket
+        # 연결 자체(/queue/join 등)엔 안 걸리고 신규 HTTP 요청에만 적용된다.
+        limit_req zone=rag_limit burst=10 nodelay;
 
         # multi_agent 응답이 느릴 수 있으니(비교 질의 1분+) 타임아웃을 넉넉히
         proxy_read_timeout 180s;
@@ -277,8 +322,11 @@ sudo certbot renew --dry-run   # 자동 갱신이 정상 동작하는지 확인(
 - [ ] `pip install -r requirements.txt`가 가상환경에서 에러 없이 끝났는가
 - [ ] `https://<도메인>`으로 접속되고 인증서 경고가 없는가(브라우저 자물쇠 아이콘)
 - [ ] `http://<도메인>`으로 접속 시 `https://`로 자동 리다이렉트되는가
+- [ ] `https://<도메인>` 접속 시 로그인 화면이 뜨는가(안 뜨면
+      `GRADIO_APP_SHARED_PASSWORD`가 안 걸린 것 — `journalctl -u rag-gradio`에
+      경고 로그가 있는지 확인) — **인증 없이 열려 있으면 배포하지 말 것**
 - [ ] 외부에서 `curl http://<서버IP>:7860`, `curl http://<서버IP>:11434`가 **막혀야** 정상
-      (방화벽에서 닫혀 있는지 서버 밖에서 재확인)
+      (ufw뿐 아니라 `gcloud compute firewall-rules list`로 VPC 레벨도 함께 확인)
 - [ ] `systemctl status ollama rag-gradio nginx` 셋 다 active (running)
 - [ ] `systemctl show ollama -p Environment`에 `OLLAMA_NUM_PARALLEL=2`가 보이는가
       (다중 사용자 병렬 처리를 실제로 켜고 싶다면)
