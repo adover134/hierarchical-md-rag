@@ -63,6 +63,12 @@ python scripts/gradio_app.py --port 7860
 
 ## 0) 사전 준비
 
+- **GPU 인스턴스**: GCP 기준 `g2-standard-4`(또는 `-8`) + NVIDIA L4(24GB) 권장.
+  L4는 지금 쓰는 gpt-oss:20b GGUF(~14GB)를 KV 캐시 여유까지 두고 올릴 수 있고,
+  T4 대비 연산 성능이 훨씬 좋아 응답 지연이 크게 줄어든다. GB200/B200/H200/H100/
+  A100 80GB 같은 데이터센터급 GPU는 이 규모(20B 모델, 소수 베타 테스터)엔 완전히
+  과한 스펙이니 고를 필요 없다. vCPU/메모리는 GPU가 병목이라 4~8 vCPU면 충분(호스트
+  쪽에서 임베딩 모델 CPU 연산 + nginx + Gradio가 같이 돌아가는 정도 여유만 있으면 됨).
 - 도메인의 A 레코드가 이 서버의 공인 IP를 가리키도록 설정(DNS 전파는 수 분~수십 분
   걸릴 수 있음 — `dig <도메인>`으로 확인).
 - 방화벽에서 80(HTTP), 443(HTTPS), 22(SSH)만 열고 나머지는 닫는다.
@@ -73,6 +79,35 @@ python scripts/gradio_app.py --port 7860
   sudo ufw enable
   sudo ufw status  # 7860, 11434가 목록에 없어야 정상
   ```
+
+## 0.5) 코드·데이터 이전, 파이썬 환경 준비
+
+**코드+데이터 옮기기**: 이 저장소는 `data_index/`(벡터 DB, 존재 게이트용 엑셀)와
+`output/`(존재 게이트 CSV 폴백)가 전부 `.gitignore` 대상이라 `git clone`만으로는
+안 딸려온다. 별도로 필요한 것만 옮기느니, 로컬에서 검증된 상태 그대로 통째로
+옮기는 게 안전하다(로컬 디렉토리 전체 약 50MB 수준, `.git`/`__pycache__` 제외):
+
+```bash
+rsync -avz --exclude='.git' --exclude='__pycache__' --exclude='.hf_cache' \
+  ./ <GCP유저>@<GCP IP>:~/project/hierarchical-md-rag/
+```
+
+(`.env`는 없어도 무방하다 — `scripts/gradio_app.py`가 필요한 값을 전부 자체적으로
+강제 설정한다. `python-dotenv`가 `override=False`로 불려서 `.env`가 있어도 이미
+설정된 값은 절대 덮어쓰지 않는다.)
+
+**파이썬 환경**: `requirements.txt`로 새 가상환경을 만든다(로컬처럼 팀 공유 conda
+환경에 기대지 않아도 됨):
+
+```bash
+cd ~/project/hierarchical-md-rag
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+아래 systemd unit(2번 항목)의 `ExecStart` 경로를 이 가상환경의 python으로 맞춰야
+한다(`~/project/hierarchical-md-rag/.venv/bin/python`).
 
 ## 1) Ollama 실행
 
@@ -148,7 +183,7 @@ Requires=ollama.service
 Type=simple
 User=<실행할 사용자명>
 WorkingDirectory=/home/<사용자>/project/hierarchical-md-rag
-ExecStart=/home/<사용자>/miniconda3/envs/langc/bin/python scripts/gradio_app.py --host 127.0.0.1 --port 7860
+ExecStart=/home/<사용자>/project/hierarchical-md-rag/.venv/bin/python scripts/gradio_app.py --host 127.0.0.1 --port 7860
 Restart=on-failure
 RestartSec=5
 
@@ -162,6 +197,13 @@ sudo systemctl enable --now rag-gradio
 sudo systemctl status rag-gradio      # active (running) 확인
 journalctl -u rag-gradio -f           # 로그 실시간 확인(문제 생기면 여기부터 본다)
 ```
+
+**로깅/텔레메트리 방침**(코드에 이미 반영돼 있어 별도 설정 불필요, 참고용):
+- 모든 질의/답변은 `eval_resources/gradio_query_log.jsonl`에 남는다(👍/👎 안 한
+  것, 오류로 끝난 것 포함) — 피드백 분석용, 로컬에만 저장되고 git에는 안 올라감.
+- HuggingFace Hub로 나가던 임베딩 모델 사용 텔레메트리는 차단돼 있다
+  (`HF_HUB_DISABLE_TELEMETRY=1`) — 질의 내용과 무관하게 외부로 나가는 사용
+  내역이라 별도로 막아둔 것.
 
 ## 3) nginx 리버스 프록시 설정
 
@@ -229,11 +271,17 @@ sudo certbot renew --dry-run   # 자동 갱신이 정상 동작하는지 확인(
 
 ## 5) 최종 점검
 
+- [ ] `data_index/chroma_B`, `data_index/나라장터_RFP_메타데이터.xlsx`,
+      `output/execution_summary_*.csv`가 서버에 실제로 존재하는가(0.5단계에서
+      rsync 누락되면 DB가 비어 있거나 존재 게이트가 오탐/과탐할 수 있음)
+- [ ] `pip install -r requirements.txt`가 가상환경에서 에러 없이 끝났는가
 - [ ] `https://<도메인>`으로 접속되고 인증서 경고가 없는가(브라우저 자물쇠 아이콘)
 - [ ] `http://<도메인>`으로 접속 시 `https://`로 자동 리다이렉트되는가
 - [ ] 외부에서 `curl http://<서버IP>:7860`, `curl http://<서버IP>:11434`가 **막혀야** 정상
       (방화벽에서 닫혀 있는지 서버 밖에서 재확인)
 - [ ] `systemctl status ollama rag-gradio nginx` 셋 다 active (running)
+- [ ] `systemctl show ollama -p Environment`에 `OLLAMA_NUM_PARALLEL=2`가 보이는가
+      (다중 사용자 병렬 처리를 실제로 켜고 싶다면)
 - [ ] 재부팅 후에도 세 서비스가 자동으로 다시 뜨는가(`sudo reboot` 후 확인 — 테스트
       환경이면 한 번은 실제로 재부팅해 보는 걸 권장)
 - [ ] `TEST_SCENARIOS.md` 위쪽 테스트 문항을 실제 도메인 URL로 한 번 더 확인
