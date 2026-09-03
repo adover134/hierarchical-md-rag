@@ -246,7 +246,20 @@ nginx를 권장한다. 아래는 nginx 기준.
 sudo apt install nginx   # 데비안/우분투 기준
 ```
 
-**요청 속도 제한**: 인증을 걸어도(2번 항목) 계정 하나를 테스터 전원이 공유하다 보니,
+**인증(Basic Auth) — 어차피 nginx를 쓰니 여기서 거는 게 가장 간단하다**: 앱
+자체의 `GRADIO_APP_SHARED_PASSWORD`(2번 항목)도 있지만, 어차피 nginx가 이미
+리버스 프록시로 앞단에 있으니 표준 HTTP Basic Auth로 nginx 레벨에서 막는 게 더
+간단하고, 요청이 앱까지 가기도 전에 걸러진다는 장점이 있다(둘 다 걸어도 충돌 없이
+같이 동작함 — nginx가 먼저 막고, 통과하면 앱이 한 번 더 확인).
+
+```bash
+sudo apt install apache2-utils   # htpasswd 명령 제공
+sudo htpasswd -c /etc/nginx/.htpasswd tester   # 최초 1회는 -c(파일 새로 생성)
+# 프롬프트에서 테스터에게 공유할 비밀번호 입력 → /etc/nginx/.htpasswd 생성됨
+# 계정을 더 추가하려면 -c 없이: sudo htpasswd /etc/nginx/.htpasswd <다른 계정명>
+```
+
+**요청 속도 제한**: 인증을 걸어도 계정 하나를 테스터 전원이 공유하다 보니,
 악의적/실수로 반복 요청이 몰리면 GPU가 계속 점유돼 다른 테스터가 못 쓰게 된다.
 `/etc/nginx/conf.d/rag-gradio-ratelimit.conf`(반드시 `http {}` 컨텍스트, 즉
 `sites-available` 파일이 아니라 `conf.d`에 별도로):
@@ -263,6 +276,9 @@ server {
     server_name <도메인>;
 
     location / {
+        auth_basic "입찰메이트 테스트 배포";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+
         proxy_pass http://127.0.0.1:7860;
         proxy_http_version 1.1;
 
@@ -322,9 +338,11 @@ sudo certbot renew --dry-run   # 자동 갱신이 정상 동작하는지 확인(
 - [ ] `pip install -r requirements.txt`가 가상환경에서 에러 없이 끝났는가
 - [ ] `https://<도메인>`으로 접속되고 인증서 경고가 없는가(브라우저 자물쇠 아이콘)
 - [ ] `http://<도메인>`으로 접속 시 `https://`로 자동 리다이렉트되는가
-- [ ] `https://<도메인>` 접속 시 로그인 화면이 뜨는가(안 뜨면
-      `GRADIO_APP_SHARED_PASSWORD`가 안 걸린 것 — `journalctl -u rag-gradio`에
-      경고 로그가 있는지 확인) — **인증 없이 열려 있으면 배포하지 말 것**
+- [ ] `https://<도메인>` 접속 시 브라우저 기본 Basic Auth 팝업이 뜨는가(nginx
+      `.htpasswd`) — **인증 없이 화면이 바로 열리면 배포하지 말 것**. 앱 자체의
+      `GRADIO_APP_SHARED_PASSWORD`를 같이 걸었다면 nginx 인증 통과 후 Gradio
+      로그인 화면이 한 번 더 뜨는지도 확인(안 뜨면 `journalctl -u rag-gradio`에
+      경고 로그가 있는지 확인)
 - [ ] 외부에서 `curl http://<서버IP>:7860`, `curl http://<서버IP>:11434`가 **막혀야** 정상
       (ufw뿐 아니라 `gcloud compute firewall-rules list`로 VPC 레벨도 함께 확인)
 - [ ] `systemctl status ollama rag-gradio nginx` 셋 다 active (running)
