@@ -265,7 +265,7 @@ sudo htpasswd -c /etc/nginx/.htpasswd tester   # 최초 1회는 -c(파일 새로
 `sites-available` 파일이 아니라 `conf.d`에 별도로):
 
 ```nginx
-limit_req_zone $binary_remote_addr zone=rag_limit:10m rate=6r/m;
+limit_req_zone $binary_remote_addr zone=rag_limit:10m rate=60r/m;
 ```
 
 `/etc/nginx/sites-available/rag-gradio`:
@@ -292,10 +292,14 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
 
-        # IP당 분당 6회(버스트 10)로 제한 — 질문 하나가 1분 가까이 걸릴 수 있는
-        # 앱 특성상 너무 빡빡하게 잡으면 정상 사용도 막히니 넉넉하게. WebSocket
-        # 연결 자체(/queue/join 등)엔 안 걸리고 신규 HTTP 요청에만 적용된다.
-        limit_req zone=rag_limit burst=10 nodelay;
+        # IP당 분당 60회(버스트 30)로 제한. 처음엔 분당 6회/버스트 10으로
+        # 잡았다가 실제 배포에서 503이 쏟아지는 걸 겪었다 — Gradio 페이지 하나를
+        # 로드할 때 CSS/JS 에셋(runtime/dist/legacy 등)이 10개 넘게 거의 동시에
+        # 요청되는데, 그 정상적인 로드조차 버스트를 다 써버려 막혔다. 이 값은
+        # "채팅 질의 남용 방지"가 목적이지 정적 에셋 로드까지 제한할 의도가
+        # 아니었으므로, 정상 페이지 로드가 걸리지 않을 만큼 넉넉히 올렸다.
+        # WebSocket 연결 자체(/queue/join 등)엔 안 걸리고 신규 HTTP 요청에만 적용된다.
+        limit_req zone=rag_limit burst=30 nodelay;
 
         # multi_agent 응답이 느릴 수 있으니(비교 질의 1분+) 타임아웃을 넉넉히
         proxy_read_timeout 180s;
