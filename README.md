@@ -174,10 +174,11 @@ gitignore됨(`eval_resources/eval_results_*.json`, `eval_resources/eval_report_*
 HWP(X) 파일 파싱 및 로딩 프로세스 및 검색 과정의 개선을 수행하였다.
 
 기존 프로젝트를 함께 진행한 아래 팀원들에게 감사를 전한다.
-@youuuchul (이메일: dbcjf25@gmail.com)
-@Loah-Lee (이메일: sims0724@gmail.com)
-@wwwwkjh1022-art
-@dinu1108
+
+- @youuuchul (이메일: dbcjf25@gmail.com)
+- @Loah-Lee (이메일: sims0724@gmail.com)
+- @wwwwkjh1022-art
+- @dinu1108
 
 문의는 아래 이메일로
 adfsfsf@naver.com
