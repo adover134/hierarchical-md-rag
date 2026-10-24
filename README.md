@@ -5,7 +5,7 @@
 markdown으로 변환하는 파싱 단계만
 [`hwp-hierarchical-md-skill`](https://github.com/adover134/korean_official_document_parser_skill)로
 교체하였다.</br>
-기존의 "HWP→PDF→markdown" 변환 체인을 완전히 대체하며, 그 이전 단계들이 만들던 청킹/검색/답변 생성 로직은 원본 그대로 재사용한다.<?br>
+기존의 "HWP→PDF→markdown" 변환 체인을 완전히 대체하며, 그 이전 단계들이 만들던 청킹/검색/답변 생성 로직은 원본 그대로 재사용한다.</br>
 PDF 원본 문서는 팀의 기존 파이프라인을 그대로 쓴다(새 파서는 HWP/HWPX 전용).
 
 ## 개발 사유
