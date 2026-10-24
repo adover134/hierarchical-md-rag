@@ -1,14 +1,23 @@
 # hierarchical-md-rag
 
-한국 공공기관 입찰공고문(HWP/HWPX/PDF)을 검색·질의응답하는 RAG 파이프라인이다.
+한국 공공기관 입찰공고문(HWP/HWPX/PDF)을 검색·질의응답하는 RAG 파이프라인이다.</br>
 **팀 프로젝트(AI_7-team)의 실제 RAG 파이프라인을 포크**해서, HWP/HWPX 문서를
 markdown으로 변환하는 파싱 단계만
 [`hwp-hierarchical-md-skill`](https://github.com/adover134/korean_official_document_parser_skill)로
-교체한 것이다 — 기존의 "HWP→PDF→markdown" 변환 체인을 완전히 대체하며, 그 이전
-단계들이 만들던 청킹/검색/답변 생성 로직은 원본 그대로 재사용한다. PDF 원본
-문서는 팀의 기존 파이프라인을 그대로 쓴다(새 파서는 HWP/HWPX 전용).
+교체하였다.</br>
+기존의 "HWP→PDF→markdown" 변환 체인을 완전히 대체하며, 그 이전 단계들이 만들던 청킹/검색/답변 생성 로직은 원본 그대로 재사용한다.</br>
+PDF 원본 문서는 팀의 기존 파이프라인을 그대로 쓴다(새 파서는 HWP/HWPX 전용).
 
-## 구조
+## 개발 사유
+
+팀 프로젝트 당시의 파싱 단계에서는 계층 구조를 활용하지 못하였다.</br>
+이는 HWP 파일의 로딩 방식으로 인한 문제임을 알게 되었다.</br>
+이에 전용 로더를 찾아 전처리 결과를 개선하고자 수행하였다.</br>
+</br>
+DB가 개선된 후, 기존과 다른 문제들을 만들어 테스트하였더니 기존 파이프라인의 개선점들이 발견되었다.</br>
+이들을 추가로 개선하여 답변의 안정성을 높였다.
+
+## 전체 프로젝트 파일 시스템 구조
 
 - `src/graph/workflow.py` — `RAGChatbotV17`, 질의 분석·검색·답변 생성을 orchestrate
 - `src/parsers/` — 청킹(`chunker.py`), 헤더 감지(`auditor.py`), HWP/PDF 로더
@@ -236,10 +245,11 @@ gitignore됨(`eval_resources/eval_results_*.json`, `eval_resources/eval_report_*
 HWP(X) 파일 파싱 및 로딩 프로세스 및 검색 과정의 개선을 수행하였다.
 
 기존 프로젝트를 함께 진행한 아래 팀원들에게 감사를 전한다.
-@youuuchul (이메일: dbcjf25@gmail.com)
-@Loah-Lee (이메일: sims0724@gmail.com)
-@wwwwkjh1022-art
-@dinu1108
+
+- @youuuchul (이메일: dbcjf25@gmail.com)
+- @Loah-Lee (이메일: sims0724@gmail.com)
+- @wwwwkjh1022-art
+- @dinu1108
 
 문의는 아래 이메일로
 adfsfsf@naver.com
