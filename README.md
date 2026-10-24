@@ -214,6 +214,28 @@ curl -X POST http://localhost:8001/v1/query \
 rate limit은 아직 없다(hwp-hierarchical-md-service의 rate_limit.py는 Langfuse 트레이스를
 근거로 세는데, 이 저장소는 Langfuse를 아직 안 씀 — 필요해지면 추가 검토).
 
+## 테스트 배포용 Gradio UI
+
+랜덤 테스터가 바로 써볼 수 있는 채팅 화면(`scripts/gradio_app.py`)이다. 검색 API와 같은
+백엔드(`RAGChatbotV17.answer()`)를 쓰지만 API 서버가 아니라 웹 UI다.
+
+```bash
+GRADIO_APP_SHARED_PASSWORD=<공유 비밀번호> python scripts/gradio_app.py [--share] [--port 7860]
+```
+
+- **전략/모델 고정**: `multi_agent` + 로컬 Ollama `gpt-oss:20b`로 스크립트 안에서 강제한다
+  (환경변수로 덮어쓸 수 없음 — 검증한 조합만 테스터에게 노출하기 위함). 실행 전 Ollama가
+  떠 있고 모델이 받아져 있어야 하며, 아니면 시작 시점에 사유를 알려주고 종료한다.
+- **인증**: `GRADIO_APP_SHARED_PASSWORD`를 설정하면 공유 계정(아이디 `tester`) 하나로 접속을
+  막는다. 도메인 배포 시 필수, 로컬 확인용이면 없어도 되며 경고만 출력한다.
+- **동시 처리**: 챗봇 인스턴스를 `GRADIO_APP_POOL_SIZE`(기본 2)개 풀로 관리해 요청마다 하나씩
+  대여한다. Ollama 쪽도 `OLLAMA_NUM_PARALLEL`을 맞춰야 실제 병렬이 된다.
+- **로그**: 👍/👎 피드백은 `eval_resources/gradio_flagged/`, 모든 질의/답변은
+  `eval_resources/gradio_query_log.jsonl`에 남는다(둘 다 gitignore). HuggingFace 등
+  외부 텔레메트리는 차단한다.
+- 배포 절차·사전 점검 질문은 [`TEST_SCENARIOS.md`](TEST_SCENARIOS.md), 테스터 설문은
+  [`TESTER_SURVEY.md`](TESTER_SURVEY.md) 참고. 의존성은 `requirements.txt`.
+
 ## 평가
 
 ```bash
