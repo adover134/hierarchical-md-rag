@@ -11,4 +11,4 @@ readme = "README.md"
 
 # 이 저장소는 pip 설치형 패키지가 아니라 src/+scripts/ 구조의 애플리케이션이다.
 # 의존성은 팀 프로젝트(AI_7-team)와 공유하는 conda 환경(langc)을 그대로 쓴다 —
-# 별도 requirements.txt는 아직 없음. 필요한 주요 런타임 의존성은 README 참고.
+# 깨끗한 환경 재현용 의존성은 requirements.txt 참고.
