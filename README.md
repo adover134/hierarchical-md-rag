@@ -20,7 +20,7 @@ DB가 개선된 후, 기존과 다른 문제들을 만들어 테스트하였더�
 ### 왜 multi-agent를 추가했는가
 
 개선한 DB에서도 다음 두 가지 한계가 남았다.</br>
-1. **로컬 모델의 한계** — 로컬 `gpt-oss:20b`는 검색이 완벽해도 같은 입력·temperature=0.0에서 실행마다 정답 근거를 놓치거나 값을 뒤섞었다. 근거 압축, 값 추출, 비교를 한 번의 호출에 몰아 맡길수록 심해졌다.</br>
+1. **로컬 모델의 한계** — 로컬 `gpt-oss:20b`는 검색이 완벽해도 같은 입력 · temperature=0.0에서 실행마다 정답 근거를 놓치거나 값을 뒤섞었다. 근거 압축, 값 추출, 비교를 한 번의 호출에 몰아 맡길수록 심해졌다.</br>
 2. **한 번의 검색으로는 필요한 근거를 다 못 가져옴** — 여러 기관을 비교하거나 여러 사실을 묻는 질의는 한 번의 검색으로 필요한 청크가 전부 올라오지 않는 경우가 있었다. 검색 건수(top-k)를 키우면 DB에서 가져오는 것 자체는 문제없지만, 리랭킹을 앱에서 실행하기 때문에 후보가 늘수록 앱의 리랭킹이 속도 병목이 된다.
 
 그래서 질의를 1~3개 step으로 나눠 필요한 근거만 단계별로 확보하고, step마다 값을 미리 추출해 확정하며, 확정된 값은 최종 생성 LLM의 재판단을 거치지 않게 했다(상세는 아래 "답변 생성 전략: multi_agent" 절).</br>
@@ -66,6 +66,53 @@ flowchart LR
     end
     A5 -.->|"같은 컬렉션을 읽음(구축과 검색은 별도 프로세스)"| B3
 ```
+
+### DB 구축 단계 상세
+
+역할은 둘로 나뉜다. **파서 skill은 HWP/HWPX를 헤더가 붙은 Markdown으로 바꾸는 로딩 단계**이고,
+**이 저장소는 그 Markdown의 청킹과 DB 적재**를 맡는다. 원본 팀 파이프라인은 HWP를 PDF로 바꾼 뒤
+markdown을 추출하고 정규식으로 헤더를 감지·삽입했는데(`hwp_converter.py` + `pdf_loader.py` +
+`auditor.py`), 새 경로는 이 로딩 구간을 skill의 `hwp2md convert`로 통째로 대체한다.
+
+```mermaid
+flowchart TD
+    IN["HWP/HWPX 원본"] --> SKILL
+    subgraph SKILL["로딩 — 파서 skill, hwp2md convert (외부 저장소)"]
+        direction TB
+        S1["kordoc으로 JSON blocks 추출\nHTML 표는 GFM 표 / label: value로 정규화"] --> S2["규칙 기반 헤더 후보 추출"]
+        S2 --> S3["LLM이 후보별 계층 판단\n(main / sub / attachment / not_heading)"]
+        S3 --> S4["헤더 마크(##/###)만 삽입\n본문은 재작성하지 않음"]
+    end
+    SKILL -->|"Markdown(헤더 포함)"| BRIDGE
+    subgraph BRIDGE["청킹 — 이 저장소, scripts/parser_bridge.py"]
+        direction TB
+        P1["표 평탄화(step2, table_flattener.py)\nMarkdown 표를 문장으로 풀어 씀"] --> P2["텍스트 정리(step2b)"]
+        P2 -->|"정규식 계층 재추출(step3/4)은 건너뜀"| P3["섹션 분할(step6)\n## / ### 를 그대로 인식"]
+    end
+    BRIDGE -->|"청크"| INDEX
+    subgraph INDEX["적재 — 이 저장소, scripts/build_index_new_parser.py"]
+        direction TB
+        I1["UID 부여 · 계층 구성"] --> I2["Hybrid 임베딩\ndense + sparse(BM25/Kiwi)"]
+        I2 --> I3[("ChromaDB")]
+    end
+```
+
+**전처리 변경 정리** — 입력이 "헤더 없는 PDF 추출 텍스트"에서 "skill이 헤더까지 확정한
+Markdown"으로 바뀌었으므로, 그 입력에 맞게 청킹 앞단을 고쳤다. 청킹 규칙 자체(`##` 경계,
+두 번째 `###`부터 경계, 1000자 초과 시 200자 겹침 분할)는 팀 원본 그대로다.
+
+| 구분 | 변경 | 이유 |
+|---|---|---|
+| 건너뜀 | 정규식 계층 재추출(`step3`/`step4`) | "제N조" 패턴을 본문에서 다시 찾아 Level 1로 재배정하고 `#` 헤더를 또 삽입하는 로직이다. 헤더가 없는 텍스트를 전제로 만들어져서, skill이 `### 제1조(납품)`처럼 이미 sub_section으로 처리한 줄까지 가짜 H1로 오염시키는 것이 실측으로 확인됐다. |
+| 확장 | 섹션 분할의 헤더 정규식을 인자로 받게 함(`step6_section_split`의 `h1_re`/`h2_re`) | skill의 실제 레벨(`##`/`###`)을 그대로 인식하기 위해서다. 기본값(`#`/`##`)은 그대로라 PDF 경로는 영향이 없다. |
+| 수정 | 표 평탄화(`table_flattener.py`)가 헤더 없는 표·2단 헤더 표를 잘못 읽던 문제 | hwp2md의 Markdown 표는 GFM 문법상 헤더 행을 강제로 만든다. 헤더 없는 "라벨: 값" 표는 첫 데이터 행이 헤더로 취급되어 "사 업 명: 공사기간"처럼 라벨이 뒤섞였고, 2단 헤더 표는 하위 헤더 행이 데이터처럼 한 번 더 반복됐다. 둘 다 좁은 조건으로 감지해 고쳤다(`3728ab8`). 이 문제가 평가 문항 하나(m17)가 0점이던 원인이었고 수정 후 만점이 됐다. |
+| 그대로 | 텍스트 정리, 섹션 맵 기반 청킹, UID 부여, 임베딩, Chroma 적재 | 팀 원본 로직을 재사용한다. |
+
+PDF 원본 문서는 skill을 거치지 않고 팀의 기존 로더(`pdf_loader.py`)로 들어온다.
+
+skill 내부(kordoc 변환, 표 정규화, 헤더 후보 추출, LLM 계층 판단)의 상세는
+[korean_official_document_parser_skill](https://github.com/adover134/korean_official_document_parser_skill)
+저장소를 참고한다.
 
 ## DB 구축
 
