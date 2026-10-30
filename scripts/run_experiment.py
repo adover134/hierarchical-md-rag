@@ -184,7 +184,8 @@ def cmd_build(cfg: dict, args: argparse.Namespace) -> None:
             info.update(total_seconds=round(secs, 1), per_doc=_per_doc(rows, "file"))
         else:
             secs = run([py, "scripts/build_index_new_parser.py", "--input", str(_path(cfg["corpus_dir"])),
-                        "--backend", "ollama", "--model", llm["model"]],
+                        "--backend", "openai", "--base-url", llm["base_url"], "--api-key", llm["api_key"],
+                        "--model", llm["model"]],
                        cwd=root, env=env, log=rd / f"{system['name']}_build_hwp.log")
             secs_pdf = run([py, "scripts/index_pdf_originals.py", "--input", str(_path(cfg["corpus_dir"]))],
                            cwd=root, env=env, log=rd / f"{system['name']}_build_pdf.log")
@@ -192,7 +193,15 @@ def cmd_build(cfg: dict, args: argparse.Namespace) -> None:
                     + _read_summary_csv(root / "output" / "execution_summary_pdf_originals.csv"))
             info.update(total_seconds=round(secs + secs_pdf, 1), per_doc=_per_doc(rows, "file"))
         (rd / f"{system['name']}_build.json").write_text(json.dumps(info, ensure_ascii=False, indent=2), encoding="utf-8")
-        print(f"[{system['name']}] 색인 완료: {info['total_seconds']}초, 문서 {len(info['per_doc'])}건")
+        ok_docs = [d for d in info["per_doc"] if d.get("status") == "success"]
+        expected = len(corpus_docs(cfg))
+        print(f"[{system['name']}] 색인 소요 {info['total_seconds']}초, 성공 {len(ok_docs)}/{expected}건")
+        if len(ok_docs) != expected:
+            failed = [d["file"] for d in info["per_doc"] if d.get("status") != "success"]
+            raise SystemExit(
+                f"[{system['name']}] 색인 실패: 성공 {len(ok_docs)}/{expected}건. 로그를 확인하세요: "
+                f"{rd / (system['name'] + '_build*.log')}\n  실패 예: {failed[:3]}"
+            )
 
 
 def _per_doc(rows: list[dict[str, str]], key: str) -> list[dict[str, Any]]:
