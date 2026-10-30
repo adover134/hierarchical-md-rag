@@ -1,12 +1,12 @@
-"""새 파서(hwp-hierarchical-md-service의 hwp2md CLI)의 출력을 chunker.py 이후 단계에 연결한다.
+"""새 파서(파서 skill `korean_official_document_parser_skill`의 `run_pipeline.py`)의 출력을 chunker.py 이후 단계에 연결한다.
 
 개선된 버전의 skill은 원래 파이프라인에서 markdown 초안이 확정되기까지의 이전 단계들
 (HWP→PDF 변환, PDF→markdown 추출, 정규식 기반 헤더 감지/삽입 — `hwp_converter.py`+
-`pdf_loader.py`+`auditor.py`)을 통째로 **대체**한다. hwp2md가 만드는 markdown이 곧
+`pdf_loader.py`+`auditor.py`)을 통째로 **대체**한다. skill이 만드는 markdown이 곧
 `chunker.py`가 원래 기대하던 "이미 완성된 markdown(헤더 포함)"이므로, 그 앞 단계들은 우리
 경로에서 아예 호출되지 않는다.
 
-hwp2md의 출력은 그대로 둔다(재작성/재매핑 없음) — 대체하는 것이지 기존 관례에 끼워맞추는 게
+skill의 출력은 그대로 둔다(재작성/재매핑 없음) — 대체하는 것이지 기존 관례에 끼워맞추는 게
 아니다. 대신 소비하는 쪽인 `chunker.py`가 skill의 실제 헤더 레벨(`##`=main_section/
 attachment_section, `###`=sub_section)을 직접 인식하도록 `_build_section_map()` 등에
 파라미터로 넘긴다(`chunker.py`도 이 목적으로 h1_re/h2_re를 받게 확장해뒀다 — 원래 `#`/`##`
@@ -24,6 +24,7 @@ attachment_section, `###`=sub_section)을 직접 인식하도록 `_build_section
 
 from __future__ import annotations
 
+import os
 import re
 import subprocess
 import sys
@@ -41,27 +42,51 @@ _SKILL_L1_RE = re.compile(r"^## (.+)$", re.MULTILINE)  # main_section / attachme
 _SKILL_L2_RE = re.compile(r"^### (.+)$", re.MULTILINE)  # sub_section
 
 
+def skill_dir() -> Path:
+    """파서 skill 저장소 위치. 기본은 이 저장소와 같은 폴더의 `korean_official_document_parser_skill`,
+    `HWP_SKILL_DIR` 환경변수로 바꿀 수 있다."""
+    default = Path(__file__).resolve().parent.parent.parent / "korean_official_document_parser_skill"
+    return Path(os.environ.get("HWP_SKILL_DIR") or default)
+
+
 def convert_with_new_parser(
     hwp_path: Path,
     work_dir: Path,
     backend: str = "ollama",
     model: str = "qwen3.5:9b",
     skip_if_exists: bool = True,
+    base_url: str | None = None,
+    api_key: str | None = None,
 ) -> Path:
-    """hwp2md CLI로 계층 구조 markdown을 만든다. 결과를 그대로 반환 — 후처리 없음.
+    """파서 skill(`scripts/run_pipeline.py`)로 계층 구조 markdown을 만든다. 결과를 그대로 반환 — 후처리 없음.
 
-    `skip_if_exists=True`(기본)면 이미 `work_dir`에 이 파일의 변환 결과가 있으면 hwp2md를
-    다시 안 돌린다 — `run_pipeline.py`의 `--skip-existing-stage1`과 같은 성격의, 위치에 무관한
-    일반적인 캐싱이다."""
+    skill의 `--backend/--base-url/--api-key`를 그대로 전달한다. 로컬 Ollama의 gpt-oss:20b처럼
+    Ollama 기본 백엔드와 맞지 않는 모델은 `--backend openai --base-url http://localhost:11434/v1`로
+    OpenAI 호환 엔드포인트를 쓴다(이때 Ollama 서버를 `OLLAMA_CONTEXT_LENGTH`를 키워 띄워야 한다 —
+    EXPERIMENTS.md 참고).
+
+    `skip_if_exists=True`(기본)면 이미 `work_dir`에 이 파일의 변환 결과가 있으면 다시 안 돌린다."""
     work_dir.mkdir(parents=True, exist_ok=True)
     stem = unicodedata.normalize("NFC", hwp_path.stem)
     out_path = work_dir / f"{stem}.md"
 
     if not (skip_if_exists and out_path.exists()):
+        script = skill_dir() / "scripts" / "run_pipeline.py"
+        if not script.exists():
+            raise FileNotFoundError(
+                f"파서 skill을 찾을 수 없습니다: {script} — "
+                "git clone https://github.com/adover134/korean_official_document_parser_skill 후 "
+                "HWP_SKILL_DIR 환경변수로 위치를 알려주세요."
+            )
         cmd = [
-            "hwp2md", "convert", str(hwp_path), "-o", str(out_path),
-            "--backend", backend, "--model", model, "--skip-doctor",
+            sys.executable, str(script), str(hwp_path),
+            "--pipeline-root", str(work_dir / "_pipeline"),
+            "--model", model, "--backend", backend, "-o", str(out_path),
         ]
+        if base_url:
+            cmd += ["--base-url", base_url]
+        if api_key:
+            cmd += ["--api-key", api_key]
         subprocess.run(cmd, check=True)
 
     return out_path
@@ -77,13 +102,15 @@ def process_file_no_regex_reextraction(file_path: Path) -> list[dict]:
 
     body = step2_flatten_tables(body)
     body = step2b_clean_text(body)
-    # step3_extract_hierarchy / step4_insert_headers 건너뜀 — 헤더는 hwp2md가 이미 정확히 배치함
+    # step3_extract_hierarchy / step4_insert_headers 건너뜀 — 헤더는 파서 skill이 이미 정확히 배치함
     split_results = step6_section_split(body, h1_re=_SKILL_L1_RE, h2_re=_SKILL_L2_RE)
 
     source = doc_meta.get("document_title", "Unknown")
     name = source.rsplit(".", 1)[0] if "." in source else source
     institution, project_name = "N/A", "N/A"
     if "_" in name:
+        # `src/parsers/chunker.py::process_file()`와 동일하게 맞춘다 — 자세한 이유는
+        # chunker.py 쪽 주석 참고.
         institution, project_name = name.split("_", 1)
 
     chunks: list[dict] = []

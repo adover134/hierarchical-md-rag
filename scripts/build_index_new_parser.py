@@ -1,5 +1,5 @@
 """새 파서로 HWP/HWPX 문서를 인덱싱한다 — `preprocessor.py`(원본 팀 파이프라인)의 HWP→PDF→
-audit 경로 대신 `parser_bridge.py`(hwp2md 직결)를 쓴다는 것만 다르고, 그 이후(청킹→Chroma 적재)는
+audit 경로 대신 `parser_bridge.py`(파서 skill 직결)를 쓴다는 것만 다르고, 그 이후(청킹→Chroma 적재)는
 `preprocessor.py`의 `process_single_pdf()`와 동일한 `build_db.py` 함수들을 그대로 재사용한다.
 
 사용법:
@@ -25,7 +25,8 @@ from parser_bridge import convert_with_new_parser, process_file_no_regex_reextra
 SUPPORTED_EXTENSIONS = {".hwp", ".hwpx"}
 
 
-def process_single_hwp(hwp_path: Path, work_dir: Path, output_dir: Path, backend: str, model: str) -> Dict:
+def process_single_hwp(hwp_path: Path, work_dir: Path, output_dir: Path, backend: str, model: str,
+                       base_url: str | None = None, api_key: str | None = None) -> Dict:
     from src.retrievers.build_db import (
         compute_doc_id, assign_uids, build_hierarchy, apply_section_uids,
         upsert_hybrid_chunks, upsert_hierarchy_chroma,
@@ -38,7 +39,7 @@ def process_single_hwp(hwp_path: Path, work_dir: Path, output_dir: Path, backend
     }
     t0 = time.time()
 
-    parsed_path = convert_with_new_parser(hwp_path, work_dir, backend=backend, model=model)
+    parsed_path = convert_with_new_parser(hwp_path, work_dir, backend=backend, model=model, base_url=base_url, api_key=api_key)
     chunks = process_file_no_regex_reextraction(parsed_path)
     result["chunk_count"] = len(chunks)
 
@@ -78,6 +79,8 @@ def main() -> None:
     ap.add_argument("--input", "-i", required=True, help="HWP/HWPX 원본 폴더")
     ap.add_argument("--backend", default="ollama", choices=["ollama", "openai", "groq", "gemini"])
     ap.add_argument("--model", default="qwen3.5:9b")
+    ap.add_argument("--base-url", help="OpenAI 호환 엔드포인트(예: Ollama의 http://localhost:11434/v1)")
+    ap.add_argument("--api-key", help="--backend가 ollama가 아닐 때의 API 키(로컬 Ollama는 아무 문자열)")
     ap.add_argument("--limit", type=int, help="처리할 문서 수 상한 (테스트용)")
     args = ap.parse_args()
 
@@ -96,7 +99,7 @@ def main() -> None:
     for i, f in enumerate(files, 1):
         print(f"\n[{i}/{len(files)}] {f.name}")
         try:
-            result = process_single_hwp(f, work_dir, output_dir, args.backend, args.model)
+            result = process_single_hwp(f, work_dir, output_dir, args.backend, args.model, args.base_url, args.api_key)
         except Exception as e:
             result = {
                 "file": f.name, "status": "failed", "duration_sec": 0.0,
