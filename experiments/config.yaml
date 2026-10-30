@@ -33,9 +33,14 @@ tags:
   regression_pass_score: 4
   regression:
     new20: [m2, m17, m19, m20]
-  # 수치 비교 질의: 기대 값이 모두 답에 있고, winner가 비교 문장의 주어로 언급돼야 통과(LLM 미사용).
-  # values/winner는 해당 문항의 expected_answer에서 확인한 값으로 채운다(EXPERIMENTS.md 참고).
-  numeric_compare: {}
+  # 수치 비교 질의: 기대 값이 모두 답에 있고, winner가 loser보다 큰 쪽으로 서술돼야 통과(LLM 미사용).
+  # values/winner는 각 문항의 expected_answer에서 가져왔다(m19·m20·n20이 평가셋의 수치 비교 문항 전부).
+  numeric_compare:
+    new20:
+      m19: {values: ["368,467,000원", "24,867,000원"], winner: "건축", loser: "통신"}
+      m20: {values: ["220,000,000원", "150,000,000원"], winner: "한서대학교", loser: "자카르타"}
+    new20_v2:
+      n20: {values: ["608,881,900원", "245,339,600원"], winner: "영남영농조합법인", loser: "쏘유팜"}
 
 table_samples: experiments/table_samples.yaml      # 표 정합률 샘플(정답 `라벨: 값` 쌍)
 

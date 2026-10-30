@@ -485,16 +485,22 @@ def calculate_table_pair_accuracy(
     return sum(1 for label, value in pairs if table_pair_present(chunk_texts, label, value)) / len(pairs)
 
 
-_COMPARATIVE_CUE_RE = _re.compile(r"더|가장|높|큽니다|큰|많|최대|최고|작|적|낮|최소|최저")
+_BIGGER_CUE_RE = _re.compile(r"더 ?크|큽니다|큰 |큰$|더 ?많|많습니다|더 ?높|높습니다|가장|최대|최고")
+_SMALLER_CUE_RE = _re.compile(r"더 ?작|작습니다|더 ?적|적습니다|더 ?낮|낮습니다|최소|최저")
 
 
 def judge_numeric_comparison(
-    answer: str, expected_values: list[str], expected_winner: str | None
+    answer: str,
+    expected_values: list[str],
+    expected_winner: str | None,
+    expected_loser: str | None = None,
 ) -> bool:
     """수치 비교 질의의 답을 문자열로 결정론적으로 판정한다(LLM 미사용).
 
-    1) 기대 값이 모두 답에 들어 있고, 2) `expected_winner`가 주어지면 비교 표현이 있는 문장에서
-    승자가 언급돼야 한다. 문장에 "보다"가 있으면 승자는 "보다" 앞(주어 쪽)에 있어야 한다.
+    1) 기대 값이 모두 답에 들어 있고, 2) `expected_winner`(큰 쪽)가 주어지면 비교 표현이 있는 문장에서
+    승자가 언급돼야 한다. `expected_loser`도 주면 방향까지 본다 — "A가 B보다 크다"류는 승자가 패자보다
+    앞에, "A가 B보다 작다"류는 승자가 패자보다 뒤에 나와야 한다. 패자가 문장에 없으면 승자 언급만 본다.
+    문장 단위 휴리스틱이라 복잡한 서술은 오판할 수 있다는 한계가 있다.
     """
     normalized_answer = normalize_for_match(answer)
     for value in expected_values:
@@ -503,15 +509,22 @@ def judge_numeric_comparison(
     if not expected_winner:
         return True
     winner = normalize_for_match(expected_winner)
+    loser = normalize_for_match(expected_loser) if expected_loser else ""
     for sentence in _re.split(r"(?<=[.!?。])\s+|\n+", str(answer or "")):
-        if not _COMPARATIVE_CUE_RE.search(sentence):
+        bigger = bool(_BIGGER_CUE_RE.search(sentence))
+        smaller = bool(_SMALLER_CUE_RE.search(sentence))
+        if not (bigger or smaller):
             continue
         norm = normalize_for_match(sentence)
-        pos = norm.find(winner)
-        if pos < 0:
+        w = norm.find(winner)
+        if w < 0:
             continue
-        than = norm.find("보다")
-        if than >= 0 and pos > than:
-            continue
-        return True
+        l = norm.find(loser) if loser else -1
+        if l < 0:
+            return True
+        if smaller and not bigger:
+            if w > l:
+                return True
+        elif w < l:
+            return True
     return False

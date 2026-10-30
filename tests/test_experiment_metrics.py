@@ -158,3 +158,25 @@ class TestNumericComparison:
             expected_winner=None,
         )
         assert ok is True
+
+
+class TestNumericComparisonDirection:
+    VALUES = ["368,467,000원", "24,867,000원"]
+
+    def judge(self, answer):
+        return judge_numeric_comparison(answer, self.VALUES, "건축", "통신")
+
+    def test_bigger_phrasing_correct(self):
+        assert self.judge("건축공사(368,467,000원)가 통신공사(24,867,000원)보다 큽니다.")
+
+    def test_smaller_phrasing_correct(self):
+        assert self.judge("통신공사(24,867,000원)가 건축공사(368,467,000원)보다 작습니다.")
+
+    def test_smaller_phrasing_wrong_direction(self):
+        assert not self.judge("건축공사(368,467,000원)가 통신공사(24,867,000원)보다 작습니다.")
+
+    def test_bigger_phrasing_wrong_winner(self):
+        assert not self.judge("통신공사(24,867,000원)가 건축공사(368,467,000원)보다 큽니다.")
+
+    def test_without_loser_only_presence(self):
+        assert judge_numeric_comparison("더 큰 곳은 건축공사입니다. 368,467,000원, 24,867,000원", self.VALUES, "건축")

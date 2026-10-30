@@ -412,7 +412,7 @@ def cmd_evaluate(cfg: dict, args: argparse.Namespace) -> None:
             }
             spec = numeric.get((rec["dataset"], rec["id"]))
             if spec:
-                row["numeric_compare_ok"] = M.judge_numeric_comparison(rec.get("answer", ""), spec["values"], spec.get("winner"))
+                row["numeric_compare_ok"] = M.judge_numeric_comparison(rec.get("answer", ""), spec["values"], spec.get("winner"), spec.get("loser"))
             per_query.append(row)
 
         summary["systems"][system["name"]] = {
