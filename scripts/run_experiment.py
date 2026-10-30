@@ -185,7 +185,9 @@ def cmd_build(cfg: dict, args: argparse.Namespace) -> None:
         else:
             secs = run([py, "scripts/build_index_new_parser.py", "--input", str(_path(cfg["corpus_dir"])),
                         "--backend", "openai", "--base-url", llm["base_url"], "--api-key", llm["api_key"],
-                        "--model", llm["model"]],
+                        "--model", llm["model"]]
+                       + (["--max-candidates-per-call", str(llm["parser_max_candidates_per_call"])]
+                          if llm.get("parser_max_candidates_per_call") else []),
                        cwd=root, env=env, log=rd / f"{system['name']}_build_hwp.log")
             secs_pdf = run([py, "scripts/index_pdf_originals.py", "--input", str(_path(cfg["corpus_dir"]))],
                            cwd=root, env=env, log=rd / f"{system['name']}_build_pdf.log")
