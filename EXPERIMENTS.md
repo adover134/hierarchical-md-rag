@@ -117,7 +117,7 @@ python scripts/run_experiment.py report   --run-id main1 --write   # 표 출력 
 |---|---|---|---|
 | prepare | 팀 전처리기는 `.hwpx`를 처리하지 않음 | `preprocessor.py`가 `.hwp`만 PDF로 변환 | 팀 코드는 그대로 두고 hwpx 18건을 LibreOffice로 먼저 PDF 변환(`prepare`가 자동 수행) |
 | build(팀) | 57/57 성공, 약 898초 | — | 문서별 시간은 `<run-id>/team_final_build.json` |
-| build(현재) | HWP/HWPX 42건 전부 실패 | ① 이 저장소의 변환 호출이 예전 `hwp2md` 명령(서비스 패키지, 로컬의 editable 설치 경로가 사라져 있었음)에 의존 ② 실행기가 실패를 "색인 완료"로 보고 | 변환을 **파서 skill의 `run_pipeline.py` 직접 호출**로 교체(`scripts/parser_bridge.py`, 위치는 `HWP_SKILL_DIR`). 실행기는 성공 건수가 코퍼스 문서 수와 다르면 오류로 중단하도록 수정 |
+| build(현재) | HWP/HWPX 42건 전부 실패 | ① 이 저장소의 변환 호출이 예전 `hwp2md` 명령에 의존(이 명령은 skill이 아니라 별도 서비스 패키지의 콘솔 스크립트이고, 이 머신에서는 그 editable 설치 경로가 사라져 있었음) ② 실행기가 실패를 "색인 완료"로 보고 | 변환을 **파서 skill의 `run_pipeline.py` 직접 호출**로 교체(`scripts/parser_bridge.py`, 위치는 `HWP_SKILL_DIR`). 실행기는 성공 건수가 코퍼스 문서 수와 다르면 오류로 중단하도록 수정 |
 | build(현재) | skill을 gpt-oss:20b로 돌리면 `JSONDecodeError: Expecting value: line 1 column 1` | skill 기본 백엔드(`--backend ollama`)는 Ollama 네이티브 `/api/chat`에 `think:false`+`format:json`을 보내는데 gpt-oss는 이를 따르지 않고 빈 응답을 돌려줌 | skill 문서(SKILL.md)의 OpenAI 호환 백엔드 사용: `--backend openai --base-url http://localhost:11434/v1 --api-key ollama-local` |
 | build(현재) | 위 백엔드로도 같은 오류 | Ollama `/v1` 기본 컨텍스트 4096토큰 — 실측: `prompt_tokens 4050 + completion_tokens 46 = 4096`, `finish_reason: length`, 본문은 비고 추론(reasoning)만 채워짐 | `OLLAMA_CONTEXT_LENGTH=32768`으로 Ollama 서버를 재기동 |
 

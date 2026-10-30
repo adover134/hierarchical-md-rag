@@ -1,6 +1,6 @@
 """PDF 원본 문서를 팀의 기존(수정 안 한) PDF 경로로 인덱싱한다.
 
-이 문서들은 HWP/HWPX가 아니라 애초에 PDF로 발급된 원본이라, 새 파서(hwp2md, kordoc 기반)의
+이 문서들은 HWP/HWPX가 아니라 애초에 PDF로 발급된 원본이라, 파서 skill(kordoc 기반)의
 대상이 아니다 — kordoc 자체가 HWP/HWPX 전용이므로 여기 적용할 수 없다. 그래서 이 문서들은
 `preprocessor.py`의 원래 PDF 경로(`pdf_loader.load_pdf` → `auditor.audit_file` →
 `chunker.process_file`, 전부 원본 그대로, 수정 없음)를 그대로 써서 같은 ChromaDB에 추가한다 —

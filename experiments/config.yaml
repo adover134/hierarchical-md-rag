@@ -46,7 +46,7 @@ table_samples: experiments/table_samples.yaml      # 표 정합률 샘플(정답
 
 # --- 시스템 ---------------------------------------------------------------------------
 # kind: team    = 팀 프로젝트 최종 RAG(별도 체크아웃, 코드 무수정). 문서는 PDF로 변환해 팀 전처리기에 넣는다.
-# kind: current = 이 저장소. HWP/HWPX는 새 파서(hwp2md), PDF는 팀 원본 PDF 경로로 색인한다.
+# kind: current = 이 저장소. HWP/HWPX는 파서 skill(run_pipeline.py), PDF는 팀 원본 PDF 경로로 색인한다.
 # db_from: 다른 시스템의 DB를 그대로 쓴다(답변 전략만 다름).
 systems:
   - name: team_final
