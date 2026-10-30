@@ -12550,6 +12550,17 @@ class RAGChatbotV17:
             except Exception:
                 pass
 
+        # 나라장터 입찰공고목록 export(`공고명/공고기관/수요기관` 스키마, 상단 안내 줄 포함)도
+        # 같은 용도의 근거로 읽는다 — 실험(experiments/)에서 팀 버전과 같은 엑셀 한 파일을
+        # 입력으로 맞추기 위한 호환이며, 위 `나라장터_RFP_메타데이터.xlsx` 경로는 그대로다.
+        for bid_list_path in sorted((PROJECT_ROOT / "data_index").glob("입찰공고목록*.xlsx")):
+            try:
+                from src.utils.bid_list_xlsx import load_bid_list_labels
+
+                labels.extend(load_bid_list_labels(bid_list_path))
+            except Exception:
+                continue
+
         for csv_name in ("execution_summary_new_parser.csv", "execution_summary_pdf_originals.csv"):
             csv_path = PROJECT_ROOT / "output" / csv_name
             if not csv_path.exists():

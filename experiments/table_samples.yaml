@@ -1,0 +1,128 @@
+# 표 데이터 정합률용 샘플 — 원문 HWP/HWPX 표를 kordoc으로 직접 읽어 확인한 `라벨: 값` 정답 쌍.
+# 판정: 해당 문서의 청크 중 하나에 `라벨: 값`이 붙어서 그대로 존재하면 정합(src/evaluation/metrics.py table_pair_present).
+# 라벨/값은 원문 표의 헤더 셀·데이터 셀 텍스트 그대로이고(공백·쉼표는 비교 시 무시), 병합 헤더는 가장 안쪽 라벨만 쓴다.
+# 라벨이 모호한 3단 이상 병합 표와 개인정보 입력 양식(빈 칸)은 일부러 제외했다.
+- source: 2026년 산지전용지(구촌) 대집행복구공사_충청북도 영동군
+  kind: 라벨:값 표(헤더 없음)
+  pairs:
+  - label: 사업위치
+    value: 영동군 일원
+  - label: 공사기간
+    value: 착공일로부터 60일
+  - label: 하도급지킴이
+    value: 대상
+  - label: 기초금액
+    value: 금45,261,650원
+  - label: 추정가격
+    value: 금41,146,955원
+  - label: 부가가치세
+    value: 금4,114,695원
+- source: 2026년 임도구조개량사업_충청북도 영동군
+  kind: 라벨:값 표(헤더 없음)
+  pairs:
+  - label: 사업위치
+    value: 영동군 일원
+  - label: 공사기간
+    value: 착공일로부터 60일
+  - label: 기초금액
+    value: 금154,580,000원
+  - label: 추정가격
+    value: 금140,527,273원
+  - label: 부가가치세
+    value: 금14,052,727원
+  - label: 도급자관급자재
+    value: 3,420,000원
+- source: 고양골소하천 정비관리사업_충청북도 영동군
+  kind: 라벨:값 표(헤더 없음)
+  pairs:
+  - label: 사업위치
+    value: 영동군 심천면 일원
+  - label: 공사기간
+    value: 착공일로부터 90일
+  - label: 하도급지킴이
+    value: 비대상
+  - label: 추정금액
+    value: 금40,000,000원
+  - label: 기초금액
+    value: 금26,750,000원
+  - label: 도급자관급자재
+    value: 금13,250,000원
+- source: 영동 스마트복합쉼터 조성사업 건축공사(비상주) 감리용역_충청북도 영동군
+  kind: 라벨:값 표(헤더 없음)
+  pairs:
+  - label: 과업기간
+    value: 착수일로부터 365일
+  - label: 예정금액
+    value: 금35,598,000원
+  - label: 기초금액
+    value: 금35,598,000원
+  - label: 추정가격
+    value: 금32,361,818원
+  - label: 손해배상공제
+    value: 금136,000원
+- source: 용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(건축)[민간입찰 대행]_충청북도 영동군
+  kind: 라벨:값 표(헤더 없음)
+  pairs:
+  - label: 사업위치
+    value: 영동군 용화면 일원
+  - label: 공사기간
+    value: 착공일로부터 120일
+  - label: 하도급지킴이
+    value: 민간입찰
+  - label: 추정금액
+    value: 금145,618,000원
+  - label: 추정가격
+    value: 금132,380,000원
+  - label: 부가가치세
+    value: 금13,238,000원
+- source: SRT 감속기 모터피니언 기어_주식회사 에스알
+  kind: 라벨:값 표(헤더 없음, 일부 행은 2쌍)
+  pairs:
+  - label: 계약기간
+    value: 계약체결일로부터 420일
+  - label: 검사소요일수
+    value: 7일 이내
+  - label: 인도조건
+    value: 납품장소 입고도
+  - label: 하자보증기간
+    value: 1년
+  - label: 하자보증율
+    value: 5%
+- source: SRT 코일스프링 5품목 구매_주식회사 에스알
+  kind: 라벨:값 표(헤더 없음, 일부 행은 2쌍)
+  pairs:
+  - label: 검사소요일수
+    value: 7일 이내
+  - label: 인도조건
+    value: 납품장소 입고도
+  - label: 하자보증기간
+    value: 3년
+  - label: 하자보증율
+    value: 5%
+- source: 2026학년도 덕적초중고(도서지역) 통학버스 임차용역 소액수의 견적제출 공고_인천광역시교육청 덕적고등학교
+  kind: 라벨:값 표(헤더 없음)
+  pairs:
+  - label: 용역현장
+    value: 인천광역시 옹진군 덕적면 덕적남로 15
+  - label: 임차대수
+    value: '1대 (21인승 중형버스 이상) : 운전기사 1명'
+- source: 장성경찰서 장애인승강기 설치공사(건축)_경찰청 전남경찰청
+  kind: 2단 헤더 표(세로 병합)
+  pairs:
+  - label: 공사예정금액(A=B+E)
+    value: 368,467,000
+  - label: 기초금액(B=C+D)
+    value: 368,467,000
+  - label: 추정가격(C)
+    value: 334,970,000
+  - label: 부가가치세(D)
+    value: 33,497,000
+- source: (긴급)송림리 마을만들기사업(건축,기계)_충청남도 서천군 농업기술센터
+  kind: 2단 헤더 표(가로·세로 병합)
+  pairs:
+  - label: 추정가격
+    value: 259,204,546
+  - label: 부가가치세
+    value: 25,920,454
+  - label: 관급자설치
+    value: 285,000

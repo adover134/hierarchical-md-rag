@@ -13,3 +13,6 @@ eval_resources/eval_report_*.html
 eval_resources/debug_logs/
 eval_resources/gradio_flagged/
 eval_resources/gradio_query_log.jsonl
+RAG_프로세스_테스트_데이터_원본/
+eval_resources/experiment_runs/
+experiments/work/
