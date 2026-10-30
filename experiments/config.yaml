@@ -16,6 +16,9 @@ llm:
   model: gpt-oss:20b          # 답변·질의의도·파서(Pass1b) 모델
   judge_model: gpt-oss:20b
   timeout_sec: 1200
+  # 파서 skill의 Pass1b 호출당 헤더 후보 수. 기본(70)에서는 후보가 많은 문서의 한 호출이 느린 로컬 GPU에서
+  # skill의 호출 제한(300초)을 넘어 실패한다(RTX 4060 8GB에서 실측). 후보를 나눠 호출하면 해결된다.
+  parser_max_candidates_per_call: 30
 
 top_k: 5                      # 세 시스템 모두 동일(팀 프로젝트 기본값은 10 — 평가에서는 5로 통일)
 repeat: 1                     # 같은 문항 반복 횟수. temperature=0.0이어도 비결정적이라 2~3으로 올려 편차를 볼 수 있다.
@@ -65,3 +68,11 @@ systems:
     project_root: .
     db_from: current_default
     env: {HWP_RAG_ANSWER_STRATEGY: multi_agent}
+  # 보조 변형(요청한 3개 시스템 외): 팀 시스템의 CSV 단축 경로를 끈 것. 입찰공고목록 엑셀에는 금액·요약·본문이 없어
+  # 팀 CSV 단축 경로가 금액류 질문에 무의미한 답("사업비는 `사업비`입니다")을 내기 때문에, 그 영향을 분리해서 본다.
+  - name: team_final_no_csv
+    title: (보조) 팀 최종 RAG, CSV 단축 끔
+    kind: team
+    project_root: ../RAG_project
+    db_from: team_final
+    env: {CSV_SHORTCIRCUIT_ENABLED: "false"}

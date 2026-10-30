@@ -26,7 +26,8 @@ SUPPORTED_EXTENSIONS = {".hwp", ".hwpx"}
 
 
 def process_single_hwp(hwp_path: Path, work_dir: Path, output_dir: Path, backend: str, model: str,
-                       base_url: str | None = None, api_key: str | None = None) -> Dict:
+                       base_url: str | None = None, api_key: str | None = None,
+                       max_candidates_per_call: int | None = None) -> Dict:
     from src.retrievers.build_db import (
         compute_doc_id, assign_uids, build_hierarchy, apply_section_uids,
         upsert_hybrid_chunks, upsert_hierarchy_chroma,
@@ -39,7 +40,8 @@ def process_single_hwp(hwp_path: Path, work_dir: Path, output_dir: Path, backend
     }
     t0 = time.time()
 
-    parsed_path = convert_with_new_parser(hwp_path, work_dir, backend=backend, model=model, base_url=base_url, api_key=api_key)
+    parsed_path = convert_with_new_parser(hwp_path, work_dir, backend=backend, model=model, base_url=base_url, api_key=api_key,
+                                       max_candidates_per_call=max_candidates_per_call)
     chunks = process_file_no_regex_reextraction(parsed_path)
     result["chunk_count"] = len(chunks)
 
@@ -81,6 +83,8 @@ def main() -> None:
     ap.add_argument("--model", default="qwen3.5:9b")
     ap.add_argument("--base-url", help="OpenAI 호환 엔드포인트(예: Ollama의 http://localhost:11434/v1)")
     ap.add_argument("--api-key", help="--backend가 ollama가 아닐 때의 API 키(로컬 Ollama는 아무 문자열)")
+    ap.add_argument("--max-candidates-per-call", type=int,
+                    help="Pass1b LLM 호출 하나당 헤더 후보 최대 개수(skill 옵션). 느린 로컬 GPU에서 호출 제한 시간 초과를 피하려면 줄인다")
     ap.add_argument("--limit", type=int, help="처리할 문서 수 상한 (테스트용)")
     args = ap.parse_args()
 
@@ -99,7 +103,8 @@ def main() -> None:
     for i, f in enumerate(files, 1):
         print(f"\n[{i}/{len(files)}] {f.name}")
         try:
-            result = process_single_hwp(f, work_dir, output_dir, args.backend, args.model, args.base_url, args.api_key)
+            result = process_single_hwp(f, work_dir, output_dir, args.backend, args.model, args.base_url, args.api_key,
+                                        args.max_candidates_per_call)
         except Exception as e:
             result = {
                 "file": f.name, "status": "failed", "duration_sec": 0.0,

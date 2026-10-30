@@ -9,6 +9,7 @@
 | **팀 최종 RAG** (`team_final`) | [`adover134/RAG_project`](https://github.com/adover134/RAG_project) `main` — 코드 무수정 |
 | **현 버전 기본** (`current_default`) | 이 저장소, `HWP_RAG_ANSWER_STRATEGY=two_stage` |
 | **현 버전 멀티에이전트** (`current_multi_agent`) | 이 저장소, `HWP_RAG_ANSWER_STRATEGY=multi_agent` (DB는 기본과 공유) |
+| (보조) **팀 최종, CSV 단축 끔** (`team_final_no_csv`) | 위 팀 시스템과 같은 DB·코드에 `CSV_SHORTCIRCUIT_ENABLED=false`만 다름. 요청한 3개 시스템 밖의 보조 측정 — 아래 "엑셀 입력의 영향" 참고 |
 
 ## 비교 조건 (공정성)
 
@@ -108,6 +109,20 @@ python scripts/run_experiment.py report   --run-id main1 --write   # 표 출력 
 결과 파일은 `eval_resources/experiment_runs/<run-id>/`(git 추적 안 함)에 쌓인다: `<system>_raw.json`(원시 응답),
 `<system>_chunks.json`(DB 덤프), `<system>_build.json`(색인 시간), `summary.json`(지표·문항별 점수).
 
+## 엑셀 입력의 영향 (팀 시스템)
+
+입찰공고목록 엑셀에는 금액·사업 요약·본문 컬럼이 없다. 팀 시스템은 원래 이 값들이 채워진 `data_list.csv`를 쓰는 CSV 단축 경로를
+갖고 있어서, 변환한 CSV(해당 컬럼이 빈 값)에서는 금액류 질문에 의미 없는 답을 낸다. 드라이런(6문항)에서 확인된 예:
+
+- 질문: "송림리 마을만들기사업(건축,기계)의 기초금액은 얼마인가요?" → 팀 답변: "사업비는 `사업비`입니다." (`csv_short_circuit: true`)
+
+처음 계획에서는 "단축 경로가 값이 없으면 검색 경로로 넘어간다"고 가정했지만 실제로는 그렇지 않았다. 그래서 요청한 3개 시스템의
+측정은 그대로 두고, 같은 팀 DB·코드에서 `CSV_SHORTCIRCUIT_ENABLED=false`만 바꾼 **보조 변형**(`team_final_no_csv`)을 함께 측정해
+엑셀 입력으로 인한 영향을 분리해서 볼 수 있게 했다. 결과 표를 읽을 때 팀 시스템의 금액류 문항 점수는 이 영향이 섞여 있다.
+
+드라이런에서 함께 관찰한 것(문항 6개, 전체 결과 아님): 팀 DB의 표 청크는 `사업명: 사업위치, 2026 년 …: 영동군 일원, Col3: …`
+형태로 라벨이 뒤섞여 있다 — 이 프로젝트의 표 평탄화 수정이 겨냥한 문제와 같은 형태다.
+
 ## 실행 기록과 겪은 문제 (재현 시 참고)
 
 실험을 처음 돌릴 때 실제로 막혔던 지점과 해결을 순서대로 남긴다. 같은 환경에서는 위 "직접 실행하기"만 따르면
@@ -120,6 +135,7 @@ python scripts/run_experiment.py report   --run-id main1 --write   # 표 출력 
 | build(현재) | HWP/HWPX 42건 전부 실패 | ① 이 저장소의 변환 호출이 예전 `hwp2md` 명령에 의존(이 명령은 skill이 아니라 별도 서비스 패키지의 콘솔 스크립트이고, 이 머신에서는 그 editable 설치 경로가 사라져 있었음) ② 실행기가 실패를 "색인 완료"로 보고 | 변환을 **파서 skill의 `run_pipeline.py` 직접 호출**로 교체(`scripts/parser_bridge.py`, 위치는 `HWP_SKILL_DIR`). 실행기는 성공 건수가 코퍼스 문서 수와 다르면 오류로 중단하도록 수정 |
 | build(현재) | skill을 gpt-oss:20b로 돌리면 `JSONDecodeError: Expecting value: line 1 column 1` | skill 기본 백엔드(`--backend ollama`)는 Ollama 네이티브 `/api/chat`에 `think:false`+`format:json`을 보내는데 gpt-oss는 이를 따르지 않고 빈 응답을 돌려줌 | skill 문서(SKILL.md)의 OpenAI 호환 백엔드 사용: `--backend openai --base-url http://localhost:11434/v1 --api-key ollama-local` |
 | build(현재) | 위 백엔드로도 같은 오류 | Ollama `/v1` 기본 컨텍스트 4096토큰 — 실측: `prompt_tokens 4050 + completion_tokens 46 = 4096`, `finish_reason: length`, 본문은 비고 추론(reasoning)만 채워짐 | `OLLAMA_CONTEXT_LENGTH=32768`으로 Ollama 서버를 재기동 |
+| build(현재) | HWP/HWPX 42건 중 5건 실패(`HTTP 500`, 정확히 5분 경과) | skill이 LLM 호출에 300초 제한을 두는데, 후보가 많은 문서는 한 번의 Pass1b 호출이 8GB GPU에서 그보다 오래 걸림(기본 호출당 후보 70개) | skill 문서의 `--max-candidates-per-call`을 30으로 낮춰 전체를 다시 구축(`llm.parser_max_candidates_per_call`). 그래도 실패한 5건은 10으로 낮춰 재처리. 문서별 값은 `current_default_build.json`의 `parser_batch` 필드 |
 
 원인을 확인한 방법(재현 가능):
 
