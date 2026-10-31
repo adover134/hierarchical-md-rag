@@ -318,9 +318,23 @@ gitignore됨(`eval_resources/eval_results_*.json`, `eval_resources/eval_report_*
 - `--judge_model`은 반드시 지정할 것 — 기본값(`gpt-5-mini`)은 Groq에 없어서
   판정 자체가 실패한다
 
+### 3개 시스템 비교 실험 (multi-agent 브랜치)
+
+팀 프로젝트 최종 RAG, 현 버전 기본(`two_stage`), 현 버전 멀티에이전트를 같은 문서·같은 입력 엑셀·같은 평가셋·
+같은 로컬 LLM(gpt-oss:20b)으로 비교한다. 설정은 `experiments/config.yaml`, 재현 명령과 결과 표는
+[`EXPERIMENTS.md`](EXPERIMENTS.md)에 있다. 파서 쪽 표 처리는 단계별로 분리해서 잰다 — 로더가 표를 표로 내놨는가
+(검출)와 평탄화가 `라벨: 값`으로 풀었는가(DB·LLM 불필요):
+
+```bash
+python scripts/run_experiment.py parsing --run-id <실행 이름> --tag <꼬리표>
+```
+
+현재 상태: 입력 엑셀에 사업 금액·요약이 없어 팀 시스템의 금액류 질문이 불리해지는 조건이라, 나라장터가 다시 열리는
+11월 2일 이후 새 데이터로 전체를 처음부터 다시 실험할 예정이다. 그전까지의 값(`main1`)은 참고용이다.
+
 ## 현재 상태
 
-`docs/BUGFIXES.md`에 오늘까지 추적·수정한 근본원인 15개가 전부 기록돼 있다
+`docs/BUGFIXES.md`에 오늘까지 추적·수정한 근본원인 25개가 전부 기록돼 있다
 (검색 순위 오판, org 해석 우선순위, retrieval depth, 답변 생성 방식 전환,
 비교 질의 컨텍스트 불균형 등). 두 평가셋 모두 현재 전 문항 정답 상태다.
 
