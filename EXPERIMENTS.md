@@ -140,6 +140,9 @@ python scripts/run_experiment.py report   --run-id main1 --write   # 표 출력 
 python scripts/run_experiment.py parsing --run-id main1 --tag before --systems team_final current_default
 ```
 
+측정 로직은 독립 스크립트 [`scripts/eval_parsing.py`](scripts/eval_parsing.py)에 있고(두 브랜치 공통), `run_experiment.py parsing`은
+config의 시스템 목록으로 그것을 호출할 뿐이다. 한 프로젝트만 재려면 `python scripts/eval_parsing.py --help`.
+
 표본은 `experiments/table_samples.yaml`의 14개 표·59쌍이다. 처음 10개 표·47쌍(기존)에 평탄화 점검용 4개 표·12쌍(추가분)을 더했다.
 
 ### 측정값 (`main1` 산출물, 같은 샘플·같은 로더 출력)

@@ -579,137 +579,26 @@ def cmd_report(cfg: dict, args: argparse.Namespace) -> None:
 
 
 # ---------------------------------------------------------------------------
-# parsing: 로더(표 검출) → 평탄화 → 청크, 단계별 표 지표
+# parsing: 로더(표 검출) → 평탄화 → 청크, 단계별 표 지표 — 측정 로직은 독립 스크립트 eval_parsing.py
 # ---------------------------------------------------------------------------
 
-def _loader_md_path(root: Path, system: dict, source: str) -> Path | None:
-    """시스템 로더의 Markdown 출력 중 샘플 문서의 것을 찾는다(파일명에 문서 키가 들어 있는 것)."""
-    folder = root / system["loader_md_dir"]
-    key = _source_key(source)
-    for f in sorted(folder.glob(system.get("loader_md_glob", "*.md"))):
-        if key in _source_key(f.name):
-            return f
-    return None
-
-
-def _flatten_files(args: argparse.Namespace) -> None:
-    """프로젝트 루트에서 그 프로젝트의 평탄화·텍스트 정리(+선택: 재청킹)를 로더 출력 파일들에 적용한다.
-
-    두 코드가 모두 `src.*` 모듈명을 쓰므로 시스템마다 별도 프로세스로 호출한다(_execute와 같은 방식)."""
-    root = Path(args.project_root).resolve()
-    sys.path.insert(0, str(root))
-    os.chdir(root)
-    spec = json.loads(Path(args.questions).read_text(encoding="utf-8"))
-    # 두 파이프라인 모두 청킹 전에 "표 평탄화(step2) → 텍스트 정리(step2b: 굵게 표시 ** 제거 등)" 순으로 처리한다.
-    # 평탄화 단계의 결과는 정리까지 거친 텍스트로 본다(정리 전 텍스트는 `**값**`처럼 라벨:값 인접이 깨져 보인다).
-    from src.parsers.chunker import parse_frontmatter, step2_flatten_tables, step2b_clean_text
-
-    rechunk = None
-    if spec.get("rechunk"):
-        from scripts.parser_bridge import process_file_no_regex_reextraction as rechunk
-    result: dict[str, Any] = {}
-    for path in spec["paths"]:
-        text = Path(path).read_text(encoding="utf-8")
-        _, body = parse_frontmatter(text)
-        entry: dict[str, Any] = {"flattened": step2b_clean_text(step2_flatten_tables(body))}
-        if rechunk:
-            entry["chunks"] = [c["page_content"] for c in rechunk(Path(path))]
-        result[path] = entry
-    Path(args.out).write_text(json.dumps(result, ensure_ascii=False), encoding="utf-8")
-
-
-def _parsing_summary(records: list[dict]) -> dict[str, Any]:
-    def rate(num: int, den: int) -> float | None:
-        return round(num / den, 4) if den else None
-
-    n = len(records)
-    det = [r for r in records if r["detected"]]
-    return {
-        "pairs_n": n,
-        "detected_n": len(det),
-        "detection_rate": rate(len(det), n),
-        "flatten_ok_of_detected": rate(sum(r["flatten_ok"] for r in det), len(det)),
-        "flatten_ok_n": sum(r["flatten_ok"] for r in det),
-        "end_to_end_rate": rate(sum(r["e2e_ok"] for r in records), n) if all(r["e2e_ok"] is not None for r in records) else None,
-        "end_to_end_n": sum(bool(r["e2e_ok"]) for r in records),
-    }
-
-
 def cmd_parsing(cfg: dict, args: argparse.Namespace) -> None:
-    from src.evaluation import metrics as M
+    import eval_parsing
 
     rd = run_dir(cfg, args.run_id)
-    tag = args.tag or "run"
-    samples = yaml.safe_load(_path(cfg["table_samples"]).read_text(encoding="utf-8")) or []
-    out: dict[str, Any] = {}
+    systems = []
     for system in pick_systems(cfg, args.systems):
         if not system.get("loader_md_dir"):
             continue
-        name = system["name"]
-        root = _path(system["project_root"])
-        paths = {s["source"]: _loader_md_path(root, system, s["source"]) for s in samples}
-        found = sorted({str(p) for p in paths.values() if p})
-        spec = rd / f"parsing_{tag}_{name}_in.json"
-        res_file = rd / f"parsing_{tag}_{name}_flat.json"
-        spec.write_text(json.dumps({"paths": found, "rechunk": system["kind"] == "current"}, ensure_ascii=False), encoding="utf-8")
-        run([sys.executable, str(Path(__file__).resolve()), "_flatten_files", "--project-root", str(root),
-             "--questions", str(spec), "--out", str(res_file)], cwd=root, env=system_env(cfg, system))
-        flat = json.loads(res_file.read_text(encoding="utf-8"))
-        dump_file = rd / f"{system.get('db_from') or name}_chunks.json"
-        dump = json.loads(dump_file.read_text(encoding="utf-8")) if dump_file.exists() else []
-
-        records: list[dict] = []
-        for smp in samples:
-            md_path = paths[smp["source"]]
-            pairs = [(p["label"], p["value"]) for p in smp["pairs"]]
-            if md_path is None:
-                flags = [False] * len(pairs)
-                flat_text, doc_chunks = "", []
-            else:
-                flags, _ = M.calculate_table_detection(M.markdown_table_blocks(md_path.read_text(encoding="utf-8")), pairs)
-                entry = flat[str(md_path)]
-                flat_text = entry["flattened"]
-                key = _source_key(smp["source"])
-                doc_chunks = entry.get("chunks") or [
-                    c["text"] for c in dump
-                    if key in _source_key(c.get("source", "")) or key in _source_key(c.get("document_title", ""))
-                ]
-            for (label, value), detected in zip(pairs, flags):
-                records.append({
-                    "source": smp["source"], "kind": smp.get("kind"), "group": smp.get("group", "base"),
-                    "label": label, "value": value, "detected": detected,
-                    "flatten_ok": M.table_pair_present([flat_text], label, value) if flat_text else False,
-                    "e2e_ok": M.table_pair_present(doc_chunks, label, value) if doc_chunks else None,
-                })
-        out[name] = {
-            "title": system.get("title", name),
-            "all": _parsing_summary(records),
-            "base": _parsing_summary([r for r in records if r["group"] == "base"]),
-            "added": _parsing_summary([r for r in records if r["group"] == "added"]),
-            "records": records,
-        }
-
-    (rd / f"parsing_{tag}.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
-    text = render_parsing(out, tag)
-    (rd / f"parsing_{tag}.md").write_text(text, encoding="utf-8")
-    print(text)
-
-
-def render_parsing(out: dict[str, Any], tag: str) -> str:
-    pct = lambda v: "-" if v is None else f"{v * 100:.1f}%"
-    lines = [f"### 표 지표 — 단계별 ({tag})", "",
-             "| 시스템 | 표본 | 표 검출률 (로더) | 평탄화·정리 정합률 (검출된 쌍 중) | 종단 정합률 (최종 청크) |",
-             "|---|---|---|---|---|"]
-    for name, d in out.items():
-        for label, key in (("전체", "all"), ("기존 10표", "base"), ("추가분", "added")):
-            s = d[key]
-            if not s["pairs_n"]:
-                continue
-            lines.append(
-                f"| {d['title']} | {label} ({s['pairs_n']}쌍) | {pct(s['detection_rate'])} ({s['detected_n']}/{s['pairs_n']}) "
-                f"| {pct(s['flatten_ok_of_detected'])} ({s['flatten_ok_n']}/{s['detected_n']}) "
-                f"| {pct(s['end_to_end_rate'])} ({s['end_to_end_n']}/{s['pairs_n']}) |")
-    return "\n".join(lines) + "\n"
+        systems.append({
+            "name": system["name"], "title": system.get("title", system["name"]),
+            "project_root": _path(system["project_root"]),
+            "loader_md_dir": system["loader_md_dir"], "loader_md_glob": system.get("loader_md_glob", "*.md"),
+            "rechunk": system["kind"] == "current",
+            "chunk_dump": rd / f"{system.get('db_from') or system['name']}_chunks.json",
+            "env": system_env(cfg, system),
+        })
+    print(eval_parsing.run_parsing(systems, _path(cfg["table_samples"]), rd, args.tag or "run"))
 
 
 # ---------------------------------------------------------------------------
@@ -719,7 +608,7 @@ def render_parsing(out: dict[str, Any], tag: str) -> str:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("command", choices=["prepare", "build", "query", "dump", "evaluate", "report", "all",
-                                        "parsing", "_execute", "_dump_db", "_flatten_files"])
+                                        "parsing", "_execute", "_dump_db"])
     ap.add_argument("--config", default=str(DEFAULT_CONFIG))
     ap.add_argument("--run-id", default=None, help="결과 폴더 이름(기본: 오늘 날짜시간). 이어서 실행/채점할 때 지정")
     ap.add_argument("--systems", nargs="*", help="특정 시스템만(예: team_final current_default)")
@@ -736,8 +625,6 @@ def main() -> None:
         return _execute(args)
     if args.command == "_dump_db":
         return _dump_db(args)
-    if args.command == "_flatten_files":
-        return _flatten_files(args)
 
     sys.path.insert(0, str(REPO_ROOT))
     cfg = load_config(Path(args.config))
