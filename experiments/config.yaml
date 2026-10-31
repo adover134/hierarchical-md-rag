@@ -56,11 +56,14 @@ systems:
     title: 팀 프로젝트 최종 RAG
     kind: team
     project_root: ../RAG_project
+    loader_md_dir: output                # 로더(LibreOffice→PDF→Markdown) 출력 위치 — parsing 명령이 표 검출에 사용
+    loader_md_glob: "step1_parsed_*.md"
     env: {}
   - name: current_default
     title: 현 버전 기본(two_stage)
     kind: current
     project_root: .
+    loader_md_dir: output/new_parser_md  # 로더(skill: kordoc→Markdown) 출력 위치
     env: {HWP_RAG_ANSWER_STRATEGY: two_stage}
   - name: current_multi_agent
     title: 현 버전 멀티에이전트

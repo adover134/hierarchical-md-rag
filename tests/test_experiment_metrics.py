@@ -4,6 +4,9 @@ import pytest
 
 from src.evaluation.metrics import (
     calculate_context_hit_rate,
+    calculate_table_detection,
+    markdown_table_blocks,
+    table_pair_detected,
     calculate_header_inclusion_rate,
     calculate_key_value_hit_position,
     calculate_key_value_mrr,
@@ -180,3 +183,83 @@ class TestNumericComparisonDirection:
 
     def test_without_loser_only_presence(self):
         assert judge_numeric_comparison("더 큰 곳은 건축공사입니다. 368,467,000원, 24,867,000원", self.VALUES, "건축")
+
+
+SONGRIM = """1. 견적
+
+마. 기초금액: 금285,125,000원
+
+| 추정금액 | 기 초 금 액 |  |  | 관 급 자 재 |  |
+| --- | --- | --- | --- | --- | --- |
+| 추정금액 | 계 | 추정가격 | 부가가치세 | 도급자설치 | 관급자설치 |
+| 285,125,000 | 285,125,000 | 259,204,546 | 25,920,454 | - | 285,000 |
+
+※ 비율
+
+| - 지반조성·포장공사업 | : | 14,045,146 | 5.4 | % |
+| --- | --- | --- | --- | --- |
+| - 실내건축공사업 | : | 47,615,183 | 18.4 | % |
+"""
+
+# 팀 로더(LibreOffice→PDF) 출력처럼 라벨은 평문 줄, 값 일부만 파이프 행으로 나오는 경우
+TEAM_STYLE = """기초금액관급자재
+추정금액
+계추정가격 부가가치세 도급자설치 관급자설치
+285,125,000 285,125,000 259,204,546 25,920,454 - 285,000
+
+|285,125,000|**285,125,000**|259,204,546|25,920,454|-|285,000|
+"""
+
+
+class TestMarkdownTableBlocks:
+    def test_blocks_are_consecutive_pipe_rows_without_separators(self):
+        blocks = markdown_table_blocks(SONGRIM)
+        assert len(blocks) == 2
+        assert blocks[0][0] == ["추정금액", "기 초 금 액", "", "", "관 급 자 재", ""]
+        assert len(blocks[0]) == 3
+        assert blocks[1][0][0] == "- 지반조성·포장공사업"
+
+    def test_no_table_returns_empty(self):
+        assert markdown_table_blocks("그냥 문장입니다.") == []
+
+    def test_bold_markers_are_stripped(self):
+        blocks = markdown_table_blocks(TEAM_STYLE)
+        assert blocks[0][0][1] == "285,125,000"
+
+
+class TestTablePairDetected:
+    def test_label_and_value_in_same_block(self):
+        blocks = markdown_table_blocks(SONGRIM)
+        assert table_pair_detected(blocks, "추정가격", "259,204,546")
+
+    def test_label_cell_may_carry_prefix(self):
+        blocks = markdown_table_blocks(SONGRIM)
+        assert table_pair_detected(blocks, "지반조성·포장공사업", "14,045,146")
+
+    def test_value_in_another_block_is_not_detected(self):
+        blocks = markdown_table_blocks(SONGRIM)
+        assert not table_pair_detected(blocks, "추정가격", "14,045,146")
+
+    def test_label_only_in_plain_text_is_not_detected(self):
+        blocks = markdown_table_blocks(TEAM_STYLE)
+        assert not table_pair_detected(blocks, "추정가격", "259,204,546")
+
+    def test_short_label_requires_whole_cell(self):
+        blocks = markdown_table_blocks("| 구분 | ABC | 점수 |\n| --- | --- | --- |\n| x | B | 8 |\n")
+        assert table_pair_detected(blocks, "B", "8")
+        assert not table_pair_detected(blocks, "C", "8")
+
+    def test_comma_and_space_insensitive(self):
+        blocks = markdown_table_blocks(SONGRIM)
+        assert table_pair_detected(blocks, "추정 가격", "259204546")
+
+
+class TestCalculateTableDetection:
+    def test_returns_detected_pairs_and_rate(self):
+        pairs = [("추정가격", "259,204,546"), ("부가가치세", "25,920,454"), ("없는라벨", "1,234")]
+        detected, rate = calculate_table_detection(markdown_table_blocks(SONGRIM), pairs)
+        assert detected == [True, True, False]
+        assert rate == pytest.approx(2 / 3)
+
+    def test_no_pairs_is_none(self):
+        assert calculate_table_detection([], [])[1] is None

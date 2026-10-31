@@ -476,6 +476,61 @@ def table_pair_present(chunk_texts: list[str], label: str, value: str) -> bool:
     return any(pattern.search(normalize_for_match(t)) for t in chunk_texts)
 
 
+_PIPE_ROW_RE = _re.compile(r"^\|.+\|$")
+_PIPE_SEP_RE = _re.compile(r"^\|[-:\s|]+\|$")
+
+
+def markdown_table_blocks(text: str) -> list[list[list[str]]]:
+    """Markdown 텍스트에서 표 블록(연속된 `|...|` 행)을 뽑아 `블록 → 행 → 셀` 목록으로 돌려준다.
+
+    평탄화 코드(`table_flattener`)가 표를 찾는 규칙과 같다: 구분선 행은 버리고, 셀의 `<br>`는
+    공백으로, 굵게 표시(`**`)는 지운다. 표가 아닌 줄(평문)은 블록에 들어가지 않는다.
+    """
+    blocks: list[list[list[str]]] = []
+    current: list[list[str]] = []
+    for line in str(text or "").split("\n"):
+        stripped = line.strip()
+        if _PIPE_ROW_RE.match(stripped):
+            if _PIPE_SEP_RE.match(stripped):
+                continue
+            cells = [
+                _re.sub(r"<br\s*/?>", " ", c, flags=_re.IGNORECASE).replace("**", "").strip()
+                for c in stripped.strip("|").split("|")
+            ]
+            current.append(cells)
+        elif current:
+            blocks.append(current)
+            current = []
+    if current:
+        blocks.append(current)
+    return blocks
+
+
+def _cell_matches(cell: str, target: str) -> bool:
+    """셀이 목표 텍스트와 맞는지. 4자 이상이면 포함, 그보다 짧으면(예: 'B', '8') 셀 전체 일치만 인정한다."""
+    c, t = normalize_for_match(cell), normalize_for_match(target)
+    if not t:
+        return False
+    return c == t or (len(t) >= 4 and t in c)
+
+
+def table_pair_detected(blocks: list[list[list[str]]], label: str, value: str) -> bool:
+    """로더가 `라벨`과 `값`을 같은 표 블록 안의 셀로 내놓았는지(평탄화 이전 단계의 표 검출)."""
+    for block in blocks:
+        cells = [c for row in block for c in row]
+        if any(_cell_matches(c, label) for c in cells) and any(_cell_matches(c, value) for c in cells):
+            return True
+    return False
+
+
+def calculate_table_detection(
+    blocks: list[list[list[str]]], pairs: list[tuple[str, str]]
+) -> tuple[list[bool], float | None]:
+    """쌍별 검출 여부와 검출률. 쌍이 없으면 비율은 None."""
+    flags = [table_pair_detected(blocks, label, value) for label, value in pairs]
+    return flags, (sum(flags) / len(flags) if flags else None)
+
+
 def calculate_table_pair_accuracy(
     chunk_texts: list[str], pairs: list[tuple[str, str]]
 ) -> float | None:
