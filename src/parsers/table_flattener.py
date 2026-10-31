@@ -96,6 +96,74 @@ def _looks_like_repeating_kv_grid(headers: list[str], data_rows: list[list[str]]
     return checked_any
 
 
+# 헤더 자리에 올 수 없는 구분 기호 셀 — "라벨 | : | 값 | % " 같은 테두리 없는 표의 흔적
+_SEPARATOR_CELLS = {":", "：", "%"}
+# 병합 2단 헤더의 하위 헤더 셀은 짧은 항목명이다(데이터 문장과 구별하는 데 쓴다)
+_MAX_SUB_HEADER_LEN = 20
+
+
+def _is_value_like(cell: str) -> bool:
+    return bool(cell) and bool(_LOOKS_LIKE_VALUE_RE.match(cell)) and any(ch.isdigit() for ch in cell)
+
+
+def _looks_like_headerless_value_table(headers: list[str]) -> bool:
+    """헤더 행이 사실은 첫 데이터 행인 "라벨 | : | 금액 | 비율 | %" 꼴의 테두리 없는 표인지 판별한다.
+
+    GFM이 헤더 행을 강제해서 이런 표는 첫 행이 헤더로 찍힌다(예: 업종별 추정가격 비율). 진짜 헤더에는
+    ":"나 "%" 단독 셀이 오지 않고, 금액·비율 같은 숫자가 오지도 않는다. 단, 연도 열 제목("2026", "2027")은
+    숫자라도 헤더이므로, 쉼표·소수점이 있는 수(금액·비율)가 둘 이상일 때만 데이터로 본다.
+    """
+    cells = [h for h in headers if h]
+    if any(c in _SEPARATOR_CELLS for c in cells):
+        return True
+    numeric = [c for c in cells if _is_value_like(c)]
+    return len(numeric) >= 2 and any("," in c or "." in c for c in numeric)
+
+
+def _render_headerless_value_row(row: list[str]) -> str:
+    """"- 라벨 | : | 14,045,146 | 5.4 | %" → "라벨: 14,045,146 (5.4%)"."""
+    cells = [c for c in row if c and c not in {":", "："}]
+    if not cells:
+        return ""
+    label = cells[0].lstrip("-•·ㆍ* ").strip() or cells[0]
+    rest: list[str] = []
+    for cell in cells[1:]:
+        if cell == "%" and rest:
+            rest[-1] += "%"
+        else:
+            rest.append(cell)
+    if not rest:
+        return label
+    return f"{label}: {rest[0]}" + (f" ({', '.join(rest[1:])})" if len(rest) > 1 else "")
+
+
+def _merge_two_row_header(
+    headers: list[str], data_rows: list[list[str]]
+) -> tuple[list[str], list[list[str]]] | None:
+    """병합 셀로 이뤄진 2단 헤더를 한 줄 헤더로 합친다. 해당하지 않으면 None.
+
+    kordoc은 가로로 병합된 상위 헤더를 "빈 칸"으로 풀어 낸다: `| 추정금액 | 기초금액 |  |  | 관급자재 |  |`
+    아래에 하위 헤더 행(`| 추정금액 | 계 | 추정가격 | 부가가치세 | 도급자설치 | 관급자설치 |`)이 데이터처럼
+    따라온다. 상위 헤더를 오른쪽 빈 칸으로 채우고(병합 범위) 하위 헤더와 이어 붙여 열 라벨로 쓴다.
+    아래를 모두 만족할 때만 합친다(일반 표를 건드리지 않기 위해 좁게):
+    - 3열 이상이고 상위 헤더에 빈 칸이 있으며, 그 빈 칸 왼쪽에 채울 상위 라벨이 있다
+    - 바로 아래 행이 같은 길이이고, 모든 칸이 차 있고, 숫자 값이 없고, 칸마다 짧은 항목명이다
+    """
+    if len(headers) < 3 or not data_rows or len(data_rows[0]) != len(headers):
+        return None
+    sub = data_rows[0]
+    if not any(not h for h in headers[1:]) or not headers[0]:
+        return None
+    if not all(sub) or any(_is_value_like(c) for c in sub) or any(len(c) > _MAX_SUB_HEADER_LEN for c in sub):
+        return None
+    merged: list[str] = []
+    top = ""
+    for h, lower in zip(headers, sub):
+        top = h or top
+        merged.append(top if lower == top else f"{top} {lower}")
+    return merged, data_rows[1:]
+
+
 def flatten_table(table_text: str) -> str:
     """마크다운 테이블을 자연어 텍스트로 변환한다.
 
@@ -158,13 +226,21 @@ def flatten_table(table_text: str) -> str:
     repeating_kv_grid = (
         not kv_table and not placeholder and _looks_like_repeating_kv_grid(headers, data_rows)
     )
+    headerless_value_table = (
+        not kv_table and not placeholder and not repeating_kv_grid
+        and _looks_like_headerless_value_table(headers)
+    )
+    if not (kv_table or placeholder or repeating_kv_grid or headerless_value_table):
+        merged_header = _merge_two_row_header(headers, data_rows)
+        if merged_header:
+            headers, data_rows = merged_header
 
     # KV 테이블에서는 헤더 행도 데이터 — 단, 일반적 열 제목은 제외
     if kv_table:
         header_vals = {h.strip() for h in headers if h.strip()}
         if not header_vals.issubset(_GENERIC_KV_HEADERS):
             data_rows.insert(0, headers)
-    elif repeating_kv_grid:
+    elif repeating_kv_grid or headerless_value_table:
         # 이 표는 애초에 헤더가 없고 첫 데이터 행이 GFM 문법 때문에 어쩔 수 없이
         # 헤더 자리에 찍힌 것이므로, 헤더 행도 그대로 데이터로 취급한다.
         data_rows.insert(0, headers)
@@ -187,6 +263,11 @@ def flatten_table(table_text: str) -> str:
                 result_lines.append(key)
             elif val:
                 result_lines.append(val)
+    elif headerless_value_table:
+        for row in data_rows:
+            rendered = _render_headerless_value_row(row)
+            if rendered:
+                result_lines.append(rendered)
     elif repeating_kv_grid:
         # 라벨:값이 반복되는 그리드 — 컬럼 인덱스(짝수=라벨/홀수=값)를 고정
         # 신뢰하지 않는다. HWP 병합 셀이 마크다운으로 복원될 때 값 칸이 한 칸
