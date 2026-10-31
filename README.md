@@ -365,7 +365,8 @@ python scripts/eval_parsing.py --project-root . --loader-md-dir output/new_parse
 [`EXPERIMENTS.md`](EXPERIMENTS.md)에 있다. 파서 쪽 표 처리의 단계별 측정(`run_experiment.py parsing`)은 위 `eval_parsing.py`를 시스템별로 호출한다.
 
 현재 상태: 입력 엑셀에 사업 금액·요약이 없어 팀 시스템의 금액류 질문이 불리해지는 조건이라, 나라장터가 다시 열리는
-11월 2일 이후 새 데이터로 전체를 처음부터 다시 실험할 예정이다. 그전까지의 값(`main1`)은 참고용이다.
+11월 2일 이후 엑셀에 금액을 보강해 질의·채점을 다시 돌릴 예정이다(엑셀은 DB 구축에 쓰이지 않아 팀 DB는 재사용). 그전까지의
+질의·채점 값(`main1`)은 참고용이다.
 
 ## 현재 상태
 
