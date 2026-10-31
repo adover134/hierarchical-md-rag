@@ -24,7 +24,7 @@ SAMPLES = [{
     "pairs": [{"label": "추정가격", "value": "259,204,546"}, {"label": "부가가치세", "value": "25,920,454"}],
 }, {
     "source": "테스트 공고_기관", "kind": "평문", "group": "added",
-    "pairs": [{"label": "지반조성공사업", "value": "14,045,146"}],
+    "pairs": [{"label": "지반조성공사업", "value": "14,045,146"}, {"label": "없는라벨", "value": "9,999"}],
 }]
 
 
@@ -41,8 +41,14 @@ def test_stage_split_distinguishes_undetected_from_unflattened(tmp_path):
     base, added = out["base"], out["added"]
     # 표로 내놓은 2단 헤더 표: 검출되고 평탄화 후에도 짝이 남는다
     assert (base["detected_n"], base["flatten_ok_n"]) == (2, 2)
-    # 평문 목록은 표가 아니므로 미검출(검출률에 반영) — 평탄화 정합률의 분모에서 빠진다
-    assert added["detected_n"] == 0 and added["flatten_ok_of_detected"] is None
+    # 표가 아닌 문단 줄이라도 `라벨 : 값`으로 이어져 있으면 검출이다(연결이 살아 있음)
+    assert (added["pairs_n"], added["detected_n"], added["flatten_ok_n"]) == (2, 1, 1)
+
+
+def test_pair_missing_from_loader_output_is_undetected(tmp_path):
+    out = E.evaluate_system(_system(tmp_path), SAMPLES, tmp_path / "work", "t")
+    missing = [r for r in out["records"] if r["label"] == "없는라벨"][0]
+    assert not missing["detected"] and not missing["flatten_ok"]
 
 
 def test_end_to_end_is_none_without_chunks(tmp_path):

@@ -5,6 +5,7 @@ import pytest
 from src.evaluation.metrics import (
     calculate_context_hit_rate,
     calculate_table_detection,
+    table_pair_in_text,
     markdown_table_blocks,
     table_pair_detected,
     calculate_header_inclusion_rate,
@@ -263,3 +264,43 @@ class TestCalculateTableDetection:
 
     def test_no_pairs_is_none(self):
         assert calculate_table_detection([], [])[1] is None
+
+
+class TestTablePairInText:
+    """표가 아닌 문단 줄에서 라벨-값 연결이 살아 있는지 (줄 단위, 양쪽 순서 인정)."""
+
+    def test_label_then_value_on_one_line(self):
+        text = "- 지반조성·포장공사업 : 66,530,000 77.80 %"
+        assert table_pair_in_text(text, "지반조성·포장공사업", "66,530,000")
+
+    def test_value_then_label_with_colon(self):
+        assert table_pair_in_text("66,530,000 : 지반조성·포장공사업", "지반조성·포장공사업", "66,530,000")
+
+    def test_value_then_label_in_parentheses(self):
+        assert table_pair_in_text("금285,125,000원 (기초금액)", "기초금액", "285,125,000원")
+
+    def test_garbled_pairing_is_not_a_match(self):
+        # 구버전 skill이 5칸 행을 두 칸씩 묶어 망가뜨린 줄: 콜론이 두 번 끼어 있다
+        assert not table_pair_in_text("전문공사 업종별 합계: :, 85,530,000: 100, %", "전문공사 업종별 합계", "85,530,000")
+
+    def test_previous_value_next_label_is_not_a_reversed_match(self):
+        # 평탄화된 행에서 '앞 항목의 값'과 '다음 항목의 라벨'이 붙어 보이는 것은 짝이 아니다
+        line = "추정가격: 259,204,546, 부가가치세: 25,920,454"
+        assert table_pair_in_text(line, "추정가격", "259,204,546")
+        assert not table_pair_in_text(line, "부가가치세", "259,204,546")
+
+    def test_does_not_join_across_lines(self):
+        assert not table_pair_in_text("추정가격\n259,204,546", "추정가격", "259,204,546")
+
+    def test_empty_text(self):
+        assert not table_pair_in_text("", "a", "b")
+
+
+class TestDetectionUsesTextToo:
+    def test_pair_in_text_counts_when_not_in_a_table(self):
+        text = "- 지반조성·포장공사업 : 66,530,000 77.80 %"
+        flags, rate = calculate_table_detection([], [("지반조성·포장공사업", "66,530,000")], text=text)
+        assert flags == [True] and rate == 1.0
+
+    def test_without_text_only_tables_count(self):
+        assert calculate_table_detection([], [("a", "100")])[0] == [False]

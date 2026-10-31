@@ -2,7 +2,7 @@
 
 DB·LLM이 필요 없다. 정답 `라벨: 값` 쌍(experiments/table_samples.yaml)마다 세 가지를 잰다.
 
-  표 검출률        로더가 라벨 셀과 값 셀을 같은 표 블록(연속된 `|` 행)으로 내놨는가
+  표 검출률        로더 출력에서 라벨-값 연결이 살아 있는가 (같은 표 블록 안의 셀, 또는 한 줄에서 `라벨 : 값` / `값 : 라벨` / `값(라벨)`)
   평탄화·정리 정합률  검출된 쌍이 평탄화(step2)와 텍스트 정리(step2b) 뒤에도 `라벨: 값`으로 남는가
   종단 정합률       최종 청크에 `라벨: 값`이 남는가 (재청킹 또는 청크 덤프 기준)
 
@@ -122,7 +122,8 @@ def evaluate_system(system: dict, samples: list[dict], work_dir: Path, tag: str)
         if md_path is None:
             flags, flat_text, doc_chunks = [False] * len(pairs), "", []
         else:
-            flags, _ = M.calculate_table_detection(M.markdown_table_blocks(md_path.read_text(encoding="utf-8")), pairs)
+            md_text = md_path.read_text(encoding="utf-8")
+            flags, _ = M.calculate_table_detection(M.markdown_table_blocks(md_text), pairs, text=md_text)
             entry = flat[str(md_path)]
             flat_text = entry["flattened"]
             key = source_key(smp["source"])

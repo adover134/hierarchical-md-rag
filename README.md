@@ -275,7 +275,7 @@ gitignore됨(`eval_resources/eval_results_*.json`, `eval_resources/eval_report_*
 ### 표 처리 측정 (로더 검출 · 평탄화 분리)
 
 전처리가 표를 제대로 다루는지는 DB·LLM 없이 잴 수 있다. 정답 `라벨: 값` 쌍
-(`experiments/table_samples.yaml`)마다 (1) 로더가 라벨·값을 같은 표로 내놨는가, (2) 평탄화·텍스트 정리 뒤에도
+(`experiments/table_samples.yaml`)마다 (1) 로더 출력에서 라벨-값 연결이 살아 있는가(같은 표 안, 또는 한 줄의 `라벨 : 값`), (2) 평탄화·텍스트 정리 뒤에도
 `라벨: 값`으로 남는가, (3) 최종 청크에 남는가를 단계별로 센다. 브랜치와 무관하게 같은 스크립트를 쓴다:
 
 ```bash
