@@ -57,6 +57,7 @@ def convert_with_new_parser(
     skip_if_exists: bool = True,
     base_url: str | None = None,
     api_key: str | None = None,
+    max_candidates_per_call: int | None = None,
 ) -> Path:
     """파서 skill(`scripts/run_pipeline.py`)로 계층 구조 markdown을 만든다. 결과를 그대로 반환 — 후처리 없음.
 
@@ -87,6 +88,10 @@ def convert_with_new_parser(
             cmd += ["--base-url", base_url]
         if api_key:
             cmd += ["--api-key", api_key]
+        if max_candidates_per_call:
+            # skill 옵션: Pass1b LLM 호출 하나에 넘길 헤더 후보 수. 느린 로컬 환경에서 한 호출이
+            # skill의 호출 제한 시간(300초)을 넘지 않게 줄이는 용도.
+            cmd += ["--max-candidates-per-call", str(max_candidates_per_call)]
         subprocess.run(cmd, check=True)
 
     return out_path
