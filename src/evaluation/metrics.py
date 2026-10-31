@@ -523,11 +523,43 @@ def table_pair_detected(blocks: list[list[list[str]]], label: str, value: str) -
     return False
 
 
+def table_pair_in_text(text: str, label: str, value: str) -> bool:
+    """표가 아닌 텍스트 줄에서 라벨과 값이 바로 이어져 있는지 (줄 단위, 양쪽 순서 인정).
+
+    - 라벨 → 값: `라벨 : 값` (`:` 하나)
+    - 값 → 라벨: `값 : 라벨` 또는 `값(라벨)` — 명시적 구분자가 있을 때만 인정한다.
+    줄마다 따로 정규화해서 보므로 줄 사이는 잇지 않는다. 값→라벨을 구분자 없이 인정하면 평탄화된 행에서
+    "앞 항목의 값"과 "다음 항목의 라벨"이 붙어 엉뚱한 쌍(`259204546부가가치세`)이 맞는 것으로 잡히기 때문이다.
+    콜론이 두 번 끼는 `합계: :, 85,530,000`처럼 짝이 어긋난 줄은 맞지 않는다.
+    """
+    lab, val = normalize_for_match(label), normalize_for_match(value)
+    if not lab or not val:
+        return False
+    el, ev = _re.escape(lab), _re.escape(val)
+    patterns = [
+        _re.compile(el + r"[:：]" + ev),
+        _re.compile(ev + r"[:：]" + el),
+        _re.compile(ev + r"[(（]" + el + r"[)）]"),
+    ]
+    for line in str(text or "").split("\n"):
+        norm = normalize_for_match(line)
+        if any(pat.search(norm) for pat in patterns):
+            return True
+    return False
+
+
 def calculate_table_detection(
-    blocks: list[list[list[str]]], pairs: list[tuple[str, str]]
+    blocks: list[list[list[str]]], pairs: list[tuple[str, str]], text: str | None = None
 ) -> tuple[list[bool], float | None]:
-    """쌍별 검출 여부와 검출률. 쌍이 없으면 비율은 None."""
-    flags = [table_pair_detected(blocks, label, value) for label, value in pairs]
+    """쌍별 검출 여부와 검출률. 쌍이 없으면 비율은 None.
+
+    검출 = 같은 표 블록 안의 셀로 있거나(`table_pair_detected`), `text`가 주어지면 그 텍스트의 한 줄에서
+    라벨과 값이 바로 이어져 있음(`table_pair_in_text`). 로더가 표를 문단 줄로 내놓아도 연결이 살아 있으면 검출이다.
+    """
+    flags = [
+        table_pair_detected(blocks, label, value) or (text is not None and table_pair_in_text(text, label, value))
+        for label, value in pairs
+    ]
     return flags, (sum(flags) / len(flags) if flags else None)
 
 
