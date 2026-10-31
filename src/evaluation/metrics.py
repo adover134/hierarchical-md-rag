@@ -359,3 +359,227 @@ def calculate_avg_score(
             continue
         scores.append(doc.get("score", 0.0))
     return sum(scores) / len(scores) if scores else None
+
+
+# ============================================================================
+# 실험용 지표 — DB/청크 ID와 무관하게 3개 시스템을 같은 잣대로 비교하기 위한 함수들.
+# (청크 ID는 DB마다 달라 청크 단위 Recall은 시스템 간 비교가 안 된다 — 대신 정답에 들어
+#  있는 값(금액·일수·날짜 등)이 검색된 텍스트에 실제로 있는지를 본다.)
+# ============================================================================
+
+import re as _re
+
+_ZERO_WIDTH_RE = _re.compile(r"[​‌‍﻿]")
+_DATE_RE = _re.compile(
+    r"(?<!\d)(\d{4})\s*[.\-/년]\s*(\d{1,2})\s*[.\-/월]\s*(\d{1,2})\s*(?:일|\.)?"
+)
+# 숫자 뒤에 바로 붙는 단위(원/일/%/개월 등). 단위가 없으면 3자리 이상(또는 쉼표 포함)일 때만 핵심값으로 본다.
+_UNIT_PATTERN = r"(?:개월|원|일|%|퍼센트|년|월|시간|시|분|명|개|건|회|차|주|점|배)"
+_NUMBER_RE = _re.compile(
+    rf"(?<![\d,.])(\d{{1,3}}(?:,\d{{3}})+|\d+)(\.\d+)?\s?({_UNIT_PATTERN})?"
+)
+
+
+def normalize_for_match(text: str) -> str:
+    """공백·쉼표·제로폭 문자를 지우고 날짜를 YYYYMMDD 형태로 통일한다."""
+    s = _ZERO_WIDTH_RE.sub("", str(text or ""))
+    s = _DATE_RE.sub(lambda m: f"D{int(m.group(1)):04d}{int(m.group(2)):02d}{int(m.group(3)):02d}", s)
+    return _re.sub(r"[\s,]", "", s)
+
+
+def extract_key_values(expected_answer: str) -> list[str]:
+    """정답 문장에서 검색 텍스트에 그대로 들어 있어야 할 핵심값(숫자+단위, 날짜)을 뽑는다.
+
+    평가셋을 고치지 않고 `expected_answer`에서 결정론적으로 추출한다. 단위 없는 1~2자리
+    숫자는 너무 모호해(번호·항목 수 등) 제외한다. 날짜는 한 토큰으로 취급한다.
+    """
+    text = str(expected_answer or "")
+    values: list[str] = []
+    spans: list[tuple[int, int]] = []
+
+    for m in _DATE_RE.finditer(text):
+        values.append(m.group(0).strip())
+        spans.append(m.span())
+
+    for m in _NUMBER_RE.finditer(text):
+        if any(s <= m.start() < e for s, e in spans):
+            continue
+        integer, frac, unit = m.group(1), m.group(2) or "", m.group(3) or ""
+        digits = integer.replace(",", "")
+        if not unit and len(digits) < 3 and "," not in integer:
+            continue
+        values.append(f"{integer}{frac}{unit}")
+
+    ordered = sorted(
+        zip(values, [text.find(v) for v in values]), key=lambda pair: pair[1]
+    )
+    seen: set[str] = set()
+    result: list[str] = []
+    for value, _ in ordered:
+        if value not in seen:
+            seen.add(value)
+            result.append(value)
+    return result
+
+
+def calculate_key_value_hit_position(
+    retrieved_texts: list[str], key_values: list[str]
+) -> int | None:
+    """모든 핵심값이 상위 r개 청크 텍스트(누적)에 처음 모두 나타나는 최소 r(1-based)."""
+    keys = [normalize_for_match(v) for v in key_values if normalize_for_match(v)]
+    if not keys:
+        return None
+    cumulative = ""
+    for rank, text in enumerate(retrieved_texts, start=1):
+        cumulative += normalize_for_match(text)
+        if all(k in cumulative for k in keys):
+            return rank
+    return None
+
+
+def calculate_context_hit_rate(hit_positions: list[int | None], k: int) -> float | None:
+    """핵심값 적격 문항 중 상위 K 안에서 핵심값이 모두 확보된 비율. 적격 문항이 없으면 None."""
+    if not hit_positions:
+        return None
+    return sum(1 for p in hit_positions if p is not None and p <= k) / len(hit_positions)
+
+
+def calculate_key_value_mrr(hit_positions: list[int | None]) -> float | None:
+    """핵심값이 처음 모두 확보된 순위의 역수 평균. 적격 문항이 없으면 None."""
+    if not hit_positions:
+        return None
+    return sum(1.0 / p if p else 0.0 for p in hit_positions) / len(hit_positions)
+
+
+def _has_section_label(value: object) -> bool:
+    return str(value or "").strip().upper() not in {"", "N/A", "NONE", "NULL"}
+
+
+def calculate_header_inclusion_rate(chunks: list[dict], k: int) -> float | None:
+    """상위 K 청크 중 상위 대분류/중분류(section_level1/2) 메타데이터가 보존된 비율."""
+    top = chunks[:k]
+    if not top:
+        return None
+    kept = sum(
+        1
+        for c in top
+        if _has_section_label(c.get("section_level1")) or _has_section_label(c.get("section_level2"))
+    )
+    return kept / len(top)
+
+
+def table_pair_present(chunk_texts: list[str], label: str, value: str) -> bool:
+    """어느 한 청크 안에 `라벨: 값`이 붙어서(라벨 뒤 곧바로 값) 존재하는지."""
+    pattern = _re.compile(
+        _re.escape(normalize_for_match(label)) + r"[:：]" + _re.escape(normalize_for_match(value))
+    )
+    return any(pattern.search(normalize_for_match(t)) for t in chunk_texts)
+
+
+_PIPE_ROW_RE = _re.compile(r"^\|.+\|$")
+_PIPE_SEP_RE = _re.compile(r"^\|[-:\s|]+\|$")
+
+
+def markdown_table_blocks(text: str) -> list[list[list[str]]]:
+    """Markdown 텍스트에서 표 블록(연속된 `|...|` 행)을 뽑아 `블록 → 행 → 셀` 목록으로 돌려준다.
+
+    평탄화 코드(`table_flattener`)가 표를 찾는 규칙과 같다: 구분선 행은 버리고, 셀의 `<br>`는
+    공백으로, 굵게 표시(`**`)는 지운다. 표가 아닌 줄(평문)은 블록에 들어가지 않는다.
+    """
+    blocks: list[list[list[str]]] = []
+    current: list[list[str]] = []
+    for line in str(text or "").split("\n"):
+        stripped = line.strip()
+        if _PIPE_ROW_RE.match(stripped):
+            if _PIPE_SEP_RE.match(stripped):
+                continue
+            cells = [
+                _re.sub(r"<br\s*/?>", " ", c, flags=_re.IGNORECASE).replace("**", "").strip()
+                for c in stripped.strip("|").split("|")
+            ]
+            current.append(cells)
+        elif current:
+            blocks.append(current)
+            current = []
+    if current:
+        blocks.append(current)
+    return blocks
+
+
+def _cell_matches(cell: str, target: str) -> bool:
+    """셀이 목표 텍스트와 맞는지. 4자 이상이면 포함, 그보다 짧으면(예: 'B', '8') 셀 전체 일치만 인정한다."""
+    c, t = normalize_for_match(cell), normalize_for_match(target)
+    if not t:
+        return False
+    return c == t or (len(t) >= 4 and t in c)
+
+
+def table_pair_detected(blocks: list[list[list[str]]], label: str, value: str) -> bool:
+    """로더가 `라벨`과 `값`을 같은 표 블록 안의 셀로 내놓았는지(평탄화 이전 단계의 표 검출)."""
+    for block in blocks:
+        cells = [c for row in block for c in row]
+        if any(_cell_matches(c, label) for c in cells) and any(_cell_matches(c, value) for c in cells):
+            return True
+    return False
+
+
+def calculate_table_detection(
+    blocks: list[list[list[str]]], pairs: list[tuple[str, str]]
+) -> tuple[list[bool], float | None]:
+    """쌍별 검출 여부와 검출률. 쌍이 없으면 비율은 None."""
+    flags = [table_pair_detected(blocks, label, value) for label, value in pairs]
+    return flags, (sum(flags) / len(flags) if flags else None)
+
+
+def calculate_table_pair_accuracy(
+    chunk_texts: list[str], pairs: list[tuple[str, str]]
+) -> float | None:
+    """정답 `라벨: 값` 쌍 중 청크에 정확히 존재하는 비율. 쌍이 없으면 None."""
+    if not pairs:
+        return None
+    return sum(1 for label, value in pairs if table_pair_present(chunk_texts, label, value)) / len(pairs)
+
+
+_BIGGER_CUE_RE = _re.compile(r"더 ?크|큽니다|큰 |큰$|더 ?많|많습니다|더 ?높|높습니다|가장|최대|최고")
+_SMALLER_CUE_RE = _re.compile(r"더 ?작|작습니다|더 ?적|적습니다|더 ?낮|낮습니다|최소|최저")
+
+
+def judge_numeric_comparison(
+    answer: str,
+    expected_values: list[str],
+    expected_winner: str | None,
+    expected_loser: str | None = None,
+) -> bool:
+    """수치 비교 질의의 답을 문자열로 결정론적으로 판정한다(LLM 미사용).
+
+    1) 기대 값이 모두 답에 들어 있고, 2) `expected_winner`(큰 쪽)가 주어지면 비교 표현이 있는 문장에서
+    승자가 언급돼야 한다. `expected_loser`도 주면 방향까지 본다 — "A가 B보다 크다"류는 승자가 패자보다
+    앞에, "A가 B보다 작다"류는 승자가 패자보다 뒤에 나와야 한다. 패자가 문장에 없으면 승자 언급만 본다.
+    문장 단위 휴리스틱이라 복잡한 서술은 오판할 수 있다는 한계가 있다.
+    """
+    normalized_answer = normalize_for_match(answer)
+    for value in expected_values:
+        if normalize_for_match(value) not in normalized_answer:
+            return False
+    if not expected_winner:
+        return True
+    winner = normalize_for_match(expected_winner)
+    loser = normalize_for_match(expected_loser) if expected_loser else ""
+    for sentence in _re.split(r"(?<=[.!?。])\s+|\n+", str(answer or "")):
+        bigger = bool(_BIGGER_CUE_RE.search(sentence))
+        smaller = bool(_SMALLER_CUE_RE.search(sentence))
+        if not (bigger or smaller):
+            continue
+        norm = normalize_for_match(sentence)
+        w = norm.find(winner)
+        if w < 0:
+            continue
+        l = norm.find(loser) if loser else -1
+        if l < 0:
+            return True
+        if smaller and not bigger:
+            if w > l:
+                return True
+        elif w < l:
+            return True
+    return False

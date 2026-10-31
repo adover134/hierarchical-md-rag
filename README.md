@@ -129,7 +129,7 @@ skill 내부(kordoc 변환, 표 정규화, 헤더 후보 추출, LLM 계층 판�
 `| 추정금액 | 기 초 금 액 | | | 관 급 자 재 | |` 아래에 하위 헤더 행을 데이터처럼 붙인다. 이를 그대로 풀면
 `기 초 금 액: 계, 추정가격, 부가가치세` 줄과 `…259,204,546, 25,920,454…` 값 줄이 따로 나와 라벨과 값의 짝이 끊긴다.
 한계: 3단 이상 헤더, 세로 병합, 위 조건에 맞지 않는 불규칙한 표는 6번의 일반 규칙으로 풀리므로 라벨이 어긋날 수 있다.
-표 처리가 잘 되는지는 로더 검출과 평탄화를 나눠 `scripts/run_experiment.py parsing`(multi-agent 브랜치)으로 잰다.
+표 처리가 잘 되는지는 로더 검출과 평탄화를 나눠 `scripts/eval_parsing.py`로 잰다(아래 "표 처리 측정").
 
 ## DB 구축
 
@@ -271,6 +271,20 @@ gitignore됨(`eval_resources/eval_results_*.json`, `eval_resources/eval_report_*
   세트, 문서 단위+청크 단위(`chunk_uids`) 정답 라벨 포함, 최신 상태에서 8/8 정답
 - `--judge_model`은 반드시 지정할 것 — 기본값(`gpt-5-mini`)은 Groq에 없어서
   판정 자체가 실패한다
+
+### 표 처리 측정 (로더 검출 · 평탄화 분리)
+
+전처리가 표를 제대로 다루는지는 DB·LLM 없이 잴 수 있다. 정답 `라벨: 값` 쌍
+(`experiments/table_samples.yaml`)마다 (1) 로더가 라벨·값을 같은 표로 내놨는가, (2) 평탄화·텍스트 정리 뒤에도
+`라벨: 값`으로 남는가, (3) 최종 청크에 남는가를 단계별로 센다. 브랜치와 무관하게 같은 스크립트를 쓴다:
+
+```bash
+python scripts/eval_parsing.py --project-root . --loader-md-dir output/new_parser_md --rechunk --tag <꼬리표>
+```
+
+`--loader-md-dir`은 파서 skill이 낸 Markdown 폴더, `--rechunk`는 그 Markdown을 이 프로젝트의 평탄화·청킹으로 다시
+처리해 종단 값을 계산한다(DB는 건드리지 않음). 다른 체크아웃(예: 팀 저장소)을 재려면 `--project-root`와
+`--loader-md-glob`, 청크 덤프용 `--chunk-dump`를 쓴다. 결과는 `eval_resources/parsing_runs/parsing_<꼬리표>.{json,md}`.
 
 ## 현재 상태
 
