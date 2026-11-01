@@ -36,6 +36,7 @@ sys.path.insert(0, 'src')
 from src.utils.config import *
 from src.utils.helpers import *
 from src.utils.korean_keywords import stem_words
+from src.utils.org_match import distinctive_token_candidates
 from src.graph.state import QueryIntent, QuestionPlan, EvidenceSpan, AnswerDraft
 from src.retrievers.query_heuristics import (
     has_budget_evidence as retriever_has_budget_evidence,
@@ -12724,6 +12725,25 @@ class RAGChatbotV17:
                 if overlap >= 2 and meaningful_overlap:
                     score = overlap * 100 + len(org_name)
                     candidates.append((score, org_name))
+
+        # 4b) 고유한 기관명 낱말 하나만 겹쳐도 인정한다(`신목중학교`, `전주사랑의집`).
+        # 4)는 겹치는 낱말이 2개 이상이어야 해서, 질문이 기관을 고유명 하나로만 가리키면 후보가 비었다.
+        # 질문 낱말은 기관명 사전을 읽은 Kiwi로 조사·어미를 떼어 비교한다(`신목중학교의` → `신목중학교`).
+        # 앞 단계에서 후보가 하나도 없을 때만 쓴다. 후보가 이미 있는데 적용하면 `마을만들기사업`, `정비관리사업`처럼
+        # 여러 공고가 공유하는 분류어로 엉뚱한 기관이 더 붙는다.
+        if not candidates:
+            try:
+                query_stems = set(stem_words(unicodedata.normalize("NFKC", query.lower()), self._get_kiwi_analyzer()))
+            except Exception:
+                query_stems = set()
+            candidates.extend(
+                distinctive_token_candidates(
+                    normalized_query,
+                    self.vector_store.org_registry.keys(),
+                    self._is_generic_rfp_token,
+                    extra_query_tokens=query_stems,
+                )
+            )
 
         # 4.5) 영문 약어(예: KOICA) 기반 기관 복원
         # "ai", "it", "pc"처럼 2글자짜리 흔한 영문 토큰은 실제 기관 약어가

@@ -31,12 +31,16 @@ def distinctive_token_candidates(
     *,
     max_doc_freq: int = 2,
     min_len: int = 3,
+    extra_query_tokens: Iterable[str] = (),
 ) -> list[tuple[int, str]]:
-    """(점수, 기관명) 목록. 점수는 기존 토큰 겹침 규칙과 같은 형태(`겹친 단어 수 * 100 + 기관명 길이`)다."""
+    """(점수, 기관명) 목록. 점수는 기존 토큰 겹침 규칙과 같은 형태(`겹친 단어 수 * 100 + 기관명 길이`)다.
+
+    `extra_query_tokens`는 형태소 분석으로 조사를 뗀 질문 낱말이다(`신목중학교의` → `신목중학교`). 질문의 원래 토큰과 합쳐서 본다.
+    """
     orgs = list(org_names)
     org_tokens = {org: _tokens(org) for org in orgs}
     doc_freq = Counter(token for toks in org_tokens.values() for token in toks)
-    query_tokens = _tokens(query)
+    query_tokens = _tokens(query) | _tokens(" ".join(extra_query_tokens))
 
     def eligible(token: str) -> bool:
         return (

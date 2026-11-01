@@ -1,0 +1,249 @@
+{
+ "cur_db__forced__n4": {
+  "answer": "동복 납품기한은 2027년 2월 22일(월), 하복 납품기한은 2027년 5월 10일(월)입니다.",
+  "expected": "동복은 2027년 2월 22일(월), 하복은 2027년 5월 10일(월)까지입니다.",
+  "csv_short_circuit": false,
+  "latencies": {
+   "analyze_query": 31.7584,
+   "retrieve": 2.0539,
+   "extract_evidence": 0.0366,
+   "generate": 52.0528
+  },
+  "retrieved": [
+   [
+    "ec6ddda0b02b1c97_49",
+    "2027년도 신목중학교 교복구매_서울특별시강서교육청 신"
+   ],
+   [
+    "ec6ddda0b02b1c97_48",
+    "2027년도 신목중학교 교복구매_서울특별시강서교육청 신"
+   ],
+   [
+    "ec6ddda0b02b1c97_2",
+    "2027년도 신목중학교 교복구매_서울특별시강서교육청 신"
+   ],
+   [
+    "ec6ddda0b02b1c97_1",
+    "2027년도 신목중학교 교복구매_서울특별시강서교육청 신"
+   ],
+   [
+    "ec6ddda0b02b1c97_50",
+    "2027년도 신목중학교 교복구매_서울특별시강서교육청 신"
+   ]
+  ],
+  "facts": [
+   "2027년2월22일",
+   "2027년5월10일"
+  ],
+  "facts_in_raw_top5": 1.0,
+  "facts_in_context": 1.0,
+  "answer_ok": true,
+  "cause": "정상",
+  "generation_reasoning": "We need to answer: \"2027학년도 신목중학교 교복(동복 및 하복) 구매의 납품기한은 언제까지인가요?\" Use the extracted evidence. The evidence says: 동복 납품기한: 2027-02-22, 하복 납품기한: 2027-05-10. Also mention that school circumstances may adjust. Provide answer in Korean, concise, professional. Provide bullet points maybe. The instruction: \"첫 문장에서 질문에 직접 답한다.\" So first sentence: \"2027학년도 신목중학교 교복(동복 및 하복) 구매의 납품기한은 동복은 2027년 2월 22일(월), 하복은 2027년 5월 10일(월)까지입니다.\" Then bullet points: maybe mention that dates are subject to change due to school circumstances. Provide bullet points 2-4. No extra labels. No \"결론:\" etc. Also no mention of \"문서에서 확인되지 않습니다.\" because all info present. So final answer.",
+  "recording_errors": 0,
+  "calls": [
+   {
+    "index": 0,
+    "prompt_chars": 357,
+    "prompt_head": "너는 RFP 질의 의도 분류기다. 질문의 의미만 보고 시각 자료 첨부 필요 여부를 판단한다. 사용자 질문이 '텍스트 설명'만 원하는지, 아니면 '이미지/표 같은 시각 자료 첨부'를 함께 기대하는지를 분류하세요. - 질문이 '있어?', '보여줘', '자료', '근거 화면', '원본 그림/",
+    "content": "{\"visual_needed\": false, \"confidence\": 0.99, \"reason\": \"단순 납품기한 확인 요청\"}",
+    "reasoning": "We need to determine if the user wants visual materials attached. The question: \"2027학년도 신목중학교 교복(동복 및 하복) 구매의 납품기한은 언제까지인가요?\" They are asking for a deadline. It's a simple factual question. According to instructions: \"단순 사실 질의(금액/기한/요건 확인)면 false입니다.\" So visual_needed false. Confidence high. Provide JSON."
+   },
+   {
+    "index": 1,
+    "prompt_chars": 4713,
+    "prompt_head": "당신은 입찰메이트 엔지니어링 팀의 시니어 RFP 분석가입니다. 목표는 사용자의 질문에 대해 문서 근거 기반으로 정확하고 실무적으로 답하는 것입니다.  ## 절대 원칙 1. 질문에 먼저 직접 답한다. 2. 근거 없는 추정은 금지한다. 3. 검색된 문서 컨텍스트에 없는 사실은 답하지 않는다",
+    "content": "2027학년도 신목중학교 교복의 납품기한은 동복은 2027년 2월 22일(월), 하복은 2027년 5월 10일(월)까지입니다.  \n\n- **동복 납품기한**: 2027‑02‑22  \n- **하복 납품기한**: 2027‑05‑10  \n- **변동 가능성**: 학교 사정에 따라 일정이 조정될 수 있음.",
+    "reasoning": "We need to answer: \"2027학년도 신목중학교 교복(동복 및 하복) 구매의 납품기한은 언제까지인가요?\" Provide answer: The delivery deadline: 동복 2027. 2. 22.(월) / 하복 2027. 5. 10(월). Provide bullet points. Also mention that it's subject to change. Provide 1 sentence conclusion, bullet points. No mention of \"출처\" etc. According to instructions: output format: 1) 핵심 결론 1문장 2) 질문 유형에 맞는 가이드형 핵심 포인트(불릿 2~4개, 키워드 우선) 3) 문서에서 확인되지 않는 경우 \"문서에서 확인되지 않습니다.\" Only if missing. Here we have info. So no missing. Provide answer accordingly."
+   },
+   {
+    "index": 2,
+    "prompt_chars": 5383,
+    "prompt_head": "당신은 입찰메이트 엔지니어링 팀의 시니어 RFP 분석가입니다. 목표는 사용자의 질문에 대해 문서 근거 기반으로 정확하고 실무적으로 답하는 것입니다.  ## 절대 원칙 1. 질문에 먼저 직접 답한다. 2. 근거 없는 추정은 금지한다. 3. 검색된 문서 컨텍스트에 없는 사실은 답하지 않는다",
+    "content": "2027학년도 신목중학교 교복(동복 및 하복) 구매의 납품기한은 동복은 2027년 2월 22일(월), 하복은 2027년 5월 10일(월)까지입니다.  \n\n- 동복 납품기한: 2027‑02‑22  \n- 하복 납품기한: 2027‑05‑10  \n- 학교 사정에 따라 일정이 조정될 수 있음.",
+    "reasoning": "We need to answer: \"2027학년도 신목중학교 교복(동복 및 하복) 구매의 납품기한은 언제까지인가요?\" Use the extracted evidence. The evidence says: 동복 납품기한: 2027-02-22, 하복 납품기한: 2027-05-10. Also mention that school circumstances may adjust. Provide answer in Korean, concise, professional. Provide bullet points maybe. The instruction: \"첫 문장에서 질문에 직접 답한다.\" So first sentence: \"2027학년도 신목중학교 교복(동복 및 하복) 구매의 납품기한은 동복은 2027년 2월 22일(월), 하복은 2027년 5월 10일(월)까지입니다.\" Then bullet points: maybe mention that dates are subject to change due to school circumstances. Provide bullet points 2-4. No extra labels. No \"결론:\" etc. Also no mention of \"문서에서 확인되지 않습니다.\" because all info present. So final answer."
+   },
+   {
+    "index": 3,
+    "prompt_chars": 835,
+    "prompt_head": "너는 문서 기반 QA 응답을 최종 사용자용으로 다듬는 편집자다. 사실을 바꾸지 말고 중복/장황함만 줄여라. 아래 '기존 답변'을 사용자에게 바로 전달할 수 있게 간결하고 자연스러운 한국어로 다듬어라.  [필수 규칙] 1) 사실/수치/단위/날짜/주체/출처를 절대 변경하거나 새로 만들지 말",
+    "content": "동복 납품기한은 2027년 2월 22일(월), 하복 납품기한은 2027년 5월 10일(월)입니다.",
+    "reasoning": "We need to produce concise answer: \"2027학년도 신목중학교 교복(동복 및 하복) 구매의 납품기한은 동복은 2027년 2월 22일(월), 하복은 2027년 5월 10일(월)까지입니다.\" But we need to remove redundancy. The answer should be 1-2 sentences. The first sentence should contain the key info. We can say: \"동복 납품기한은 2027년 2월 22일(월), 하복 납품기한은 2027년 5월 10일(월)입니다.\" That is concise. Ensure no labels. No extra. No mention of \"동복은\" repeated. That is fine."
+   }
+  ],
+  "context_chars": 5383
+ },
+ "cur_db__forced__m11": {
+  "answer": "전주사랑의집 남자생활실 타일공사의 기초금액은 50,000,000원입니다.",
+  "expected": "기초금액은 50,000,000원(추정가격 45,454,545원, 부가세 4,545,455원)입니다.",
+  "csv_short_circuit": false,
+  "latencies": {
+   "analyze_query": 6.4901,
+   "retrieve": 0.6821,
+   "extract_evidence": 0.0345,
+   "generate": 55.2962
+  },
+  "retrieved": [
+   [
+    "bd5032e6600e13ff_2",
+    "전주사랑의집 시설공사 소액수의 견적 제출 공고_전주사랑"
+   ],
+   [
+    "bd5032e6600e13ff_1",
+    "전주사랑의집 시설공사 소액수의 견적 제출 공고_전주사랑"
+   ],
+   [
+    "bd5032e6600e13ff_10",
+    "전주사랑의집 시설공사 소액수의 견적 제출 공고_전주사랑"
+   ],
+   [
+    "bd5032e6600e13ff_4",
+    "전주사랑의집 시설공사 소액수의 견적 제출 공고_전주사랑"
+   ],
+   [
+    "bd5032e6600e13ff_8",
+    "전주사랑의집 시설공사 소액수의 견적 제출 공고_전주사랑"
+   ]
+  ],
+  "facts": [
+   "50000000"
+  ],
+  "facts_in_raw_top5": 1.0,
+  "facts_in_context": 1.0,
+  "answer_ok": true,
+  "cause": "정상",
+  "generation_reasoning": "We need to answer: \"전주사랑의집 남자생활실 타일공사의 기초금액은 얼마인가요?\" The extracted evidence says: \"기초금액: 50,000,000\". So answer: 50,000,000. Provide bullet points maybe. According to guidelines: first sentence answer. Then bullet points 2-4. No extra. So:\n\n\"전주사랑의집 남자생활실 타일공사의 기초금액은 50,000,000원입니다.\"\n\nThen bullets: maybe mention source, that it's from 공사금액 section, that it's the same as 추정금액, etc. But keep concise. No \"결론:\" etc. Also no mention of source. Just answer.",
+  "recording_errors": 0,
+  "calls": [
+   {
+    "index": 0,
+    "prompt_chars": 344,
+    "prompt_head": "너는 RFP 질의 의도 분류기다. 질문의 의미만 보고 시각 자료 첨부 필요 여부를 판단한다. 사용자 질문이 '텍스트 설명'만 원하는지, 아니면 '이미지/표 같은 시각 자료 첨부'를 함께 기대하는지를 분류하세요. - 질문이 '있어?', '보여줘', '자료', '근거 화면', '원본 그림/",
+    "content": "{\"visual_needed\": false, \"confidence\": 0.99, \"reason\": \"단순 금액 문의로 시각 자료 필요 없음\"}",
+    "reasoning": "We need to determine if the user wants visual materials attached. The question: \"전주사랑의집 남자생활실 타일공사의 기초금액은 얼마인가요?\" They ask for the basic amount of tile work. It's a simple factual question: \"What is the basic amount?\" They want a number. No mention of wanting a visual. So visual_needed: false. Confidence high. Reason: simple factual. Provide JSON."
+   },
+   {
+    "index": 1,
+    "prompt_chars": 5462,
+    "prompt_head": "당신은 입찰메이트 엔지니어링 팀의 시니어 RFP 분석가입니다. 목표는 사용자의 질문에 대해 문서 근거 기반으로 정확하고 실무적으로 답하는 것입니다.  ## 절대 원칙 1. 질문에 먼저 직접 답한다. 2. 근거 없는 추정은 금지한다. 3. 검색된 문서 컨텍스트에 없는 사실은 답하지 않는다",
+    "content": "근거: 기초금액: 50,000,000  \n출처: 전주사랑의집 | 전주사랑의집 시설공사 소액수의 견적 제출 공고 | p.1",
+    "reasoning": "We need to answer: \"전주사랑의집 남자생활실 타일공사의 기초금액은 얼마인가요?\" The user asks for the basic amount (기초금액). The search context shows a document with \"추정금액: 50,000,000, 기초금액: 50,000,000, 추정가격: 45,454,545, 부가세: 4,545,455, 도급자 설치 관급자재대: 0\". So the answer: 50,000,000. According to instructions: first answer directly. Then bullet points. Then if missing, mention. So we answer: 50,000,000. Then bullet points: 기초금액 50,000,000, 추정금액 50,000,000, 부가세 4,545,455. Provide source. The source: \"전주사랑의집 시설공사 소액수의 견적 제출 공고 - 전주사랑의집 p.1\". So we need to output in the required format: first line: core conclusion. Then bullet points. Then if missing, mention. But we have the answer. So no missing. Provide source. The format: \"근거: ... 출처: 기관명 | source | page(있으면)\". But the instruction says output format: - 근거: ... 출처: 기관명 | source | page(있으면). But earlier instruction says: \"1) 핵심 결론 1문장 2) 질문 유형에 맞는 가이드형 핵심 포인트(불릿 2~4개, 키워드 우선) 3) 질문의 필수 항목이 실제로 누락된 경우에만 문서에서 확인되지 않습니다.\" So we need to output that. But the final instruction says \"출력 형식(엄수) - 근거: ... 출처: 기관명 | source | page(있으면)\". There's a conflict. The last instruction overrides? The system says \"## 출력 형식(엄수)\" which is the final instruction. So we must output in that format. So we need to output:\n\n근거: 기초금액: 50,000,000\n출처: 전주사랑의집 | 전주사랑의집 시설공사 소액수의 견적 제출 공고 | p.1\n\nBut the instruction says \"근거: ... 출처: 기관명 | source | page(있으면)\". So we need to list up to 7. But we only have one relevant. So we output that. The user asked for the amount. So we answer with that. No missing. So final."
+   },
+   {
+    "index": 2,
+    "prompt_chars": 6032,
+    "prompt_head": "당신은 입찰메이트 엔지니어링 팀의 시니어 RFP 분석가입니다. 목표는 사용자의 질문에 대해 문서 근거 기반으로 정확하고 실무적으로 답하는 것입니다.  ## 절대 원칙 1. 질문에 먼저 직접 답한다. 2. 근거 없는 추정은 금지한다. 3. 검색된 문서 컨텍스트에 없는 사실은 답하지 않는다",
+    "content": "전주사랑의집 남자생활실 타일공사의 기초금액은 50,000,000원입니다.  \n\n- 공사금액 항목에 명시된 기초금액과 추정금액이 동일합니다.  \n- 해당 금액은 전주사랑의집 시설공사 소액수 견적 제출 공고 p.1에 기재되어 있습니다.  \n- 기초금액은 계약 체결 시 낙찰금액에 부가가치세를 제외한 금액으로 적용됩니다.",
+    "reasoning": "We need to answer: \"전주사랑의집 남자생활실 타일공사의 기초금액은 얼마인가요?\" The extracted evidence says: \"기초금액: 50,000,000\". So answer: 50,000,000. Provide bullet points maybe. According to guidelines: first sentence answer. Then bullet points 2-4. No extra. So:\n\n\"전주사랑의집 남자생활실 타일공사의 기초금액은 50,000,000원입니다.\"\n\nThen bullets: maybe mention source, that it's from 공사금액 section, that it's the same as 추정금액, etc. But keep concise. No \"결론:\" etc. Also no mention of source. Just answer."
+   },
+   {
+    "index": 3,
+    "prompt_chars": 808,
+    "prompt_head": "너는 문서 기반 QA 응답을 최종 사용자용으로 다듬는 편집자다. 사실을 바꾸지 말고 중복/장황함만 줄여라. 아래 '기존 답변'을 사용자에게 바로 전달할 수 있게 간결하고 자연스러운 한국어로 다듬어라.  [필수 규칙] 1) 사실/수치/단위/날짜/주체/출처를 절대 변경하거나 새로 만들지 말",
+    "content": "전주사랑의집 남자생활실 타일공사의 기초금액은 50,000,000원입니다.",
+    "reasoning": "We need to produce concise answer: \"전주사랑의집 남자생활실 타일공사의 기초금액은 50,000,000원입니다.\" That's it. No labels. Ensure no extra."
+   }
+  ],
+  "context_chars": 6032
+ },
+ "cur_db__forced__n13": {
+  "answer": "문서에서 확인되지 않습니다.",
+  "expected": "착공일로부터 120일입니다.",
+  "csv_short_circuit": false,
+  "latencies": {
+   "analyze_query": 14.4813,
+   "retrieve": 0.1285,
+   "extract_evidence": 0.0481,
+   "generate": 32.4568
+  },
+  "retrieved": [
+   [
+    "ee6136e36f340f32_2",
+    "용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 "
+   ],
+   [
+    "ee6136e36f340f32_0",
+    "용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 "
+   ],
+   [
+    "ee6136e36f340f32_3",
+    "용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 "
+   ],
+   [
+    "ee6136e36f340f32_8",
+    "용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 "
+   ],
+   [
+    "ee6136e36f340f32_11",
+    "용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 "
+   ]
+  ],
+  "facts": [
+   "120일"
+  ],
+  "facts_in_raw_top5": 0.0,
+  "facts_in_context": 0.0,
+  "answer_ok": false,
+  "cause": "검색 실패(상위 5개 원문에 정답 없음)",
+  "generation_reasoning": "We need to answer: \"용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)의 공사기간은 며칠인가요?\" We have \"추려진 근거: 관련 근거 없음\". So no document shows the duration. According to instructions, if missing, we say \"문서에서 확인되지 않습니다.\" The answer should be short: \"문서에서 확인되지 않습니다.\" No other content.",
+  "recording_errors": 0,
+  "calls": [
+   {
+    "index": 0,
+    "prompt_chars": 363,
+    "prompt_head": "너는 RFP 질의 의도 분류기다. 질문의 의미만 보고 시각 자료 첨부 필요 여부를 판단한다. 사용자 질문이 '텍스트 설명'만 원하는지, 아니면 '이미지/표 같은 시각 자료 첨부'를 함께 기대하는지를 분류하세요. - 질문이 '있어?', '보여줘', '자료', '근거 화면', '원본 그림/",
+    "content": "{\"visual_needed\": false, \"confidence\": 0.99, \"reason\": \"단순 공사기간을 묻는 사실 질의로 시각 자료 필요 없음\"}",
+    "reasoning": "We need to determine if the user wants visual materials attached. The question: \"용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)의 공사기간은 며칠인가요?\" They ask for the duration of the construction. It's a simple factual question: \"How many days is the construction period?\" They want a number. No visual. So visual_needed: false. Confidence high. Provide JSON."
+   },
+   {
+    "index": 1,
+    "prompt_chars": 3660,
+    "prompt_head": "당신은 입찰메이트 엔지니어링 팀의 시니어 RFP 분석가입니다. 목표는 사용자의 질문에 대해 문서 근거 기반으로 정확하고 실무적으로 답하는 것입니다.  ## 절대 원칙 1. 질문에 먼저 직접 답한다. 2. 근거 없는 추정은 금지한다. 3. 검색된 문서 컨텍스트에 없는 사실은 답하지 않는다",
+    "content": "근거: 관련 근거 없음  \n출처: 충청북도 영동군 공고 문서 (제공된 내용)",
+    "reasoning": "We need to answer: \"용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)의 공사기간은 며칠인가요?\" We must find the duration in days. Search the provided RFP context. The provided text includes sections but not the duration. We need to find the duration. The RFP likely contains a schedule. But the provided excerpt doesn't show. We need to search within the RFP. The user provided only a snippet. We need to find the duration. If not present, answer \"관련 근거 없음\". But we must check if any part mentions \"공사기간\" or \"기간\" or \"공사기간은\". The snippet includes \"공사 소액수의 견적제출 안내 공고\" etc. No mention of duration. So likely not present. We should answer \"관련 근거 없음\". But we need to follow the instruction: \"문서에서 확인되지 않습니다.\" if missing. The output format: \"근거: ... 출처: ...\". If no evidence, output \"관련 근거 없음\". So we output that."
+   },
+   {
+    "index": 2,
+    "prompt_chars": 4205,
+    "prompt_head": "당신은 입찰메이트 엔지니어링 팀의 시니어 RFP 분석가입니다. 목표는 사용자의 질문에 대해 문서 근거 기반으로 정확하고 실무적으로 답하는 것입니다.  ## 절대 원칙 1. 질문에 먼저 직접 답한다. 2. 근거 없는 추정은 금지한다. 3. 검색된 문서 컨텍스트에 없는 사실은 답하지 않는다",
+    "content": "문서에서 확인되지 않습니다.",
+    "reasoning": "We need to answer: \"용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)의 공사기간은 며칠인가요?\" We have \"추려진 근거: 관련 근거 없음\". So no document shows the duration. According to instructions, if missing, we say \"문서에서 확인되지 않습니다.\" The answer should be short: \"문서에서 확인되지 않습니다.\" No other content."
+   },
+   {
+    "index": 3,
+    "prompt_chars": 754,
+    "prompt_head": "너는 문서 기반 QA 응답을 최종 사용자용으로 다듬는 편집자다. 사실을 바꾸지 말고 중복/장황함만 줄여라. 아래 '기존 답변'을 사용자에게 바로 전달할 수 있게 간결하고 자연스러운 한국어로 다듬어라.  [필수 규칙] 1) 사실/수치/단위/날짜/주체/출처를 절대 변경하거나 새로 만들지 말",
+    "content": "문서에서 확인되지 않습니다.",
+    "reasoning": "We need to produce a concise answer. The question: \"용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)의 공사기간은 며칠인가요?\" The existing answer says \"문서에서 확인되지 않습니다.\" According to rule 7, we should keep that phrase only if the existing answer had that phrase. It does. So we keep it. But we need to produce a concise answer: \"문서에서 확인되지 않습니다.\" That's it. Ensure no labels."
+   }
+  ],
+  "context_chars": 4205,
+  "block_judgments": [
+   {
+    "block": 1,
+    "preview": "당신은 입찰메이트 엔지니어링 팀의 시니어 RFP 분석가입니다. 목표는 사용자의 질문에 대해 문서 근거 기반으로 정확하고 실무적으로 답하는 것입니다.  ## 절대 ",
+    "answer": "{\"contains_answer\": false, \"quote\": \"\", \"why\": \"블록에 공사기간에 관한 내용이 없습니다.\"}"
+   },
+   {
+    "block": 2,
+    "preview": "[용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)[민간입찰 대행] - 용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)[민간입찰",
+    "answer": "{\"contains_answer\": false, \"quote\": \"\", \"why\": \"블록에 공사기간(착공일로부터 120일)에 대한 언급이 없습니다.\"}"
+   },
+   {
+    "block": 3,
+    "preview": "[용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)[민간입찰 대행] - 용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)[민간입찰",
+    "answer": "{\"contains_answer\": false, \"quote\": \"\", \"why\": \"문서에 공사기간이 언급되지 않음\"}"
+   },
+   {
+    "block": 4,
+    "preview": "[용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)[민간입찰 대행] - 용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)[민간입찰",
+    "answer": "{\"contains_answer\": false, \"quote\": \"\", \"why\": \"블록에 공사기간(120일)에 대한 언급이 없습니다.\"}"
+   },
+   {
+    "block": 5,
+    "preview": "[용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)[민간입찰 대행] - 용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)[민간입찰",
+    "answer": "{\"contains_answer\": false, \"quote\": \"\", \"why\": \"문서에 공사기간(120일) 언급이 없습니다.\"}"
+   }
+  ]
+ }
+}

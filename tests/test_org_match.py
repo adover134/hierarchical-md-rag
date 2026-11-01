@@ -74,3 +74,17 @@ class TestScoring:
     def test_returns_score_and_org_pairs(self):
         (score, org), = distinctive_token_candidates("신목중학교 납품", ORGS, is_generic)
         assert isinstance(score, int) and score > 0 and org == "2027년도 신목중학교 교복구매"
+
+
+class TestExtraQueryTokens:
+    """Kiwi가 조사를 뗀 질문 낱말을 넘기면, 조사가 붙은 질문에서도 기관이 잡힌다."""
+
+    def test_particle_attached_name_is_found_through_extra_tokens(self):
+        q = "신목중학교의 납품기한은 언제인가요?"
+        assert names(q) == []
+        got = [o for _s, o in distinctive_token_candidates(q, ORGS, is_generic, extra_query_tokens={"신목중학교"})]
+        assert got == ["2027년도 신목중학교 교복구매"]
+
+    def test_extra_tokens_obey_the_same_filters(self):
+        got = distinctive_token_candidates("교복 구매의 기한", ORGS, is_generic, extra_query_tokens={"교복", "구매", "2027학년도"})
+        assert got == []
