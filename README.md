@@ -185,8 +185,8 @@ python scripts/index_pdf_originals.py --input <PDF_폴더>            # 팀 원�
 ```
 
 두 스크립트 다 `data_index/`(gitignore됨)에 동일한 Chroma 컬렉션으로 upsert한다.
-임베딩은 로컬 모델(`jhgan/ko-sroberta-multitask`, dense) + BM25(sparse, Kiwi
-형태소 분석 기반)를 함께 쓰는 하이브리드 인덱스라 별도 API 키가 필요 없다.
+임베딩은 로컬 모델(`jhgan/ko-sroberta-multitask`, dense)을 쓰고, 색인에는 Kiwi 형태소 분석 기반 BM25 희소 벡터도 저장하지만
+검색 때는 읽지 않는다. 검색은 밀집 검색 상위 후보를 낱말 겹침 비율(어휘 점수)과 섞어 다시 점수를 매기는 방식이다. 별도 API 키가 필요 없다.
 
 HWP/HWPX 변환은 [파서 skill](https://github.com/adover134/korean_official_document_parser_skill)의
 `scripts/run_pipeline.py`를 호출한다 — 이 저장소와 같은 폴더에 `korean_official_document_parser_skill`로
