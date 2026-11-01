@@ -35,6 +35,7 @@ _load_runtime_env()
 sys.path.insert(0, 'src')
 from src.utils.config import *
 from src.utils.helpers import *
+from src.utils.korean_keywords import stem_words
 from src.graph.state import QueryIntent, QuestionPlan, EvidenceSpan, AnswerDraft
 from src.retrievers.query_heuristics import (
     has_budget_evidence as retriever_has_budget_evidence,
@@ -8250,9 +8251,9 @@ class RAGChatbotV17:
         """build_db.py의 BM25 인덱싱과 동일한 Kiwi 형태소 분석기를 지연 초기화해 재사용한다."""
         analyzer = getattr(self, "_kiwi_analyzer_cache", None)
         if analyzer is None:
-            from kiwipiepy import Kiwi
+            from src.utils.org_dictionary import new_kiwi
 
-            analyzer = Kiwi()
+            analyzer = new_kiwi()  # 기관명 사전(DB 구축 때 엑셀로 생성)을 불러온다
             self._kiwi_analyzer_cache = analyzer
         return analyzer
 
@@ -8272,7 +8273,11 @@ class RAGChatbotV17:
 
     def _extract_query_keywords(self, query: str, max_keywords: int = 10) -> list[str]:
         raw = unicodedata.normalize("NFKC", query.lower())
-        tokens = re.findall(r"[0-9a-zA-Z가-힣]{2,}", raw)
+        # 형태소 분석으로 조사·어미를 뗀 낱말을 먼저 쓰고, 분석기를 못 쓸 때만 어미가 붙은 원형 토큰을 쓴다.
+        try:
+            tokens = stem_words(raw, self._get_kiwi_analyzer())
+        except Exception:
+            tokens = re.findall(r"[0-9a-zA-Z가-힣]{2,}", raw)
         for noun in self._extract_kiwi_noun_tokens(query):
             if noun not in tokens:
                 tokens.append(noun)

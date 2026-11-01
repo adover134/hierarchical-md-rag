@@ -28,7 +28,14 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--input", "-i", required=True, help="PDF 원본 폴더")
     ap.add_argument("--limit", type=int)
+    ap.add_argument("--bid-list-xlsx", help="입찰공고목록 엑셀. 기관명을 Kiwi 사용자 사전으로 등록한다(기본: data_index/입찰공고목록*.xlsx)")
     args = ap.parse_args()
+
+    # build_db를 불러오기 전에 사전을 만들어야 BM25 명사 추출이 기관명을 한 덩어리로 본다
+    from src.utils.org_dictionary import refresh_dictionary
+
+    org_words = refresh_dictionary(args.bid_list_xlsx)
+    print(f"기관명 사전: {len(org_words)}개 낱말" if org_words else "기관명 사전: 엑셀이 없어 만들지 않음")
 
     from src.utils.config import PROJECT_ROOT
 

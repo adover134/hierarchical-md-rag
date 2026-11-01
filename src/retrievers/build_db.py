@@ -16,6 +16,7 @@ from chromadb.utils import embedding_functions
 from chromadb.utils.embedding_functions import ChromaBm25EmbeddingFunction
 from typing import Any, List, Dict, Tuple, Optional, cast
 from src.utils.config import PROJECT_ROOT, CHROMA_PATH, CHUNK_DIR, EMBEDDING_MODEL
+from src.utils.org_dictionary import new_kiwi
 # 필수 라이브러리 체크
 try:
     from kiwipiepy import Kiwi
@@ -26,7 +27,7 @@ except ImportError:
 # 1. 환경 설정 및 초기화
 # ---------------------------------------------------------------------------
 os.makedirs(CHROMA_PATH, exist_ok=True)
-_kiwi = Kiwi()
+_kiwi = new_kiwi()  # 기관명 사전(data_index/org_dictionary.txt)을 불러온 Kiwi — 질의 처리와 같은 방식으로 기관명을 한 덩어리로 본다
 client = chromadb.PersistentClient(path=str(CHROMA_PATH))
 
 # [Dense] SRoBERTa 임베딩

@@ -6,7 +6,7 @@
 
   facts_in_raw_top5   검색된 상위 5개 청크 원문에 정답 핵심 수치가 있는가
   facts_in_context    생성 호출에 실제로 들어간 컨텍스트(청크당 700자 발췌)에 있는가
-  answer_ok           답변에 정답 핵심 수치가 있는가(휴리스틱)
+  answer_ok           답변에 정답의 '주된 값'(괄호 안 내역 제외)이 모두 있는가(휴리스틱)
   cause               검색 실패 / 컨텍스트에서 잘림 / 컨텍스트에 있는데 모델이 못 찾음 / 정상
 
 실패한 문항은 컨텍스트 블록마다 "이 블록에 답이 있는가"를 모델에 따로 묻는다(사후 진단, 답변 경로와 무관).
@@ -22,6 +22,7 @@ import argparse
 import importlib.util
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -106,10 +107,23 @@ def generation_call(rec: dict) -> dict | None:
     return max(calls, key=lambda c: len(prompt_text(c)), default=None)
 
 
-def analyse(rec: dict, expected: str, chunk_text: dict[str, str]) -> dict:
-    from build_qrels import key_facts, norm
+_PAREN = re.compile(r"[(（][^)）]*[)）]")
 
-    facts = key_facts(expected)
+
+def primary_facts(expected: str) -> list[str]:
+    """정답 문장에서 '주된 값'. 괄호 안의 내역·부가 값(추정가격, 동복·하복 금액 등)은 뺀다.
+
+    괄호를 빼면 값이 하나도 남지 않을 때만 괄호 안 값까지 쓴다.
+    """
+    from build_qrels import key_facts
+
+    return key_facts(_PAREN.sub("", expected)) or key_facts(expected)
+
+
+def analyse(rec: dict, expected: str, chunk_text: dict[str, str]) -> dict:
+    from build_qrels import norm
+
+    facts = primary_facts(expected)
     gen = generation_call(rec)
     prompt = prompt_text(gen) if gen else ""
     top5 = (rec.get("retrieved_docs") or [])[:5]
@@ -119,7 +133,7 @@ def analyse(rec: dict, expected: str, chunk_text: dict[str, str]) -> dict:
     def share(text: str) -> float:
         return round(sum(f in text for f in facts) / len(facts), 2) if facts else 0.0
 
-    rec_out = {"facts": facts, "facts_in_raw_top5": share(raw), "facts_in_context": share(ctx), "answer_ok": share(ans) >= 0.5}
+    rec_out = {"facts": facts, "facts_in_raw_top5": share(raw), "facts_in_context": share(ctx), "answer_ok": share(ans) == 1.0}
     if any(c.get("error") for c in rec.get("llm_calls", [])):
         rec_out["cause"] = "기록 실패(원인 판정 불가)"
     elif rec_out["answer_ok"]:
@@ -181,6 +195,8 @@ def main() -> None:
     ap.add_argument("--llm-url", default="http://localhost:11434/v1")
     ap.add_argument("--model", default="gpt-oss:20b")
     ap.add_argument("--no-block-judge", action="store_true")
+    ap.add_argument("--reanalyse", action="store_true",
+                    help="저장된 `<이름>__<조건>.json`을 다시 판정만 한다(LLM·검색 실행 없음). 결과는 diagnosis_primary.json")
     a = ap.parse_args()
 
     out_dir = Path(a.out_dir).resolve()  # 작업 트리에서 실행되는 하위 프로세스가 같은 위치를 보도록 절대 경로로
@@ -202,19 +218,20 @@ def main() -> None:
             if cond == "forced":
                 env["HWP_RAG_FORCE_RETRIEVAL"] = "1"
             out = out_dir / f"{tname}__{cond}.json"
-            subprocess.run([sys.executable, str(Path(__file__).resolve()), "_run", "--project-root", root,
-                            "--questions", str(qfile), "--out", str(out)], cwd=root, env=env, check=True)
+            if not a.reanalyse:
+                subprocess.run([sys.executable, str(Path(__file__).resolve()), "_run", "--project-root", root,
+                                "--questions", str(qfile), "--out", str(out)], cwd=root, env=env, check=True)
             recs = json.loads(out.read_text(encoding="utf-8"))
             for rec in recs:
                 expected = items[rec["id"]]["expected_answer"]
                 diag = analyse(rec, expected, chunks)
-                if not diag["answer_ok"] and not a.no_block_judge:
+                if not diag["answer_ok"] and not a.no_block_judge and not a.reanalyse:
                     diag["block_judgments"] = block_judgments(rec, expected, a.llm_url, a.model)
                 report[f"{tname}__{cond}__{rec['id']}"] = {
                     "answer": rec.get("answer", "")[:200], "expected": expected, "csv_short_circuit": rec.get("csv_short_circuit"),
                     "latencies": rec.get("latencies"), "retrieved": [(d.get("chunk_id"), (d.get("source") or "")[:30]) for d in (rec.get("retrieved_docs") or [])[:5]],
                     **diag}
-            (out_dir / "diagnosis.json").write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
+            (out_dir / ("diagnosis_primary.json" if a.reanalyse else "diagnosis.json")).write_text(json.dumps(report, ensure_ascii=False, indent=1), encoding="utf-8")
     print(json.dumps({k: {x: v[x] for x in ("answer_ok", "cause", "facts_in_raw_top5", "facts_in_context")} for k, v in report.items()},
                      ensure_ascii=False, indent=1))
 
