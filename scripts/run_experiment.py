@@ -353,7 +353,6 @@ def _chunk_lookup(chunks: list[dict]) -> dict[str, dict]:
 def cmd_evaluate(cfg: dict, args: argparse.Namespace) -> None:
     sys.path.insert(0, str(REPO_ROOT))
     from src.evaluation import metrics as M
-    from src.evaluation.llm_judge import judge_rag_response
 
     for k, v in llm_env(cfg).items():
         os.environ[k] = v
@@ -395,14 +394,7 @@ def cmd_evaluate(cfg: dict, args: argparse.Namespace) -> None:
             judge_cache = rd / "judge_cache" / system["name"]
             judge_cache.mkdir(parents=True, exist_ok=True)
             cache_file = judge_cache / f"{rec['dataset']}__{rec['id']}__{rec.get('repeat', 1)}.json"
-            if cache_file.exists():
-                judge = json.loads(cache_file.read_text(encoding="utf-8"))
-            else:
-                context = "\n\n".join(p for p in (rec.get("evidence", ""), "\n\n".join(t for t in texts if t)) if p)
-                judge = judge_rag_response(question=item["question"], expected_answer=expected,
-                                           generated_answer=rec.get("answer", ""), context=context,
-                                           model=cfg["llm"].get("judge_model"))
-                cache_file.write_text(json.dumps(judge, ensure_ascii=False), encoding="utf-8")
+            judge = load_claude_judgment(cache_file)
 
             key_values = M.extract_key_values(expected)
             kv_pos = M.calculate_key_value_hit_position(texts, key_values) if key_values else None
@@ -442,6 +434,20 @@ def cmd_evaluate(cfg: dict, args: argparse.Namespace) -> None:
 
     (rd / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"요약 저장: {rd / 'summary.json'}")
+
+
+def load_claude_judgment(cache_file: Path) -> dict[str, Any]:
+    """Claude가 채점해 넣어 둔 캐시를 읽는다. 없으면 로컬 gpt-oss로 대신 채점하지 않고 멈춘다.
+
+    채점은 항상 Claude가 한다(생성은 gpt-oss). 캐시는 `scripts/claude_judge.py export` → 서브에이전트 채점 → `import`로 만든다.
+    """
+    if not cache_file.exists():
+        raise SystemExit(
+            f"채점 캐시가 없다: {cache_file}\n채점은 Claude 서브에이전트로 한다. "
+            "`python scripts/claude_judge.py export --runs <run>:<system> --out-dir <dir>` 후 서브에이전트가 채점하고 "
+            "`python scripts/claude_judge.py import --out-dir <dir>`로 가져온 다음 evaluate를 다시 실행한다."
+        )
+    return json.loads(cache_file.read_text(encoding="utf-8"))
 
 
 def _mean(values: list[float]) -> float | None:
@@ -545,7 +551,7 @@ def render_report(summary: dict, cfg: dict) -> str:
         return f"| {label} | {cells} |"
 
     k = summary["top_k"]
-    out = [f"실행 ID `{summary['run_id']}` · top_k={k} · LLM {cfg['llm']['model']} (Judge {cfg['llm'].get('judge_model')})", ""]
+    out = [f"실행 ID `{summary['run_id']}` · top_k={k} · LLM {cfg['llm']['model']} (심사: Claude 서브에이전트)", ""]
     out += ["### 1. 검색 품질", f"| 지표 | {heads} |", sep,
             row("Context Hit Rate@3", "context_hit_at_3"), row(f"Context Hit Rate@{k}", "context_hit_at_5"),
             row("핵심값 MRR", "kv_mrr"), row("문서(source) 단위 MRR", "source_mrr"),

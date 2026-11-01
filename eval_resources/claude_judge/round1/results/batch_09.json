@@ -1,0 +1,62 @@
+{
+  "j0081": {
+    "correctness": {"score": 4, "reason": "핵심 값인 365일은 맞지만 기산점(계약체결일로부터)과 단가발주 180일 조건이 빠져 기대 답변과 완전히 일치하지는 않는다."},
+    "answer_coverage": {"score": 3, "reason": "기대 답변의 두 요소 중 365일만 언급하고 단가발주 180일 이내 조건과 기산점은 누락했다."},
+    "faithfulness": {"score": 5, "reason": "365일이라는 내용은 context의 계약기간 항목에서 직접 확인된다."},
+    "context_relevance": {"score": 4, "reason": "context에 해당 공고의 계약기간이 정확히 포함되어 있으나 재입찰, 입찰보증금 등 불필요한 내용도 섞여 있다."}
+  },
+  "j0082": {
+    "correctness": {"score": 5, "reason": "계약기간 420일이라는 핵심 값이 기대 답변과 일치한다."},
+    "answer_coverage": {"score": 4, "reason": "420일은 포함했으나 기산점인 '계약체결일로부터'라는 사소한 정보가 빠졌다."},
+    "faithfulness": {"score": 5, "reason": "420일은 context의 계약기간 항목에서 직접 확인된다."},
+    "context_relevance": {"score": 4, "reason": "해당 공고의 계약기간이 포함되어 있으나 기타사항 등 질문과 무관한 내용도 다수 포함되어 있다."}
+  },
+  "j0083": {
+    "correctness": {"score": 5, "reason": "2026년 10월 20일(화)부터 10월 22일(수)까지라는 기간이 기대 답변과 일치한다."},
+    "answer_coverage": {"score": 4, "reason": "시작일과 종료일은 모두 포함했으나 '3일간'이라는 표현은 명시하지 않았다."},
+    "faithfulness": {"score": 5, "reason": "행사기간은 context에 여러 번 그대로 기재되어 있다."},
+    "context_relevance": {"score": 4, "reason": "행사기간 정보가 충분히 포함되어 있으나 입찰 참가 자격 등 무관한 내용도 섞여 있다."}
+  },
+  "j0084": {
+    "correctness": {"score": 5, "reason": "사업예산 55,800,000원(부가세 포함)이 기대 답변과 정확히 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "금액과 부가세 포함 여부를 모두 빠짐없이 담았다."},
+    "faithfulness": {"score": 5, "reason": "사업예산 금액과 부가세 포함 여부가 context에 그대로 나온다."},
+    "context_relevance": {"score": 4, "reason": "사업예산 정보가 명확히 포함되어 있으나 제출서류 목록 등 불필요한 내용도 많다."}
+  },
+  "j0085": {
+    "correctness": {"score": 4, "reason": "기초금액 102,000,000원은 정확하나 추정가격과 부가가치세 내역이 빠졌다."},
+    "answer_coverage": {"score": 3, "reason": "총액만 제시하고 기대 답변의 추정가격 92,727,273원과 부가가치세 9,272,727원은 누락했다."},
+    "faithfulness": {"score": 5, "reason": "102,000,000원은 context의 기초금액 항목에서 직접 확인된다."},
+    "context_relevance": {"score": 4, "reason": "기초금액과 그 내역이 포함되어 있으나 서약서, 제출서류 등 무관한 내용도 섞여 있다."}
+  },
+  "j0086": {
+    "correctness": {"score": 5, "reason": "착공일로부터 60일간이라는 답이 기대 답변과 정확히 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "기산점과 일수를 모두 포함해 누락이 없다."},
+    "faithfulness": {"score": 5, "reason": "사업기간 '착공일로부터 60 일간'이 context에 그대로 있다."},
+    "context_relevance": {"score": 4, "reason": "사업기간 정보가 명확히 있으나 금액표와 입찰 주의사항 등 불필요한 내용도 포함되어 있다."}
+  },
+  "j0087": {
+    "correctness": {"score": 5, "reason": "낙찰하한율 86.245%가 기대 답변과 정확히 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 핵심 값을 빠짐없이 포함했다."},
+    "faithfulness": {"score": 5, "reason": "낙찰하한율 86.245%는 context에서 직접 확인된다."},
+    "context_relevance": {"score": 4, "reason": "낙찰하한율이 포함되어 있으나 청렴계약, 신용평가 등 무관한 내용이 상당 부분을 차지한다."}
+  },
+  "j0088": {
+    "correctness": {"score": 5, "reason": "기초금액 631,400,000원(부가가치세 포함)이 기대 답변과 정확히 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "금액과 부가가치세 포함 여부를 모두 담았다."},
+    "faithfulness": {"score": 5, "reason": "기초금액과 부가가치세 포함 여부가 context에 그대로 기재되어 있다."},
+    "context_relevance": {"score": 4, "reason": "기초금액 정보가 명확히 있으나 평가항목, 접수 안내 등 불필요한 내용도 섞여 있다."}
+  },
+  "j0089": {
+    "correctness": {"score": 5, "reason": "동복 2027년 2월 19일(금), 하복 2027년 5월 7일(금)이 기대 답변과 정확히 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "동복과 하복 납품기한을 모두 빠짐없이 포함했다."},
+    "faithfulness": {"score": 5, "reason": "두 납품기한과 학교 사정에 따른 변동 가능 단서가 모두 context에서 확인된다."},
+    "context_relevance": {"score": 4, "reason": "납품기한 정보가 반복적으로 충분히 있으나 계약 특수조건 등 무관한 내용도 포함되어 있다."}
+  },
+  "j0090": {
+    "correctness": {"score": 5, "reason": "착공일로부터 180일이라는 답이 기대 답변과 정확히 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "기산점과 일수를 모두 포함해 누락이 없다."},
+    "faithfulness": {"score": 5, "reason": "공사기간 '착공일로부터 180일'이 context에 그대로 있다."},
+    "context_relevance": {"score": 4, "reason": "공사기간 정보가 명확히 있으나 하도급, 안전서약서 등 무관한 내용이 많이 포함되어 있다."}
+  }
+}

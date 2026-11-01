@@ -9,12 +9,11 @@ bid_list_xlsx: RAG_프로세스_테스트_데이터_원본/입찰공고목록_20
 work_dir: experiments/work                         # 사전 변환한 PDF 등 중간 산출물(gitignore)
 runs_dir: eval_resources/experiment_runs           # 실행 결과 JSON(gitignore, 요약만 EXPERIMENTS.md에 기록)
 
-# --- LLM: 세 시스템 + Judge + 파서 모두 로컬 Ollama gpt-oss:20b -------------------------
+# --- LLM: 세 시스템의 답변 생성 + 파서는 로컬 Ollama gpt-oss:20b. 채점(Judge)은 항상 Claude 서브에이전트(scripts/claude_judge.py) ---
 llm:
   base_url: http://localhost:11434/v1
   api_key: ollama-local
   model: gpt-oss:20b          # 답변·질의의도·파서(Pass1b) 모델
-  judge_model: gpt-oss:20b
   timeout_sec: 1200
   # 파서 skill의 Pass1b 호출당 헤더 후보 수. 기본(70)에서는 후보가 많은 문서의 한 호출이 느린 로컬 GPU에서
   # skill의 호출 제한(300초)을 넘어 실패한다(RTX 4060 8GB에서 실측). 후보를 나눠 호출하면 해결된다.

@@ -1,0 +1,62 @@
+{
+  "j0061": {
+    "correctness": {"score": 0, "reason": "답변이 '문서에서 확인되지 않습니다'로 사실상 답변을 거부해 기대 답변의 동복 2027년 2월 22일, 하복 5월 10일을 전혀 제시하지 못했다."},
+    "answer_coverage": {"score": 0, "reason": "기대 답변의 핵심 포인트인 동복·하복 납품기한이 하나도 포함되지 않았다."},
+    "faithfulness": {"score": 5, "reason": "context에는 신목중학교가 아닌 서야고등학교 공고만 있으므로 확인되지 않는다는 답변은 context와 모순되지 않고 환각이 없다."},
+    "context_relevance": {"score": 1, "reason": "검색된 context는 질문 대상인 신목중학교가 아닌 서야고등학교 교복 공고로, 필요한 납품기한 정보가 없다."}
+  },
+  "j0062": {
+    "correctness": {"score": 5, "reason": "예정가격 82.495% 이상, 최저가순 적격심사, 종합평점 85점 이상이라는 기대 답변의 핵심을 모두 정확히 담았다."},
+    "answer_coverage": {"score": 5, "reason": "기대 답변의 모든 핵심 포인트가 빠짐없이 포함되어 있다."},
+    "faithfulness": {"score": 5, "reason": "답변 내용이 context의 '8. 낙찰자 결정' 가항에서 그대로 확인된다."},
+    "context_relevance": {"score": 5, "reason": "context가 해당 입찰의 낙찰자 결정 조항을 직접 포함해 질문에 완벽히 관련된다."}
+  },
+  "j0063": {
+    "correctness": {"score": 5, "reason": "공사기간 120일이라는 기대 답변의 핵심 값을 정확히 제시했다."},
+    "answer_coverage": {"score": 4, "reason": "120일은 포함했으나 기산점인 '착공일로부터'가 빠졌다."},
+    "faithfulness": {"score": 5, "reason": "공사기간 120일은 context의 입찰 부치는 사항에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "context가 해당 공사의 공고문으로 공사기간 정보를 명확히 포함한다."}
+  },
+  "j0064": {
+    "correctness": {"score": 3, "reason": "파워뱅크 1기와 디스펜서 2기를 합산한 '총 3기'는 수치상 틀리지 않지만 기대 답변의 장비별 구성이 사라져 핵심 정보가 절반 정도만 전달된다."},
+    "answer_coverage": {"score": 2, "reason": "240kW 파워뱅크 1기와 디스펜서 2기라는 구분된 핵심 내용이 누락되고 합계만 언급했다."},
+    "faithfulness": {"score": 3, "reason": "context에는 '총 3기'라는 표현이 없고 파워뱅크와 디스펜서를 같은 단위로 합산한 추론이 들어갔다."},
+    "context_relevance": {"score": 4, "reason": "context에 16_의성여객 공사의 설치대수가 명확히 있으나 17_동양교통 공고 등 불필요한 내용도 섞여 있다."}
+  },
+  "j0065": {
+    "correctness": {"score": 5, "reason": "기초금액 228,081,000원을 정확히 제시했다."},
+    "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 핵심 값이 빠짐없이 포함되었다."},
+    "faithfulness": {"score": 5, "reason": "기초금액 228,081,000원은 context에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "context가 해당 공사의 입찰공고로 기초금액 정보를 명확히 포함한다."}
+  },
+  "j0066": {
+    "correctness": {"score": 5, "reason": "기초금액 102,000,000원이라는 핵심 값을 정확히 제시했다."},
+    "answer_coverage": {"score": 4, "reason": "기초금액은 포함했으나 기대 답변에 있는 추정가격과 부가가치세 내역이 누락되었다."},
+    "faithfulness": {"score": 5, "reason": "기초금액 102,000,000원은 context의 물품구매 개요에서 직접 확인된다."},
+    "context_relevance": {"score": 4, "reason": "context에 G-램프사업단 공고의 기초금액이 있으나 건명이 '실험실습기자재(컴퓨터 및 워크스테이션) 구매'로 표기되고 청렴계약 등 불필요한 내용이 많다."}
+  },
+  "j0067": {
+    "correctness": {"score": 3, "reason": "동복 납품기한 2027년 2월 19일은 정확하나 하복 납품기한을 제시하지 않아 핵심 정보의 절반만 맞다."},
+    "answer_coverage": {"score": 3, "reason": "동복과 하복 두 핵심 포인트 중 하복 5월 7일이 누락되었다."},
+    "faithfulness": {"score": 5, "reason": "동복 납품기한 2027년 2월 19일(금)은 context에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "context가 서야고등학교 교복 공고로 동복과 하복 납품기한을 모두 포함한다."}
+  },
+  "j0068": {
+    "correctness": {"score": 5, "reason": "예산 245,339,600원(부가세 포함)을 정확히 제시해 기대 답변과 의미가 같다."},
+    "answer_coverage": {"score": 5, "reason": "금액과 부가세 포함 여부라는 핵심 포인트를 모두 담았고 한글 금액 표기는 같은 값의 다른 표현이다."},
+    "faithfulness": {"score": 5, "reason": "예산 금액과 부가세 포함 여부가 context의 사업 개요에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "context가 해당 물품 구매 공고서로 예산 정보를 명확히 포함한다."}
+  },
+  "j0069": {
+    "correctness": {"score": 5, "reason": "공사기간 120일이라는 기대 답변의 핵심 값을 정확히 제시했다."},
+    "answer_coverage": {"score": 4, "reason": "120일은 포함했으나 기산점인 '착공일로부터'가 빠졌다."},
+    "faithfulness": {"score": 5, "reason": "공사기간 120일은 context의 사업 개요 표에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "context가 해당 공사의 공고문으로 공사기간 정보를 명확히 포함한다."}
+  },
+  "j0070": {
+    "correctness": {"score": 5, "reason": "전자입찰서 접수 마감일시 2026년 8월 12일 15:00을 정확히 제시했다."},
+    "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심 포인트인 마감 날짜와 시각을 모두 포함했다."},
+    "faithfulness": {"score": 5, "reason": "마감일시는 context의 입찰일정 표에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "context가 해당 용역 공고의 입찰일정을 포함해 질문에 완벽히 관련된다."}
+  }
+}

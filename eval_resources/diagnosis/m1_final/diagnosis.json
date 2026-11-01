@@ -1,0 +1,90 @@
+{
+ "cur_db__forced__m1": {
+  "answer": "낙찰자 결정은 예상가격의 82.495 % 이상을 제시한 자 중 최저가격 입찰자순으로 적격심사하여 종합평점이 85점 이상인 경우입니다.",
+  "expected": "예정가격의 82.495% 이상으로 견적서를 제출한 자 중 최저가격 입찰자순으로 적격심사하여 종합평점이 85점 이상인 경우 낙찰자로 결정합니다.",
+  "csv_short_circuit": false,
+  "latencies": {
+   "analyze_query": 85.0939,
+   "retrieve": 18.3448,
+   "extract_evidence": 0.0827,
+   "generate": 91.818
+  },
+  "retrieved": [
+   [
+    "b4e5d245fe5b6e5d_1",
+    "SRT 감속기 모터피니언 기어_주식회사 에스알"
+   ],
+   [
+    "b4e5d245fe5b6e5d_9",
+    "SRT 감속기 모터피니언 기어_주식회사 에스알"
+   ],
+   [
+    "b4e5d245fe5b6e5d_2",
+    "SRT 감속기 모터피니언 기어_주식회사 에스알"
+   ],
+   [
+    "b4e5d245fe5b6e5d_10",
+    "SRT 감속기 모터피니언 기어_주식회사 에스알"
+   ],
+   [
+    "b4e5d245fe5b6e5d_13",
+    "SRT 감속기 모터피니언 기어_주식회사 에스알"
+   ]
+  ],
+  "facts": [
+   "82.495%",
+   "85점"
+  ],
+  "facts_in_raw_top5": 1.0,
+  "facts_in_context": 1.0,
+  "answer_ok": true,
+  "cause": "정상",
+  "generation_reasoning": "We need to answer: \"SRT 감속기 모터피니언기어 구매 입찰의 낙찰자 결정 기준은 무엇인가요?\" Use the extracted evidence. The evidence says:\n\n- 낙찰자 선정은 예정가격의 82.495% 이상을 제시한 자 중 최저가격 입찰자순으로 적격심사하여 종합평점이 85점 이상인 경우 낙찰자로 결정합니다.\n- 동일 가격 입찰이 있을 경우 추첨 방식을 적용합니다.\n- 평가 기준은 조달청 물품구매적격심사 세부기준에 따라 수행됩니다.\n\nThus answer: The criteria: 1) Bid must be at least 82.495% of the estimated price. 2) Among those, lowest price first, then eligibility review. 3) Must achieve overall score ≥85. 4) If same price, random draw. 5) Evaluation criteria per 조달청 물품구매적격심사 세부기준.\n\nWe need to produce bullet points 2-4. Also mention that the criteria are as above. No extra. Also no \"결론:\" etc. Just answer.",
+  "recording_errors": 0,
+  "calls": [
+   {
+    "index": 0,
+    "prompt_chars": 521,
+    "prompt_head": "JSON 객체 하나만 출력하세요. 설명 문장과 코드블록은 금지입니다. 아래 질문의 의도를 분류해 JSON 객체만 반환하세요.  허용 query_type: org | ranking | filter | category | search 필드: - query_type: 문자열 - org_nam",
+    "content": "{\"query_type\":\"search\",\"org_name\":\"\",\"rank_order\":\"\",\"amount_min\":null,\"amount_max\":null,\"qualifications\":[],\"categories\":[],\"confidence\":0.9}",
+    "reasoning": "We need to parse the question: \"SRT 감속기 모터피니언기어 구매 입찰의 낙찰자 결정 기준은 무엇인가요?\" It's asking about criteria for determining the winning bidder in a procurement for SRT gear motor gear. This is a general question about procurement criteria. It's not about an organization, ranking, filter, category. It's a general search question. So query_type: search. No org_name. rank_order empty. amount_min null. amount_max null. qualifications empty array. categories empty array. confidence maybe 0.9. Output JSON object only."
+   },
+   {
+    "index": 1,
+    "prompt_chars": 353,
+    "prompt_head": "너는 RFP 질의 의도 분류기다. 질문의 의미만 보고 시각 자료 첨부 필요 여부를 판단한다. 사용자 질문이 '텍스트 설명'만 원하는지, 아니면 '이미지/표 같은 시각 자료 첨부'를 함께 기대하는지를 분류하세요. - 질문이 '있어?', '보여줘', '자료', '근거 화면', '원본 그림/",
+    "content": "{\"visual_needed\": false, \"confidence\": 0.95, \"reason\": \"질문은 낙찰자 결정 기준에 대한 단순 사실 질의이며, 시각 자료를 요구하는 언급이 없음\"}",
+    "reasoning": "We need to determine if the user question expects visual materials attached. The question: \"SRT 감속기 모터피니언기어 구매 입찰의 낙찰자 결정 기준은 무엇인가요?\" They ask about criteria for awarding bid. This is a factual question about criteria. No mention of wanting images, tables, or visual. So visual_needed: false. Confidence high. Provide JSON."
+   },
+   {
+    "index": 2,
+    "prompt_chars": 4105,
+    "prompt_head": "당신은 입찰메이트 엔지니어링 팀의 시니어 RFP 분석가입니다. 목표는 사용자의 질문에 대해 문서 근거 기반으로 정확하고 실무적으로 답하는 것입니다.  ## 절대 원칙 1. 질문에 먼저 직접 답한다. 2. 근거 없는 추정은 금지한다. 3. 검색된 문서 컨텍스트에 없는 사실은 답하지 않는다",
+    "content": "낙찰자 선정은 **예상가격의 82.495 % 이상을 제시한 자 중에서**  \n- **최저가격**을 기준으로 적격심사를 진행하고,  \n- **종합평점이 85점 이상**인 경우에만 낙찰로 결정됩니다.  \n- 동일 가격 입찰이 있을 경우 **추첨**으로 결정합니다.  \n- 평가 기준은 조달청 물품구매적격심사 세부기준에 따라 수행됩니다.",
+    "reasoning": "We need to answer: \"SRT 감속기 모터피니언기어 구매 입찰의 낙찰자 결정 기준은 무엇인가요?\" According to the RFP context, the criteria are in section 8. 낙찰자 결정. We need to provide the answer: The criteria: 82.495% of estimated price or higher, then lowest price among those, then comprehensive score >=85 points. Also mention that evaluation criteria are the procurement qualification assessment detailed criteria. Also mention that if same price, draw. So answer: \"82.495% of estimated price or higher, lowest price, score >=85.\" Provide bullet points. Also mention that evaluation criteria are the procurement qualification assessment detailed criteria. Provide the answer in Korean. According to instructions: first answer directly. Then bullet points. No mention of \"결론:\" etc. Provide concise. Also mention that if same price, draw. Provide bullet points: 1) 82.495% of estimated price or higher, 2) lowest price among those, 3) comprehensive score >=85, 4) same price -> draw. Also mention that evaluation criteria are the procurement qualification assessment detailed criteria. Provide bullet points. Also mention that the evaluation is based on 조달청 물품구매적격심사 세부기준. Provide bullet points. Also mention that the method is multiple bidding. Provide bullet points. Provide answer."
+   },
+   {
+    "index": 3,
+    "prompt_chars": 4793,
+    "prompt_head": "당신은 입찰메이트 엔지니어링 팀의 시니어 RFP 분석가입니다. 목표는 사용자의 질문에 대해 문서 근거 기반으로 정확하고 실무적으로 답하는 것입니다.  ## 절대 원칙 1. 질문에 먼저 직접 답한다. 2. 근거 없는 추정은 금지한다. 3. 검색된 문서 컨텍스트에 없는 사실은 답하지 않는다",
+    "content": "낙찰자 결정은 “예상가격의 82.495 % 이상을 제시한 자 중 최저가격 입찰자순으로 적격심사하여 종합평점이 85점 이상인 경우”에 해당합니다.  \n\n- **가격 조건**: 예상가격의 82.495 % 이상을 제시한 자만 대상  \n- **가격 우선**: 최저가격 입찰자 순으로 적격심사 진행  \n- **평가 점수**: 종합평점이 85점 이상이어야 낙찰  \n- **동일가격 시**: 추첨 방식으로 결정  \n- **평가 기준**: 조달청 물품구매적격심사 세부기준에 따라 수행됩니다",
+    "reasoning": "We need to answer: \"SRT 감속기 모터피니언기어 구매 입찰의 낙찰자 결정 기준은 무엇인가요?\" Use the extracted evidence. The evidence says:\n\n- 낙찰자 선정은 예정가격의 82.495% 이상을 제시한 자 중 최저가격 입찰자순으로 적격심사하여 종합평점이 85점 이상인 경우 낙찰자로 결정합니다.\n- 동일 가격 입찰이 있을 경우 추첨 방식을 적용합니다.\n- 평가 기준은 조달청 물품구매적격심사 세부기준에 따라 수행됩니다.\n\nThus answer: The criteria: 1) Bid must be at least 82.495% of the estimated price. 2) Among those, lowest price first, then eligibility review. 3) Must achieve overall score ≥85. 4) If same price, random draw. 5) Evaluation criteria per 조달청 물품구매적격심사 세부기준.\n\nWe need to produce bullet points 2-4. Also mention that the criteria are as above. No extra. Also no \"결론:\" etc. Just answer."
+   },
+   {
+    "index": 4,
+    "prompt_chars": 809,
+    "prompt_head": "너는 문서 기반 QA 응답을 최종 사용자용으로 다듬는 편집자다. 사실을 바꾸지 말고 중복/장황함만 줄여라. 아래 '기존 답변'을 사용자에게 바로 전달할 수 있게 간결하고 자연스러운 한국어로 다듬어라.  [필수 규칙] 1) 사실/수치/단위/날짜/주체/출처를 절대 변경하거나 새로 만들지 말",
+    "content": "낙찰자 결정은 예상가격의 82.495 % 이상을 제시한 자 중 최저가격 입찰자순으로 적격심사하여 종합평점이 85점 이상인 경우입니다.",
+    "reasoning": "We need to produce concise answer: \"낙찰자 결정은 예상가격의 82.495% 이상을 제시한 자 중 최저가격 입찰자순으로 적격심사하여 종합평점이 85점 이상인 경우\" basically. The question: \"SRT 감속기 모터피니언기어 구매 입찰의 낙찰자 결정 기준은 무엇인가요?\" So answer: \"예상가격의 82.495% 이상을 제시한 자 중 최저가격 입찰자순으로 적격심사하여 종합평점이 85점 이상인 경우.\" That's 1-2 sentences. Ensure no labels. No extra. So final."
+   },
+   {
+    "index": 5,
+    "prompt_chars": 953,
+    "prompt_head": "너는 RFP 응답 포맷 설계자다. 질문자가 시각 자료를 원하면 image/table 첨부를 활성화한다. 질문과 문맥을 보고 이미지/표 첨부 필요를 판정하세요. 반드시 JSON 객체 하나만 출력하세요. {\"visual_needed\": boolean, \"image_needed\": boole",
+    "content": "{\"visual_needed\": false, \"image_needed\": false, \"table_needed\": false, \"visual_focus\": \"generic_visual\", \"confidence\": 0.95, \"reason\": \"질문은 낙찰자 결정 기준에 대한 텍스트 설명을 요구하며, 제공된 문맥에서도 텍스트로 충분히 답변 가능.\"}",
+    "reasoning": "We need to decide if visual needed. The question: \"SRT 감속기 모터피니언기어 구매 입찰의 낙찰자 결정 기준은 무엇인가요?\" They want the criteria. The context includes text snippets. There's an image snippet but likely not needed. The answer can be textual. So visual_needed false. image_needed false. table_needed? The criteria might be described in text; no table needed. visual_focus generic_visual? But since no visual needed, maybe generic_visual. confidence high. Provide JSON."
+   }
+  ],
+  "context_chars": 4793
+ }
+}

@@ -37,6 +37,7 @@ from src.utils.config import *
 from src.utils.helpers import *
 from src.utils.korean_keywords import stem_words
 from src.utils.org_match import distinctive_token_candidates
+from src.utils.rerank_rules import FUNCTION_WORDS, has_answer_number
 from src.graph.state import QueryIntent, QuestionPlan, EvidenceSpan, AnswerDraft
 from src.retrievers.query_heuristics import (
     has_budget_evidence as retriever_has_budget_evidence,
@@ -8339,6 +8340,15 @@ class RAGChatbotV17:
                 break
         return uniq
 
+    def _rerank_focus_terms(self, query: str, max_terms: int = 6) -> list[str]:
+        """재정렬용 핵심 낱말. 조사를 뗀 낱말에서 `_extract_focus_terms_for_fact`의 제외 규칙을 적용하고, 법령형 기능어(`위한` 등)는 뺀다."""
+        try:
+            stemmed = " ".join(stem_words(unicodedata.normalize("NFKC", (query or "").lower()), self._get_kiwi_analyzer()))
+        except Exception:
+            stemmed = query
+        terms = self._extract_focus_terms_for_fact(stemmed, max_terms=max_terms + len(FUNCTION_WORDS))
+        return [t for t in terms if t not in FUNCTION_WORDS][:max_terms]
+
     @staticmethod
     def _extract_focus_terms_for_fact(query: str, max_terms: int = 8) -> list[str]:
         """수치/문자셋/기한 질의의 핵심 앵커 토큰을 추출합니다."""
@@ -11514,7 +11524,8 @@ class RAGChatbotV17:
         title_key = self._normalize_text_for_match(project_title)
         org_query_key = self._normalize_text_for_match(org_name or "")
         query_key = self._normalize_text_for_match(query)
-        keywords = self._extract_query_keywords(query)
+        # 사업명을 반복한 질문은 제목 낱말만으로 상한 10개가 차서 정작 묻는 속성(접수, 마감일시)이 잘렸다. 점수 상한(4.2)은 그대로라 16개로 넓힌다.
+        keywords = self._extract_query_keywords(query, max_keywords=16)
         profile = query_profile or {}
         single_doc_focus = bool(profile.get("single_doc_focus"))
         source_hints = [str(h) for h in (profile.get("source_hints") or []) if h]
@@ -11577,11 +11588,14 @@ class RAGChatbotV17:
             score += 0.2
 
         if any(token in q_norm for token in ["얼마", "수량", "단위", "기한", "마감", "언제", "시간", "용량"]):
-            if re.search(r"\d+\s*(원|억|만|명|건|개|일|시간|분|mb|gb|kb|%)", text, re.IGNORECASE):
+            if has_answer_number(text):
                 score += 1.4
             if any(marker in text for marker in ["이내", "마감", "기한", "주기", "횟수"]):
                 score += 0.7
-            focus_terms = self._extract_focus_terms_for_fact(query, max_terms=6)
+            # 제목 낱말이 없는 숫자 청크를 깎는 규칙. 이미 대상 기관의 청크이면 제목 낱말은 구분 정보가 못 되므로(질문이
+            # 사업명을 반복하고 속성 청크는 제목을 반복하지 않는다) 적용하지 않는다.
+            in_target_org = bool(org_query_key and org_key and org_query_key == org_key)
+            focus_terms = [] if in_target_org else self._rerank_focus_terms(query)
             if focus_terms and re.search(r"\d", text):
                 lowered_text = unicodedata.normalize("NFKC", text.lower())
                 if not any(term in lowered_text for term in focus_terms):
