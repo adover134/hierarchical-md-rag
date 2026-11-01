@@ -1,0 +1,566 @@
+{
+ "qrels": {
+  "m1": {
+   "b4e5d245fe5b6e5d_9": 2
+  },
+  "m2": {
+   "7087a950e3268853_8": 2,
+   "7087a950e3268853_9": 2
+  },
+  "m3": {
+   "8d112e98e864a788_2": 2
+  },
+  "m4": {
+   "04b0e9e19f054a59_2": 2
+  },
+  "m5": {
+   "3feff89a82248e64_1": 2
+  },
+  "m6": {
+   "efe7ddd300842f10_1": 2
+  },
+  "m7": {
+   "e19c1de79c203cb2_3": 2
+  },
+  "m8": {
+   "e2e7e9f50050f1d2_2": 2
+  },
+  "m9": {
+   "81bf884140a98b76_2": 1
+  },
+  "m10": {
+   "b9470ab42aefbc36_1": 2
+  },
+  "m11": {
+   "bd5032e6600e13ff_2": 2
+  },
+  "m12": {
+   "d3103c2ea6bf5391_1": 2
+  },
+  "m13": {
+   "81a533e68823c524_1": 2
+  },
+  "m14": {
+   "bfe0eb07eb895879_1": 2
+  },
+  "m15": {
+   "5dccacf4c08383f9_1": 2
+  },
+  "m16": {
+   "7b59fd64e2168dba_1": 2
+  },
+  "m17": {
+   "fae8ae3bf11051ad_1": 2
+  },
+  "m18": {
+   "03447c6f7fb4753a_1": 2
+  },
+  "m19": {
+   "c6f0d09453dbde09_5": 1,
+   "39db7f57b1e773a3_5": 1
+  },
+  "m20": {
+   "112446edeb4c558d_1": 1,
+   "825dc6671942ac8d_1": 1
+  },
+  "n1": {
+   "e67bb0f33cafe747_1": 2
+  },
+  "n2": {
+   "6a1e9105c84854ba_1": 2
+  },
+  "n3": {
+   "948989b4035de560_3": 2
+  },
+  "n4": {
+   "ec6ddda0b02b1c97_2": 2,
+   "ec6ddda0b02b1c97_49": 2
+  },
+  "n5": {
+   "967a1361805258b8_0": 2,
+   "967a1361805258b8_1": 2,
+   "967a1361805258b8_3": 2,
+   "967a1361805258b8_4": 2,
+   "967a1361805258b8_37": 2
+  },
+  "n6": {
+   "9cb1944eb032f1fc_1": 2
+  },
+  "n7": {
+   "44aeeb71a6d461c6_1": 2
+  },
+  "n8": {
+   "d17a8536cb132250_1": 2
+  },
+  "n9": {
+   "4584c73e10f3267f_1": 2
+  },
+  "n10": {
+   "65d38aaeb51a2224_1": 2
+  },
+  "n11": {
+   "b5071b1b57ed8cf7_1": 2
+  },
+  "n12": {
+   "d830d29b6d165620_1": 2
+  },
+  "n13": {
+   "ee6136e36f340f32_1": 2
+  },
+  "n14": {
+   "ec04c5bc09596ba0_1": 2
+  },
+  "n15": {
+   "3b093584899e1efa_0": 2,
+   "3b093584899e1efa_1": 2
+  },
+  "n16": {
+   "f1b8cb1a7e1cf64f_0": 2
+  },
+  "n17": {
+   "957b1d1c201a3845_1": 2
+  },
+  "n18": {
+   "ca8e61a7d88d8bc6_0": 2
+  },
+  "n19": {
+   "e0fe195ce8e6a45d_0": 2
+  },
+  "n20": {
+   "ca8e61a7d88d8bc6_0": 1,
+   "e0fe195ce8e6a45d_0": 1
+  }
+ },
+ "report": {
+  "m1": {
+   "facts": [
+    "82.495%",
+    "85점"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m2": {
+   "facts": [
+    "86.245%"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "m3": {
+   "facts": [
+    "770250000",
+    "700227273",
+    "70022727"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m4": {
+   "facts": [
+    "2026년12월31일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m5": {
+   "facts": [
+    "47820800",
+    "43473455",
+    "4347345"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m6": {
+   "facts": [
+    "180일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m7": {
+   "facts": [
+    "55800000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m8": {
+   "facts": [
+    "631400000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m9": {
+   "facts": [
+    "2026년8월12일",
+    "15:00"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 0,
+   "status": "ok"
+  },
+  "m10": {
+   "facts": [
+    "2026년10월20일",
+    "10월",
+    "22일",
+    "3일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m11": {
+   "facts": [
+    "50000000",
+    "45454545",
+    "4545455"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m12": {
+   "facts": [
+    "60일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m13": {
+   "facts": [
+    "120일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m14": {
+   "facts": [
+    "102000000",
+    "92727273",
+    "9272727"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m15": {
+   "facts": [
+    "78364000",
+    "71240000",
+    "66440000",
+    "6150000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m16": {
+   "facts": [
+    "365일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m17": {
+   "facts": [
+    "60일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m18": {
+   "facts": [
+    "50000000",
+    "45454545",
+    "4545455"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m19": {
+   "facts": [
+    "368467000",
+    "24867000"
+   ],
+   "sources_found": 2,
+   "sources": 2,
+   "relevant": 2,
+   "full": 0,
+   "status": "ok"
+  },
+  "m20": {
+   "facts": [
+    "220000000",
+    "150000000"
+   ],
+   "sources_found": 2,
+   "sources": 2,
+   "relevant": 2,
+   "full": 0,
+   "status": "ok"
+  },
+  "n1": {
+   "facts": [
+    "285125000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n2": {
+   "facts": [
+    "60일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n3": {
+   "facts": [
+    "390000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n4": {
+   "facts": [
+    "2027년2월22일",
+    "2027년5월10일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "n5": {
+   "facts": [
+    "2027년2월19일",
+    "2027년5월7일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 5,
+   "full": 5,
+   "status": "ok"
+  },
+  "n6": {
+   "facts": [
+    "387660",
+    "264660",
+    "123000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n7": {
+   "facts": [
+    "365일",
+    "180일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n8": {
+   "facts": [
+    "420일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n9": {
+   "facts": [
+    "26750000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n10": {
+   "facts": [
+    "99000000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n11": {
+   "facts": [
+    "228081000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n12": {
+   "facts": [
+    "33690000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n13": {
+   "facts": [
+    "120일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n14": {
+   "facts": [
+    "90일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n15": {
+   "facts": [
+    "100000000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "n16": {
+   "facts": [
+    "240kW",
+    "2기",
+    "5기"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n17": {
+   "facts": [
+    "240kW",
+    "1기",
+    "2기"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n18": {
+   "facts": [
+    "245339600"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n19": {
+   "facts": [
+    "608881900"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n20": {
+   "facts": [
+    "608881900",
+    "245339600"
+   ],
+   "sources_found": 2,
+   "sources": 2,
+   "relevant": 2,
+   "full": 0,
+   "status": "ok"
+  }
+ }
+}

@@ -267,6 +267,12 @@ def _execute(args: argparse.Namespace) -> None:
     spec.loader.exec_module(module)
     if hasattr(module, "load_env"):
         module.load_env()  # python-dotenv는 이미 있는 환경변수를 덮어쓰지 않으므로 실험 설정이 우선한다
+    if os.environ.get("HWP_RAG_FORCE_RETRIEVAL") == "1":
+        # DB 비교용: 기관 개요·청크 예산·기관 문서 스캔·CSV 단축 경로는 검색기를 건너뛰고 캐시로 답하므로 DB 차이가 가려진다.
+        # 프로세스 코드는 건드리지 않고, 단축 경로 우회 판정만 항상 "우회"로 고정해 모든 질의가 검색을 거치게 한다.
+        from src.graph.workflow import RAGChatbotV17
+        RAGChatbotV17._should_bypass_short_circuit_for_query = staticmethod(lambda query: True)
+        RAGChatbotV17._can_override_short_circuit_bypass = lambda self, *a, **k: False
 
     questions = json.loads(Path(args.questions).read_text(encoding="utf-8"))
     records: list[dict] = []

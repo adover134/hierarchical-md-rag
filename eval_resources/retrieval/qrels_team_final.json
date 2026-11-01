@@ -1,0 +1,589 @@
+{
+ "qrels": {
+  "m1": {
+   "f04dad2307831bae_15": 2
+  },
+  "m2": {
+   "2c0673398da42a05_10": 2
+  },
+  "m3": {
+   "8d112e98e864a788_2": 2
+  },
+  "m4": {
+   "1714acb517c882a1_2": 2
+  },
+  "m5": {
+   "08ec81c5ad3e6eb4_1": 2,
+   "08ec81c5ad3e6eb4_2": 2
+  },
+  "m6": {
+   "37b03aa0a007495e_1": 2
+  },
+  "m7": {
+   "e19c1de79c203cb2_3": 2
+  },
+  "m8": {
+   "e2e7e9f50050f1d2_2": 2
+  },
+  "m9": {
+   "351dfb354e137c43_3": 1,
+   "351dfb354e137c43_4": 1
+  },
+  "m10": {
+   "b6dea0f556ab7d67_1": 2,
+   "b6dea0f556ab7d67_4": 2
+  },
+  "m11": {
+   "33227eed065d2292_1": 2,
+   "33227eed065d2292_4": 2
+  },
+  "m12": {
+   "0ba18e152b98ca4f_1": 2
+  },
+  "m13": {
+   "cba9c3b401225c8e_2": 2,
+   "cba9c3b401225c8e_6": 2
+  },
+  "m14": {
+   "b23105b71f79a226_1": 2
+  },
+  "m15": {
+   "78478e707682c913_1": 2
+  },
+  "m16": {
+   "9160fabc2049e508_2": 2,
+   "9160fabc2049e508_4": 2
+  },
+  "m17": {
+   "ff7c0bcb6689a77f_2": 2,
+   "ff7c0bcb6689a77f_4": 2
+  },
+  "m18": {
+   "1398adba42aa9cab_1": 2
+  },
+  "m19": {
+   "ba6f917f7bb1437a_6": 1,
+   "ba6f917f7bb1437a_11": 1,
+   "b32b5195f09789b0_3": 1,
+   "b32b5195f09789b0_7": 1,
+   "b32b5195f09789b0_8": 1
+  },
+  "m20": {
+   "c6f5967c01df6d51_2": 1,
+   "7f92a91d4bfb29f9_1": 1
+  },
+  "n1": {
+   "944d131d450a20b6_1": 2,
+   "944d131d450a20b6_2": 2
+  },
+  "n2": {
+   "41dc2e944ae9d376_2": 2,
+   "41dc2e944ae9d376_4": 2
+  },
+  "n3": {
+   "d642411d32764823_1": 2,
+   "d642411d32764823_3": 2,
+   "d642411d32764823_4": 2
+  },
+  "n4": {
+   "ec6ddda0b02b1c97_2": 2,
+   "ec6ddda0b02b1c97_49": 2
+  },
+  "n5": {
+   "967a1361805258b8_0": 2,
+   "967a1361805258b8_1": 2,
+   "967a1361805258b8_3": 2,
+   "967a1361805258b8_4": 2,
+   "967a1361805258b8_37": 2
+  },
+  "n6": {
+   "f16e11cba458eddf_1": 2,
+   "f16e11cba458eddf_3": 2,
+   "f16e11cba458eddf_6": 2
+  },
+  "n7": {
+   "1475eb2bac3e142d_1": 2,
+   "1475eb2bac3e142d_3": 2,
+   "1475eb2bac3e142d_5": 2
+  },
+  "n8": {
+   "7bf2645e50d4fa91_1": 2,
+   "7bf2645e50d4fa91_3": 2
+  },
+  "n9": {
+   "c92ee49da7cc0216_2": 2,
+   "c92ee49da7cc0216_4": 2
+  },
+  "n10": {
+   "65d38aaeb51a2224_1": 2
+  },
+  "n11": {
+   "82f409fcc5af77df_1": 2
+  },
+  "n12": {
+   "482dc68509d30256_2": 2,
+   "482dc68509d30256_4": 2
+  },
+  "n13": {
+   "c024ba15b7e688bc_2": 2,
+   "c024ba15b7e688bc_7": 2
+  },
+  "n14": {
+   "c93626db162ac439_1": 2,
+   "c93626db162ac439_6": 2,
+   "c93626db162ac439_7": 2
+  },
+  "n15": {
+   "3b093584899e1efa_0": 2,
+   "3b093584899e1efa_1": 2
+  },
+  "n16": {
+   "efdec373160ee2bf_1": 2
+  },
+  "n17": {
+   "deafa8dcb8b6d102_1": 2
+  },
+  "n18": {
+   "ca8e61a7d88d8bc6_0": 2
+  },
+  "n19": {
+   "e0fe195ce8e6a45d_0": 2
+  },
+  "n20": {
+   "ca8e61a7d88d8bc6_0": 1,
+   "e0fe195ce8e6a45d_0": 1
+  }
+ },
+ "report": {
+  "m1": {
+   "facts": [
+    "82.495%",
+    "85점"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m2": {
+   "facts": [
+    "86.245%"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m3": {
+   "facts": [
+    "770250000",
+    "700227273",
+    "70022727"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m4": {
+   "facts": [
+    "2026년12월31일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m5": {
+   "facts": [
+    "47820800",
+    "43473455",
+    "4347345"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "m6": {
+   "facts": [
+    "180일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m7": {
+   "facts": [
+    "55800000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m8": {
+   "facts": [
+    "631400000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m9": {
+   "facts": [
+    "2026년8월12일",
+    "15:00"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 0,
+   "status": "ok"
+  },
+  "m10": {
+   "facts": [
+    "2026년10월20일",
+    "10월",
+    "22일",
+    "3일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "m11": {
+   "facts": [
+    "50000000",
+    "45454545",
+    "4545455"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "m12": {
+   "facts": [
+    "60일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m13": {
+   "facts": [
+    "120일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "m14": {
+   "facts": [
+    "102000000",
+    "92727273",
+    "9272727"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m15": {
+   "facts": [
+    "78364000",
+    "71240000",
+    "66440000",
+    "6150000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m16": {
+   "facts": [
+    "365일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "m17": {
+   "facts": [
+    "60일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "m18": {
+   "facts": [
+    "50000000",
+    "45454545",
+    "4545455"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "m19": {
+   "facts": [
+    "368467000",
+    "24867000"
+   ],
+   "sources_found": 2,
+   "sources": 2,
+   "relevant": 5,
+   "full": 0,
+   "status": "ok"
+  },
+  "m20": {
+   "facts": [
+    "220000000",
+    "150000000"
+   ],
+   "sources_found": 2,
+   "sources": 2,
+   "relevant": 2,
+   "full": 0,
+   "status": "ok"
+  },
+  "n1": {
+   "facts": [
+    "285125000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "n2": {
+   "facts": [
+    "60일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "n3": {
+   "facts": [
+    "390000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 3,
+   "full": 3,
+   "status": "ok"
+  },
+  "n4": {
+   "facts": [
+    "2027년2월22일",
+    "2027년5월10일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "n5": {
+   "facts": [
+    "2027년2월19일",
+    "2027년5월7일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 5,
+   "full": 5,
+   "status": "ok"
+  },
+  "n6": {
+   "facts": [
+    "387660",
+    "264660",
+    "123000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 3,
+   "full": 3,
+   "status": "ok"
+  },
+  "n7": {
+   "facts": [
+    "365일",
+    "180일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 3,
+   "full": 3,
+   "status": "ok"
+  },
+  "n8": {
+   "facts": [
+    "420일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "n9": {
+   "facts": [
+    "26750000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "n10": {
+   "facts": [
+    "99000000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n11": {
+   "facts": [
+    "228081000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n12": {
+   "facts": [
+    "33690000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "n13": {
+   "facts": [
+    "120일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "n14": {
+   "facts": [
+    "90일"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 3,
+   "full": 3,
+   "status": "ok"
+  },
+  "n15": {
+   "facts": [
+    "100000000"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 2,
+   "full": 2,
+   "status": "ok"
+  },
+  "n16": {
+   "facts": [
+    "240kW",
+    "2기",
+    "5기"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n17": {
+   "facts": [
+    "240kW",
+    "1기",
+    "2기"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n18": {
+   "facts": [
+    "245339600"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n19": {
+   "facts": [
+    "608881900"
+   ],
+   "sources_found": 1,
+   "sources": 1,
+   "relevant": 1,
+   "full": 1,
+   "status": "ok"
+  },
+  "n20": {
+   "facts": [
+    "608881900",
+    "245339600"
+   ],
+   "sources_found": 2,
+   "sources": 2,
+   "relevant": 2,
+   "full": 0,
+   "status": "ok"
+  }
+ }
+}
