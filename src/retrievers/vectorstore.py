@@ -22,7 +22,6 @@ from src.utils.config import (
     OPENAI_API_KEY,
     ORG_ALIASES,
     PROJECT_ROOT,
-    RETRIEVAL_FULL_POOL_MAX,
     RETRIEVAL_ORG_PREFILTER,
 )
 
@@ -440,8 +439,8 @@ class VectorStore:
 
         lexical_query: 어휘 점수에만 쓰는 질의(조사를 뗀 키워드). 밀집 검색은 항상 원문 `query`로 한다.
         org_name: 주면 밀집 검색 후보를 그 기관의 청크로 먼저 좁힌 뒤 상위를 자른다(자른 뒤 거르면 대상 기관 청크가 사라질 수 있다).
-            RETRIEVAL_ORG_PREFILTER를 켠 경우에만, 그리고 후보 풀이 DB 전체를 덮지 않을 때만 쓴다. 기본은 끔이다:
-            기관 문서의 후보 청크가 늘어 호출자의 재정렬이 정답 청크를 밀어낸 문항(m2, m9)이 있었다. 이때의 기관 거르기는 호출자의 사후 필터가 맡는다.
+            RETRIEVAL_ORG_PREFILTER를 켠 경우에만 쓴다. 기본은 끔이다: 기관 문서의 후보 청크가 늘어 호출자의 재정렬이
+            정답 청크를 밀어낸 문항(m2, m9)이 있었다. 끈 동안의 기관 거르기는 호출자의 사후 필터가 맡는다.
 
         mode:
         - chroma: dense score only
@@ -459,15 +458,10 @@ class VectorStore:
         # (재현 사례에서 원시 순위 40~120위대) 예전 후보군(top_k*4, 최소 40)
         # 밖으로 배제되면 리랭킹 단계까지 아예 못 올라왔다. 코퍼스가 작아
         # 후보군을 키워도 비용이 거의 안 드므로 넉넉하게 넓힌다.
-        # 청크가 RETRIEVAL_FULL_POOL_MAX 이하인 DB는 DB 전체를 재정렬한다. 비례 풀(top_k*15)에서는 밀집 순위가 낮은 정답 청크
-        # (n13: 1,207개 중 367위, 풀 360)가 어휘 점수를 받기도 전에 빠졌다.
-        if self.count <= RETRIEVAL_FULL_POOL_MAX:
-            default_candidate_k = self.count
-        else:
-            default_candidate_k = min(self.count, max(top_k * 15, 150))
+        default_candidate_k = min(self.count, max(top_k * 15, 150))
         n_results = max(top_k, candidate_k or default_candidate_k)
         lexical_text = lexical_query or query
-        org_where = {"org": org_name} if org_name and RETRIEVAL_ORG_PREFILTER and self.count > RETRIEVAL_FULL_POOL_MAX else None
+        org_where = {"org": org_name} if org_name and RETRIEVAL_ORG_PREFILTER else None
 
         try:
             raw_rows = self._query_candidates(query, n_results=n_results, where=org_where)

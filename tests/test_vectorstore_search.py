@@ -45,26 +45,15 @@ class TestLexicalQuery:
 
 
 class TestCandidatePool:
-    def test_small_database_is_searched_in_full_only_when_enabled(self, monkeypatch):
-        import src.retrievers.vectorstore as vs
-
-        monkeypatch.setattr(vs, "RETRIEVAL_FULL_POOL_MAX", 2000)
-        store = _store(ROWS, count=1207)
-        store.search("q", top_k=24, mode="hybrid")
-        assert store.calls[0]["n_results"] == 1207
-
-    def test_default_pool_is_proportional_not_the_whole_database(self):
+    def test_pool_is_proportional_never_the_whole_database(self):
         store = _store(ROWS, count=1207)
         store.search("q", top_k=24, mode="hybrid")
         assert store.calls[0]["n_results"] == 360
 
-    def test_large_database_keeps_the_proportional_pool(self, monkeypatch):
-        import src.retrievers.vectorstore as vs
-
-        monkeypatch.setattr(vs, "RETRIEVAL_FULL_POOL_MAX", 2000)
-        store = _store(ROWS, count=50000)
+    def test_pool_is_capped_by_the_database_size(self):
+        store = _store(ROWS, count=100)
         store.search("q", top_k=24, mode="hybrid")
-        assert store.calls[0]["n_results"] == 360
+        assert store.calls[0]["n_results"] == 100
 
     def test_explicit_candidate_k_wins(self):
         store = _store(ROWS, count=1207)
@@ -74,13 +63,12 @@ class TestCandidatePool:
 
 class TestOrgFilterBeforeCut:
     @pytest.fixture(autouse=True)
-    def _pool_covers_only_small_dbs(self, monkeypatch):
+    def _prefilter_on(self, monkeypatch):
         import src.retrievers.vectorstore as vs
 
-        monkeypatch.setattr(vs, "RETRIEVAL_FULL_POOL_MAX", 100)
         monkeypatch.setattr(vs, "RETRIEVAL_ORG_PREFILTER", True)
 
-    def test_org_filter_is_passed_to_the_candidate_query_for_a_large_db(self):
+    def test_org_filter_is_passed_to_the_candidate_query(self):
         store = _store(ROWS, count=5000)
         store.search("q", top_k=5, mode="hybrid", org_name="A")
         assert store.calls[0]["where"] == {"org": "A"}
@@ -95,11 +83,6 @@ class TestOrgFilterBeforeCut:
 
         monkeypatch.setattr(vs, "RETRIEVAL_ORG_PREFILTER", False)
         store = _store(ROWS, count=5000)
-        store.search("q", top_k=5, mode="hybrid", org_name="A")
-        assert store.calls[0]["where"] is None
-
-    def test_small_db_whose_pool_covers_everything_does_not_prefilter(self):
-        store = _store(ROWS, count=50)
         store.search("q", top_k=5, mode="hybrid", org_name="A")
         assert store.calls[0]["where"] is None
 
