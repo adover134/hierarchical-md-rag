@@ -34,6 +34,9 @@ _load_runtime_env()
 sys.path.insert(0, 'src')
 from src.utils.config import *
 from src.utils.helpers import *
+from src.utils.korean_keywords import stem_words
+from src.utils.org_match import distinctive_token_candidates
+from src.utils.rerank_rules import FUNCTION_WORDS, has_answer_number
 from src.graph.state import QueryIntent, QuestionPlan, EvidenceSpan, AnswerDraft
 from src.retrievers.query_heuristics import (
     has_budget_evidence as retriever_has_budget_evidence,
@@ -7569,9 +7572,9 @@ class RAGChatbotV17:
         """build_db.py의 BM25 인덱싱과 동일한 Kiwi 형태소 분석기를 지연 초기화해 재사용한다."""
         analyzer = getattr(self, "_kiwi_analyzer_cache", None)
         if analyzer is None:
-            from kiwipiepy import Kiwi
+            from src.utils.org_dictionary import new_kiwi
 
-            analyzer = Kiwi()
+            analyzer = new_kiwi()  # 기관명 사전(DB 구축 때 엑셀로 생성)을 불러온다
             self._kiwi_analyzer_cache = analyzer
         return analyzer
 
@@ -7591,7 +7594,11 @@ class RAGChatbotV17:
 
     def _extract_query_keywords(self, query: str, max_keywords: int = 10) -> list[str]:
         raw = unicodedata.normalize("NFKC", query.lower())
-        tokens = re.findall(r"[0-9a-zA-Z가-힣]{2,}", raw)
+        # 형태소 분석으로 조사·어미를 뗀 낱말을 먼저 쓰고, 분석기를 못 쓸 때만 어미가 붙은 원형 토큰을 쓴다.
+        try:
+            tokens = stem_words(raw, self._get_kiwi_analyzer())
+        except Exception:
+            tokens = re.findall(r"[0-9a-zA-Z가-힣]{2,}", raw)
         for noun in self._extract_kiwi_noun_tokens(query):
             if noun not in tokens:
                 tokens.append(noun)
@@ -7651,6 +7658,15 @@ class RAGChatbotV17:
             if len(uniq) >= max_keywords:
                 break
         return uniq
+
+    def _rerank_focus_terms(self, query: str, max_terms: int = 6) -> list[str]:
+        """재정렬용 핵심 낱말. 조사를 뗀 낱말에서 `_extract_focus_terms_for_fact`의 제외 규칙을 적용하고, 법령형 기능어(`위한` 등)는 뺀다."""
+        try:
+            stemmed = " ".join(stem_words(unicodedata.normalize("NFKC", (query or "").lower()), self._get_kiwi_analyzer()))
+        except Exception:
+            stemmed = query
+        terms = self._extract_focus_terms_for_fact(stemmed, max_terms=max_terms + len(FUNCTION_WORDS))
+        return [t for t in terms if t not in FUNCTION_WORDS][:max_terms]
 
     @staticmethod
     def _extract_focus_terms_for_fact(query: str, max_terms: int = 8) -> list[str]:
@@ -10295,6 +10311,9 @@ class RAGChatbotV17:
             kwargs["hybrid_alpha"] = 0.6
         if "dynamic_hard_threshold" in params:
             kwargs["dynamic_hard_threshold"] = 2
+        if "lexical_query" in params:
+            # 어휘 점수는 조사를 뗀 키워드로 계산한다(`공사기간은` → `공사기간`). 밀집 검색은 원문 질의를 그대로 쓴다.
+            kwargs["lexical_query"] = " ".join(self._extract_query_keywords(q, max_keywords=12))
 
         try:
             results = search_fn(q, top_k=request_k, **kwargs)
@@ -10811,7 +10830,8 @@ class RAGChatbotV17:
         title_key = self._normalize_text_for_match(project_title)
         org_query_key = self._normalize_text_for_match(org_name or "")
         query_key = self._normalize_text_for_match(query)
-        keywords = self._extract_query_keywords(query)
+        # 사업명을 반복한 질문은 제목 낱말만으로 상한 10개가 차서 정작 묻는 속성(접수, 마감일시)이 잘렸다. 점수 상한(4.2)은 그대로라 16개로 넓힌다.
+        keywords = self._extract_query_keywords(query, max_keywords=16)
         profile = query_profile or {}
         single_doc_focus = bool(profile.get("single_doc_focus"))
         source_hints = [str(h) for h in (profile.get("source_hints") or []) if h]
@@ -10874,11 +10894,14 @@ class RAGChatbotV17:
             score += 0.2
 
         if any(token in q_norm for token in ["얼마", "수량", "단위", "기한", "마감", "언제", "시간", "용량"]):
-            if re.search(r"\d+\s*(원|억|만|명|건|개|일|시간|분|mb|gb|kb|%)", text, re.IGNORECASE):
+            if has_answer_number(text):
                 score += 1.4
             if any(marker in text for marker in ["이내", "마감", "기한", "주기", "횟수"]):
                 score += 0.7
-            focus_terms = self._extract_focus_terms_for_fact(query, max_terms=6)
+            # 제목 낱말이 없는 숫자 청크를 깎는 규칙. 이미 대상 기관의 청크이면 제목 낱말은 구분 정보가 못 되므로(질문이
+            # 사업명을 반복하고 속성 청크는 제목을 반복하지 않는다) 적용하지 않는다.
+            in_target_org = bool(org_query_key and org_key and org_query_key == org_key)
+            focus_terms = [] if in_target_org else self._rerank_focus_terms(query)
             if focus_terms and re.search(r"\d", text):
                 lowered_text = unicodedata.normalize("NFKC", text.lower())
                 if not any(term in lowered_text for term in focus_terms):
@@ -11867,6 +11890,25 @@ class RAGChatbotV17:
                 if overlap >= 2:
                     score = overlap * 100 + len(org_name)
                     candidates.append((score, org_name))
+
+        # 4b) 고유한 기관명 낱말 하나만 겹쳐도 인정한다(`신목중학교`, `전주사랑의집`).
+        # 4)는 겹치는 낱말이 2개 이상이어야 해서, 질문이 기관을 고유명 하나로만 가리키면 후보가 비었다.
+        # 질문 낱말은 기관명 사전을 읽은 Kiwi로 조사·어미를 떼어 비교한다(`신목중학교의` → `신목중학교`).
+        # 앞 단계에서 후보가 하나도 없을 때만 쓴다. 후보가 이미 있는데 적용하면 `마을만들기사업`, `정비관리사업`처럼
+        # 여러 공고가 공유하는 분류어로 엉뚱한 기관이 더 붙는다.
+        if not candidates:
+            try:
+                query_stems = set(stem_words(unicodedata.normalize("NFKC", query.lower()), self._get_kiwi_analyzer()))
+            except Exception:
+                query_stems = set()
+            candidates.extend(
+                distinctive_token_candidates(
+                    normalized_query,
+                    self.vector_store.org_registry.keys(),
+                    self._is_generic_rfp_token,
+                    extra_query_tokens=query_stems,
+                )
+            )
 
         # 4.5) 영문 약어(예: KOICA) 기반 기관 복원
         # "ai", "it", "pc"처럼 2글자짜리 흔한 영문 토큰은 실제 기관 약어가

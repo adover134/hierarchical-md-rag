@@ -22,6 +22,7 @@ from src.utils.config import (
     OPENAI_API_KEY,
     ORG_ALIASES,
     PROJECT_ROOT,
+    RETRIEVAL_ORG_PREFILTER,
 )
 
 # 파서는 import 방식을 사용
@@ -375,13 +376,15 @@ class VectorStore:
         threshold = max(1, int(hard_threshold))
         return "chroma" if cls.estimate_query_hardness(query) >= threshold else "hybrid"
 
-    def _query_candidates(self, query: str, n_results: int) -> list[dict[str, Any]]:
+    def _query_candidates(self, query: str, n_results: int, where: dict[str, Any] | None = None) -> list[dict[str, Any]]:
         response: dict[str, Any]
+        filter_kwargs: dict[str, Any] = {"where": where} if where else {}
         try:
             response = self.collection.query(
                 query_texts=[query],
                 n_results=n_results,
                 include=["documents", "metadatas", "distances"],
+                **filter_kwargs,
             )
         except Exception:
             query_embedding = self._create_embeddings([query])[0]
@@ -389,6 +392,7 @@ class VectorStore:
                 query_embeddings=[query_embedding],
                 n_results=n_results,
                 include=["documents", "metadatas", "distances"],
+                **filter_kwargs,
             )
 
         docs = response.get("documents") or [[]]
@@ -428,8 +432,14 @@ class VectorStore:
         hybrid_alpha: float = 0.6,
         dynamic_hard_threshold: int = 2,
         candidate_k: int | None = None,
+        lexical_query: str | None = None,
+        org_name: str | None = None,
     ) -> list[dict[str, Any]]:
         """문서를 검색합니다.
+
+        lexical_query: 어휘 점수에만 쓰는 질의(조사를 뗀 키워드). 밀집 검색은 항상 원문 `query`로 한다.
+        org_name: 주면 밀집 검색 후보를 그 기관의 청크로 먼저 좁힌 뒤 상위를 자른다(자른 뒤 거르면 대상 기관 청크가 사라질 수 있다).
+            RETRIEVAL_ORG_PREFILTER가 켜져 있을 때만 쓴다(기본 켬). 끄면 기관 거르기는 호출자의 사후 필터가 맡는다.
 
         mode:
         - chroma: dense score only
@@ -449,9 +459,11 @@ class VectorStore:
         # 후보군을 키워도 비용이 거의 안 드므로 넉넉하게 넓힌다.
         default_candidate_k = min(self.count, max(top_k * 15, 150))
         n_results = max(top_k, candidate_k or default_candidate_k)
+        lexical_text = lexical_query or query
+        org_where = {"org": org_name} if org_name and RETRIEVAL_ORG_PREFILTER else None
 
         try:
-            raw_rows = self._query_candidates(query, n_results=n_results)
+            raw_rows = self._query_candidates(query, n_results=n_results, where=org_where)
         except Exception as e:
             print(f"검색 오류: {e}")
             return []
@@ -460,7 +472,7 @@ class VectorStore:
         ranked: list[dict[str, Any]] = []
         for row in raw_rows:
             dense = self._dense_score(row.get("distance"))
-            lexical = self._lexical_score(query, row.get("text", ""), row.get("source", ""))
+            lexical = self._lexical_score(lexical_text, row.get("text", ""), row.get("source", ""))
             score = dense if selected_mode == "chroma" else (alpha * dense + (1.0 - alpha) * lexical)
             ranked.append(
                 {

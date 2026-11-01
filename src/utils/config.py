@@ -80,6 +80,9 @@ AMOUNT_UNITS: dict[str, int] = {"억": 100_000_000, "만": 10_000}
 # 검색/컨텍스트 성능 튜닝
 RETRIEVAL_EXPANSION_CAP: int = _get_env_int("RETRIEVAL_EXPANSION_CAP", 3, min_value=1)
 RETRIEVAL_SEARCH_PASSES: int = _get_env_int("RETRIEVAL_SEARCH_PASSES", 1, min_value=1)
+# 기관을 알면 밀집 검색 후보를 그 기관의 청크로 먼저 좁힌 뒤 상위를 자른다(자른 뒤 거르면 대상 기관 청크가 사라진다: n13). 재정렬 규칙을 고친 뒤에는
+# 40문항에서 놓치는 문항이 없다. 끄려면 RETRIEVAL_ORG_PREFILTER=false.
+RETRIEVAL_ORG_PREFILTER: bool = os.environ.get("RETRIEVAL_ORG_PREFILTER", "true").lower() == "true"
 RETRIEVAL_HIGH_RECALL_K_MULTIPLIER: float = _get_env_float(
     "RETRIEVAL_HIGH_RECALL_K_MULTIPLIER", 0.8, min_value=0.5
 )
