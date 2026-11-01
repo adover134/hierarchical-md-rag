@@ -10995,6 +10995,9 @@ class RAGChatbotV17:
             kwargs["hybrid_alpha"] = 0.6
         if "dynamic_hard_threshold" in params:
             kwargs["dynamic_hard_threshold"] = 2
+        if "lexical_query" in params:
+            # 어휘 점수는 조사를 뗀 키워드로 계산한다(`공사기간은` → `공사기간`). 밀집 검색은 원문 질의를 그대로 쓴다.
+            kwargs["lexical_query"] = " ".join(self._extract_query_keywords(q, max_keywords=12))
 
         try:
             results = search_fn(q, top_k=request_k, **kwargs)

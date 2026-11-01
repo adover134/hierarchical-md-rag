@@ -80,6 +80,11 @@ AMOUNT_UNITS: dict[str, int] = {"억": 100_000_000, "만": 10_000}
 # 검색/컨텍스트 성능 튜닝
 RETRIEVAL_EXPANSION_CAP: int = _get_env_int("RETRIEVAL_EXPANSION_CAP", 3, min_value=1)
 RETRIEVAL_SEARCH_PASSES: int = _get_env_int("RETRIEVAL_SEARCH_PASSES", 1, min_value=1)
+# 청크 수가 이 값 이하인 DB는 하이브리드 재정렬 대상을 DB 전체로 둔다(전수 스캔). 기본은 끔(0): 청크가 늘면 확장되지 않는다.
+# 켜면 밀집 순위가 낮은 정답 청크(n13: 1,207개 중 367위)가 풀 밖으로 빠지지 않지만, 검색 1회가 약 0.15초에서 0.56초가 된다.
+RETRIEVAL_FULL_POOL_MAX: int = _get_env_int("RETRIEVAL_FULL_POOL_MAX", 0, min_value=0)
+# 기관을 알면 밀집 검색 후보를 그 기관의 청크로 먼저 좁힌다. 기본은 끔: 같은 문서의 후보가 늘어 재정렬이 정답 청크를 밀어낸 문항이 있었다(m2, m9).
+RETRIEVAL_ORG_PREFILTER: bool = os.environ.get("RETRIEVAL_ORG_PREFILTER", "false").lower() == "true"
 RETRIEVAL_HIGH_RECALL_K_MULTIPLIER: float = _get_env_float(
     "RETRIEVAL_HIGH_RECALL_K_MULTIPLIER", 0.8, min_value=0.5
 )
