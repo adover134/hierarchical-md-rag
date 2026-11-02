@@ -34,3 +34,14 @@ def test_mean_and_paired_summary_skip_not_applicable_scores():
     assert _mean([5, None, 3]) == 4.0
     r = paired_summary([5, None, 3], [5, 2, 4])
     assert (r["up"], r["down"], r["same"]) == (1, 0, 1)  # None이 낀 쌍은 건너뛴다
+
+
+def test_summary_table_shows_how_many_refusals_were_excluded_from_faithfulness(monkeypatch):
+    import grid_report as gr
+
+    cell = {("new20", "m1"): {"correctness": 5, "answer_coverage": 5, "faithfulness": 4, "context_relevance": 5},
+            ("new20", "m2"): {"correctness": 0, "answer_coverage": 0, "faithfulness": None, "context_relevance": 3}}
+    scores = {gr.cell_name(p, d): cell for p, _ in gr.PROCESSES for d, _ in gr.DBS}
+    table = gr.summary_table(scores)
+    assert "4.000 (거부 1건 제외)" in table
+    assert "2.500" in table  # 다른 축은 그대로

@@ -80,7 +80,10 @@ def summary_table(scores: dict[str, dict]) -> str:
     for p, pname in PROCESSES:
         for d, dname in DBS:
             sc = scores[cell_name(p, d)]
-            vals = " | ".join(f"{_mean([v[a] for v in sc.values()]):.3f}" for a in AXES)
+            na = sum(v["faithfulness"] is None for v in sc.values())
+            vals = " | ".join(
+                f"{_mean([v[a] for v in sc.values()]):.3f}" + (f" (거부 {na}건 제외)" if a == "faithfulness" and na else "")
+                for a in AXES)
             full = sum(v["correctness"] == 5 for v in sc.values())
             lines.append(f"| {pname} | {dname} | {vals} | {full}/{len(sc)} |")
     return "\n".join(lines)

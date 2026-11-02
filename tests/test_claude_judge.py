@@ -135,3 +135,27 @@ def test_hint_flags_refusal_items():
     dataset = {("new20", "m1"): {"question": "q", "expected_answer": "기초금액은 50,000,000원입니다."}}
     items, _ = build_items(records, dataset, 5, 1, with_hint=True)
     assert items[0]["hint"]["refusal"] is True
+
+
+def test_import_keeps_the_previous_claude_cache_when_regrading_with_v2(tmp_path, monkeypatch):
+    import json as _json
+
+    import claude_judge as cj
+
+    runs = tmp_path / "runs"
+    cache = runs / "r1" / "judge_cache" / "sys"
+    cache.mkdir(parents=True)
+    (cache / "new20__m1__1.json").write_text('{"old": true}', encoding="utf-8")
+    out = tmp_path / "round"
+    (out / "results").mkdir(parents=True)
+    (out / "rubric_version.txt").write_text("v2\n", encoding="utf-8")
+    axes = {ax: {"score": 5, "reason": "ok"} for ax in cj.AXES}
+    (out / "mapping.json").write_text(_json.dumps({"j0001": {"run": "r1", "system": "sys", "dataset": "new20", "id": "m1", "repeat": 1}}), encoding="utf-8")
+    (out / "results" / "batch_01.json").write_text(_json.dumps({"j0001": axes}), encoding="utf-8")
+    monkeypatch.setattr(cj, "RUNS_DIR", runs)
+    import argparse
+
+    cj.cmd_import(argparse.Namespace(out_dir=str(out)))
+    assert (runs / "r1" / "judge_cache_v1_ref" / "sys" / "new20__m1__1.json").exists()
+    assert _json.loads((cache / "new20__m1__1.json").read_text(encoding="utf-8"))["correctness"]["score"] == 5
+    assert not (runs / "r1" / "judge_cache_gptoss_ref").exists()

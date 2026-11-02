@@ -192,17 +192,21 @@ def cmd_import(a: argparse.Namespace) -> None:
         print("검증 실패:\n  " + "\n  ".join(problems[:40]))
         raise SystemExit(1)
     touched = set()
+    # 이전 캐시를 어디에 남기는지: v2 재채점이면 이전 Claude(v1) 채점을 `judge_cache_v1_ref`에, 그 밖에는 이전 gpt-oss 채점을 `judge_cache_gptoss_ref`에 둔다.
+    version_file = out / "rubric_version.txt"
+    v2_regrade = version_file.exists() and version_file.read_text(encoding="utf-8").strip() == "v2"
+    ref_name, summary_ref = ("judge_cache_v1_ref", "summary_v1_ref.json") if v2_regrade else ("judge_cache_gptoss_ref", "summary_gptoss_ref.json")
     for item_id, origin in mapping.items():
         run_dir = RUNS_DIR / origin["run"]
         cache = run_dir / "judge_cache" / origin["system"]
-        ref = run_dir / "judge_cache_gptoss_ref" / origin["system"]
+        ref = run_dir / ref_name / origin["system"]
         if (origin["run"], origin["system"]) not in touched:
             touched.add((origin["run"], origin["system"]))
             if cache.exists() and not ref.exists():
                 ref.parent.mkdir(parents=True, exist_ok=True)
                 shutil.move(str(cache), str(ref))
-            if (run_dir / "summary.json").exists() and not (run_dir / "summary_gptoss_ref.json").exists():
-                shutil.copy(run_dir / "summary.json", run_dir / "summary_gptoss_ref.json")
+            if (run_dir / "summary.json").exists() and not (run_dir / summary_ref).exists():
+                shutil.copy(run_dir / "summary.json", run_dir / summary_ref)
             cache.mkdir(parents=True, exist_ok=True)
         (cache / f"{origin['dataset']}__{origin['id']}__{origin['repeat']}.json").write_text(
             json.dumps({ax: merged[item_id][ax] for ax in AXES}, ensure_ascii=False), encoding="utf-8")

@@ -91,7 +91,7 @@
 - 지금까지 보고한 점수(`dbcmp3`~`dbcmp8`의 대부분)는 v1이다. v2 점수와 직접 섞어 비교하지 않는다. 필요하면 해당 칸을 v2로 다시 채점한다(칸당 40건, 서브에이전트 4개).
 
 남은 일(우선순위는 정해야 한다)
-1. ~~규칙 6 결정~~ 거부 답변의 Faithfulness는 N/A로 제외하는 것으로 정했다(2026-11-03). `claude_judge.is_refusal`이 거부 답변을 가려내 `hint.refusal`로 알리고, `grid_report.load_scores`가 그 항목의 Faithfulness를 `None`으로 두어 평균과 쌍체 비교에서 뺀다. `run_experiment.py evaluate`의 요약 평균에는 아직 적용하지 않았다.
+1. ~~규칙 6 결정~~ 거부 답변의 Faithfulness는 N/A로 제외하고 표에 `거부 N건 제외`를 병기하는 것으로 정했다(2026-11-03, 0점 처리와 비교해 선택. 현재 규칙은 [`judge_rules.md`](judge_rules.md)). `claude_judge.is_refusal`이 거부 답변을 가려내 `hint.refusal`로 알리고, `grid_report.load_scores`가 그 항목의 Faithfulness를 `None`으로 두어 평균과 쌍체 비교에서 뺀다. `run_experiment.py evaluate`의 요약 평균에는 아직 적용하지 않았다.
 2. **Context relevance 규칙.** 질문이 요구하는 정보가 context에 있는지를 기준으로 명시한다(예: 정답 값이 context에 들어 있으면 최소 4점).
 3. **보고된 칸 전체를 v2로 재채점**해 한 기준으로 맞춘다(`dbcmp6` 6칸, `dbcmp7` 4칸 중 이번에 2칸 완료, `dbcmp8` 1칸).
 4. **채점기가 같은 DB로 직접 RAG를 수행해 자기가 찾은 정보와 생성 답변을 비교하는 방식**(제안). 기대 답변이 틀렸거나 표기가 다른 경우에 기준을 보강할 수 있다. 채점이 시스템과 같은 DB에 의존하게 되어 독립성이 약해질 수 있으므로, 기대 답변 대조를 주로 하고 DB 검색은 보조로 쓰는 설계가 필요하다. 아직 구현하지 않았다.
