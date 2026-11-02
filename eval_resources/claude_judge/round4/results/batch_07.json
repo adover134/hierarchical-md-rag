@@ -1,0 +1,182 @@
+{
+ "j0061": {
+  "correctness": {
+   "score": 0,
+   "reason": "답변이 '사업기간은 공사'라는 무의미한 문자열로 120일이라는 기대값을 전혀 제시하지 않는다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "공사기간 120일 정보가 전혀 포함되지 않았다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에는 착공일로부터 120일이 명시되어 있으나 답변은 이를 반영하지 않은 깨진 문자열이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사(전기)의 공사기간 '착공일로부터120 일'이 직접 포함되어 있다."
+  }
+ },
+ "j0062": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 추정금액 770,250,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값은 포함했으나 추정가격·부가세 내역은 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context의 '사업비: 약 7.7억 원 (770,250,000원)'과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context가 정답 금액을 담고 있으나 사업명 등 다른 근거 없이 금액 한 줄뿐이다."
+  }
+ },
+ "j0063": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 100,000,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 유일한 핵심인 100,000,000원을 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변이 context의 '사업비: 약 1.0억 원 (100,000,000원)'과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context가 정답 금액을 담고 있으나 사업명 없이 금액 한 줄뿐이다."
+  }
+ },
+ "j0064": {
+  "correctness": {
+   "score": 0,
+   "reason": "'히트펌프, 물품'이라는 답변은 어느 곳의 예산이 더 큰지 전혀 답하지 않는다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "영남영농조합법인과 두 금액 모두 누락되었다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "단어는 context에 있으나 질문에 대한 근거 있는 진술이 아니다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context에 608,881,900원과 245,339,600원 히트펌프 금액은 있으나 쏘유팜·영남영농조합법인 이름이 없고 무관한 선문대 공고가 섞여 있다."
+  }
+ },
+ "j0065": {
+  "correctness": {
+   "score": 0,
+   "reason": "낙찰하한율 86.245%를 제시하지 않고 비교 생략 문구만 출력했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "핵심 값이 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "질문과 무관한 '문서 A/B 비교' 문구로 context 내용을 반영하지 않았다."
+  },
+  "context_relevance": {
+   "score": 2,
+   "reason": "context는 질병관리청 구매입찰 공고이나 호흡기 감염병 검사 시약 건이 확인되지 않고 하한율도 89.745%로 기대값과 다르다."
+  }
+ },
+ "j0066": {
+  "correctness": {
+   "score": 0,
+   "reason": "'사업기간은 2026년'은 60일이라는 기대값과 무관한 깨진 답변이다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "착공일로부터 60일 정보가 누락되었다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에는 '공사기간: 착공일로부터 60일'이 있으나 답변은 이를 반영하지 않았다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업명과 공사기간 60일이 직접 포함되어 있다."
+  }
+ },
+ "j0067": {
+  "correctness": {
+   "score": 0,
+   "reason": "공사기간 120일을 제시하지 않고 비교 생략 문구만 출력했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "핵심 값이 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "질문과 무관한 '문서 A/B 비교' 문구로 context에 근거하지 않는다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context에 용화지구 공사가 없고 장성경찰서·송림리 등 다른 건축공사만 있다."
+  }
+ },
+ "j0068": {
+  "correctness": {
+   "score": 0,
+   "reason": "'2027학년도, 교복, 동복, 하복'은 납품기한 날짜를 전혀 제시하지 않는다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "동복 2월 22일, 하복 5월 10일 정보가 모두 누락되었다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "단어 나열일 뿐 context에 근거한 진술이 아니다."
+  },
+  "context_relevance": {
+   "score": 2,
+   "reason": "context는 서야고·청주하이텍고 교복 공고로 신목중학교 정보가 없다."
+  }
+ },
+ "j0069": {
+  "correctness": {
+   "score": 0,
+   "reason": "'2026'은 동복 2027-02-19, 하복 2027-05-07과 맞지 않는 틀린 답변이다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "두 납품기한이 모두 누락되었다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에 서야고 납품기한이 명시되어 있으나 답변 '2026'은 이를 반영하지 않았다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 서야고 동복 2027.2.19., 하복 2027.5.7. 납품기한이 포함되어 있으나 청주하이텍고 등 다른 학교 내용도 섞여 있다."
+  }
+ },
+ "j0070": {
+  "correctness": {
+   "score": 2,
+   "reason": "220,000,000원이라는 한 값은 맞지만 어느 사업이 더 큰지 명시하지 않고 비교 대상 금액도 없다."
+  },
+  "answer_coverage": {
+   "score": 2,
+   "reason": "더 큰 사업명과 자카르타 용역 150,000,000원이 누락되었다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "제시한 금액은 context의 '사업비: 약 2.2억 원 (220,000,000원)'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 2,
+   "reason": "context가 사업명 없는 금액 한 줄뿐이라 두 사업 비교에 필요한 정보가 부족하다."
+  }
+ }
+}

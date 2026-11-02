@@ -1,0 +1,62 @@
+{
+  "j0001": {
+    "correctness": {"score": 5, "reason": "주된 값 50,000,000원을 정확히 제시했으며 '사업비'라는 표현 차이는 의미상 문제되지 않는다."},
+    "answer_coverage": {"score": 4, "reason": "핵심 금액은 포함했으나 괄호 속 부차 정보(추정가격·부가세)는 빠졌다."},
+    "faithfulness": {"score": 5, "reason": "답변이 context의 '사업비: 약 5,000만 원 (50,000,000원)'을 그대로 옮겼다."},
+    "context_relevance": {"score": 4, "reason": "context에 정답 금액은 있으나 사업명 등 식별 정보 없이 한 줄만 있어 근거가 빈약하다."}
+  },
+  "j0002": {
+    "correctness": {"score": 0, "reason": "'사업기간은 공사'라는 무의미한 답으로 120일이라는 기간을 전혀 제시하지 못했다."},
+    "answer_coverage": {"score": 0, "reason": "기대 답변의 핵심인 착공일로부터 120일이 전혀 포함되지 않았다."},
+    "faithfulness": {"score": 1, "reason": "context의 공사기간 정보를 반영하지 않은 의미 없는 문구다."},
+    "context_relevance": {"score": 4, "reason": "context에 건축 공사의 공사기간 120일이 명시되어 있으나 전기 공사 등 불필요한 내용이 섞여 있다."}
+  },
+  "j0003": {
+    "correctness": {"score": 5, "reason": "기초금액 26,750,000원과 같은 금액을 정확히 제시했다."},
+    "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 핵심인 금액을 빠짐없이 포함했다."},
+    "faithfulness": {"score": 5, "reason": "답변이 context의 사업비 문구를 그대로 옮겼다."},
+    "context_relevance": {"score": 4, "reason": "정답 금액은 있으나 사업명 등 식별 정보 없이 한 줄만 있다."}
+  },
+  "j0004": {
+    "correctness": {"score": 1, "reason": "'2026년'만 제시해 10월 20일~22일 3일간이라는 핵심 기간을 전혀 특정하지 못했다."},
+    "answer_coverage": {"score": 1, "reason": "날짜와 기간(3일간)이 모두 누락되고 연도만 언급했다."},
+    "faithfulness": {"score": 3, "reason": "2026년이라는 연도는 context와 맞지만 답변이 context의 행사기간을 제대로 반영하지 못했다."},
+    "context_relevance": {"score": 5, "reason": "context에 행사기간 2026년 10월 20일~22일 3일간이 여러 번 명시되어 있다."}
+  },
+  "j0005": {
+    "correctness": {"score": 1, "reason": "어느 사업의 예산이 더 큰지 답하지 않고 사업명 없는 금액 하나만 제시했다."},
+    "answer_coverage": {"score": 1, "reason": "비교 결과와 두 사업의 금액 중 대부분이 누락되었다."},
+    "faithfulness": {"score": 5, "reason": "제시한 금액은 context의 사업비 문구와 정확히 일치한다."},
+    "context_relevance": {"score": 2, "reason": "context는 사업명 없는 금액 한 줄뿐이라 두 사업을 비교하는 데 필요한 정보가 크게 부족하다."}
+  },
+  "j0006": {
+    "correctness": {"score": 0, "reason": "'2026'은 동복 2027.2.19, 하복 2027.5.7이라는 납품기한과 맞지 않는 틀린 답이다."},
+    "answer_coverage": {"score": 0, "reason": "동복·하복 납품기한이 전혀 포함되지 않았다."},
+    "faithfulness": {"score": 1, "reason": "context에 명시된 2027년 납품기한과 어긋나는 근거 없는 값이다."},
+    "context_relevance": {"score": 4, "reason": "context에 서야고 납품기한이 명시되어 있으나 청주하이텍고 공고 등 무관한 내용이 섞여 있다."}
+  },
+  "j0007": {
+    "correctness": {"score": 5, "reason": "착공일로부터 60일과 같은 60일을 정확히 제시했으며 '사업기간'이라는 표현 차이는 의미상 문제되지 않는다."},
+    "answer_coverage": {"score": 5, "reason": "핵심 정보인 60일을 포함했다."},
+    "faithfulness": {"score": 5, "reason": "context의 '공사기간 착공일로부터 60일'에 근거한다."},
+    "context_relevance": {"score": 5, "reason": "context가 해당 사업의 공고문이며 공사기간이 명시되어 있다."}
+  },
+  "j0008": {
+    "correctness": {"score": 0, "reason": "날짜 없이 키워드만 나열해 동복 2027.2.22, 하복 2027.5.10이라는 납품기한을 전혀 제시하지 못했다."},
+    "answer_coverage": {"score": 0, "reason": "기대 답변의 납품기한이 하나도 포함되지 않았다."},
+    "faithfulness": {"score": 1, "reason": "키워드 나열일 뿐 context에 근거한 의미 있는 답이 아니다."},
+    "context_relevance": {"score": 1, "reason": "context는 서야고와 청주하이텍고 공고뿐이고 신목중학교 정보는 없다."}
+  },
+  "j0009": {
+    "correctness": {"score": 5, "reason": "기초금액 33,690,000원과 같은 금액을 정확히 제시했다."},
+    "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심 금액을 빠짐없이 포함했다."},
+    "faithfulness": {"score": 5, "reason": "답변이 context의 사업비 문구를 그대로 옮겼다."},
+    "context_relevance": {"score": 4, "reason": "정답 금액은 있으나 사업명 등 식별 정보 없이 한 줄만 있다."}
+  },
+  "j0010": {
+    "correctness": {"score": 5, "reason": "기초금액 631,400,000원과 같은 금액을 정확히 제시했다."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 금액을 포함했고 빠진 것은 괄호 속 부가세 포함 표기뿐이다."},
+    "faithfulness": {"score": 5, "reason": "답변이 context의 사업비 문구를 그대로 옮겼다."},
+    "context_relevance": {"score": 4, "reason": "정답 금액은 있으나 사업명 등 식별 정보 없이 한 줄만 있다."}
+  }
+}

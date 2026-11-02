@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "entries": {
+    "79a93d4a2f8f50b95f852280616242fee1855dc99a3c75211917f55e72e95fae": {
+      "last_emitted_at_ms": 1793622184996,
+      "message": "Use parallel execution for independent tasks. Use run_in_background for long operations (npm install, builds, tests)."
+    },
+    "466399dafa2d20f60587180bad0a07358eb7f2bce724df0ff682f038ad33f5ad": {
+      "last_emitted_at_ms": 1793622183782,
+      "message": "Read multiple files in parallel when possible for faster analysis."
+    },
+    "175d133eba7d60de9b98925e5d0aa70b5f273655f9b031a60e40ae94780cdb0d": {
+      "last_emitted_at_ms": 1793622177910,
+      "message": "Spawning agent: unknown (opus) | Task: Grade batch 08"
+    },
+    "947160a9994cdc064abe34304a64715e3c9dad072539013d99f4f2e356a46f86": {
+      "last_emitted_at_ms": 1793622175377,
+      "message": "Spawning agent: unknown (opus) | Task: Grade batch 07"
+    },
+    "cfb95ecd0b15aa19130199834273bd96fc907da11782131845444227877f92d0": {
+      "last_emitted_at_ms": 1793622172734,
+      "message": "Spawning agent: unknown (opus) | Task: Grade batch 06"
+    },
+    "8c622113a358d533a421dfbc9a684abf027caf528bc02500f011f020c81b1894": {
+      "last_emitted_at_ms": 1793622170123,
+      "message": "Spawning agent: unknown (opus) | Task: Grade batch 05"
+    },
+    "e97ccda8827ec73a0f5f85710bd2ef1a2327615732a2ed12f79ea7a684f8b41c": {
+      "last_emitted_at_ms": 1793622167567,
+      "message": "Spawning agent: unknown (opus) | Task: Grade batch 04"
+    },
+    "5504dd26cc8581d57c043629f9dc3cf2fea229503abed9b065cb6a882081f193": {
+      "last_emitted_at_ms": 1793622164928,
+      "message": "Spawning agent: unknown (opus) | Task: Grade batch 03"
+    },
+    "a8602439bc78af1cc0cb1c47410b902e571fc3e20da8dcb340d06ab999236afc": {
+      "last_emitted_at_ms": 1793622162382,
+      "message": "Spawning agent: unknown (opus) | Task: Grade batch 02"
+    },
+    "67556b749b595b1b91ad0afcf327f04ae2c0788c5c2186fa46f4e6d64f8debb1": {
+      "last_emitted_at_ms": 1793622159625,
+      "message": "Spawning agent: unknown (opus) | Task: Grade batch 01"
+    }
+  },
+  "updated_at": "2026-11-02T12:23:04.996Z"
+}
