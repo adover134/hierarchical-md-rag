@@ -1,0 +1,182 @@
+{
+ "j0001": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 계약체결일로부터 365일이 정확하며 괄호 안 단가발주 조건 누락은 감점하지 않는다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 365일이 포함되어 있고 괄호 안 부차 정보 누락은 감점 대상이 아니다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "계약기간 365일은 context의 입찰사항에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 입찰공고의 계약기간을 직접 담고 있어 질문에 완전히 관련된다."
+  }
+ },
+ "j0002": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 47,820,800원이 정확하며 괄호 안 추정가격·부가가치세 누락은 감점하지 않는다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 모두 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액 47,820,800원은 context의 입찰에 부치는 사항에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "기초금액 정보는 충분히 있으나 청렴 시책 안내 등 무관한 내용이 일부 섞여 있다."
+  }
+ },
+ "j0003": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업기간 착공일로부터 60일간이 기대 답변과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 60일이 빠짐없이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "사업기간 60일간은 context에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "사업기간 정보는 있으나 입찰참가자격 등 질문과 무관한 내용이 상당 부분 포함되어 있다."
+  }
+ },
+ "j0004": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 추정금액 770,250,000원이 정확하고 덧붙인 추정가격 700,227,273원도 맞다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 추정금액이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "추정금액과 추정가격 모두 context에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공사의 추정금액과 내역을 직접 담고 있다."
+  }
+ },
+ "j0005": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 47,820,800원이 정확하며 괄호 안 내역 누락은 감점하지 않는다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 모두 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액 47,820,800원은 context에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "기초금액 정보는 충분하나 입찰참가자격 등 무관한 내용이 일부 포함되어 있다."
+  }
+ },
+ "j0006": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 228,081,000원이 기대 답변과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 빠짐없이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액 228,081,000원은 context에 여러 번 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "기초금액 정보는 충분하나 하도급지킴이 안내 등 무관한 내용이 일부 포함되어 있다."
+  }
+ },
+ "j0007": {
+  "correctness": {
+   "score": 3,
+   "reason": "240kW 파워뱅크 1기는 맞지만 주된 값인 디스펜서 2기가 명시되지 않아 최대 3점이다(규칙2, 규칙7)."
+  },
+  "answer_coverage": {
+   "score": 3,
+   "reason": "주된 포인트 중 디스펜서 2기가 빠져 일부만 커버한다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "파워뱅크 1기는 context에 있으나 총 3기는 context에 없는 합산 추론이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공사의 설치대수를 직접 담고 있다."
+  }
+ },
+ "j0008": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업예산 99,000,000원이 정확하며 괄호 안 한글 금액·부가세 표기 누락은 감점하지 않는다(규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "사업예산 99,000,000원은 context에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "사업예산 정보는 있으나 사용인감계·청렴계약 서식 등 무관한 내용이 많이 섞여 있다."
+  }
+ },
+ "j0009": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 387,660원이 정확하고 덧붙인 동복 264,660원도 맞다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있고 하복 금액 누락은 부차 정보라 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액과 동복 금액은 context에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "기초금액 정보는 충분하나 실적증명서 서식 등 무관한 내용이 일부 포함되어 있다."
+  }
+ },
+ "j0010": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 631,400,000원(부가가치세 포함)이 기대 답변과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 빠짐없이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액 631,400,000원과 부가가치세 포함 표기는 context에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "기초금액 정보는 있으나 평가항목·안전보건 의무 등 무관한 내용이 상당 부분 포함되어 있다."
+  }
+ }
+}

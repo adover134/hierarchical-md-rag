@@ -1,0 +1,182 @@
+{
+ "j0001": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 82.495%와 85점, 최저가 순 적격심사 기준이 모두 맞으며 '예정가격'을 '예상가격'으로 쓴 것은 사소한 표기 차이다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "낙찰하한율, 최저가 순 적격심사, 종합평점 85점 이상이라는 주된 포인트를 모두 포함한다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "내용은 context의 8.가항과 일치하나 context에 없는 '예상가격'이라는 용어로 바꿔 썼다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 낙찰자 결정 조항이 그대로 포함되어 있다."
+  }
+ },
+ "j0002": {
+  "correctness": {
+   "score": 5,
+   "reason": "납품기한 2026년 12월 31일이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 납품기한을 빠짐없이 담았다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '납품기한 : 2026. 12. 31.'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 납품기한 항목이 들어 있다."
+  }
+ },
+ "j0003": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 33,690,000원이 기대 값과 같다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 기초금액을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 금33,690,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 금액 표가 들어 있다."
+  }
+ },
+ "j0004": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업예산 55,800,000원이 기대 값과 같다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 사업예산을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업예산 : 55,800,000원 / 부가세포함'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 사업예산 항목이 들어 있다."
+  }
+ },
+ "j0005": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 60일이 맞다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 공사기간 60일을 포함한다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 공사기간 항목이 들어 있다."
+  }
+ },
+ "j0006": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 365일이 맞고 괄호 안 단가발주 기간 누락은 부차 정보다(규칙1, 규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 들어 있고 괄호 안 내역 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '계약기간: 계약체결일로부터 365일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 입찰의 계약기간 항목이 들어 있다."
+  }
+ },
+ "j0007": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 기초금액 50,000,000원이 맞고 괄호 안 추정가격과 부가가치세는 부차 정보다(규칙1, 규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 들어 있고 괄호 안 내역 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 50,000,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 기초금액 항목이 들어 있다."
+  }
+ },
+ "j0008": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 228,081,000원이 기대 값과 같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 기초금액을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 228,081,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 금액 표가 들어 있다."
+  }
+ },
+ "j0009": {
+  "correctness": {
+   "score": 5,
+   "reason": "예산 608,881,900원이 한글 금액 표기와 같은 값이다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 예산을 포함한다(규칙4, 규칙7)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '예산 : 일금육억팔백팔십팔만일천구백원정(608,881,900원, 부가세 포함)'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 예산 항목이 들어 있다."
+  }
+ },
+ "j0010": {
+  "correctness": {
+   "score": 5,
+   "reason": "고른 대상인 건축 공사와 그 기초금액 368,467,000원이 맞다(규칙5)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "비교 질문의 주된 사실인 고른 대상과 그 값을 담았으므로 통신 금액이 빠져도 감점하지 않는다(규칙5, 규칙7)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "건축 368,467,000원과 통신 24,867,000원이 context에 있어 비교 결과가 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 두 공사의 기초금액이 모두 들어 있다."
+  }
+ }
+}

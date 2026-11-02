@@ -1,0 +1,182 @@
+{
+ "j0001": {
+  "correctness": {
+   "score": 5,
+   "reason": "납품기한 2026년 12월 31일이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 납품기한이 모두 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '납품기한 : 2026. 12. 31.'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 납품기한이 명시되어 있다."
+  }
+ },
+ "j0002": {
+  "correctness": {
+   "score": 0,
+   "reason": "주된 값 60일이 없고 '사업기간은 2026년'이라는 무의미한 답을 했다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 포인트인 60일이 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "'사업기간은 2026년'이라는 주장은 context의 '착공일로부터 60일'과 맞지 않아 근거가 없다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context 표에 해당 공사의 공사기간 '착공일로부터 60일'이 명시되어 있다."
+  }
+ },
+ "j0003": {
+  "correctness": {
+   "score": 5,
+   "reason": "390,000원이 기대 주된 값과 같고 라벨 '사업비' 차이는 감점하지 않는다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 390,000원이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '인천광역시교육청 덕적고등학교'라는 기관명은 context에 없다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 사업비 값 한 줄뿐이라 질문의 값은 들어 있으나 사업명이나 금액 항목명을 확인할 근거가 부족하다."
+  }
+ },
+ "j0004": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 '계약체결일로부터 365일'이 맞고 괄호 안 단가발주 조건 누락은 감점하지 않는다(규칙1, 규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 포인트 365일이 포함되어 있고 괄호 안 부차 정보 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '계약기간 계약체결일로부터 365 일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 입찰의 계약기간이 명시되어 있다."
+  }
+ },
+ "j0005": {
+  "correctness": {
+   "score": 5,
+   "reason": "예산이 더 큰 곳으로 영남영농조합법인을 고르고 두 금액도 맞다(규칙5, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "선택 대상과 두 금액이 모두 포함되어 있다(규칙5)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "두 금액 모두 context의 예산 문구에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 두 사업의 예산이 모두 들어 있다."
+  }
+ },
+ "j0006": {
+  "correctness": {
+   "score": 5,
+   "reason": "240kW 파워뱅크 2기와 디스펜서 5기가 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 세 개가 모두 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '설치대수 : 240kW 파워뱅크 2 기, 디스펜서 5 기'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 설치대수가 명시되어 있다."
+  }
+ },
+ "j0007": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 47,820,800원이 맞고 괄호 안 추정가격·부가가치세는 부차 정보이며 라벨 차이도 감점하지 않는다(규칙1, 규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있고 괄호 안 내역 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "금액이 context의 사업비 문구에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 사업비 값 한 줄뿐이라 질문의 값은 들어 있으나 사업명이나 금액 항목명을 확인할 근거가 부족하다."
+  }
+ },
+ "j0008": {
+  "correctness": {
+   "score": 5,
+   "reason": "55,800,000원이 기대 주된 값과 같고 라벨 '사업비' 차이는 감점하지 않는다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 55,800,000원이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "금액이 context의 사업비 문구에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 사업비 값 한 줄뿐이라 질문의 값은 들어 있으나 사업명이나 금액 항목명을 확인할 근거가 부족하다."
+  }
+ },
+ "j0009": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 착공일로부터 180일이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 180일이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 180 일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 공사기간이 명시되어 있다."
+  }
+ },
+ "j0010": {
+  "correctness": {
+   "score": 5,
+   "reason": "100,000,000원이 기대 주된 값과 같고 라벨 '사업비' 차이는 감점하지 않는다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 100,000,000원이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '충청남도 아산시'라는 기관명은 context에 없다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 사업비 값 한 줄뿐이라 질문의 값은 들어 있으나 사업명이나 금액 항목명을 확인할 근거가 부족하다."
+  }
+ }
+}

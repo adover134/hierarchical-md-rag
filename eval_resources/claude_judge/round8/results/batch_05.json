@@ -1,0 +1,182 @@
+{
+ "j0041": {
+  "correctness": {
+   "score": 5,
+   "reason": "240kW 파워뱅크 2기, 디스펜서 5기로 주된 값이 모두 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 포인트인 파워뱅크 2기와 디스펜서 5기가 모두 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '설치대수 : 240kW 파워뱅크 2기, 디스펜서 5기'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 사업 공고 원문으로 설치대수 정보를 충분히 담고 있다."
+  }
+ },
+ "j0042": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 33,690,000원으로 기대 주된 값과 같다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 기초금액이 빠짐없이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 금33,690,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 양안이골소하천 정비관리사업 공고로 기초금액을 명시하고 있다."
+  }
+ },
+ "j0043": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 26,750,000원으로 기대 주된 값과 같다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 기초금액이 빠짐없이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 금26,750,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 고양골소하천 정비관리사업 공고로 기초금액을 명시하고 있다."
+  }
+ },
+ "j0044": {
+  "correctness": {
+   "score": 5,
+   "reason": "더 큰 사업으로 한서대학교 용역을 선택했고 220,000,000원과 150,000,000원 값도 맞다(규칙5)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "선택 대상과 두 사업예산이 모두 포함되어 있다(규칙5)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "두 사업예산, VAT 포함 여부, 계약 종료일 모두 context에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "두 사업의 공고가 모두 있어 비교에 충분하나 다른 사업예산(55,800,000원) 등 무관한 조각이 섞여 있다."
+  }
+ },
+ "j0045": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 90일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 90일이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사 기간: 90일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공사 공고로 공사기간을 명시하고 있다."
+  }
+ },
+ "j0046": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 102,000,000원이 맞으며 괄호 안 내역 누락은 감점하지 않는다(규칙1, 규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있고 부차 정보(추정가격, 부가가치세) 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 102,000,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 G램프사업단 구매 공고로 기초금액을 명시하고 있다."
+  }
+ },
+ "j0047": {
+  "correctness": {
+   "score": 5,
+   "reason": "계약기간 420일로 기대 답변의 주된 값과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 420일이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '계약기간: 계약체결일로부터 420일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 SRT 팬터그래프 집전판 구매 공고로 계약기간을 명시하고 있다."
+  }
+ },
+ "j0048": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 102,000,000원이 맞으며 괄호 안 내역 누락은 감점하지 않는다(규칙1, 규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있고 부차 정보 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 102,000,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 G-램프사업단 실험실습기자재 구매 공고로 기초금액을 명시하고 있다."
+  }
+ },
+ "j0049": {
+  "correctness": {
+   "score": 5,
+   "reason": "납품기한 2026년 12월 31일로 기대 답변과 같다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 납품기한이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '납품기한 : 2026. 12. 31.'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 식자재 구매 공고로 납품기한을 명시하고 있다."
+  }
+ },
+ "j0050": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027년 2월 19일, 하복 2027년 5월 7일로 주된 값이 모두 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "동복과 하복 납품기한 두 포인트가 모두 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 계약특수조건 제1조에서 두 날짜가 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 서야고등학교 교복 구매 공고로 납품기한을 명시하고 있다."
+  }
+ }
+}

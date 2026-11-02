@@ -1,0 +1,182 @@
+{
+ "j0071": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 285,125,000원이 기대 답변과 일치하며 한글 금액 표기는 괄호 안 부차 정보다(규칙1, 규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 기초금액이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '마. 기초금액: 금285,125,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 공고와 기초금액이 직접 들어 있다."
+  }
+ },
+ "j0072": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 47,820,800원이 맞고 괄호 안 추정가격·부가가치세 누락은 감점하지 않는다(규칙1, 규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 모두 포함되어 있고 부차 정보 누락은 감점 대상이 아니다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 금47,820,800원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 입찰 사항과 기초금액이 직접 들어 있다."
+  }
+ },
+ "j0073": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 계약기간 420일이 기대 답변과 일치한다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 420일이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '계약기간: 계약체결일로부터 420일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 입찰 공고와 계약기간이 직접 들어 있다."
+  }
+ },
+ "j0074": {
+  "correctness": {
+   "score": 5,
+   "reason": "착공일로부터 120일로 기대 답변과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 120일이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 120일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 공고와 공사기간이 직접 들어 있다."
+  }
+ },
+ "j0075": {
+  "correctness": {
+   "score": 5,
+   "reason": "예산이 더 큰 곳으로 영남영농조합법인을 고르고 두 예산 값도 맞게 제시했다(규칙5)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "선택 대상과 두 기관의 예산 값이 모두 들어 있다(규칙3, 규칙5)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "두 예산은 context에서 확인되고 차액도 맞지만 '약 60% 더 많은'은 context에 없는 계산이며 쏘유팜 대비로는 부정확한 추론이다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "두 기관의 공고와 예산이 들어 있으나 진주올팜·선문대학교 등 무관한 문서도 섞여 있다."
+  }
+ },
+ "j0076": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 공사기간 60일이 기대 답변과 일치한다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 60일이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 입찰 사항과 공사기간이 직접 들어 있다."
+  }
+ },
+ "j0077": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업예산 55,800,000원이 일치하며 '예산'이라는 이름 차이는 감점하지 않는다(규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 사업예산이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '마. 사업예산 : 55,800,000원 / 부가세포함'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 공고와 사업예산이 직접 들어 있다."
+  }
+ },
+ "j0078": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 50,000,000원이 맞고 괄호 안 추정가격·부가세 누락은 감점하지 않는다(규칙1, 규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있고 부차 정보 누락은 감점 대상이 아니다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 50,000,000'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 공고와 기초금액이 직접 들어 있다."
+  }
+ },
+ "j0079": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업기간 착공일로부터 60일간으로 기대 답변과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 60일이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '라. 사업기간: 착공일로부터 60일간'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 공고와 사업기간이 직접 들어 있다."
+  }
+ },
+ "j0080": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 631,400,000원(부가가치세 포함)이 기대 답변과 일치한다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 기초금액이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '바. 기초금액 : ... ₩631,400,000원, 부가가치세 포함'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 공고와 기초금액이 직접 들어 있다."
+  }
+ }
+}

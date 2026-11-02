@@ -1,0 +1,182 @@
+{
+ "j0021": {
+  "correctness": {
+   "score": 5,
+   "reason": "착공일로부터 60일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 60일이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업기간: 착공일로부터 60일간'과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 사업기간이 명시되어 있다."
+  }
+ },
+ "j0022": {
+  "correctness": {
+   "score": 5,
+   "reason": "규칙5에 따라 주된 사실인 선택 대상(건축)이 맞다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "규칙5·규칙3에 따라 괄호 안 금액 누락은 감점하지 않고 선택 대상이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "context에 두 기초금액은 있으나 어느 금액이 건축·통신인지 표시가 없어 대상 귀속은 추론이다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "두 기초금액은 있으나 공사명이 없어 어느 공사의 금액인지 판단할 정보가 부족하다."
+  }
+ },
+ "j0023": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 120일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 120일이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context 표의 '착공일로부터 120일'에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 공사기간이 명시되어 있다."
+  }
+ },
+ "j0024": {
+  "correctness": {
+   "score": 0,
+   "reason": "규칙6에 따라 답변 거부이므로 0점이다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "규칙6에 따라 답변 거부이므로 0점이다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "규칙6에 따라 주장이 없으므로 5점이다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 16_의성여객 공사의 설치대수가 명시되어 있으나 다른 공사 내용도 섞여 있다."
+  }
+ },
+ "j0025": {
+  "correctness": {
+   "score": 2,
+   "reason": "주된 값 2026년 12월 31일 중 연도만 제시해 납품기한 날짜가 빠졌다."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "주된 값인 구체적 날짜(12월 31일)가 누락되어 핵심 정보가 거의 없다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "2026년은 context의 납품기한 2026. 12. 31.과 모순되지 않으나 지나치게 축약됐다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 납품기한이 명시되어 있으나 무관한 확인서 내용 등이 섞여 있다."
+  }
+ },
+ "j0026": {
+  "correctness": {
+   "score": 5,
+   "reason": "규칙4(b)에 따라 '사업기간'이라는 이름 차이는 감점하지 않으며 60일이 맞다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 60일이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context 표의 '착공일로부터 60일'에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 공사기간이 명시되어 있다."
+  }
+ },
+ "j0027": {
+  "correctness": {
+   "score": 5,
+   "reason": "규칙4에 따라 사업비라는 이름과 '약 2.9억' 병기는 차이로 보지 않으며 285,125,000원이 맞다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 285,125,000원이 포함되어 있고 괄호 안 한글 금액 누락은 규칙3에 따라 감점하지 않는다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context와 일치하나 '충청남도 서천군 농업기술센터'라는 기관명은 context에 없다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "금액은 있으나 공사명이나 기초금액이라는 표시가 없어 관련성 판단 정보가 부족하다."
+  }
+ },
+ "j0028": {
+  "correctness": {
+   "score": 5,
+   "reason": "규칙4에 따라 사업비라는 이름 차이는 감점하지 않으며 78,364,000원이 맞다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "규칙3에 따라 괄호 안 내역 누락은 감점하지 않고 주된 값이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변이 context의 '약 7,836만 원 (78,364,000원)'을 그대로 옮겼다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "금액은 있으나 공사명이나 기초금액이라는 표시가 없어 관련성 판단 정보가 부족하다."
+  }
+ },
+ "j0029": {
+  "correctness": {
+   "score": 5,
+   "reason": "착공일로부터 120일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 120일이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context 표의 '착공일로부터 120일'에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 공사기간이 명시되어 있다."
+  }
+ },
+ "j0030": {
+  "correctness": {
+   "score": 5,
+   "reason": "착공일로부터 60일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 60일이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간 착공일로부터 60일'에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 공사기간이 명시되어 있다."
+  }
+ }
+}
