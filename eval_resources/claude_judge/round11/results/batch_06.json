@@ -1,0 +1,362 @@
+{
+ "j0101": {
+  "correctness": {
+   "score": 0,
+   "reason": "주된 값 '착공일로부터 60일'이 없고 '사업기간은 2026년'이라는 엉뚱한 문구만 있다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 포인트 60일이 빠졌다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "'사업기간은 2026년'은 context의 공사기간(60일)과 맞지 않는 근거 없는 주장이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 '공사기간: 착공일로부터 60일'이 직접 들어 있다."
+  }
+ },
+ "j0102": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업비로 표기했지만 값 26,750,000원이 기대 기초금액과 같다(규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 26,750,000원이 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '충청북도 영동군'은 context에 없는 추가 정보다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 정답 금액은 있으나 사업명·기초금액 라벨 없이 사업비 한 줄만 있다."
+  }
+ },
+ "j0103": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027.2.19., 하복 2027.5.7. 모두 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "두 납품기한이 모두 포함됐다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "두 날짜 모두 context의 납품기한 항목에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공고의 납품기한을 직접 담고 있다."
+  }
+ },
+ "j0104": {
+  "correctness": {
+   "score": 0,
+   "reason": "주된 값 60일이 없고 '사업기간은 2026년'이라는 무의미한 문구뿐이다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 포인트 60일이 빠졌다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "'사업기간은 2026년'은 context에서 확인되지 않는 주장이다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context는 공고번호와 안전보건 의무사항뿐이라 공사기간 정보가 없다."
+  }
+ },
+ "j0105": {
+  "correctness": {
+   "score": 5,
+   "reason": "착수일로부터 365일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 365일이 포함됐다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context 표의 과업기간 항목에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 용역의 과업기간을 직접 담고 있다."
+  }
+ },
+ "j0106": {
+  "correctness": {
+   "score": 5,
+   "reason": "608,881,900원으로 주된 값이 맞다(규칙4a)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함됐다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 예산 항목에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공고의 예산을 직접 담고 있다."
+  }
+ },
+ "j0107": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업비로 표기했지만 값 245,339,600원이 기대 예산과 같다(규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 245,339,600원이 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '두산에너빌리티 (주)'는 context에 없는 추가 정보다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 정답 금액은 있으나 사업명·예산 라벨 없이 사업비 한 줄만 있다."
+  }
+ },
+ "j0108": {
+  "correctness": {
+   "score": 0,
+   "reason": "비교 대상(영남영농조합법인)도 값도 없이 '히트펌프, 물품'만 답했다(규칙5)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "선택 대상과 두 예산 값이 모두 빠졌다(규칙3,5)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "단어는 context에 있으나 질문에 대한 근거 있는 주장이 없다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "두 금액은 context에 있으나 어느 업체 것인지 구분 정보가 없고 무관한 선문대 공고가 많다."
+  }
+ },
+ "j0109": {
+  "correctness": {
+   "score": 5,
+   "reason": "100,000,000원으로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함됐다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context 표의 1지역 기초금액에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context 표에 해당 공고의 기초금액이 직접 있다."
+  }
+ },
+ "j0110": {
+  "correctness": {
+   "score": 0,
+   "reason": "주된 값 420일이 없고 'srt, 구매' 같은 무의미한 문구뿐이다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 포인트 420일이 빠졌다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변 문구는 context에 근거한 계약기간 주장이 아니다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context에 입찰명만 있고 계약기간 정보는 없으며 대부분 선문대 공고다."
+  }
+ },
+ "j0111": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 계약체결일로부터 365일이 맞고 괄호 안 단가발주 조건은 부차 정보다(규칙1,2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 365일이 포함됐고 괄호 내역 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 계약기간 항목에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 입찰의 계약기간을 직접 담고 있다."
+  }
+ },
+ "j0112": {
+  "correctness": {
+   "score": 5,
+   "reason": "631,400,000원으로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함됐다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 기초금액 항목을 그대로 옮겼다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공고의 기초금액이 직접 있다."
+  }
+ },
+ "j0113": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 50,000,000원이 맞고 추정가격·부가세는 부차 정보다(규칙1,4a)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함됐다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 공사금액 표에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공사의 기초금액을 직접 담고 있다."
+  }
+ },
+ "j0114": {
+  "correctness": {
+   "score": 0,
+   "reason": "주된 값 60일이 없고 공사명 단어만 나열했다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 포인트 60일이 빠졌다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변 문구는 context에 근거한 기간 주장이 아니다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 삼산면 공사의 '착공일로부터 60일간'이 있으나 다른 공고 내용이 많이 섞여 있다."
+  }
+ },
+ "j0115": {
+  "correctness": {
+   "score": 5,
+   "reason": "2026. 08. 12. 15:00은 표기만 다른 같은 값이다(규칙4a,7)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "날짜와 시각이 모두 포함됐다(규칙7)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context 입찰일정 표에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공고의 접수마감일시를 직접 담고 있다."
+  }
+ },
+ "j0116": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 60일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함됐다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 공사기간 항목에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공사의 공사기간을 직접 담고 있다."
+  }
+ },
+ "j0117": {
+  "correctness": {
+   "score": 0,
+   "reason": "주된 값 390,000원 대신 서식의 자리표시 '000,000,000원'을 답했다(규칙2,7)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값 390,000원이 빠졌다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "'000,000,000원'은 context 서식의 빈칸 계약금액을 사업비로 잘못 옮긴 것이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 '기초금액: 금 390,000원'이 직접 있다."
+  }
+ },
+ "j0118": {
+  "correctness": {
+   "score": 0,
+   "reason": "주된 값 99,000,000원이 없고 '선문대학교, 교육용'이라는 무의미한 문구뿐이다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값이 빠졌다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변 문구는 context에 근거한 예산 주장이 아니다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 해당 공고의 사업예산 99,000,000원이 있으나 다른 공고와 서식 내용이 많다."
+  }
+ },
+ "j0119": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업기간으로 표기했지만 값 180일이 기대 공사기간과 같다(규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 180일이 포함됐다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 공사기간 항목(착공일로부터 180일)에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 정답이 있으나 송림리 공사 내용이 함께 섞여 있다."
+  }
+ },
+ "j0120": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업비로 표기했지만 값 245,339,600원이 기대 예산과 같다(규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함됐다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 쏘유팜 공고 예산 항목에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 쏘유팜 공고 예산이 있으나 한성케미칼·헤르스 등 무관한 공고가 많이 섞여 있다."
+  }
+ }
+}

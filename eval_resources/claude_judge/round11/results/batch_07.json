@@ -1,0 +1,362 @@
+{
+ "j0121": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 33,690,000원으로 주된 값과 일치한다(규칙4a)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "유일한 주된 값인 기초금액이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 금33,690,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 사업 공고의 금액 항목이 포함되어 질문에 충분하다."
+  }
+ },
+ "j0122": {
+  "correctness": {
+   "score": 5,
+   "reason": "낙찰하한율 86.245%로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 86.245%가 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '낙찰하한율: 86.245%'가 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 입찰 공고의 낙찰자 결정 항목이 포함되어 있다."
+  }
+ },
+ "j0123": {
+  "correctness": {
+   "score": 0,
+   "reason": "의미 없는 문자열을 답해 주된 값 420일이 없다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 포인트인 계약기간 420일이 빠졌다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 0,
+   "reason": "'사업기간은 srt, 구매'라는 내용은 context에 근거가 없다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "SRT 팬터그래프 입찰명 한 줄 외에는 선문대 공고 등 무관한 내용이고 계약기간 정보가 없다."
+  }
+ },
+ "j0124": {
+  "correctness": {
+   "score": 5,
+   "reason": "240kW 파워뱅크 1기, 디스펜서 2기로 주된 값이 모두 맞다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 포인트 세 가지가 모두 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 설치대수 항목에서 직접 확인되며 '설치되었습니다'는 사소한 표현 차이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 설치대수가 명시되어 있다."
+  }
+ },
+ "j0125": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 78,364,000원으로 주된 값이 맞고 괄호 내역 누락은 감점하지 않는다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 들어 있고 부차 내역 누락은 감점 대상이 아니다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 기초금액 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 기초금액 항목이 포함되어 있다."
+  }
+ },
+ "j0126": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업예산 55,800,000원으로 주된 값과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "금액·한글표기·부가세포함 모두 context에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 사업 공고의 사업예산 항목이 포함되어 있다."
+  }
+ },
+ "j0127": {
+  "correctness": {
+   "score": 0,
+   "reason": "답변 거부로 0점이다(규칙6)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "답변 거부로 0점이다(규칙6)."
+  },
+  "faithfulness": {
+   "score": 0,
+   "reason": "N/A(거부 답변) 주장이 없어 채점 대상이 아니다(규칙6)."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "기초금액 631,400,000원이 포함되어 있으나 다른 공고(무공해차 충전인프라) 내용이 섞여 있다."
+  }
+ },
+ "j0128": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 78,364,000원으로 주된 값과 일치한다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 들어 있고 괄호 내역 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "금액과 부가세 포함 여부가 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 기초금액 항목이 포함되어 있다."
+  }
+ },
+ "j0129": {
+  "correctness": {
+   "score": 0,
+   "reason": "'선문대학교, 교육용'이라는 무의미한 답으로 주된 값 99,000,000원이 없다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 포인트인 사업예산이 빠졌다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 0,
+   "reason": "사업비가 '선문대학교, 교육용'이라는 주장은 context에 근거가 없다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "사업예산 99,000,000원이 포함되어 있으나 전자공학과 공고 등 다른 내용이 섞여 있다."
+  }
+ },
+ "j0130": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업기간 60일로 주된 값과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '착공일로부터 60일간'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공사 공고의 사업기간 항목이 포함되어 있다."
+  }
+ },
+ "j0131": {
+  "correctness": {
+   "score": 5,
+   "reason": "납품기한 2026년 12월 31일로 주된 값과 일치한다(규칙4a)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '납품기한 : 2026. 12. 31.'에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 납품기한 항목이 포함되어 있다."
+  }
+ },
+ "j0132": {
+  "correctness": {
+   "score": 0,
+   "reason": "공고문 문장 조각을 사업비로 답해 주된 값 102,000,000원이 없다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 포인트인 기초금액이 빠졌다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 0,
+   "reason": "답변 내용은 사업비로서 context에 근거가 없다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context는 선문대학교 공고뿐이고 G램프사업단 사업이나 기초금액 정보가 없다."
+  }
+ },
+ "j0133": {
+  "correctness": {
+   "score": 5,
+   "reason": "계약체결일로부터 365일로 주된 값이 맞고 괄호 안 단가발주 기간 누락은 감점하지 않는다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 들어 있고 부차 정보 누락은 감점 대상이 아니다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 계약기간 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 입찰의 계약기간 항목이 포함되어 있다."
+  }
+ },
+ "j0134": {
+  "correctness": {
+   "score": 0,
+   "reason": "'2026'은 동복 2027년 2월 19일, 하복 2027년 5월 7일이라는 주된 값과 맞지 않는다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 포인트 두 날짜가 모두 빠졌다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context의 납품기한은 2027년이며 '2026'을 납품기한으로 한 근거가 없다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "계약 특수조건의 납품기한이 포함되어 있으나 청주하이텍고 공고 등 다른 내용이 섞여 있다."
+  }
+ },
+ "j0135": {
+  "correctness": {
+   "score": 5,
+   "reason": "계약체결일로부터 420일로 주된 값과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '계약기간: 계약체결일로부터 420일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 입찰의 입찰사항 표가 포함되어 있다."
+  }
+ },
+ "j0136": {
+  "correctness": {
+   "score": 5,
+   "reason": "착공일로부터 120일로 주된 값과 일치한다(규칙4a)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 공사기간 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공사 공고의 공사기간 항목이 포함되어 있다."
+  }
+ },
+ "j0137": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업비 99,000,000원으로 값이 같아 이름 차이는 감점하지 않는다(규칙4a, 규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업비: 약 9,900만 원 (99,000,000원)'을 그대로 옮겼다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "금액 값은 있으나 어느 사업인지 식별 정보가 없는 한 줄뿐이라 부분적으로 관련된다."
+  }
+ },
+ "j0138": {
+  "correctness": {
+   "score": 1,
+   "reason": "'2026년'은 연도만 맞고 주된 값인 12월 31일이 빠져 사실상 답이 되지 않는다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "주된 포인트인 구체적 날짜가 거의 빠졌다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 2,
+   "reason": "2026년은 context와 모순되지 않으나 납품기한 2026. 12. 31.을 제대로 반영하지 못해 근거가 부분적이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 납품기한 항목이 포함되어 있다."
+  }
+ },
+ "j0139": {
+  "correctness": {
+   "score": 2,
+   "reason": "총 3기는 합계로는 모순이 없으나 주된 값인 240kW 파워뱅크 1기와 디스펜서 2기 구분이 빠졌다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 2,
+   "reason": "주된 포인트 세 가지(240kW, 파워뱅크 1기, 디스펜서 2기)가 문자 그대로는 모두 빠지고 합계만 남았다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "context의 1기와 2기를 더한 추론이며 '총 3기'는 context에 직접 나오지 않는다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 설치대수 항목이 포함되어 있다."
+  }
+ },
+ "j0140": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업비 631,400,000원으로 값이 같아 이름 차이는 감점하지 않는다(규칙4a, 규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업비: 약 6.3억 원 (631,400,000원)'을 그대로 옮겼다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "금액 값은 있으나 어느 사업인지 식별 정보가 없는 한 줄뿐이라 부분적으로 관련된다."
+  }
+ }
+}

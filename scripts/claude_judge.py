@@ -80,9 +80,14 @@ def _context(rec: dict, k: int) -> str:
 _REFUSAL = re.compile(r"확인되지\s*않|찾을\s*수\s*없|근거\s*부족|정보가\s*없")
 
 
+REFUSAL_MAX_CHARS = 80  # 거부 문구만 낸 답변의 길이 상한. 실제 거부는 모두 53자 이하였고, 값을 낸 답변 끝에 문구가 붙은 경우(157자)는 거부가 아니다.
+
+
 def is_refusal(answer: str) -> bool:
-    """답변이 값을 내지 않고 '문서에서 확인되지 않습니다' 같은 거부·폴백 문구만 낸 경우."""
-    return bool(_REFUSAL.search(answer or ""))
+    """답변이 값을 내지 않고 '문서에서 확인되지 않습니다' 같은 거부·폴백 문구만 낸 경우.
+    값을 낸 긴 답변 끝에 문구가 덧붙은 경우는 거부로 보지 않는다(공백을 뺀 길이가 `REFUSAL_MAX_CHARS` 이하일 때만)."""
+    text = answer or ""
+    return bool(_REFUSAL.search(text)) and len(re.sub(r"\s", "", text)) <= REFUSAL_MAX_CHARS
 
 
 def primary_hint(expected: str, answer: str) -> dict:

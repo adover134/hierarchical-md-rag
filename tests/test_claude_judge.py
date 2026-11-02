@@ -159,3 +159,12 @@ def test_import_keeps_the_previous_claude_cache_when_regrading_with_v2(tmp_path,
     assert (runs / "r1" / "judge_cache_v1_ref" / "sys" / "new20__m1__1.json").exists()
     assert _json.loads((cache / "new20__m1__1.json").read_text(encoding="utf-8"))["correctness"]["score"] == 5
     assert not (runs / "r1" / "judge_cache_gptoss_ref").exists()
+
+
+def test_is_refusal_ignores_a_stray_not_found_line_after_a_real_answer():
+    from claude_judge import is_refusal
+
+    long_answer = ("공사기간은 90일입니다. - 등록개시: 2026.8.10. 10:00, 마감 및 개찰: 2026.8.14. 10:00/11:00. "
+                   "- 사업명: 지역농업개발센터 시설개선 공사(안남·청산분소)(건축). - 담당: 농업기술센터 기술지원과 지도기획팀입니다. - 문서에서 확인되지 않습니다.")
+    assert not is_refusal(long_answer)
+    assert is_refusal("요청하신 값은 `문서에서 확인되지 않습니다.`입니다.")

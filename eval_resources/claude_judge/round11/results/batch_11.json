@@ -1,0 +1,362 @@
+{
+ "j0201": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 120일이 기대 답변과 일치한다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 120일이 답변에 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '공사기간: 착공일로부터 120일'이 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 공사기간·금액 등 필요한 정보가 context에 있다."
+  }
+ },
+ "j0202": {
+  "correctness": {
+   "score": 0,
+   "reason": "답변이 '사업기간은 공사'라는 무의미한 문장으로 주된 값 90일이 없다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값 90일이 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변 문장은 context의 '공사 기간: 90일'과 무관한 깨진 출력이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 '공사 기간: 90일'이 명시되어 있다."
+  }
+ },
+ "j0203": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 120일이 기대 답변과 일치한다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 120일이 답변에 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '공사기간: 착공일로부터 120일'이 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 공사기간·금액 등 필요한 정보가 context에 있다."
+  }
+ },
+ "j0204": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 608,881,900원이 일치한다(규칙2, 규칙4a)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 예산 항목 '608,881,900원, 부가세 포함'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 예산이 명시되어 있다."
+  }
+ },
+ "j0205": {
+  "correctness": {
+   "score": 5,
+   "reason": "'사업비'로 이름이 달라도 값 55,800,000원이 기대 주된 값과 같다(규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업비: 약 5,580만 원 (55,800,000원)'을 그대로 옮겼다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 금액은 있으나 사업명 등 맥락이 없는 한 줄뿐이다."
+  }
+ },
+ "j0206": {
+  "correctness": {
+   "score": 5,
+   "reason": "'사업비'로 표기했지만 값 285,125,000원이 기초금액과 같다(규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 금 285,125,000 원'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공사의 기초금액이 있으나 다른 공사(94,083,000원) 내용도 섞여 있다."
+  }
+ },
+ "j0207": {
+  "correctness": {
+   "score": 0,
+   "reason": "답변이 키워드 나열로 깨져 주된 값 60일이 없다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값 60일이 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변 문장은 context의 '사업기간: 착공일로부터 60 일간'과 무관한 깨진 출력이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 사업기간이 명시되어 있다."
+  }
+ },
+ "j0208": {
+  "correctness": {
+   "score": 5,
+   "reason": "'사업비'로 이름이 달라도 값 47,820,800원이 기초금액과 같다(규칙4b, 괄호 내역은 부차 정보로 규칙1)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 있고 괄호 내역 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업비: 약 4,782만 원 (47,820,800원)'을 그대로 옮겼다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 금액은 있으나 사업명 등 맥락이 없는 한 줄뿐이다."
+  }
+ },
+ "j0209": {
+  "correctness": {
+   "score": 0,
+   "reason": "답변이 키워드 나열로 깨져 주된 값 365일이 없다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값 365일이 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변 문장은 context 내용에 근거한 주장이 아닌 깨진 출력이다."
+  },
+  "context_relevance": {
+   "score": 2,
+   "reason": "context에 입찰명은 있으나 계약기간 365일은 없고 다른 공고 내용이 대부분이다."
+  }
+ },
+ "j0210": {
+  "correctness": {
+   "score": 5,
+   "reason": "'사업비'로 표기했지만 값 608,881,900원이 예산과 같다(규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '예산: ...608,881,900원'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 예산이 있으나 다른 금액(271,670,300원 등)의 표도 섞여 있다."
+  }
+ },
+ "j0211": {
+  "correctness": {
+   "score": 0,
+   "reason": "선택한 대상(한서대학교 사업)과 값이 없고 '용역'이라는 무의미한 답이다(규칙5)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "비교 결과와 두 사업의 예산이 모두 빠졌다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변은 context의 사업예산 정보에 근거하지 않은 깨진 출력이다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "한서대 사업예산 220,000,000원은 있으나 자카르타 용역의 예산은 context에 없다."
+  }
+ },
+ "j0212": {
+  "correctness": {
+   "score": 0,
+   "reason": "답변 거부이므로 0점이다(규칙6)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "답변 거부이므로 0점이다(규칙6)."
+  },
+  "faithfulness": {
+   "score": 0,
+   "reason": "N/A(거부 답변) 주장이 없어 채점 대상이 아니다(규칙6)."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context는 낙찰하한율 89.745%인 다른 공고로 해당 입찰의 86.245%가 없다."
+  }
+ },
+ "j0213": {
+  "correctness": {
+   "score": 2,
+   "reason": "주된 값인 파워뱅크 2기와 디스펜서 5기를 밝히지 않고 합계 7기만 제시해 주된 값이 빠졌다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "주된 포인트(240kW 파워뱅크 2기, 디스펜서 5기)가 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "context의 2기와 5기를 합산한 추론으로 종류가 다른 설비를 합친 일반화가 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 '설치대수: 240kW 파워뱅크 2 기, 디스펜서 5 기'가 명시되어 있다."
+  }
+ },
+ "j0214": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 228,081,000원이 일치한다(규칙2, 규칙4a)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 228,081,000 원'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 기초금액이 명시되어 있다."
+  }
+ },
+ "j0215": {
+  "correctness": {
+   "score": 0,
+   "reason": "답변이 '사업기간은 공사'라는 무의미한 문장으로 주된 값 90일이 없다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값 90일이 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변 문장은 context의 '공사 기간: 90일'과 무관한 깨진 출력이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 '공사 기간: 90일'이 명시되어 있다."
+  }
+ },
+ "j0216": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 90일이 일치한다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 90일이 답변에 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "공사기간 90일과 공사명 요소가 모두 context에 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 '공사 기간: 90일'이 명시되어 있다."
+  }
+ },
+ "j0217": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 26,750,000원이 일치한다(규칙2, 규칙4a)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액 금26,750,000 원'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 기초금액이 명시되어 있다."
+  }
+ },
+ "j0218": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 387,660원이 일치하고 동복·하복 내역은 부차 정보다(규칙1, 규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 있고 괄호 내역 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 금 387,660 원'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 입찰의 기초금액이 명시되어 있다."
+  }
+ },
+ "j0219": {
+  "correctness": {
+   "score": 1,
+   "reason": "답변이 '2026년'만 담은 깨진 출력으로 날짜·기간 주된 값이 대부분 빠졌다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "10월 20일~22일, 3일간 등 주된 포인트가 거의 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변 문장은 context의 행사 기간 정보를 제대로 반영하지 않은 깨진 출력이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 '행사 기간: 2026년 10월 20일(화) ~ 10월 22일(수), 3일간'이 명시되어 있다."
+  }
+ },
+ "j0220": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 50,000,000원이 일치하고 추정가격·부가세는 부차 정보다(규칙1, 규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 있고 괄호 내역 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 50,000,000'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 기초금액이 명시되어 있다."
+  }
+ }
+}

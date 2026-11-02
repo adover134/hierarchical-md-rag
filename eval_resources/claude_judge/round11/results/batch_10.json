@@ -1,0 +1,362 @@
+{
+ "j0181": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 추정금액 770,250,000원이 정확하며 추정가격도 맞다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 770,250,000원을 포함한다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "추정금액과 추정가격이 context에 직접 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 추정금액과 내역이 명시되어 있다."
+  }
+ },
+ "j0182": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 228,081,000원이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 기초금액 228,081,000원이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 기초금액이 포함되어 있다."
+  }
+ },
+ "j0183": {
+  "correctness": {
+   "score": 5,
+   "reason": "33,690,000원은 금33,690,000원과 같은 값이다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함한다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 기초금액 33,690,000원이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 양안이골소하천 정비관리사업의 기초금액을 담고 있다."
+  }
+ },
+ "j0184": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업기간 착공일로부터 60일간이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 60일을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '사업기간: 착공일로부터 60 일간'이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 삼산면 지하수 관정개발 공사의 사업기간을 담고 있다."
+  }
+ },
+ "j0185": {
+  "correctness": {
+   "score": 0,
+   "reason": "답변 거부로 0점이다(규칙6)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "답변 거부로 0점이다(규칙6)."
+  },
+  "faithfulness": {
+   "score": 0,
+   "reason": "N/A(거부 답변) 주장이 없어 채점 대상이 아니다(규칙6)."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 기초금액 631,400,000원이 명시되어 있다."
+  }
+ },
+ "j0186": {
+  "correctness": {
+   "score": 0,
+   "reason": "기초금액 대신 무의미한 단어 나열을 답해 주된 값이 없다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값 228,081,000원이 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변의 '사업비' 값은 context 내용과 무관한 단어 나열이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 기초금액 228,081,000원이 명시되어 있다."
+  }
+ },
+ "j0187": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 120일이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 120일을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '착공일로부터 120 일'이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공사(전기)의 공사기간을 담고 있다."
+  }
+ },
+ "j0188": {
+  "correctness": {
+   "score": 5,
+   "reason": "낙찰하한율 86.245%가 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 86.245%가 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 입찰의 낙찰하한율을 담고 있다."
+  }
+ },
+ "j0189": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 추정금액 770,250,000원이 정확하다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함하며 괄호 내역 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 추정금액 770,250,000원이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 추정금액이 명시되어 있다."
+  }
+ },
+ "j0190": {
+  "correctness": {
+   "score": 0,
+   "reason": "사업기간 대신 무의미한 단어 나열을 답해 주된 값이 없다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값 60일이 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변 내용은 context의 사업기간 정보와 무관한 단어 나열이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 삼산면 공사의 사업기간 60일간이 명시되어 있다."
+  }
+ },
+ "j0191": {
+  "correctness": {
+   "score": 5,
+   "reason": "228,081,000원이 기대 값과 같고 '사업비' 라벨과 약 2.3억 병기는 감점하지 않는다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함한다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업비: 약 2.3억 원 (228,081,000원)'을 그대로 옮겼다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context에 값은 있으나 어느 사업의 금액인지 식별 정보가 없어 부분적으로만 충분하다."
+  }
+ },
+ "j0192": {
+  "correctness": {
+   "score": 0,
+   "reason": "기초금액 대신 'g램프'라는 무의미한 값을 답했다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값 50,000,000원이 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변 값은 context의 금액 정보와 무관하다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 GPU 그래픽카드 구매의 기초금액 50,000,000원이 명시되어 있다."
+  }
+ },
+ "j0193": {
+  "correctness": {
+   "score": 5,
+   "reason": "50,000,000원이 기대 주된 값과 같고 '사업비' 라벨 차이는 감점하지 않는다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함하며 괄호 내역 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 50,000,000원이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 타일공사의 기초금액을 담고 있다."
+  }
+ },
+ "j0194": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 120일이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 120일을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '착공일로부터 120 일'이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공사(건축)의 공사기간을 담고 있다."
+  }
+ },
+ "j0195": {
+  "correctness": {
+   "score": 5,
+   "reason": "245,339,600원이 기대 주된 값과 같고 '사업비' 라벨 차이는 감점하지 않는다(규칙1, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함한다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 245,339,600원이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 쏘유팜 히트펌프 구매 예산을 담고 있다."
+  }
+ },
+ "j0196": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 631,400,000원이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 631,400,000원(부가가치세 포함)이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 사업의 기초금액을 담고 있다."
+  }
+ },
+ "j0197": {
+  "correctness": {
+   "score": 5,
+   "reason": "선택한 대상(한서대학교 산업디자인 개발 프로젝트)이 맞고 괄호 안 금액은 부차 정보다(규칙1, 규칙5)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 사실인 선택 대상을 포함한다(규칙3, 규칙5)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 220,000,000원과 150,000,000원 비교로 결론을 확인할 수 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 두 사업의 사업예산이 모두 들어 있다."
+  }
+ },
+ "j0198": {
+  "correctness": {
+   "score": 5,
+   "reason": "영남영농조합법인을 선택했고 두 값 608,881,900원과 245,339,600원이 모두 맞다(규칙5)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "선택 대상과 두 값을 모두 포함한다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "금액은 context에 있으나 각 금액이 어느 기관의 것인지는 context에 없어 귀속이 추론이다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context에 두 예산 값은 있으나 사업·기관명이 없어 핵심 정보가 일부 부족하다."
+  }
+ },
+ "j0199": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 착공일로부터 180일이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 180일을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '착공일로부터 180 일'이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 화성2리 마을만들기사업(토목)의 공사기간을 담고 있다."
+  }
+ },
+ "j0200": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 착공일로부터 60일이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 60일을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '공사기간: 착공일로부터 60일'이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 대집행복구공사의 공사기간을 담고 있다."
+  }
+ }
+}

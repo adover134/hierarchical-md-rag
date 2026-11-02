@@ -1,0 +1,362 @@
+{
+ "j0081": {
+  "correctness": {
+   "score": 5,
+   "reason": "마감일시 2026. 08. 12. 15:00을 정확히 제시했고 표기 차이는 같은 값이다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 날짜와 시각이 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 입찰일정 표에 같은 마감일시가 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 용역의 입찰일정 표가 그대로 있다."
+  }
+ },
+ "j0082": {
+  "correctness": {
+   "score": 0,
+   "reason": "계약기간 365일을 제시하지 못하고 의미 없는 문자열을 답했다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값 365일이 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변 문자열은 context에서 근거를 찾을 수 없는 무의미한 내용이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 코일스프링 구매의 계약기간 365일이 명시되어 있다."
+  }
+ },
+ "j0083": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 285,125,000원을 정확히 제시했고 사업비 라벨과 약 2.9억 병기는 감점하지 않는다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 기관명(서천군 농업기술센터)은 context에 없다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context가 금액 한 줄뿐이고 사업명이 없어 질문 대상과의 연결이 부족하다."
+  }
+ },
+ "j0084": {
+  "correctness": {
+   "score": 5,
+   "reason": "더 큰 쪽으로 영남영농조합법인을 정확히 골랐고 두 금액도 맞다(규칙5)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "선택 대상과 두 금액이 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "두 예산 금액과 부가세 포함 여부가 context에 직접 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "두 공고서가 있으나 진주올팜·선문대 등 무관한 내용도 섞여 있다."
+  }
+ },
+ "j0085": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 착공일로부터 180일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 180일이 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 공사기간 착공일로부터 180일이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공사 공고가 중심이나 하도급 관련 등 불필요한 내용이 포함되어 있다."
+  }
+ },
+ "j0086": {
+  "correctness": {
+   "score": 0,
+   "reason": "공사기간 120일을 제시하지 못하고 의미 없는 문자열을 답했다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값 120일이 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변 문자열은 context에서 근거를 찾을 수 없는 무의미한 내용이다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 (전기) 공사기간 120일이 있으나 (건축) 공사 표도 섞여 있다."
+  }
+ },
+ "j0087": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 285,125,000원을 정확히 제시했고 사업비 라벨은 감점하지 않는다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context의 사업비 줄과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context가 금액 한 줄뿐이고 사업명이 없어 질문 대상과의 연결이 부족하다."
+  }
+ },
+ "j0088": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027년 2월 19일, 하복 2027년 5월 7일을 모두 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 두 날짜가 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "두 납품기한이 context의 공고 표와 특수조건에 직접 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 교복 구매 공고의 납품기한을 충분히 담고 있다."
+  }
+ },
+ "j0089": {
+  "correctness": {
+   "score": 5,
+   "reason": "더 큰 쪽으로 (건축)을 정확히 골랐고 괄호 안 금액은 부차 정보이며 사업비 라벨은 감점하지 않는다(규칙1, 규칙4, 규칙5)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 사실인 선택 대상이 들어 있다(규칙1, 규칙3, 규칙5)."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "context에 두 금액은 있으나 어느 금액이 (건축)인지 공사명이 없어 상당한 추론이 필요하다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "두 기초금액은 있으나 공사명이 빠져 있어 비교 대상 식별 정보가 부족하다."
+  }
+ },
+ "j0090": {
+  "correctness": {
+   "score": 0,
+   "reason": "답변 거부이므로 0점이다(규칙6)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "답변 거부이므로 0점이다(규칙6)."
+  },
+  "faithfulness": {
+   "score": 0,
+   "reason": "N/A(거부 답변) 주장이 없어 채점 대상이 아니다(규칙6)."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 14_온양교통 공사의 설치대수(240kW 파워뱅크 2기, 디스펜서 5기)가 명시되어 있다."
+  }
+ },
+ "j0091": {
+  "correctness": {
+   "score": 0,
+   "reason": "계약기간 420일을 제시하지 못하고 의미 없는 문자열을 답했다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값 420일이 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변 문자열은 context에서 근거를 찾을 수 없는 무의미한 내용이다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 팬터그래프 집전판 계약기간 420일이 있으나 선문대 입찰 등 무관한 내용이 많다."
+  }
+ },
+ "j0092": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 390,000원을 정확히 제시했고 사업비 라벨은 감점하지 않는다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 기관명(인천광역시교육청 덕적고등학교)은 context에 없다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context가 금액 한 줄뿐이고 사업명이 없어 질문 대상과의 연결이 부족하다."
+  }
+ },
+ "j0093": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 100,000,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 표에 (1지역) 기초금액 100,000,000이 직접 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고 표가 있으나 다른 지역 행과 무관한 문서 제목이 섞여 있다."
+  }
+ },
+ "j0094": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 100,000,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 표에 (1지역) 기초금액 100,000,000이 직접 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고 표가 있으나 다른 지역 행과 무관한 문서 제목이 섞여 있다."
+  }
+ },
+ "j0095": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 285,125,000원을 정확히 제시했다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 견적 공고에 기초금액 285,125,000원이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공사 공고의 기초금액 부분을 충분히 담고 있다."
+  }
+ },
+ "j0096": {
+  "correctness": {
+   "score": 5,
+   "reason": "예산 608,881,900원을 정확히 제시했고 사업비 라벨과 약 6.1억 병기는 감점하지 않는다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context의 사업비 줄과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context가 금액 한 줄뿐이고 사업명이 없어 질문 대상과의 연결이 부족하다."
+  }
+ },
+ "j0097": {
+  "correctness": {
+   "score": 1,
+   "reason": "기초금액 26,750,000원 대신 추정가격 24,318,182원을 답해 핵심 값이 틀렸다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값 26,750,000원이 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "제시한 금액은 context에 있으나 추정가격을 사업비로 잘못 옮겼다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 기초금액 26,750,000원이 명시되어 있다."
+  }
+ },
+ "j0098": {
+  "correctness": {
+   "score": 1,
+   "reason": "82.495%와 85점이라는 핵심 기준을 빠뜨리고 세부기준 조항만 언급했다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "주된 값 82.495%와 85점이 모두 빠졌다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 입찰명과 낙찰자선정방법 문구는 context에 직접 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 82.495%·85점 기준이 있으나 다른 입찰의 89.995%·88점 기준 등이 섞여 있다."
+  }
+ },
+ "j0099": {
+  "correctness": {
+   "score": 5,
+   "reason": "더 큰 쪽으로 (건축)을 정확히 골랐고 괄호 안 금액은 부차 정보다(규칙1, 규칙5)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 사실인 선택 대상이 들어 있다(규칙1, 규칙3, 규칙5)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 (건축) 368,467,000원과 (통신) 24,867,000원이 공사명과 함께 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 두 공사의 기초금액을 공사명과 함께 충분히 담고 있다."
+  }
+ },
+ "j0100": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 102,000,000원을 정확히 제시했고 괄호 안 내역 누락과 사업비 라벨은 감점하지 않는다(규칙1, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context의 사업비 줄과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context가 금액 한 줄뿐이고 사업명이 없어 질문 대상과의 연결이 부족하다."
+  }
+ }
+}
