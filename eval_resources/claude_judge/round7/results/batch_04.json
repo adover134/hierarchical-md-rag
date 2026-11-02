@@ -1,0 +1,182 @@
+{
+ "j0031": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 착공일로부터 60일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 정보를 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고문이 검색되어 답을 포함하나 중복·부수 내용이 섞여 있다."
+  }
+ },
+ "j0032": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 387,660원과 동복 264,660원이 정확하다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값은 포함했으나 괄호 내 하복 123,000원 내역이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액과 동복 금액 모두 context에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고의 기초금액 정보가 있으나 평가항목 등 불필요한 내용이 많다."
+  }
+ },
+ "j0033": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 120일로 기대 답변과 의미가 같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 값인 120일을 포함하며 '착공일로부터'의 생략은 사소하다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 120일'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고문이 검색되어 답을 포함하나 부수 내용이 섞여 있다."
+  }
+ },
+ "j0034": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 추정금액 770,250,000원과 추정가격이 정확하다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값과 추정가격은 있으나 괄호 내 부가가치세 금액이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "추정금액과 추정가격이 context에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 추정금액과 그 내역을 직접 포함한다."
+  }
+ },
+ "j0035": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 계약체결일로부터 365일이 정확하다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값은 포함했으나 괄호 내 단가발주 180일 조건이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 계약기간 문구에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고의 계약기간이 포함되어 있으나 부수 내용이 섞여 있다."
+  }
+ },
+ "j0036": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 631,400,000원(부가가치세 포함)으로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 모든 정보를 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 기초금액 문구와 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고의 기초금액이 있으나 부수 내용이 섞여 있다."
+  }
+ },
+ "j0037": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 50,000,000원이 정확하다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값은 있으나 괄호 내 추정가격·부가세 내역이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 50,000,000'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고의 금액 정보가 있으나 부수 내용이 섞여 있다."
+  }
+ },
+ "j0038": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027년 2월 19일(금), 하복 2027년 5월 7일(금)로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "동복·하복 납품기한을 모두 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 납품기한 및 계약조항에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 학교 공고의 납품기한이 여러 곳에 명확히 포함되어 있다."
+  }
+ },
+ "j0039": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 47,820,800원이 정확하다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값은 있으나 괄호 내 추정가격·부가가치세 내역이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 기초금액 문구와 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고의 기초금액이 있으나 부수 내용이 섞여 있다."
+  }
+ },
+ "j0040": {
+  "correctness": {
+   "score": 2,
+   "reason": "기대 답변은 240kW 파워뱅크 1기와 디스펜서 2기로 구분된 값인데 성격이 다른 설비를 합산한 '총 3기'만 제시해 핵심 정보가 부정확하다."
+  },
+  "answer_coverage": {
+   "score": 2,
+   "reason": "파워뱅크·디스펜서 구분과 240kW 사양이 모두 빠졌다."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "1기와 2기는 context에 있으나 이를 '총 3기'로 합산한 것은 context에 없는 추론이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 사업의 설치대수를 직접 포함한다."
+  }
+ }
+}

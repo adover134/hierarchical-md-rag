@@ -1,0 +1,182 @@
+{
+ "j0021": {
+  "correctness": {
+   "score": 5,
+   "reason": "건축 공사가 더 크다는 결론과 건축 기초금액 368,467,000원이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "비교 대상인 통신 공사의 기초금액 24,867,000원이 누락되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "건축 공사 기초금액 368,467,000원과 비교 결론이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 건축과 통신 두 공사의 기초금액이 모두 포함되어 있다."
+  }
+ },
+ "j0022": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 102,000,000원이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값은 포함했으나 괄호 안 추정가격과 부가가치세 내역은 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "102,000,000원이 context의 기초금액 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 사업의 기초금액 정보가 있으나 질문과 무관한 공고 내용도 섞여 있다."
+  }
+ },
+ "j0023": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 50,000,000원이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값은 포함했으나 괄호 안 추정가격과 부가가치세 내역은 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "50,000,000원이 context의 기초금액 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 사업의 기초금액 정보가 있으나 예정가격 결정 방식 등 부수 내용도 포함되어 있다."
+  }
+ },
+ "j0024": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 390,000원이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "390,000원이 context의 기초금액 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 용역의 기초금액이 포함되어 있으나 불필요한 공고 세부 내용도 많다."
+  }
+ },
+ "j0025": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 착공일로부터 180일이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 정보를 모두 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "착공일로부터 180일이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공사의 공사기간 정보가 있으나 무관한 안내 내용도 섞여 있다."
+  }
+ },
+ "j0026": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업예산 99,000,000원이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값은 포함했으나 부가가치세 포함 여부 표기가 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "99,000,000원이 context의 사업예산 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 구매 건의 사업예산이 있으나 구매내역 등 부수 내용도 포함되어 있다."
+  }
+ },
+ "j0027": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 33,690,000원이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "33,690,000원이 context의 기초금액 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 사업의 기초금액이 포함되어 있으나 정산 안내 등 무관한 내용도 있다."
+  }
+ },
+ "j0028": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업예산 55,800,000원(부가세 포함)이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 금액과 부가세 포함 여부를 모두 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "55,800,000원 부가세포함이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 사업의 사업예산이 있으나 제출서류 등 질문과 무관한 내용도 많다."
+  }
+ },
+ "j0029": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 78,364,000원(부가세 포함)이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "가스감지기와 THOR 금액은 포함했으나 추정가격 71,240,000원 기준이라는 점이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 모두 context에 있으나 기초금액이 두 품목 금액으로 구성된다는 표현은 추정가격 기준 내역을 다소 부정확하게 옮긴 추론이다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 건의 기초금액 정보가 있으나 입찰참가자격 등 부수 내용도 많다."
+  }
+ },
+ "j0030": {
+  "correctness": {
+   "score": 5,
+   "reason": "한서대학교 용역이 더 크다는 결론과 220,000,000원, 150,000,000원 두 금액이 모두 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 결론과 두 사업예산을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "두 사업예산과 VAT 포함 여부, 계약 종료일이 모두 context에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "두 사업의 예산 정보가 모두 있으나 다른 사업의 사업예산 55,800,000원 줄 등 무관한 내용이 섞여 있다."
+  }
+ }
+}
