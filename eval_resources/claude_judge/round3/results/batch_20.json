@@ -1,0 +1,182 @@
+{
+ "j0191": {
+  "correctness": {
+   "score": 5,
+   "reason": "예산이 더 큰 곳으로 영남영농조합법인을 정확히 지목했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "비교 결과와 두 예산 금액까지 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 608,881,900원과 245,339,600원으로 뒷받침된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "두 히트펌프 구매 공고의 예산이 context에 모두 있다."
+  }
+ },
+ "j0192": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업기간 착공일로부터 60일간을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 정보를 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 사업기간 항목과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "삼산면 공사 공고의 사업기간이 context에 명확히 있다."
+  }
+ },
+ "j0193": {
+  "correctness": {
+   "score": 2,
+   "reason": "합계 3기는 수치상 맞지만 파워뱅크 1기와 디스펜서 2기라는 구분을 잃어 기대 답변과 일부만 일치한다."
+  },
+  "answer_coverage": {
+   "score": 2,
+   "reason": "파워뱅크 1기, 디스펜서 2기의 세부 구성이 누락되었다."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "context에는 '총 3기'라는 표현이 없고 서로 다른 장비를 합산한 추론이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 설치대수가 context에 명확히 있다."
+  }
+ },
+ "j0194": {
+  "correctness": {
+   "score": 4,
+   "reason": "180일 값은 맞으나 공사기간을 사업기간으로 부르고 '착공일로부터' 기준이 빠져 표현이 부정확하다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "핵심 값 180일은 있으나 기산점이 누락되었다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "context의 '공사기간: 착공일로부터 180 일'에 근거하나 인용 형태가 context 문구와 다르다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공사의 공사기간이 context에 있으나 송림리 등 다른 공고도 섞여 있다."
+  }
+ },
+ "j0195": {
+  "correctness": {
+   "score": 1,
+   "reason": "82.495% 이상, 최저가순 적격심사, 종합평점 85점 이상이라는 핵심 기준이 없고 세부기준 조항만 언급했다."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "기대 답변의 핵심 포인트가 거의 없다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "조달청 물품구매적격심사 세부기준 제9조 문구는 context에 있으나 표 문구를 정리 없이 나열했다."
+  },
+  "context_relevance": {
+   "score": 2,
+   "reason": "context에는 낙찰자선정방법이 조항 참조로만 있고 비율과 점수 기준이 없다."
+  }
+ },
+ "j0196": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액이 더 큰 공사로 건축 공사를 정확히 지목했고 금액도 맞다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 비교 결과를 제시했고 괄호 속 통신 금액은 부차 정보다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 368,467,000원과 24,867,000원으로 뒷받침된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "두 공사의 기초금액이 context에 모두 있다."
+  }
+ },
+ "j0197": {
+  "correctness": {
+   "score": 5,
+   "reason": "과업기간 착수일로부터 365일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 정보를 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 과업기간 항목과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 감리용역 공고의 과업기간이 context에 명확히 있다."
+  }
+ },
+ "j0198": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 계약체결일로부터 365일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "괄호 속 단가발주 조건은 부차 정보이고 주된 값은 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 계약기간 항목과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 계약기간이 context에 명확히 있다."
+  }
+ },
+ "j0199": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 78,364,000원(부가세 포함)을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "괄호 밖 핵심 값을 포함했고 세부 내역 일부도 덧붙였다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액과 가스감지기 66,440,000원이 모두 context에 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 기초금액과 내역이 context에 명확히 있다."
+  }
+ },
+ "j0200": {
+  "correctness": {
+   "score": 0,
+   "reason": "어느 공사의 기초금액이 더 큰지 답하지 못하고 무관한 공고 문구를 사업비로 제시했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기대 답변의 핵심 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "인용 문구는 context 일부이나 이를 사업비로 제시한 것은 근거 없는 내용이다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "통신 공사의 기초금액은 있으나 건축 공사의 기초금액이 없고 무관한 공고도 섞여 있다."
+  }
+ }
+}

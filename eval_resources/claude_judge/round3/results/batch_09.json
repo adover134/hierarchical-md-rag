@@ -1,0 +1,182 @@
+{
+ "j0081": {
+  "correctness": {
+   "score": 4,
+   "reason": "365일은 맞으나 '착수일로부터' 기준이 빠지고 과업기간을 사업기간으로 잘못 지칭했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "핵심 값 365일은 있으나 기산점(착수일로부터)이 누락됐다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "365일은 context에 있으나 '사업기간' 표현은 context의 '과업기간'과 다르다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 용역의 과업기간(착수일로부터 365일)이 직접 포함되어 있다."
+  }
+ },
+ "j0082": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 390,000원을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 유일한 핵심 값을 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액 390,000원이 context에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "기초금액이 포함되어 있으나 안전보건 서약서 등 불필요한 내용도 많다."
+  }
+ },
+ "j0083": {
+  "correctness": {
+   "score": 5,
+   "reason": "착공일로부터 60일을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 내용을 빠짐없이 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "공사기간 착공일로부터 60일이 context에 직접 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공사의 공사기간 정보를 충분히 담고 있다."
+  }
+ },
+ "j0084": {
+  "correctness": {
+   "score": 1,
+   "reason": "'2026년'만 제시해 납품기한 2026년 12월 31일을 사실상 답하지 못했다."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "월·일이 빠져 핵심 정보가 거의 없다."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "2026년은 context와 모순되지 않지만 context의 구체적 기한을 반영하지 못한 불완전한 추출이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 납품기한 2026. 12. 31.이 직접 포함되어 있다."
+  }
+ },
+ "j0085": {
+  "correctness": {
+   "score": 0,
+   "reason": "'히트펌프, 물품'은 어느 곳의 예산이 더 큰지에 대한 답이 아니다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "두 기관명과 금액 비교가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "단어는 context에 있으나 질문에 대한 근거 있는 진술이 아니다."
+  },
+  "context_relevance": {
+   "score": 2,
+   "reason": "히트펌프 금액 두 개는 있으나 쏘유팜·영남영농조합법인 기관명이 없고 나머지는 무관한 선문대 문서다."
+  }
+ },
+ "j0086": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 50,000,000원을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "괄호 밖 핵심 값을 모두 포함했고 괄호 안 내역은 부차적이다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액 50,000,000원이 context에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 기초금액과 내역이 직접 포함되어 있다."
+  }
+ },
+ "j0087": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업예산 99,000,000원을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함했고 괄호 안 한글 금액·부가세 표기는 부차적이다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "사업예산 99,000,000원이 context에 직접 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "사업예산이 포함되어 있으나 제출서류 목록 등 불필요한 내용이 많다."
+  }
+ },
+ "j0088": {
+  "correctness": {
+   "score": 0,
+   "reason": "추정금액을 제시하지 않고 문서 비교를 생략한다는 무관한 응답을 했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "추정금액 770,250,000원이 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "질문과 무관한 비교 생략 문구로 context 내용과 연결되지 않는다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "해당 공사 문서 일부는 있으나 추정금액 정보가 없고 다른 공사 내용이 섞여 있다."
+  }
+ },
+ "j0089": {
+  "correctness": {
+   "score": 0,
+   "reason": "공사기간을 답하지 않고 비교 생략이라는 무관한 응답을 했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "착공일로부터 120일 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "응답이 context 내용에 근거하지 않는다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context는 충전인프라·다른 시설개선 공사 문서로 용화지구 공사 정보가 없다."
+  }
+ },
+ "j0090": {
+  "correctness": {
+   "score": 1,
+   "reason": "'2026년'만 제시해 행사기간 10월 20일~22일을 답하지 못했다."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "날짜와 3일간이라는 핵심 정보가 누락됐다."
+  },
+  "faithfulness": {
+   "score": 2,
+   "reason": "2026년은 context와 모순되지 않지만 행사기간을 사업기간으로 지칭한 불완전한 추출이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 행사기간 2026년 10월 20일~22일이 직접 포함되어 있다."
+  }
+ }
+}

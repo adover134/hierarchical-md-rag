@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse
 import csv
 import datetime as _dt
+import functools
 import importlib.util
 import json
 import os
@@ -257,6 +258,57 @@ def cmd_query(cfg: dict, args: argparse.Namespace) -> None:
             cwd=root, env=system_env(cfg, system), log=None)
 
 
+# 중간 초안 기록: 프로세스 코드는 건드리지 않고 LLM 호출(입력·출력·종료 사유)과 답변 후처리 단계의 출력을 질문별로 모은다.
+TRACE_POSTPROCESS = ("_polish_answer_with_llm", "_compact_answer_sections", "_restrict_answer_to_evidence",
+                     "_enforce_honorific_tone", "_augment_answer_from_evidence_context",
+                     "_extract_single_value_from_fact_answer", "_render_single_value_answer",
+                     "_format_answer_for_readability")
+
+
+def _msg_text(messages: Any) -> list[dict]:
+    out = []
+    for m in messages or []:
+        out.append({"role": getattr(m, "type", type(m).__name__), "content": str(getattr(m, "content", m))})
+    return out
+
+
+def install_trace(chat_cls: type, bot_cls: type | None, trace: list) -> None:
+    """`chat_cls._generate`(모든 LLM 호출이 지나는 곳)와 `bot_cls`의 후처리 메서드를 감싸 `trace`에 기록한다. 동작은 바꾸지 않는다."""
+    orig_generate = chat_cls._generate
+
+    def generate(self, messages, *a, **k):
+        entry = {"stage": "llm", "model": getattr(self, "model_name", ""), "input": _msg_text(messages)}
+        trace.append(entry)
+        result = orig_generate(self, messages, *a, **k)
+        try:
+            gen = result.generations[0]
+            entry["output"] = gen.text
+            meta = {**(getattr(gen.message, "response_metadata", {}) or {}), **(getattr(gen, "generation_info", None) or {})}
+            entry["finish_reason"] = meta.get("finish_reason")
+        except Exception as e:  # noqa: BLE001 — 기록 실패가 질의를 멈추면 안 된다
+            entry["output"] = f"<기록 실패 {type(e).__name__}>"
+        return result
+
+    chat_cls._generate = generate
+    if bot_cls is None:
+        return
+    for name in TRACE_POSTPROCESS:
+        raw = bot_cls.__dict__.get(name)
+        if raw is None:
+            continue
+        static = isinstance(raw, staticmethod)
+        func = raw.__func__ if static else raw
+
+        def make(fn, label, is_static):
+            @functools.wraps(fn)
+            def wrapped(*a, **k):
+                out = fn(*a, **k)
+                trace.append({"stage": label, "output": str(out)[:4000]})
+                return out
+            return staticmethod(wrapped) if is_static else wrapped
+        setattr(bot_cls, name, make(func, name, static))
+
+
 def _execute(args: argparse.Namespace) -> None:
     """프로젝트 루트를 import 경로 맨 앞에 두고 그 프로젝트의 `run_rag_pipeline`을 그대로 호출한다."""
     root = Path(args.project_root).resolve()
@@ -274,12 +326,21 @@ def _execute(args: argparse.Namespace) -> None:
         RAGChatbotV17._should_bypass_short_circuit_for_query = staticmethod(lambda query: True)
         RAGChatbotV17._can_override_short_circuit_bypass = lambda self, *a, **k: False
 
+    trace: list[dict] = []
+    from langchain_openai import ChatOpenAI
+    try:
+        from src.graph.workflow import RAGChatbotV17 as _Bot
+    except Exception:  # noqa: BLE001
+        _Bot = None
+    install_trace(ChatOpenAI, _Bot, trace)
+
     questions = json.loads(Path(args.questions).read_text(encoding="utf-8"))
     records: list[dict] = []
     for rep in range(args.repeat):
         for i, q in enumerate(questions, 1):
             print(f"[rep {rep + 1}/{args.repeat}] [{i}/{len(questions)}] {q['dataset']}:{q['id']} {q['question'][:50]}", flush=True)
             t0 = time.time()
+            trace.clear()
             rec: dict[str, Any] = {"dataset": q["dataset"], "id": q["id"], "question": q["question"], "repeat": rep + 1}
             try:
                 state = module.run_rag_pipeline(q["question"], None, args.top_k)
@@ -292,6 +353,7 @@ def _execute(args: argparse.Namespace) -> None:
             except Exception as e:  # noqa: BLE001 — 한 문항의 실패가 전체 실험을 멈추면 안 된다
                 rec["error"] = f"{type(e).__name__}: {e}"
                 print(f"  [ERROR] {rec['error']}", flush=True)
+            rec["trace"] = list(trace)
             rec["wall_seconds"] = round(time.time() - t0, 2)
             records.append(rec)
             Path(args.out).write_text(json.dumps(records, ensure_ascii=False, indent=2), encoding="utf-8")

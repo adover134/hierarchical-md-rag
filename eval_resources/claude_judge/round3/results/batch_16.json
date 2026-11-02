@@ -1,0 +1,182 @@
+{
+ "j0151": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 120일을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "핵심 값 120일은 있으나 기산점 '착공일로부터'가 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "공사기간 착공일로부터 120일이 context에 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "용화지구 마을회관 리모델링 공사(건축)의 입찰 사항이 context에 포함되어 있다."
+  }
+ },
+ "j0152": {
+  "correctness": {
+   "score": 0,
+   "reason": "공고문 머리말 문자열을 사업비라고 답해 어느 공사가 더 큰지 전혀 답하지 못했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "비교 결론과 두 기초금액이 모두 빠졌다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "문자열 자체는 context에 있으나 질문과 무관하며 context에 있는 두 금액을 무시했다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "건축(368,467,000원)과 통신(24,867,000원) 공사의 기초금액이 모두 context에 있다."
+  }
+ },
+ "j0153": {
+  "correctness": {
+   "score": 5,
+   "reason": "추정금액 770,250,000원을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 추정금액을 포함했고 추정가격·부가가치세 내역은 괄호 속 부가 정보이다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "추정금액 770,250,000원이 context에 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "스마트워크 무선망 통신공사 공고가 포함되어 있으나 청렴계약 안내 등 불필요한 내용도 섞여 있다."
+  }
+ },
+ "j0154": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 387,660원과 동복 264,660원, 하복 123,000원을 모두 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "총액과 동·하복 내역을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액과 동·하복 단가가 context 표기 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "한림디자인고 교복 학교주관구매 공고가 context에 충분히 포함되어 있다."
+  }
+ },
+ "j0155": {
+  "correctness": {
+   "score": 0,
+   "reason": "설치대수를 '문서에서 확인되지 않습니다'라고 답해 사실상 답변을 거부했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "파워뱅크 2기, 디스펜서 5기 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에 온양교통 설치대수가 명시되어 있는데도 확인되지 않는다고 해 context와 모순된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "온양교통 공고의 설치대수가 context에 있으나 아산여객 공고도 섞여 있다."
+  }
+ },
+ "j0156": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 120일을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "핵심 값 120일은 있으나 기산점 '착공일로부터'가 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "착공일로부터 120일이 context에 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "용화지구 마을회관 리모델링 공사(건축) 문서가 context에 포함되어 있다."
+  }
+ },
+ "j0157": {
+  "correctness": {
+   "score": 5,
+   "reason": "과업기간 착수일로부터 365일을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기산점과 기간을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "과업기간 착수일로부터 365일이 context에 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "영동 스마트복합쉼터 감리용역 입찰 사항이 context에 포함되어 있다."
+  }
+ },
+ "j0158": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 631,400,000원(부가가치세 포함)을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 요구한 기초금액을 빠짐없이 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액 631,400,000원이 context에 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "한성케미칼 태양광 발전설비 공고의 기초금액과 사업 개요가 context에 있다."
+  }
+ },
+ "j0159": {
+  "correctness": {
+   "score": 5,
+   "reason": "행사 기간 2026년 10월 20일(화)~22일(수)을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "시작일과 종료일은 있으나 '3일간'이라는 표현이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "행사기간 2026년 10월 20일~22일이 context에 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "한·중·일불교우호교류회의 한국대회 행사 용역 공고가 context에 충분히 포함되어 있다."
+  }
+ },
+ "j0160": {
+  "correctness": {
+   "score": 0,
+   "reason": "낙찰하한율 86.245%를 제시하지 않고 문서 비교를 생략한다는 엉뚱한 답을 했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "낙찰하한율 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "질문은 비교가 아닌데 문서 A/B 비교를 언급해 context나 질문과 무관한 답변이다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context는 스마트워크 통신공사 등 다른 공고(낙찰하한율 89.745%)뿐이며 공항만 감염병 검사 시약 구매 문서가 없다."
+  }
+ }
+}

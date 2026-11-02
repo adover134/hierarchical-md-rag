@@ -1,0 +1,182 @@
+{
+ "j0121": {
+  "correctness": {
+   "score": 0,
+   "reason": "공사기간 '착공일로부터 60일' 대신 '2026년'이라는 무의미한 값을 제시해 틀렸다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "핵심 값인 60일이 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에는 공사기간 60일이 명시되어 있으나 답변은 이를 반영하지 않은 근거 없는 내용이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 공사기간 60일이 명시되어 있다."
+  }
+ },
+ "j0122": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변이 기대 답변의 핵심 값을 정확히 제시한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문 대상 공고와 정답 값이 명확히 포함되어 있다."
+  }
+ },
+ "j0123": {
+  "correctness": {
+   "score": 4,
+   "reason": "금액 285,125,000원은 맞지만 '기초금액'이 아닌 '사업비'로 표기해 사소한 부정확이 있다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 금액은 포함했으나 항목명을 기초금액으로 명시하지 않았다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "285,125,000원은 context에 기초금액으로 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "정답 정보가 있으나 다른 공사(화성2리) 내용이 섞여 있다."
+  }
+ },
+ "j0124": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 78,364,000원을 정확히 제시했고 괄호 안 세부는 부차적이다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문 대상 공고와 정답 값이 명확히 포함되어 있다."
+  }
+ },
+ "j0125": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 50,000,000원을 정확히 제시했고 괄호 안 추정가격·부가세는 부차적이다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문 대상 공고와 정답 값이 명확히 포함되어 있다."
+  }
+ },
+ "j0126": {
+  "correctness": {
+   "score": 5,
+   "reason": "건축 공사가 더 크다는 결론과 건축 기초금액 368,467,000원이 정확하다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "결론은 포함했으나 통신 공사 금액(24,867,000원)을 언급하지 않았다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "건축 기초금액과 비교 결론이 context의 수치로 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "두 공사의 기초금액이 모두 context에 포함되어 있다."
+  }
+ },
+ "j0127": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변이 기대 답변의 핵심 값을 정확히 제시한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문 대상 공고와 정답 값이 명확히 포함되어 있다."
+  }
+ },
+ "j0128": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변이 기대 답변의 핵심 값을 정확히 제시한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문 대상 공고와 정답 값이 명확히 포함되어 있다."
+  }
+ },
+ "j0129": {
+  "correctness": {
+   "score": 4,
+   "reason": "180일은 맞지만 형식이 깨진 문장이며 '착공일로부터' 기준이 빠졌다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값 180일은 있으나 기산점이 누락되었다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "180일은 context에 있으나 '사업기간'이라는 표현은 context와 다르다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문 대상 공고와 정답 값이 명확히 포함되어 있다."
+  }
+ },
+ "j0130": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업예산 55,800,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문 대상 공고와 정답 값이 명확히 포함되어 있다."
+  }
+ }
+}
