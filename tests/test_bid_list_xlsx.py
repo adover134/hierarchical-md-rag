@@ -108,3 +108,22 @@ def test_chatbot_known_labels_read_bid_list(tmp_path, monkeypatch):
     labels = bot._load_known_document_labels()
     assert "송림리 마을만들기사업(건축,기계)" in labels
     assert "충청남도 서천군 농업기술센터" in labels
+
+
+def test_amount_column_is_carried_into_team_csv(tmp_path):
+    p = tmp_path / "list.xlsx"
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.append(["입찰공고목록"]); ws.append([]); ws.append([]); ws.append([])
+    ws.append([*HEADER, "사업 금액"])
+    ws.append(["공사", "-", "등록공고", "R26-1", "송림리 마을만들기사업", "충남", "서천군", "2026/08/09 1:00(-)", 285125000])
+    ws.append(["공사", "-", "등록공고", "R26-2", "금액 없는 공고", "충남", "서천군", "2026/08/09 1:00(-)", None])
+    wb.save(p)
+    corpus = tmp_path / "docs"
+    corpus.mkdir()
+    out = tmp_path / "o.csv"
+    bid_list_to_team_csv(p, corpus, out)
+    with open(out, encoding="utf-8-sig", newline="") as f:
+        rows = list(csv.DictReader(f))
+    assert rows[0]["사업 금액"] == "285125000"
+    assert rows[1]["사업 금액"] == ""

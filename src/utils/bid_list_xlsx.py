@@ -67,7 +67,8 @@ def _nfc_key(text: str) -> str:
 def bid_list_to_team_csv(xlsx_path: Path | str, corpus_dir: Path | str, out_csv: Path | str) -> dict[str, int]:
     """입찰공고목록을 팀 프로젝트가 읽는 `data_list.csv` 스키마로 변환한다.
 
-    엑셀에 없는 `사업 금액/사업 요약/텍스트` 등은 빈 값으로 둔다(없는 정보를 만들어 넣지 않는다).
+    `사업 금액`은 엑셀에 같은 이름의 열이 있으면 그 값을 쓰고, 없으면 빈 값으로 둔다.
+    엑셀에 없는 `사업 요약/텍스트` 등도 빈 값으로 둔다(없는 정보를 만들어 넣지 않는다).
     `파일명`은 공고명이 코퍼스 파일명(`공고명_기관.확장자`)의 앞부분과 같은 파일로 매칭한다.
     """
     corpus = Path(corpus_dir)
@@ -101,7 +102,7 @@ def bid_list_to_team_csv(xlsx_path: Path | str, corpus_dir: Path | str, out_csv:
             "공고 번호": base_number or number,
             "공고 차수": round_no,
             "사업명": title,
-            "사업 금액": "",
+            "사업 금액": row.get("사업 금액", ""),
             "발주 기관": org,
             "공개 일자": posted.split("(")[0].strip(),
             "입찰 참여 시작일": "",
