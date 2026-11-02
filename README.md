@@ -298,6 +298,15 @@ python scripts/eval_parsing.py --project-root . --loader-md-dir output/new_parse
 처리해 종단 값을 계산한다(DB는 건드리지 않음). 다른 체크아웃(예: 팀 저장소)을 재려면 `--project-root`와
 `--loader-md-glob`, 청크 덤프용 `--chunk-dump`를 쓴다. 결과는 `eval_resources/parsing_runs/parsing_<꼬리표>.{json,md}`.
 
+## 버전 1.2 (2026-11-03)
+
+이 브랜치(`main`, 기본 `two_stage` 답변 경로)에서 1.2에 바뀐 것은 PDF 로더 하나다.
+
+- **스캔 PDF 읽기(OCR)**: 글자가 없고 이미지만 있는 PDF 쪽만 `easyocr`로 읽는다(`src/parsers/ocr.py`). `easyocr`는 선택 설치이고, 없으면 경고만 하고 이전처럼 동작한다. `PDF_OCR_ENABLED=false`로 끌 수 있다. 57건 중 스캔 PDF는 1건뿐이라 이 프로젝트에서는 스캔 PDF를 다루지 않는다. 기능은 남겨 두지만 표를 정확히 읽는다고 보장하지 않는다.
+- 검색·답변 코드는 1.1과 같다.
+
+채점 규칙, 평가 도구, 실험 결과와 1.2의 결론은 `multi-agent` 브랜치의 `README.md`와 `EXPERIMENTS.md`에 있다.
+
 ## 현재 상태
 
 `docs/BUGFIXES.md`에 오늘까지 추적·수정한 근본원인 15개가 전부 기록돼 있다

@@ -18,6 +18,8 @@ from typing import List, Tuple
 
 from langchain_core.documents import Document
 
+from src.parsers.ocr import needs_ocr, ocr_enabled, ocr_page
+
 
 
 # 한국어 PDF 추출 플래그 (HWP→PDF 변환 문서 최적화)
@@ -244,6 +246,15 @@ def load_pdf(file_path: str | Path) -> list[Document]:
     for chunk in page_chunks:  # pymupdf4llm returns untyped dicts
         text = chunk["text"].strip()  # type: ignore
         page_num = chunk["metadata"]["page"]  # type: ignore
+        # Step 2.5: 텍스트 층이 없는 스캔 쪽은 OCR로 읽는다(텍스트 층이 있는 쪽은 그대로 둔다)
+        ocr_used = False
+        # pymupdf4llm은 글자가 없는 쪽에도 `-----` 같은 구분선만 돌려주므로 구분선·공백을 뺀 글자로 판단한다.
+        if ocr_enabled() and not re.sub(r"[-\s]", "", text):
+            page = fitz_doc[page_num - 1]
+            if needs_ocr(page.get_text(), len(page.get_images())):
+                text = ocr_page(page).strip()
+                ocr_used = bool(text)
+
         # Step 3: U+FFFD 공백 아티팩트 제거 (HWP→PDF 변환 버그)
         text = _clean_fffd_artifacts(text)
 
@@ -277,6 +288,7 @@ def load_pdf(file_path: str | Path) -> list[Document]:
                     "source": source_name,
                     "file_type": "pdf",
                     "page": page_num,
+                    **({"ocr": True} if ocr_used else {}),
                 },
             )
         )

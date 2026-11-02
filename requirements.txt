@@ -10,6 +10,8 @@
 # - pytesseract: workflow.py에서 try/except로 감싼 선택적 OCR 경로에서만 쓰고,
 #   langc 환경에도 실제로 설치돼 있지 않다 — 그 경로가 지금까지 문제없이 동작했다는
 #   뜻이라 필수 의존성이 아니다.
+# - easyocr: src/parsers/ocr.py가 지연 import하는 선택 의존성(스캔 PDF OCR, 프로젝트 범위 밖).
+#   없으면 경고만 하고 OCR을 건너뛰며 PDF 로딩은 이전과 같다. 쓰려면 `pip install easyocr`.
 # - parser_bridge / preprocessor: pip 패키지가 아니라 DB 재색인 스크립트
 #   (scripts/build_index_new_parser.py 등)가 참조하는 이웃 저장소 모듈 — 이미
 #   만들어진 data_index/chroma_B를 그대로 질의만 하는 배포 경로(scripts/gradio_app.py,
