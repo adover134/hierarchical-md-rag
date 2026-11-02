@@ -45,14 +45,51 @@ INSTRUCTIONS = """\
 
 """
 
+INSTRUCTIONS_V2 = """\
+# 채점 지시 (루브릭 v2)
+
+아래 루브릭으로 배치 파일의 항목을 하나씩 채점한다. 항목마다 질문, 기대 답변, 검색된 컨텍스트, 생성된 답변, 힌트(`hint`)가 있다.
+
+- 항목의 출처(어느 시스템·실행인지)는 알려지지 않았고 알려고 하지 않는다. 항목끼리 비교하지 말고 각 항목을 루브릭에만 비추어 독립적으로 채점한다.
+- 점수는 0~5 정수. 4개 축(correctness, answer_coverage, faithfulness, context_relevance) 모두, 각각 한 문장 근거(reason)를 쓴다. 아래 규칙을 적용했으면 근거에 규칙 번호를 적는다(예: "규칙2").
+- Faithfulness와 Context Relevance는 항목의 `context` 필드만 기준으로 한다. 외부 지식으로 답이 맞는지 추측하지 않는다.
+- 결과는 JSON 파일 하나로 쓴다: `{"<item_id>": {"correctness": {"score": 0, "reason": "..."}, "answer_coverage": {...}, "faithfulness": {...}, "context_relevance": {...}}, ...}`.
+  배치의 모든 item_id가 빠짐없이 들어 있어야 한다.
+
+## 판정 규칙 (라운드가 달라도 같은 기준을 쓰기 위한 명시 규칙)
+
+1. **주된 값.** 기대 답변에서 괄호 밖에 있는 값·사실이 주된 값이다. 괄호 안의 내역(추정가격, 부가가치세, 동복·하복 금액, 구성 항목)은 부차 정보다. 괄호 밖에 값이 하나도 없을 때만 괄호 안 값을 주된 값으로 본다.
+2. **Correctness.** 주된 값만으로 판단한다. 주된 값이 모두 맞으면 부차 정보가 빠지거나 달라도 5점이다. 주된 값 하나가 틀리거나 빠지면 최대 3점(값이 여럿이면 맞은 비율로), 핵심 값이 틀리면 0~2점이다.
+3. **Answer coverage.** 주된 값(사실 포인트)이 답변에 모두 들어 있는가만 본다. 부차 정보(괄호 안 내역) 누락은 감점하지 않는다. 주된 포인트 일부가 빠지면 빠진 비율대로 낮춘다. 모두 있으면 5점이다.
+4. **표기와 라벨.** (a) 숫자 표기 차이(쉼표, `원`, 공백, `약 …억`과 정확한 값의 병기, `5천만 원`=`50,000,000원`)는 같은 값이다. (b) 질문이 묻는 금액 이름(기초금액, 추정금액, 사업예산, 사업금액, 예산)과 답변이 쓴 이름(예: 사업비)이 달라도 값이 기대 주된 값과 같으면 감점하지 않는다.
+5. **비교 질문**(어느 쪽이 더 큰가). 주된 사실은 선택한 대상(과 있으면 그 값)이다.
+6. **답변 거부**(`문서에서 확인되지 않습니다` 등). Correctness와 Answer coverage는 0점이다. Faithfulness는 주장이 없으므로 5점이다. Context Relevance는 context만 본다.
+7. **힌트.** `hint.primary_values`는 스크립트가 기대 답변에서 뽑은 주된 값 후보이고 `hint.missing`은 그중 답변에 문자열로 없는 값이다. 문자열 일치 힌트일 뿐이다. 표기 차이나 환산으로 같은 값이면 `missing`이어도 맞다고 보고, 문자열이 있어도 엉뚱한 맥락이면 틀리다고 본다.
+
+---
+
+"""
+
 
 def _context(rec: dict, k: int) -> str:
     texts = [str(d.get("content", "")) for d in (rec.get("retrieved_docs") or [])[:k]]
     return "\n\n".join(p for p in (rec.get("evidence", ""), "\n\n".join(t for t in texts if t)) if p)
 
 
+def primary_hint(expected: str, answer: str) -> dict:
+    """기대 답변의 주된 값(괄호 밖)을 뽑고 그중 답변에 문자열로 없는 값을 알려준다. 채점자를 돕는 힌트일 뿐 점수를 정하지 않는다."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from build_qrels import norm
+    from diagnose_answer import primary_facts
+
+    facts = primary_facts(expected)
+    text = norm(answer)
+    return {"primary_values": facts, "missing": [f for f in facts if f not in text]}
+
+
 def build_items(
-    records: dict[tuple[str, str], list[dict]], dataset_items: dict[tuple[str, str], dict], k: int, seed: int
+    records: dict[tuple[str, str], list[dict]], dataset_items: dict[tuple[str, str], dict], k: int, seed: int,
+    with_hint: bool = False,
 ) -> tuple[list[dict], dict[str, dict]]:
     """(run, system)별 기록을 하나로 합쳐 섞고 항목 번호를 새로 붙인다. 번호는 출처와 무관해서 채점자는 어느 시스템인지 알 수 없다."""
     rows: list[tuple[dict, dict]] = []
@@ -67,6 +104,8 @@ def build_items(
                 "context": _context(rec, k),
                 "generated_answer": rec.get("answer", ""),
             }
+            if with_hint:
+                body["hint"] = primary_hint(body["expected_answer"], body["generated_answer"])
             origin = {"run": run, "system": system, "dataset": rec["dataset"], "id": rec["id"], "repeat": rec.get("repeat", 1)}
             rows.append((body, origin))
     random.Random(seed).shuffle(rows)
@@ -120,11 +159,12 @@ def cmd_export(a: argparse.Namespace) -> None:
     for spec in a.runs:
         run, system = spec.split(":", 1)
         records[(run, system)] = json.loads((RUNS_DIR / run / f"{system}_raw.json").read_text(encoding="utf-8"))
-    items, mapping = build_items(records, _load_dataset_items(), a.k, a.seed)
+    items, mapping = build_items(records, _load_dataset_items(), a.k, a.seed, with_hint=a.rubric == "v2")
     out = Path(a.out_dir)
     (out / "batches").mkdir(parents=True, exist_ok=True)
     (out / "results").mkdir(exist_ok=True)
-    (out / "rubric.md").write_text(INSTRUCTIONS + JUDGE_SYSTEM_PROMPT, encoding="utf-8")
+    (out / "rubric.md").write_text((INSTRUCTIONS_V2 if a.rubric == "v2" else INSTRUCTIONS) + JUDGE_SYSTEM_PROMPT, encoding="utf-8")
+    (out / "rubric_version.txt").write_text(a.rubric + "\n", encoding="utf-8")
     (out / "mapping.json").write_text(json.dumps(mapping, ensure_ascii=False, indent=1), encoding="utf-8")
     batches = split_batches(items, a.batch_size)
     for n, batch in enumerate(batches, start=1):
@@ -169,6 +209,8 @@ def main() -> None:
     e.add_argument("--batch-size", type=int, default=10)
     e.add_argument("--k", type=int, default=5, help="컨텍스트에 넣는 검색 청크 수(run_experiment의 top_k와 같게)")
     e.add_argument("--seed", type=int, default=20261102)
+    e.add_argument("--rubric", choices=["v1", "v2"], default="v2",
+                   help="v1: 이전 라운드 루브릭(힌트 없음), v2: 규칙을 명시한 루브릭 + 주된 값 힌트(기본)")
     e.set_defaults(fn=cmd_export)
     i = sub.add_parser("import")
     i.add_argument("--out-dir", required=True)

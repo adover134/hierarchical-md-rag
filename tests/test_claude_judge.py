@@ -71,3 +71,41 @@ class TestValidateResults:
 
     def test_unknown_items_are_reported(self):
         assert any("j9" in p for p in validate_results({"j1": _ok(), "j9": _ok()}, ["j1"]))
+
+
+# --- 루브릭 v2: 명시 규칙과 주된 값 힌트 -------------------------------------------------------------
+
+def test_primary_hint_ignores_parenthetical_breakdown():
+    from claude_judge import primary_hint
+
+    hint = primary_hint("기초금액은 50,000,000원(추정가격 45,454,545원, 부가가치세 4,545,455원)입니다.",
+                        "기초금액은 50,000,000원입니다.")
+    assert hint["primary_values"] == ["50000000"]
+    assert hint["missing"] == []
+
+
+def test_primary_hint_reports_missing_values_and_tolerates_notation():
+    from claude_judge import primary_hint
+
+    expected = "설치대수는 240kW 파워뱅크 2기와 디스펜서 5기입니다."
+    hint = primary_hint(expected, "240kW 파워뱅크 2기가 설치됩니다.")
+    assert hint["missing"], "디스펜서 5기가 답변에 없다는 것을 알려야 한다"
+    assert primary_hint("사업비는 50,000,000원입니다.", "사업비는 약 5,000만 원 (50,000,000 원)입니다.")["missing"] == []
+
+
+def test_rubric_v2_states_the_rules_that_drifted_between_rounds():
+    from claude_judge import INSTRUCTIONS_V2
+
+    for needle in ("주된 값", "괄호", "Answer coverage", "라벨", "문서에서 확인되지 않습니다"):
+        assert needle in INSTRUCTIONS_V2
+
+
+def test_build_items_adds_hint_only_when_requested():
+    from claude_judge import build_items
+
+    records = {("r", "s"): [{"dataset": "new20", "id": "m1", "answer": "50,000,000원", "evidence": "", "retrieved_docs": []}]}
+    dataset = {("new20", "m1"): {"question": "q", "expected_answer": "기초금액은 50,000,000원(부가세 포함)입니다."}}
+    plain, _ = build_items(records, dataset, 5, 1)
+    hinted, _ = build_items(records, dataset, 5, 1, with_hint=True)
+    assert "hint" not in plain[0]
+    assert hinted[0]["hint"]["primary_values"] == ["50000000"]
