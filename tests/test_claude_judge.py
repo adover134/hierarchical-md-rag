@@ -109,3 +109,29 @@ def test_build_items_adds_hint_only_when_requested():
     hinted, _ = build_items(records, dataset, 5, 1, with_hint=True)
     assert "hint" not in plain[0]
     assert hinted[0]["hint"]["primary_values"] == ["50000000"]
+
+
+# --- 거부 답변: Faithfulness는 해당 없음(N/A)으로 집계에서 뺀다 ---------------------------------------
+
+def test_is_refusal_detects_not_found_answers_only():
+    from claude_judge import is_refusal
+
+    assert is_refusal("문서에서 확인되지 않습니다.")
+    assert is_refusal("비교 답변을 위해 문서 A/B를 모두 검색했지만 문서 B 근거 부족으로 단정 비교를 생략합니다.")
+    assert not is_refusal("기초금액은 50,000,000원입니다.")
+    assert not is_refusal("")
+
+
+def test_rubric_v2_marks_refusal_faithfulness_as_not_applicable():
+    from claude_judge import INSTRUCTIONS_V2
+
+    assert "N/A" in INSTRUCTIONS_V2
+
+
+def test_hint_flags_refusal_items():
+    from claude_judge import build_items
+
+    records = {("r", "s"): [{"dataset": "new20", "id": "m1", "answer": "문서에서 확인되지 않습니다.", "evidence": "", "retrieved_docs": []}]}
+    dataset = {("new20", "m1"): {"question": "q", "expected_answer": "기초금액은 50,000,000원입니다."}}
+    items, _ = build_items(records, dataset, 5, 1, with_hint=True)
+    assert items[0]["hint"]["refusal"] is True

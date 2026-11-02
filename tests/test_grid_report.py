@@ -26,3 +26,11 @@ def test_paired_summary_all_equal_has_p_one():
 
 def test_cell_name():
     assert cell_name("proc", "cur_db") == "proc_on_cur_db"
+
+
+def test_mean_and_paired_summary_skip_not_applicable_scores():
+    from grid_report import _mean
+
+    assert _mean([5, None, 3]) == 4.0
+    r = paired_summary([5, None, 3], [5, 2, 4])
+    assert (r["up"], r["down"], r["same"]) == (1, 0, 1)  # None이 낀 쌍은 건너뛴다

@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import json
 import random
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -63,7 +64,7 @@ INSTRUCTIONS_V2 = """\
 3. **Answer coverage.** 주된 값(사실 포인트)이 답변에 모두 들어 있는가만 본다. 부차 정보(괄호 안 내역) 누락은 감점하지 않는다. 주된 포인트 일부가 빠지면 빠진 비율대로 낮춘다. 모두 있으면 5점이다.
 4. **표기와 라벨.** (a) 숫자 표기 차이(쉼표, `원`, 공백, `약 …억`과 정확한 값의 병기, `5천만 원`=`50,000,000원`)는 같은 값이다. (b) 질문이 묻는 금액 이름(기초금액, 추정금액, 사업예산, 사업금액, 예산)과 답변이 쓴 이름(예: 사업비)이 달라도 값이 기대 주된 값과 같으면 감점하지 않는다.
 5. **비교 질문**(어느 쪽이 더 큰가). 주된 사실은 선택한 대상(과 있으면 그 값)이다.
-6. **답변 거부**(`문서에서 확인되지 않습니다` 등). Correctness와 Answer coverage는 0점이다. Faithfulness는 주장이 없으므로 5점이다. Context Relevance는 context만 본다.
+6. **답변 거부**(`문서에서 확인되지 않습니다` 등, `hint.refusal`이 true인 항목). Correctness와 Answer coverage는 0점이다. Faithfulness는 주장이 없어 채점 대상이 아니므로 해당 없음(N/A)이다. 점수 칸에는 0을 쓰고 근거를 `N/A(거부 답변)`으로 시작한다. 집계는 이 항목의 Faithfulness를 평균에서 뺀다. Context Relevance는 context만 본다.
 7. **힌트.** `hint.primary_values`는 스크립트가 기대 답변에서 뽑은 주된 값 후보이고 `hint.missing`은 그중 답변에 문자열로 없는 값이다. 문자열 일치 힌트일 뿐이다. 표기 차이나 환산으로 같은 값이면 `missing`이어도 맞다고 보고, 문자열이 있어도 엉뚱한 맥락이면 틀리다고 본다.
 
 ---
@@ -76,6 +77,14 @@ def _context(rec: dict, k: int) -> str:
     return "\n\n".join(p for p in (rec.get("evidence", ""), "\n\n".join(t for t in texts if t)) if p)
 
 
+_REFUSAL = re.compile(r"확인되지\s*않|찾을\s*수\s*없|근거\s*부족|정보가\s*없")
+
+
+def is_refusal(answer: str) -> bool:
+    """답변이 값을 내지 않고 '문서에서 확인되지 않습니다' 같은 거부·폴백 문구만 낸 경우."""
+    return bool(_REFUSAL.search(answer or ""))
+
+
 def primary_hint(expected: str, answer: str) -> dict:
     """기대 답변의 주된 값(괄호 밖)을 뽑고 그중 답변에 문자열로 없는 값을 알려준다. 채점자를 돕는 힌트일 뿐 점수를 정하지 않는다."""
     sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -84,7 +93,7 @@ def primary_hint(expected: str, answer: str) -> dict:
 
     facts = primary_facts(expected)
     text = norm(answer)
-    return {"primary_values": facts, "missing": [f for f in facts if f not in text]}
+    return {"primary_values": facts, "missing": [f for f in facts if f not in text], "refusal": is_refusal(answer)}
 
 
 def build_items(

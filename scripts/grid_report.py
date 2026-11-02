@@ -13,9 +13,12 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import sys
 from pathlib import Path
 
 import yaml
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 RUNS_DIR = REPO_ROOT / "eval_resources" / "experiment_runs"
@@ -33,7 +36,7 @@ def cell_name(proc: str, db: str) -> str:
 
 def paired_summary(a: list[float], b: list[float]) -> dict:
     """같은 문항에 대한 두 점수열(b - a)의 평균 차이, 부호 검정 p값(양측), 늘어난/줄어든/같은 문항 수."""
-    diffs = [y - x for x, y in zip(a, b)]
+    diffs = [y - x for x, y in zip(a, b) if x is not None and y is not None]  # None(해당 없음)이 낀 쌍은 건너뛴다
     up, down = sum(d > 0 for d in diffs), sum(d < 0 for d in diffs)
     n = up + down
     p = 1.0
@@ -50,6 +53,15 @@ def load_scores(run: str, system: str) -> dict[tuple[str, str], dict[str, int]]:
         ds, qid, _ = f.stem.split("__")
         j = json.loads(f.read_text(encoding="utf-8"))
         out[(ds, qid)] = {ax: int(j[ax]["score"]) for ax in AXES}
+    # 거부 답변(`문서에서 확인되지 않습니다` 등)의 Faithfulness는 해당 없음이라 None으로 두고 집계에서 뺀다.
+    raw_path = RUNS_DIR / run / f"{system}_raw.json"
+    if raw_path.exists():
+        from claude_judge import is_refusal
+
+        for r in json.loads(raw_path.read_text(encoding="utf-8")):
+            key = (r["dataset"], r["id"])
+            if key in out and is_refusal(r.get("answer") or ""):
+                out[key]["faithfulness"] = None
     return out
 
 
@@ -57,7 +69,8 @@ def load_raw(run: str, system: str) -> dict[tuple[str, str], dict]:
     return {(r["dataset"], r["id"]): r for r in json.loads((RUNS_DIR / run / f"{system}_raw.json").read_text(encoding="utf-8"))}
 
 
-def _mean(xs: list[float]) -> float:
+def _mean(xs: list[float | None]) -> float:
+    xs = [x for x in xs if x is not None]  # 해당 없음(None)은 평균에서 뺀다
     return sum(xs) / len(xs) if xs else float("nan")
 
 
