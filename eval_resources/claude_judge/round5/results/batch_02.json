@@ -1,0 +1,182 @@
+{
+ "j0011": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간을 착공일로부터 120일로 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심인 120일과 기산점(착공일)을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 120일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고의 입찰 부치는 사항이 포함되어 충분하나 유의사항 중복 등 불필요한 내용도 있다."
+  }
+ },
+ "j0012": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 100,000,000원이라는 주된 값을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "금액은 포함했으나 이를 기초금액으로 명시하지 않고 사업비로만 표현했다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '충청남도 아산시'라는 기관명은 context에서 확인되지 않는다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context는 금액 한 줄뿐이라 사업명이나 기초금액 여부를 확인할 정보가 부족하다."
+  }
+ },
+ "j0013": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 60일을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "60일은 포함했으나 '착공일로부터'라는 기산점이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'에 근거한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 사업의 공고 정보가 있어 충분하나 하도급지킴이 등 무관한 내용이 많다."
+  }
+ },
+ "j0014": {
+  "correctness": {
+   "score": 5,
+   "reason": "과업기간 착수일로부터 365일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 모든 내용을 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '과업기간: 착수일로부터 365일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 용역 공고의 개요가 포함되어 충분하나 입찰참가자격 등 불필요한 내용도 있다."
+  }
+ },
+ "j0015": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027년 2월 22일, 하복 2027년 5월 10일로 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "동복과 하복 납품기한을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 납품기한 항목과 특수조건 제3조에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "납품기한 정보가 충분히 있으나 교복 사양 표 등 무관한 내용이 다수 포함되었다."
+  }
+ },
+ "j0016": {
+  "correctness": {
+   "score": 5,
+   "reason": "낙찰하한율 86.245%를 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 값을 빠짐없이 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '낙찰하한율: 86.245%'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "낙찰하한율과 공고명이 포함되어 충분하나 중복과 신용평가 관련 불필요 내용이 있다."
+  }
+ },
+ "j0017": {
+  "correctness": {
+   "score": 5,
+   "reason": "계약체결일로부터 420일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 내용을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '계약기간: 계약체결일로부터 420일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 입찰의 계약기간이 포함되어 충분하나 입찰보증금 등 무관한 내용도 많다."
+  }
+ },
+ "j0018": {
+  "correctness": {
+   "score": 5,
+   "reason": "영남영농조합법인(608,881,900원)이 쏘유팜(245,339,600원)보다 크다는 결론과 금액이 모두 정확하다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "두 기관의 금액과 비교 결론을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "두 금액은 context에 있으나 각 금액이 어느 기관의 것인지는 context에서 확인되지 않아 추론에 의존한다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "두 예산 금액은 있으나 기관명이 없어 비교에 필요한 귀속 정보가 부족하다."
+  }
+ },
+ "j0019": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 285,125,000원이라는 주된 값을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "금액은 포함했으나 기초금액으로 명시하지 않고 사업비로 표현했다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '충청남도 서천군 농업기술센터'라는 기관명은 context에서 확인되지 않는다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context는 금액 한 줄뿐이라 사업명이나 기초금액 여부를 확인할 정보가 부족하다."
+  }
+ },
+ "j0020": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 26,750,000원이라는 주된 값을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "금액은 포함했으나 기초금액으로 명시하지 않고 사업비로 표현했다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '충청북도 영동군'이라는 기관명은 context에서 확인되지 않는다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context는 금액 한 줄뿐이라 사업명이나 기초금액 여부를 확인할 정보가 부족하다."
+  }
+ }
+}
