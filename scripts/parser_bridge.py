@@ -97,13 +97,6 @@ def convert_with_new_parser(
     return out_path
 
 
-def _with_title_block(content: str, document_title: str, source_file: str) -> str:
-    """첫 청크 본문 맨 앞에 문서 제목 블록을 붙인다. 팀 DB 청크와 같은 모양(`document_title`, `source_file`)이다.
-    kordoc 출력의 `title:` 머리말은 청킹이 메타데이터로만 옮기고 본문에서 빼므로, 문서를 찾는 질의(사업명·기관명)가
-    본문 검색(밀집·어휘)에서 제목을 볼 수 있도록 다시 넣는다."""
-    return f'---\ndocument_title: "{document_title}"\nsource_file: "{source_file}"\n---\n\n{content}'
-
-
 def process_file_no_regex_reextraction(file_path: Path) -> list[dict]:
     """`chunker.py`의 `process_file()`과 동일하지만 step3/step4(정규식 계층 재추출)를 건너뛰고,
     step6의 헤더 인식을 skill의 실제 레벨(##/###)에 맞춘다 — 모듈 docstring 참고."""
@@ -125,14 +118,11 @@ def process_file_no_regex_reextraction(file_path: Path) -> list[dict]:
         # chunker.py 쪽 주석 참고.
         institution, project_name = name.split("_", 1)
 
-    source_file = doc_meta.get("title") or file_path.name
     chunks: list[dict] = []
     for item in split_results:
         content = item["page_content"]
         if not content:
             continue
-        if not chunks:
-            content = _with_title_block(content, document_title, source_file)
         meta = item["metadata"]
         chunks.append({
             "page_content": content,
