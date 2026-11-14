@@ -535,6 +535,8 @@ DB 구축 때 Kiwi 명사로 BM25 희소 벡터를 만들어 메타데이터에 
 
 ### 3×2 비교: DB 효과와 프로세스 효과를 따로 보기 (`dbcmp6`, 채점: Claude 서브에이전트)
 
+> **정리 (2026-11-14):** 3×2 실험의 작업 폴더(`hmr_dbcompare_wt/cur_db`, `team_db`, `team_proc_cur_db`, 약 526MB)는 용량 때문에 삭제했다. 원시 답변과 채점 기록은 `eval_resources/experiment_runs/`에, DB는 `hmr_db_snapshots/`(팀 DB `team_final`, 현재 DB `current_default`)에 남아 있어서 같은 실험을 다시 하려면 스냅샷에서 작업 폴더를 다시 만들면 된다.
+
 목표는 DB 변경의 효과와 프로세스 변경의 효과를 분리해서 재는 것이다. 프로세스 세 가지(팀 프로세스, main 버전, 멀티 에이전트)를 DB 두 가지(팀 DB, 최신 DB)에 각각 돌렸다.
 조건은 모두 같다: 단축 경로 우회와 CSV 끔(금액은 엑셀로 얻을 수 없어 항상 검색으로 돌린다), 같은 엑셀, 같은 40문항, `top_k=5`, 칸마다 한 번 질의, 채점은 Claude(블라인드, 240건을 한 라운드로 섞어서). 이전 실행 `dbcmp5`는 중간 초안을 기록하지 않아서 이 비교에는 쓰지 않고 `dbcmp6`만 근거로 삼는다.
 문항별로 여섯 조합의 답변을 나란히 둔 부록은 [`docs/dbcmp6_answers.md`](docs/dbcmp6_answers.md), 모든 축의 쌍체 비교는 [`docs/dbcmp6_summary.md`](docs/dbcmp6_summary.md)에 있다(`scripts/grid_report.py`로 생성). 채점 배치와 결과는 `eval_resources/claude_judge/round3/`.
