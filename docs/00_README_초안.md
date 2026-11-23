@@ -106,6 +106,7 @@ python scripts/gradio_app.py
 | 7 | [결과](docs/07_결과.md) | 무엇이 점수를 바꿨는가, 믿어도 되는 범위 |
 | 8 | [버전과 브랜치](docs/08_버전과_브랜치.md) | 버전별 변화, 브랜치 차이 |
 | 9 | [용어집](docs/09_용어집.md) | 문서에 나온 말의 뜻 |
+| 요약 | [발표.html](docs/발표.html) | 브라우저에서 여는 슬라이드 요약(← → 키) |
 | 기록 | [`EXPERIMENTS.md`](EXPERIMENTS.md), [`docs/`](docs/) | 실험과 채점의 상세 기록 |
 
 ## 현재 결과와 한계

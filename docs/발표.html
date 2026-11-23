@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hierarchical-md-rag 요약</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--fg:#1c2330;--sub:#5b6577;--line:#d9dee7;--acc:#2f5fd0;--ok:#1f8a4c;--warn:#b4561a}
+@media (prefers-color-scheme:dark){:root{--bg:#12151b;--card:#1b2029;--fg:#e8ecf3;--sub:#9aa5b8;--line:#2e3644;--acc:#7aa2ff;--ok:#4fc17d;--warn:#f0a064}}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Noto Sans KR","Malgun Gothic",sans-serif}
+.slide{display:none;min-height:100vh;padding:48px max(16px,6vw) 72px;max-width:1100px;margin:0 auto;flex-direction:column;justify-content:center}
+.slide.on{display:flex}
+h1{font-size:clamp(28px,5vw,48px);margin:0 0 12px;line-height:1.2}
+h2{font-size:clamp(22px,3.6vw,34px);margin:0 0 20px}
+p,li{font-size:clamp(16px,2vw,21px);line-height:1.65}
+.sub{color:var(--sub)}
+ul{padding-left:1.2em;margin:8px 0}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:18px 0}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:clamp(14px,1.8vw,19px)}
+.box.hl{border-color:var(--acc);border-width:2px}
+.arrow{color:var(--sub);font-size:22px}
+table{border-collapse:collapse;width:100%;background:var(--card);font-size:clamp(14px,1.8vw,19px)}
+th,td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+th{background:var(--bg)}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+.ok{color:var(--ok);font-weight:700}.warn{color:var(--warn);font-weight:700}
+.tag{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 12px;margin:2px 4px 2px 0;font-size:.85em;background:var(--card)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;padding:10px max(16px,6vw);background:var(--bg);border-top:1px solid var(--line);font-size:14px;color:var(--sub)}
+nav button{font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 14px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <h1>hierarchical-md-rag</h1>
+  <p>공공기관 입찰공고문에서 <b>금액, 기간, 수량</b> 같은 값을 질문으로 찾는 RAG 시스템</p>
+  <p class="sub">팀 프로젝트(AI_7-team)에서 출발해 문서 읽기, 표 처리, 검색, 답변, 채점을 바꿨다.</p>
+  <p><span class="tag">버전 1.2.0</span><span class="tag">문서 출처: 나라장터</span><span class="tag">답변: gpt-oss:20b</span><span class="tag">채점: Claude</span></p>
+</section>
+
+<section class="slide">
+  <h2>왜 만들었나</h2>
+  <ul>
+    <li>공고문은 길고, 핵심 값은 <b>표 안</b>에 있다.</li>
+    <li>표가 깨지면 "기초금액이 얼마인가"에 답하지 못한다.</li>
+    <li>그래서 표를 <b>라벨: 값</b>으로 풀고, 질문 방식도 다시 설계했다.</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>구조 한눈에</h2>
+  <div class="flow"><div class="box">HWP / HWPX</div><span class="arrow">→</span><div class="box">파서 (skill / service)</div><span class="arrow">→</span><div class="box hl">Markdown</div></div>
+  <div class="flow"><div class="box">PDF</div><span class="arrow">→</span><div class="box">PDF 로더(내장)</div><span class="arrow">→</span><div class="box hl">Markdown</div></div>
+  <div class="flow"><div class="box hl">Markdown</div><span class="arrow">→</span><div class="box">DB 구축</div><span class="arrow">→</span><div class="box">ChromaDB</div><span class="arrow">→</span><div class="box">질의응답</div><span class="arrow">→</span><div class="box">API / Gradio</div></div>
+  <p class="sub">입력은 항상 Markdown이다. HWP를 Markdown으로 바꾸는 일은 파서 저장소를 활용한다.</p>
+</section>
+
+<section class="slide">
+  <h2>DB 만들기</h2>
+  <div class="flow"><div class="box">표 평탄화</div><span class="arrow">→</span><div class="box">텍스트 정리</div><span class="arrow">→</span><div class="box">섹션 분할</div><span class="arrow">→</span><div class="box">청크 1,000자 / 겹침 200자</div><span class="arrow">→</span><div class="box">임베딩 + 저장</div></div>
+  <ul>
+    <li>표 한 줄이 <b>구분: 송림리, 기초금액: 285,125,000</b>처럼 풀린다.</li>
+    <li>같은 내용이면 덮어쓰고(upsert), 내용이 바뀌면 새 문서로 본다.</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>질문 한 건의 흐름</h2>
+  <div class="flow"><div class="box">질문 분석</div><span class="arrow">→</span><div class="box">순위·탐색은 엑셀로 바로 답</div></div>
+  <div class="flow"><div class="box">기관 필터</div><span class="arrow">→</span><div class="box">후보 풀(요청×15, 최소 150)</div><span class="arrow">→</span><div class="box">재정렬 0.6 밀집 + 0.4 낱말</div><span class="arrow">→</span><div class="box">답변</div></div>
+  <p>답변 방식 두 가지</p>
+  <ul>
+    <li><b>two_stage</b>: 근거를 정리한 뒤 답한다(기본).</li>
+    <li><b>multi_agent</b>: 질문을 1~3단계로 쪼개 값을 찾는다.</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>어떻게 평가했나</h2>
+  <p><b>프로세스 3가지 × DB 2가지 = 6칸</b>, 같은 질문 40개(문서 57건)</p>
+  <div class="flow"><div class="box">팀 프로세스</div><div class="box">main two_stage</div><div class="box">multi-agent</div><span class="arrow">×</span><div class="box">팀 DB</div><div class="box">현재 DB</div></div>
+  <ul>
+    <li>답변은 로컬 모델이 만들고, 채점은 <b>항상 Claude</b>(서브에이전트)가 한다.</li>
+    <li>채점자는 어느 시스템의 답인지 모른다.</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>결과: 정답 점수 (5점 만점)</h2>
+  <table>
+    <tr><th>프로세스</th><th>팀 DB</th><th>현재 DB</th></tr>
+    <tr><td>팀 프로세스</td><td class="n">1.225</td><td class="n">1.075</td></tr>
+    <tr><td>main (two_stage)</td><td class="n">4.775</td><td class="n">4.900</td></tr>
+    <tr><td>멀티 에이전트</td><td class="n">5.000</td><td class="n">5.000</td></tr>
+  </table>
+  <p><span class="ok">프로세스가 점수를 올렸다</span>(+3.6~+3.8, p &lt; 0.001).
+  <br>main → 멀티 에이전트와 DB 교체 효과는 우연과 구분되지 않았다.</p>
+</section>
+
+<section class="slide">
+  <h2>DB만 따로 보면</h2>
+  <table>
+    <tr><th>지표</th><th>팀 DB</th><th>현재 DB</th><th></th></tr>
+    <tr><td>표 짝 유지(60쌍)</td><td class="n">23.3%</td><td class="n">100%</td><td class="ok">나아짐</td></tr>
+    <tr><td>청크 누락 coverage</td><td class="n">0.938</td><td class="n">0.978</td><td class="ok">나아짐</td></tr>
+    <tr><td>순수 밀집 풀 Recall@360</td><td class="n">0.957</td><td class="n">0.938</td><td class="warn">나아지지 않음</td></tr>
+  </table>
+  <p class="sub">표 처리와 누락 방지는 좋아졌지만, 임베딩만으로 찾는 능력은 같거나 약간 낮다.</p>
+</section>
+
+<section class="slide">
+  <h2>믿어도 되는 범위</h2>
+  <ul>
+    <li>문항 40개, 칸마다 한 번이라 1~2문항 차이는 우연일 수 있다.</li>
+    <li>점수가 만점 근처(4.8~5.0)라 더 나아졌는지 구분하기 어렵다.</li>
+    <li>사람이 매긴 점수와는 대조하지 않았다.</li>
+    <li>스캔 PDF는 범위 밖이다.</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>버전과 브랜치</h2>
+  <table>
+    <tr><th>버전</th><th>내용</th></tr>
+    <tr><td>1.0</td><td>팀 프로젝트에 전용 로더·계층 청킹·답변 전략 추가</td></tr>
+    <tr><td>1.1.0</td><td>표 평탄화, 키워드·기관 사전, 후보 풀·기관 필터 수정</td></tr>
+    <tr><td>1.2.0</td><td>채점 규칙 v2로 전 칸 재채점</td></tr>
+  </table>
+  <p><b>multi-agent</b>: 최신(평가 도구·결과 문서 포함) · <b>main</b>: two_stage 경로만</p>
+  <p class="sub">자세한 내용은 docs/ 폴더의 01~09 문서를 본다.</p>
+</section>
+
+<nav>
+  <button id="prev">← 이전</button>
+  <span id="pos"></span>
+  <button id="next">다음 →</button>
+</nav>
+
+<script>
+(function(){
+  var s=[].slice.call(document.querySelectorAll('.slide')),i=0;
+  try{var h=parseInt(location.hash.slice(1),10);if(h>=1&&h<=s.length)i=h-1}catch(e){}
+  function show(n){
+    i=Math.max(0,Math.min(s.length-1,n));
+    s.forEach(function(x,k){x.classList.toggle('on',k===i)});
+    document.getElementById('pos').textContent=(i+1)+' / '+s.length;
+    try{history.replaceState(null,'','#'+(i+1))}catch(e){}
+  }
+  document.getElementById('prev').onclick=function(){show(i-1)};
+  document.getElementById('next').onclick=function(){show(i+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();show(i+1)}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();show(i-1)}
+    else if(e.key==='Home')show(0);else if(e.key==='End')show(s.length-1);
+  });
+  show(i);
+})();
+</script>
+</body>
+</html>
