@@ -17,14 +17,14 @@
 고정하지 않고 저장소 기본값(`two_stage`)을 따른다. 로컬 실험용으로 다른 조합을 쓰고 싶으면
 이 딕셔너리를 직접 고쳐서 실행할 것.
 
-**인증**: `GRADIO_APP_SHARED_PASSWORD` 환경변수를 설정하면 테스터 전원이 공유하는
-계정(아이디 `tester`) 하나로 접속을 막는다 — 실제 도메인 배포 시 필수(안 하면 링크만
+**인증**: `.env`(또는 환경변수)에 `GRADIO_APP_USERNAME`과 `GRADIO_APP_PASSWORD`를 설정하면 테스터 전원이 공유하는
+계정 하나로 접속을 막는다(아이디와 비밀번호는 코드나 문서에 적지 않는다) — 실제 도메인 배포 시 필수(안 하면 링크만
 아는 아무나 접근해 GPU를 소모시킬 수 있음, 자세한 근거는 `main()`의 주석 참고). 로컬
 단독 확인 시엔 없어도 되고, 없으면 시작 시 경고만 찍힌다.
 
 사용법:
     conda activate langc
-    GRADIO_APP_SHARED_PASSWORD=<공유 비밀번호> python scripts/gradio_app.py [--share] [--port 7860]
+    python scripts/gradio_app.py [--share] [--port 7860]   # 인증은 .env의 GRADIO_APP_USERNAME / GRADIO_APP_PASSWORD
 
 `--share`를 주면 Gradio가 공개 임시 링크를 만들어준다(테스터에게 바로 공유 가능,
 별도 호스팅 불필요) — 링크는 72시간 후 만료된다.
@@ -236,6 +236,21 @@ def build_app() -> gr.ChatInterface:
     )
 
 
+def resolve_auth(environ: Any = None) -> tuple[str, str] | None:
+    """`.env`/환경변수에서 Gradio 접속 아이디·비밀번호를 읽는다. 둘 다 없으면 인증 없이(None), 하나만 있으면 오류.
+
+    고정된 아이디를 코드에 두지 않는다(API 키를 저장소에 올리지 않는 것과 같은 이유).
+    예전 이름 `GRADIO_APP_SHARED_PASSWORD`도 비밀번호로 읽는다."""
+    env = os.environ if environ is None else environ
+    username = str(env.get("GRADIO_APP_USERNAME") or "").strip()
+    password = str(env.get("GRADIO_APP_PASSWORD") or env.get("GRADIO_APP_SHARED_PASSWORD") or "")
+    if not username and not password:
+        return None
+    if not (username and password):
+        raise ValueError("GRADIO_APP_USERNAME과 GRADIO_APP_PASSWORD를 둘 다 .env에 설정해야 합니다(하나만 있으면 시작하지 않습니다).")
+    return username, password
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--host", default="0.0.0.0")
@@ -250,18 +265,25 @@ def main() -> None:
 
     # 인증: 실제 도메인으로 배포하면 이 URL은 HTTPS로 인터넷에 열려 있다 — auth 없이 그냥 launch()하면 링크만 아는
     # 아무나(우연히 공유되거나, 크롤러가 찾아내거나) 접속해 GPU를 소모시킬 수
-    # 있다. GRADIO_APP_SHARED_PASSWORD를 설정하면 테스터 전원이 공유하는 계정
+    # 있다. GRADIO_APP_USERNAME/GRADIO_APP_PASSWORD(.env)를 설정하면 테스터 전원이 공유하는 계정
     # 하나로 간단히 막는다 — 개별 계정 관리까지는 이 규모에 과하다고 판단.
     # 로컬에서 --share 없이 혼자 확인할 때는 굳이 안 걸어도 되므로 기본은 없음
     # (없으면 경고만 찍고 그대로 진행 — 실수로 인증 없이 공개 배포하는 걸 완전히
     # 막진 않지만 최소한 눈에 띄게 알려준다).
-    shared_password = os.environ.get("GRADIO_APP_SHARED_PASSWORD", "")
-    auth: tuple[str, str] | None = ("tester", shared_password) if shared_password else None
+    # .env를 먼저 읽는다(챗봇 모듈은 나중에 불러오므로 여기서 직접 읽어야 인증 설정이 적용된다).
+    from dotenv import load_dotenv
+
+    load_dotenv(Path(__file__).resolve().parent.parent / ".env", override=False)
+    try:
+        auth = resolve_auth()
+    except ValueError as exc:
+        print(f"[gradio_app] 실행 중단: {exc}", file=sys.stderr)
+        raise SystemExit(1)
     if not auth:
         print(
-            "[gradio_app] 경고: GRADIO_APP_SHARED_PASSWORD가 설정되지 않아 인증 없이 "
+            "[gradio_app] 경고: GRADIO_APP_USERNAME / GRADIO_APP_PASSWORD가 설정되지 않아 인증 없이 "
             "열립니다 — 실제 도메인으로 배포하는 거라면 이 URL을 아는 누구나 접근할 수 "
-            "있다는 뜻입니다. 로컬 단독 확인이 아니라면 설정을 권장합니다.",
+            "있다는 뜻입니다. 로컬 단독 확인이 아니라면 .env에 설정하세요.",
             file=sys.stderr,
         )
 
