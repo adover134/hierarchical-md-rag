@@ -10,7 +10,7 @@
 (하한값). 그래서 값 하나로 누락을 단정하지 않고 두 시스템의 같은 문서를 나란히 본다. PDF 원본 문서는 현재 버전의 로더 출력이 없어 제외한다.
 
 사용 예:
-    python scripts/eval_omission.py --snapshots ../hmr_db_snapshots --team-md ../RAG_project/output --current-md output/new_parser_md
+    python scripts/eval_omission.py --snapshots <DB 스냅샷 폴더> --team-md ../RAG_project/output --current-md output/new_parser_md
 """
 
 from __future__ import annotations

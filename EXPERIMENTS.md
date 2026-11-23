@@ -222,7 +222,7 @@ DB 차이를 가리지 않도록 두 가지를 껐다.
   (`scripts/run_experiment.py`의 `_execute`가 우회 판정만 고정한다. 프로세스 코드는 수정하지 않았다).
 
 **재현.** 같은 커밋의 `git worktree` 두 개를 만들어 하나에는 팀 DB 복사본을, 다른 하나에는 최신 DB 복사본을 `data_index/chroma_B`로 넣고
-`run_experiment.py`의 `systems`에서 `project_root`로 가리킨다. DB 스냅샷(`hmr_db_snapshots/{team_final,current_default}`)을 저장해 두고 검증에 썼으나 2026-11-23에 용량 정리로 삭제했다. 현재 DB는 이 저장소의 `data_index/chroma_B`(`main2`), 팀 DB는 `RAG_project/data_index`에 있다.
+`run_experiment.py`의 `systems`에서 `project_root`로 가리킨다. 검증용으로 DB를 프로젝트 바깥의 임시 폴더에 복사해 뒀다가 용량 정리로 삭제했다(저장소에 올라간 적이 없다). 현재 DB는 이 저장소의 `data_index/chroma_B`(`main2`), 팀 DB는 `RAG_project/data_index`에 있다.
 
 ```bash
 python scripts/run_experiment.py --config <위 두 worktree를 systems로 둔 config> query    --run-id dbcmp3 --systems proc_on_team_db proc_on_cur_db
@@ -535,7 +535,7 @@ DB 구축 때 Kiwi 명사로 BM25 희소 벡터를 만들어 메타데이터에 
 
 ### 3×2 비교: DB 효과와 프로세스 효과를 따로 보기 (`dbcmp6`, 채점: Claude 서브에이전트)
 
-> **정리 (2026-11-14):** 3×2 실험의 작업 폴더(`hmr_dbcompare_wt/cur_db`, `team_db`, `team_proc_cur_db`, 약 526MB)는 용량 때문에 삭제했다. 원시 답변과 채점 기록은 `eval_resources/experiment_runs/`에 남아 있다. DB 스냅샷(`hmr_db_snapshots/`)과 1.0 시점 백업(`hmr_backup_main1/`)은 2026-11-23에 용량 정리로 함께 삭제했다. 같은 실험을 다시 하려면 현재 DB(`data_index/chroma_B`)와 팀 DB(`RAG_project/data_index`)에서 작업 폴더를 다시 만들어야 한다.
+> **정리:** 3×2 실험을 돌릴 때 DB를 복사한 작업 폴더(약 526MB), DB 스냅샷, 1.0 시점 백업은 프로젝트 바깥의 임시 폴더였고 저장소에 올라간 적이 없다. 용량 때문에 모두 삭제했다. 원시 답변과 채점 기록은 `eval_resources/experiment_runs/`에 남아 있다. 같은 실험을 다시 하려면 현재 DB(`data_index/chroma_B`)와 팀 DB(`RAG_project/data_index`)에서 작업 폴더를 새로 만들어야 한다.
 
 목표는 DB 변경의 효과와 프로세스 변경의 효과를 분리해서 재는 것이다. 프로세스 세 가지(팀 프로세스, main 버전, 멀티 에이전트)를 DB 두 가지(팀 DB, 최신 DB)에 각각 돌렸다.
 조건은 모두 같다: 단축 경로 우회와 CSV 끔(금액은 엑셀로 얻을 수 없어 항상 검색으로 돌린다), 같은 엑셀, 같은 40문항, `top_k=5`, 칸마다 한 번 질의, 채점은 Claude(블라인드, 240건을 한 라운드로 섞어서). 이전 실행 `dbcmp5`는 중간 초안을 기록하지 않아서 이 비교에는 쓰지 않고 `dbcmp6`만 근거로 삼는다.
@@ -649,7 +649,7 @@ CSV로 답한 문항 수(`csv_short_circuit`)는 팀 19·19, 멀티 18·18(팀 D
 
 ### 1.2 개선 ①: 첫 청크에 문서 제목 넣기 (`dbcmp8`, 채점: Claude 서브에이전트)
 
-> **결과: 이 변경은 되돌렸다(2026-11-02, 커밋 `401822f`).** 프로세스 후보 풀과 답변 Correctness 모두 이득이 없었다. 아래는 측정 기록이다. 제목 블록 DB를 만든 작업 폴더(`hmr_dbcompare_wt/title_db`)는 결과를 기록한 뒤 삭제했다(되돌린 실험의 DB).
+> **결과: 이 변경은 되돌렸다(2026-11-02, 커밋 `401822f`).** 프로세스 후보 풀과 답변 Correctness 모두 이득이 없었다. 아래는 측정 기록이다. 제목 블록 DB는 프로젝트 바깥의 임시 폴더에서 만들었고 결과를 기록한 뒤 삭제했다(되돌린 실험의 DB).
 
 변경: `scripts/parser_bridge.py`가 HWP/HWPX 문서의 첫 청크 본문 맨 앞에 `document_title`, `source_file` 두 줄(팀 DB 청크와 같은 모양, `total_pages`는 제외)을 붙인다. 이전에는 kordoc 출력의 `title:` 머리말을 청킹이 메타데이터로만 옮기고 본문에서 뺐다.
 DB는 현재 DB(`main2`)를 복사해 HWP/HWPX 42개를 캐시된 파서 출력으로 다시 청킹·적재했다(청크 1,207개 그대로, 제목 블록이 든 청크 57개 = 문서마다 하나, 팀 DB와 같다. 나머지 PDF 15개는 원래 블록이 있었다).
@@ -792,7 +792,7 @@ DB만의 성능을 프로세스와 분리해 보는 지표를 한곳에 모은�
 
 - OCR로 문서 내용이 DB에 들어가고 검색은 이 문서를 찾지만(출처 5개 중 포함), 3문항 모두 정답이 아니다. 총금액 78,840,000은 `계` 금액과 품목 금액 두 개(19,740,000 + 19,680,000)를 더한 값으로 보이고, 단가 82,000은 다른 품목의 값이다. 상품명 줄과 값 행이 떨어진 OCR 표 모양을 20B 모델이 잘못 짝지은 것으로 추정하지만 확인하지는 않았다.
 - 따라서 OCR은 "문서 내용을 DB에 넣는다"까지는 해결했고, 표를 정확히 읽는 단계는 해결하지 못했다. 한계: 질문 3개, 한 번씩만 실행했다.
-- 기존 DB(`main2`)는 건드리지 않았다. 확인에 쓴 DB(작업 폴더 `hmr_dbcompare_wt/ocr_db`)는 OCR을 프로젝트 범위 밖으로 둔 뒤 삭제했다. 참고로 같은 문서를 다시 색인하면 `doc_id`가 달라 옛 청크(제목 블록만 든 청크 0)가 남는 문제가 있어서 실제 DB에 반영할 때는 이전 청크를 먼저 지워야 한다.
+- 기존 DB(`main2`)는 건드리지 않았다. 확인에 쓴 DB는 프로젝트 바깥의 임시 폴더에 만들었고 OCR을 프로젝트 범위 밖으로 둔 뒤 삭제했다. 참고로 같은 문서를 다시 색인하면 `doc_id`가 달라 옛 청크(제목 블록만 든 청크 0)가 남는 문제가 있어서 실제 DB에 반영할 때는 이전 청크를 먼저 지워야 한다.
 
 **PaddleOCR 비교 시험 (2026-11-03, 저장소 코드는 바꾸지 않음).** 스캔 PDF를 다시 다루게 될 때를 대비해, 같은 벼 병해충 5쪽(200dpi)에 PaddleOCR 3.7.0(PaddlePaddle 3.3.1, CPU)을 별도 가상환경에서 돌려 EasyOCR과 비교했다. 시험이 끝난 뒤 가상환경과 모델 캐시는 삭제했다.
 

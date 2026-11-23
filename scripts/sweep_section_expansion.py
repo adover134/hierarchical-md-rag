@@ -4,7 +4,7 @@
 설정마다 "검색된 청크를 그 섹션 전체로 확장"했을 때의 지표를 계산한다. 확장된 섹션은 순위 한 칸을 차지하는 하나의 결과다.
 
 사용 예:
-    python scripts/sweep_section_expansion.py --raw-dir eval_resources/retrieval/run1 --snapshots ../hmr_db_snapshots
+    python scripts/sweep_section_expansion.py --raw-dir eval_resources/retrieval/run1 --snapshots <DB 스냅샷 폴더>
 """
 
 from __future__ import annotations

@@ -4,7 +4,7 @@
 핵심 수치가 모두 있으면 등급 2, 절반 이상이면 등급 1. 수치가 없는 정답 문장은 `no_facts`로 표시해 따로 본다.
 
 사용 예:
-    python scripts/build_qrels.py --chunks ../hmr_db_snapshots/current_default/chunks.json --out eval_resources/retrieval/qrels_current_default.json
+    python scripts/build_qrels.py --chunks <DB 스냅샷 폴더>/current_default/chunks.json --out eval_resources/retrieval/qrels_current_default.json
 """
 
 from __future__ import annotations

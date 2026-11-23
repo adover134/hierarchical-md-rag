@@ -12,7 +12,7 @@
 지표는 청크(섹션) 단위와 문서 단위 두 가지다. 문서 단위 정답은 DB와 무관해 세 버전을 같은 qrels로 비교할 수 있다.
 
 사용 예:
-    python scripts/eval_retriever.py --snapshots ../hmr_db_snapshots --out-dir eval_resources/retrieval/run1
+    python scripts/eval_retriever.py --snapshots <DB 스냅샷 폴더> --out-dir eval_resources/retrieval/run1
 """
 
 from __future__ import annotations
