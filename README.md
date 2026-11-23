@@ -49,6 +49,8 @@ title: 송림리 마을만들기사업_충청남도 서천군 농업기술센터
 
 - **파일 이름은 `공고명_기관명.md`** 형태다(문서 하나가 파일 하나).
   - 이 저장소가 이름의 첫 `_`를 기준으로 앞은 `org`, 뒤는 `project_name` 메타데이터로 나눠 DB에 넣는다.
+  - 이 저장소의 `org`에는 **공고명**이 들어가고, 기관명은 `project_name` 쪽이다(이름은 팀 코드에서 물려받았다).
+  - 그래서 원본 HWP 파일 이름이 처음부터 `공고명_기관명`이어야 한다.
   - 파서 skill 혼자 돌리면 기본 출력 이름은 `<원본 파일 이름>.md`(예: `공고.hwpx.md`)이다.
   - 그래서 이 저장소 스크립트는 `-o` 옵션으로 `output/new_parser_md/<원본 파일 이름에서 확장자를 뺀 이름>.md`에 저장한다.
 
@@ -68,7 +70,7 @@ python scripts/index_pdf_originals.py --input <PDF 폴더>            # PDF 로�
 
 - 같은 내용의 문서를 다시 넣으면 덮어쓴다(upsert).
 - 내용이 바뀐 문서는 새 문서로 취급되어 이전 청크가 남는다.
-  - 파서나 kordoc 버전을 바꿔 Markdown이 달라졌다면 `data_index/`를 비우고 다시 만든다.
+  - 파서나 kordoc 버전을 바꿔 Markdown이 달라졌다면 `data_index/chroma_B/`만 지우고 다시 만든다(같은 폴더의 공고 목록 엑셀과 `org_dictionary.txt`는 남긴다).
 
 ## 2. 질문하기 (두 가지 방법)
 
@@ -85,8 +87,9 @@ python scripts/index_pdf_originals.py --input <PDF 폴더>            # PDF 로�
 | 답변 방식 | 환경변수로 선택(`two_stage` 기본, `multi_agent`) | `multi_agent`로 고정 |
 
 ```bash
-# API
+# API (RAG_API_KEYS를 비웠다면 Authorization 줄은 필요 없다)
 curl -X POST http://localhost:8001/v1/query -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <RAG_API_KEYS의 키>" \
   -d '{"query": "송림리 마을만들기사업의 기초금액은?", "top_k": 10}'
 
 # Gradio (외부 공개 링크가 필요하면 --share)
@@ -113,7 +116,7 @@ python scripts/gradio_app.py
 
 ## 현재 결과와 한계
 
-40개 질문에서 정답 점수(5점 만점)는 팀 프로세스 1.1~2.8, 이 프로젝트의 프로세스 4.8~5.0이다.
+40개 질문에서 정답 점수(5점 만점)는 팀 프로세스 1.1~1.2(단축 경로를 켜면 2.8), 이 프로젝트의 프로세스 4.8~5.0이다.
 
 - 스캔 PDF는 다루지 않는다.
 - DB 변경의 효과는 문항 40개로는 통계적으로 구분되지 않았다.
