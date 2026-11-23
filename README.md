@@ -127,4 +127,4 @@ python scripts/gradio_app.py
 
 ## 브랜치
 
-`multi-agent`(최신: 멀티 에이전트, 평가 도구, 결과 문서), `main`(기본 `two_stage` 경로만).
+`multi-agent`(GitHub 기본, 최신: 멀티 에이전트, 평가 도구, 결과 문서), `main`(`two_stage` 경로만, 같은 문서 포함).
