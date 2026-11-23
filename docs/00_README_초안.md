@@ -22,6 +22,9 @@ flowchart LR
 
 **문서는 항상 [나라장터](https://www.g2b.go.kr/)에서 가져온 것이라고 가정한다.** 공고문 양식과 첨부 구성이 다른 출처의 문서는 다루지 않는다.
 
+**공고 목록(엑셀)은 지금 이 저장소가 다루지만, 원래 파서가 만들어야 하는 정보다.**
+기관명 사전과 순위·금액 질문이 이 엑셀에 기대고 있어서, 나중에 파서 쪽으로 옮길 예정이다.
+
 | Markdown을 만드는 곳 | 대상 | 비고 |
 |---|---|---|
 | [파서 skill](https://github.com/adover134/korean_official_document_parser_skill) | HWP, HWPX | 명령줄(`run_pipeline.py`), Node(kordoc)와 LLM 필요 |
