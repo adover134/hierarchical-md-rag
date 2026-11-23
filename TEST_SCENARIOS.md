@@ -185,10 +185,10 @@ ollama list   # gpt-oss:20b가 보이면 완료
 SSH 세션이 끊겨도 계속 돌고, 크래시 시 자동 재시작되도록 systemd unit을 만든다.
 `--host 127.0.0.1`로 바인딩해 nginx를 거치지 않은 직접 접근을 막는다.
 
-**인증 필수**: 도메인이 뜨는 순간 이 앱은 인터넷에 공개된다 — `GRADIO_APP_SHARED_PASSWORD`를
-반드시 설정할 것. 안 하면 시작 로그에 경고가 찍히고 그대로 인증 없이 열린다(로컬
+**인증 필수**: 도메인이 뜨는 순간 이 앱은 인터넷에 공개된다 — `GRADIO_APP_USERNAME`과
+`GRADIO_APP_PASSWORD`를 반드시 설정할 것(프로젝트 루트의 `.env` 또는 아래 `EnvironmentFile`). 안 하면 시작 로그에 경고가 찍히고 그대로 인증 없이 열린다(로컬
 단독 확인용 예외 처리이지, 실제 배포에서 무시해도 되는 경고가 아니다). 테스터
-전원이 같은 계정(아이디 `tester`)을 공유한다.
+전원이 같은 계정(`.env`에 적은 아이디와 비밀번호)을 공유한다.
 
 `/etc/systemd/system/rag-gradio.service`:
 
@@ -202,7 +202,7 @@ Requires=ollama.service
 Type=simple
 User=<실행할 사용자명>
 WorkingDirectory=/home/<사용자>/project/hierarchical-md-rag
-Environment="GRADIO_APP_SHARED_PASSWORD=<테스터에게 공유할 비밀번호>"
+EnvironmentFile=/etc/rag-gradio.env
 ExecStart=/home/<사용자>/project/hierarchical-md-rag/.venv/bin/python scripts/gradio_app.py --host 127.0.0.1 --port 7860
 Restart=on-failure
 RestartSec=5
@@ -216,7 +216,7 @@ systemd unit 파일은 보통 다른 로컬 사용자도 읽을 수 있어(`644`
 쓰는 전용 인스턴스라면 생략해도 되는 정도지만, 습관으로 들이는 게 낫다):
 
 ```bash
-echo 'GRADIO_APP_SHARED_PASSWORD=<비밀번호>' | sudo tee /etc/rag-gradio.env
+printf 'GRADIO_APP_USERNAME=<아이디>\nGRADIO_APP_PASSWORD=<비밀번호>\n' | sudo tee /etc/rag-gradio.env
 sudo chmod 600 /etc/rag-gradio.env
 # unit 파일에서 Environment= 줄을 아래로 교체:
 #   EnvironmentFile=/etc/rag-gradio.env
@@ -247,14 +247,14 @@ sudo apt install nginx   # 데비안/우분투 기준
 ```
 
 **인증(Basic Auth) — 어차피 nginx를 쓰니 여기서 거는 게 가장 간단하다**: 앱
-자체의 `GRADIO_APP_SHARED_PASSWORD`(2번 항목)도 있지만, 어차피 nginx가 이미
+자체의 `GRADIO_APP_USERNAME`/`GRADIO_APP_PASSWORD`(2번 항목)도 있지만, 어차피 nginx가 이미
 리버스 프록시로 앞단에 있으니 표준 HTTP Basic Auth로 nginx 레벨에서 막는 게 더
 간단하고, 요청이 앱까지 가기도 전에 걸러진다는 장점이 있다(둘 다 걸어도 충돌 없이
 같이 동작함 — nginx가 먼저 막고, 통과하면 앱이 한 번 더 확인).
 
 ```bash
 sudo apt install apache2-utils   # htpasswd 명령 제공
-sudo htpasswd -c /etc/nginx/.htpasswd tester   # 최초 1회는 -c(파일 새로 생성)
+sudo htpasswd -c /etc/nginx/.htpasswd <아이디>   # 최초 1회는 -c(파일 새로 생성)
 # 프롬프트에서 테스터에게 공유할 비밀번호 입력 → /etc/nginx/.htpasswd 생성됨
 # 계정을 더 추가하려면 -c 없이: sudo htpasswd /etc/nginx/.htpasswd <다른 계정명>
 ```
@@ -344,7 +344,7 @@ sudo certbot renew --dry-run   # 자동 갱신이 정상 동작하는지 확인(
 - [ ] `http://<도메인>`으로 접속 시 `https://`로 자동 리다이렉트되는가
 - [ ] `https://<도메인>` 접속 시 브라우저 기본 Basic Auth 팝업이 뜨는가(nginx
       `.htpasswd`) — **인증 없이 화면이 바로 열리면 배포하지 말 것**. 앱 자체의
-      `GRADIO_APP_SHARED_PASSWORD`를 같이 걸었다면 nginx 인증 통과 후 Gradio
+      `GRADIO_APP_USERNAME`/`GRADIO_APP_PASSWORD`를 같이 걸었다면 nginx 인증 통과 후 Gradio
       로그인 화면이 한 번 더 뜨는지도 확인(안 뜨면 `journalctl -u rag-gradio`에
       경고 로그가 있는지 확인)
 - [ ] 외부에서 `curl http://<서버IP>:7860`, `curl http://<서버IP>:11434`가 **막혀야** 정상

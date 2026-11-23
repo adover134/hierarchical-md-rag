@@ -59,7 +59,7 @@ DB가 개선된 후, 기존과 다른 문제들을 만들어 테스트하였더�
 | 항목 | 상태 | 내용 |
 |---|---|---|
 | 표 평탄화 수정, 표 지표 단계 분리 | ✅ | 병합 2단 헤더·헤더 없는 표를 고쳤고, 표 지표를 로더 검출 · 평탄화 · 종단으로 나눴다. 현 버전은 3단계 모두 60/60(`main2`). [`EXPERIMENTS.md`](EXPERIMENTS.md) "표 지표" |
-| 로더 갱신(kordoc 4.24.29), DB `main2` 재구축 | ✅ | 57/57 문서 |
+| 로더 갱신(kordoc 4.24.29), DB `main2` 갱신(전체 색인) | ✅ | 57/57 문서 |
 | 팀 DB와 최신 DB 비교, 오답 원인 진단 | ✅ | 같은 프로세스에서 DB만 바꿔 비교했고 답변 품질은 구분되지 않았다. 오답 원인은 기관 후보 추출(n4)과 컨텍스트 발췌 잘림(m17)으로 좁혔다. [`EXPERIMENTS.md`](EXPERIMENTS.md) "DB 비교" |
 | 질문 키워드에서 조사·어미 제거 | ✅ | Kiwi(0.24.1)로 `공사기간은` → `공사기간`처럼 뗀 낱말을 키워드로 쓴다. 진단 9문항 중 m17이 700자 컨텍스트에서도 풀렸다(결정적으로 확인). 전체 40문항 측정은 3×2 비교(`dbcmp6`)에서 했다: main × 최신 DB가 Correctness 4.875, 37/40 문항 5점 |
 | 기관명 Kiwi 사전 | ✅ | 엑셀의 기관명(법인 표기를 뗀 것과 붙은 것)을 DB 구축 단계에서 고유명사로 등록해 질의 처리(키워드, 기관 후보 추출)와 BM25 명사 추출이 같은 사전을 쓴다. 단, 색인에 저장되는 BM25 희소 벡터는 검색에서 읽지 않는다. 현재 DB의 BM25 색인은 사전 없이 만들어졌다. 기관 후보 추출(n4, m11)에도 쓰인다 |
@@ -369,14 +369,15 @@ rate limit은 아직 없다(hwp-hierarchical-md-service의 rate_limit.py는 Lang
 백엔드(`RAGChatbotV17.answer()`)를 쓰지만 API 서버가 아니라 웹 UI다.
 
 ```bash
-GRADIO_APP_SHARED_PASSWORD=<공유 비밀번호> python scripts/gradio_app.py [--share] [--port 7860]
+python scripts/gradio_app.py [--share] [--port 7860]   # 인증 값은 .env에 둔다
 ```
 
 - **전략/모델 고정**: `multi_agent` + 로컬 Ollama `gpt-oss:20b`로 스크립트 안에서 강제한다
   (환경변수로 덮어쓸 수 없음 — 검증한 조합만 테스터에게 노출하기 위함). 실행 전 Ollama가
   떠 있고 모델이 받아져 있어야 하며, 아니면 시작 시점에 사유를 알려주고 종료한다.
-- **인증**: `GRADIO_APP_SHARED_PASSWORD`를 설정하면 공유 계정(아이디 `tester`) 하나로 접속을
-  막는다. 도메인 배포 시 필수, 로컬 확인용이면 없어도 되며 경고만 출력한다.
+- **인증**: `.env`에 `GRADIO_APP_USERNAME`과 `GRADIO_APP_PASSWORD`를 적으면 공유 계정 하나로 접속을
+  막는다. 둘 중 하나만 있으면 시작하지 않는다. 아이디와 비밀번호는 코드나 문서에 적지 않는다.
+  도메인 배포 시 필수, 로컬 확인용이면 없어도 되며 경고만 출력한다.
 - **동시 처리**: 챗봇 인스턴스를 `GRADIO_APP_POOL_SIZE`(기본 2)개 풀로 관리해 요청마다 하나씩
   대여한다. Ollama 쪽도 `OLLAMA_NUM_PARALLEL`을 맞춰야 실제 병렬이 된다.
 - **로그**: 👍/👎 피드백은 `eval_resources/gradio_flagged/`, 모든 질의/답변은
