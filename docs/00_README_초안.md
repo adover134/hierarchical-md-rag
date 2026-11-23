@@ -20,6 +20,8 @@ flowchart LR
 
 **입력은 Markdown 파일이다.** HWP/HWPX를 Markdown으로 바꾸는 일은 이 저장소가 아니라 파서가 한다.
 
+**문서는 항상 공공장터에서 가져온 것이라고 가정한다.** 공고문 양식과 첨부 구성이 다른 출처의 문서는 다루지 않는다.
+
 | Markdown을 만드는 곳 | 대상 | 비고 |
 |---|---|---|
 | [파서 skill](https://github.com/adover134/korean_official_document_parser_skill) | HWP, HWPX | 명령줄(`run_pipeline.py`), Node(kordoc)와 LLM 필요 |
@@ -98,7 +100,8 @@ python scripts/gradio_app.py
 | 4 | [DB 구축](docs/04_DB구축.md) | Markdown이 청크가 되기까지, DB 구조, 다시 넣는 규칙 |
 | 5 | [질의 처리](docs/05_질의처리.md) | 질문이 답이 되기까지, 검색과 답변 방식 두 가지 |
 | 6 | [평가](docs/06_평가.md) | 무엇을 비교하고 점수가 무엇을 재는가 |
-| 7~9 | 결과, 버전, 용어집 | 작성 중 |
+| 7 | [결과](docs/07_결과.md) | 무엇이 점수를 바꿨는가, 믿어도 되는 범위 |
+| 8~9 | 버전과 브랜치, 용어집 | 작성 중 |
 | 기록 | [`EXPERIMENTS.md`](EXPERIMENTS.md), [`docs/`](docs/) | 실험과 채점의 상세 기록 |
 
 ## 현재 결과와 한계
