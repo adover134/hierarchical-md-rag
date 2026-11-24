@@ -1,0 +1,51 @@
+"""엑셀(나라장터 입찰공고목록)과 Markdown 폴더로 `data_index/metadata.csv`를 만든다.
+
+    python scripts/build_metadata.py --markdown-dir output/new_parser_md output [--bid-list-xlsx <엑셀>] [--allow-unmatched]
+
+매칭 안 되는 행이나 주인 없는 문서가 있으면 목록을 보여 주고 멈춘다(`--allow-unmatched`면 파일명을 비운 채 계속).
+"""
+
+from __future__ import annotations
+
+import argparse
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from src.metadata.build import MetadataError, build_metadata_rows, write_metadata_csv  # noqa: E402
+from src.utils.config import PROJECT_ROOT  # noqa: E402
+
+DEFAULT_OUT = PROJECT_ROOT / "data_index" / "metadata.csv"
+
+
+def find_excel(explicit: str | None) -> Path:
+    if explicit:
+        return Path(explicit)
+    found = sorted((PROJECT_ROOT / "data_index").glob("입찰공고목록*.xlsx"))
+    if not found:
+        raise SystemExit("엑셀을 찾지 못했다. --bid-list-xlsx로 알려 주거나 data_index/입찰공고목록*.xlsx에 둔다.")
+    return found[0]
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--markdown-dir", required=True, nargs="+", help="파서와 PDF 로더가 만든 Markdown 폴더(여러 개 가능)")
+    ap.add_argument("--bid-list-xlsx")
+    ap.add_argument("--out", default=str(DEFAULT_OUT))
+    ap.add_argument("--allow-unmatched", action="store_true")
+    args = ap.parse_args()
+
+    xlsx = find_excel(args.bid_list_xlsx)
+    try:
+        header, rows = build_metadata_rows(xlsx, args.markdown_dir, allow_unmatched=args.allow_unmatched)
+    except MetadataError as e:
+        raise SystemExit(f"중단: 엑셀과 문서가 맞지 않는다.\n{e}")
+    out = write_metadata_csv(header, rows, args.out)
+    blank_deadline = sum(1 for r in rows if not r["입찰마감일시"])
+    blank_amount = sum(1 for r in rows if not r["사업 금액"])
+    print(f"{out}: {len(rows)}행 (입찰마감일시 빈 값 {blank_deadline}, 사업 금액 빈 값 {blank_amount})")
+
+
+if __name__ == "__main__":
+    main()
