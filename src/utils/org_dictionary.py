@@ -46,6 +46,7 @@ def _markers(name: str) -> list[str]:
 def org_words(names: Iterable[str]) -> list[str]:
     """기관명마다 사전에 넣을 낱말을 중복 없이 등록 순서대로 돌려준다. 한 글자 낱말은 뺀다.
 
+    띄어쓰기가 다른 표기를 위해, 여러 낱말로 된 이름은 이웃한 낱말끼리와 전체를 붙여 쓴 형태도 넣는다.
     질문에는 `한성케미칼`처럼 법인 표기 없이, 문서에는 `(주)한성케미칼`처럼 표기가 붙어 나오므로 둘 다 넣는다.
       - 법인 표기를 뗀 낱말(공백 기준)
       - 법인 표기가 있던 기관은 그 표기를 앞·뒤에 붙인 낱말(`(주)한성케미칼`, `한성케미칼(주)`, `주식회사에스알`)
@@ -53,7 +54,17 @@ def org_words(names: Iterable[str]) -> list[str]:
     """
     seen: dict[str, None] = {}
     for name in names:
-        core_words = [w for w in clean_org_name(name).split() if len(w) >= 2]
+        tokens = clean_org_name(name).split()
+        core_words = [w for w in tokens if len(w) >= 2]
+        # 띄어쓰기가 다른 표기('신목 중학교' / '신목중학교')도 한 기관으로 알아보게 붙여 쓴 형태를 더한다.
+        # Kiwi 사전은 공백이 든 항목을 무시하므로 붙여 쓴 쪽을 등록해야 한다. 이웃한 낱말끼리와 이름 전체를 붙인다.
+        compact = [
+            "".join(tokens[i:j])
+            for i in range(len(tokens))
+            for j in range(i + 2, len(tokens) + 1)
+            if j - i == 2 or (i == 0 and j == len(tokens))
+        ]
+        core_words += [w for w in compact if len(w) >= 2 and w not in core_words]
         for word in core_words:
             seen.setdefault(word, None)
         for marker in _markers(name):

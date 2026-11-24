@@ -29,8 +29,28 @@ class TestCleanOrgName:
 
 
 class TestOrgWords:
+    def test_spaced_and_compact_spellings_both_become_entries(self):
+        # 'OO 중학교'와 'OO중학교'를 모두 기관으로 알아보려면 붙여 쓴 형태도 사전에 있어야 한다
+        words = org_words(["신목 중학교"])
+        assert "신목중학교" in words
+
+    def test_compact_form_gets_the_legal_markers_too(self):
+        words = org_words(["(주) 한성 케미칼"])
+        assert "한성케미칼" in words and "(주)한성케미칼" in words and "한성케미칼(주)" in words
+
+    def test_adjacent_words_are_joined_but_not_the_whole_of_a_long_name(self):
+        words = org_words(["서울특별시강서교육청 신목 중학교"])
+        assert "신목중학교" in words
+        assert "서울특별시강서교육청신목중학교" in words
+
+    def test_kiwi_recognizes_the_compact_form_as_one_word(self, tmp_path):
+        path = write_user_dictionary(org_words(["신목 중학교"]), tmp_path / "d.txt")
+        kiwi = new_kiwi(path)
+        assert "신목중학교" in [t.form for t in kiwi.tokenize("신목중학교 교복 구매")]
+
     def test_each_word_of_a_multi_word_name_is_an_entry(self):
-        assert org_words(["서울특별시강서교육청 신목중학교"]) == ["서울특별시강서교육청", "신목중학교"]
+        words = org_words(["서울특별시강서교육청 신목중학교"])
+        assert words[:2] == ["서울특별시강서교육청", "신목중학교"]
 
     def test_duplicates_and_one_character_words_are_dropped(self):
         assert org_words(["선문대학교", "선문대학교", "가"]) == ["선문대학교"]
