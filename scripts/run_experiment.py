@@ -117,7 +117,7 @@ def run(cmd: list[str], *, cwd: Path, env: dict[str, str], log: Path | None = No
 # ---------------------------------------------------------------------------
 
 def cmd_prepare(cfg: dict, args: argparse.Namespace) -> None:
-    from src.utils.bid_list_xlsx import bid_list_to_team_csv
+    from src.evaluation.team_csv import bid_list_to_team_csv
 
     corpus = _path(cfg["corpus_dir"])
     xlsx = _path(cfg["bid_list_xlsx"])

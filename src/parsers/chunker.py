@@ -535,7 +535,13 @@ def process_file(file_path: Path) -> List[Dict]:
     name = source.rsplit('.', 1)[0] if '.' in source else source
     institution = 'N/A'
     project_name = 'N/A'
-    if '_' in name:
+    from src.metadata.lookup import org_fields_for
+
+    from_csv = org_fields_for(file_path.name)
+    if from_csv:
+        # 메타데이터 CSV(엑셀에서 만든 것)의 값을 쓴다. 아래 파일 이름 쪼개기는 CSV에 없는 파일의 대비책이다.
+        institution, project_name = from_csv
+    elif '_' in name:
         # 파일명 규칙은 "{공고제목/사업명}_{실제 기관명}"이다. org 필드는 검색
         # 매칭에 쓰는 식별 라벨(공고제목/사업명)을 담고, project_name은 실제
         # 기관명을 담는다 — 이 둘을 뒤바꾸는 시도(org=기관명, project_name=

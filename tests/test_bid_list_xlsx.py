@@ -5,7 +5,8 @@ import csv
 import openpyxl
 import pytest
 
-from src.utils.bid_list_xlsx import bid_list_to_team_csv, load_bid_list_labels, read_bid_list_rows
+from src.evaluation.team_csv import bid_list_to_team_csv
+from src.utils.bid_list_xlsx import load_bid_list_labels, read_bid_list_rows
 
 HEADER = ["업무구분", "업무여부", "구분", "입찰공고번호", "공고명", "공고기관", "수요기관", "게시일시(입찰마감일시)"]
 
@@ -127,3 +128,19 @@ def test_amount_column_is_carried_into_team_csv(tmp_path):
         rows = list(csv.DictReader(f))
     assert rows[0]["사업 금액"] == "285125000"
     assert rows[1]["사업 금액"] == ""
+
+
+def test_team_csv_keeps_the_deadline(tmp_path):
+    p = tmp_path / "list.xlsx"
+    _write_bid_list(p, [
+        ["공사", "-", "등록공고", "R26-1", "가 사업", "충남", "아산시", "2026/08/09 17:26(2026/08/14 10:00)"],
+        ["공사", "-", "등록공고", "R26-2", "나 사업", "충남", "아산시", "2026/08/09 17:51(-)"],
+    ])
+    corpus = tmp_path / "docs"
+    corpus.mkdir()
+    out = tmp_path / "o.csv"
+    bid_list_to_team_csv(p, corpus, out)
+    with open(out, encoding="utf-8-sig", newline="") as f:
+        rows = list(csv.DictReader(f))
+    assert rows[0]["공개 일자"] == "2026/08/09 17:26" and rows[0]["입찰 참여 마감일"] == "2026/08/14 10:00"
+    assert rows[1]["입찰 참여 마감일"] == ""
