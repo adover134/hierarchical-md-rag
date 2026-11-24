@@ -105,8 +105,12 @@ class CSVMarkdownConverter:
             with open(csv_path, 'r', encoding='utf-8-sig') as f:
                 reader = csv.DictReader(f)
 
+                from src.metadata.team_view import is_metadata_row, to_team_row
+
                 for row_num, row in enumerate(reader, 1):
                     try:
+                        if is_metadata_row(row):
+                            row = to_team_row(row)  # metadata.csv(엑셀 열 이름)를 팀 형식 이름으로 맞춘다
                         data = self.convert_row(row)
                         markdowns.append(data)
                     except ValueError as e:
