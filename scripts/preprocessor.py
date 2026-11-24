@@ -43,9 +43,21 @@ def _documents_to_parsed_markdown(docs: list, source_name: str, output_path: Pat
     output_path.write_text('\n'.join(lines), encoding='utf-8')
 
 
-def process_single_pdf(pdf_path: Path, output_dir: Path) -> Dict:
+def parse_pdf_to_markdown(pdf_path: Path, output_dir: Path) -> tuple[Path, Path]:
+    """PDF → step1_parsed_*.md → step2_audited_*.md. 메타데이터 단계 전에 단독으로도 쓴다."""
     from src.parsers.pdf_loader import load_pdf
     from src.parsers.auditor import audit_file
+
+    stem = pdf_path.stem
+    parsed_path = output_dir / f'step1_parsed_{stem}.md'
+    docs = load_pdf(pdf_path)
+    _documents_to_parsed_markdown(docs, pdf_path.name, parsed_path)
+    audited_path = output_dir / f'step2_audited_{stem}.md'
+    audit_file(str(parsed_path), str(audited_path))
+    return parsed_path, audited_path
+
+
+def process_single_pdf(pdf_path: Path, output_dir: Path) -> Dict:
     from src.parsers.chunker import process_file
     from src.retrievers.build_db import (
         compute_doc_id, assign_uids, build_hierarchy, apply_section_uids,
@@ -66,14 +78,8 @@ def process_single_pdf(pdf_path: Path, output_dir: Path) -> Dict:
     }
     t0 = time.time()
 
-    # Step 1: PDF → markdown (pdf_loader 기반)
-    parsed_path = output_dir / f'step1_parsed_{stem}.md'
-    docs = load_pdf(pdf_path)
-    _documents_to_parsed_markdown(docs, pdf_path.name, parsed_path)
-
-    # Step 2: Auditor
-    audited_path = output_dir / f'step2_audited_{stem}.md'
-    audit_file(str(parsed_path), str(audited_path))
+    # Step 1-2: PDF → markdown(pdf_loader 기반) → Auditor
+    parsed_path, audited_path = parse_pdf_to_markdown(pdf_path, output_dir)
 
     # Step 3-7: Chunker
     chunks = process_file(audited_path)

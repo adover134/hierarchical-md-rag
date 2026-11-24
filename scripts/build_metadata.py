@@ -15,6 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.metadata.build import MetadataError, build_metadata_rows, write_metadata_csv  # noqa: E402
 from src.utils.config import PROJECT_ROOT  # noqa: E402
+from src.utils.org_dictionary import DEFAULT_DICTIONARY_PATH, build_dictionary_from_metadata  # noqa: E402
 
 DEFAULT_OUT = PROJECT_ROOT / "data_index" / "metadata.csv"
 
@@ -44,6 +45,8 @@ def main() -> None:
     out = write_metadata_csv(header, rows, args.out)
     blank_deadline = sum(1 for r in rows if not r["입찰마감일시"])
     blank_amount = sum(1 for r in rows if not r["사업 금액"])
+    words = build_dictionary_from_metadata(out, DEFAULT_DICTIONARY_PATH if args.out == str(DEFAULT_OUT) else Path(args.out).with_name("org_dictionary.txt"))
+    print(f"기관명 사전: {len(words)}개 낱말")
     print(f"{out}: {len(rows)}행 (입찰마감일시 빈 값 {blank_deadline}, 사업 금액 빈 값 {blank_amount})")
 
 

@@ -22,8 +22,9 @@ flowchart LR
 
 **문서는 항상 [나라장터](https://www.g2b.go.kr/)에서 가져온 것이라고 가정한다.** 공고문 양식과 첨부 구성이 다른 출처의 문서는 다루지 않는다.
 
-**공고 목록(엑셀)은 지금 이 저장소가 다루지만, 원래 파서가 만들어야 하는 정보다.**
-기관명 사전과 순위·금액 질문이 이 엑셀에 기대고 있어서, 나중에 파서 쪽으로 옮길 예정이다.
+**메타데이터는 나라장터 공고목록 엑셀에서 출발한다.**
+엑셀의 값을 버리지 않고 `data_index/metadata.csv`로 만들고, 엑셀에 없는 값(사업 금액 등)만 문서에서 채운다.
+기관명 사전도 이 CSV에서만 만든다([메타데이터](docs/10_메타데이터.md)).
 
 | Markdown을 만드는 곳 | 대상 | 비고 |
 |---|---|---|
@@ -61,9 +62,19 @@ title: 송림리 마을만들기사업_충청남도 서천군 농업기술센터
 - 있는지만 파일 이름으로 확인한다.
   - 파서나 kordoc 버전을 바꾼 뒤에는 `output/new_parser_md/`를 지우고 다시 만들어야 새 Markdown이 쓰인다.
 
+순서는 **파싱 → 메타데이터 → 청킹과 DB**다.
+
 ```bash
-python scripts/build_index_new_parser.py --input <HWP/HWPX 폴더>   # Markdown이 있으면 그대로, 없으면 skill로 만들어 색인
-python scripts/index_pdf_originals.py --input <PDF 폴더>            # PDF 로더로 Markdown을 만들고 색인
+# 1) Markdown 만들기 (HWP는 skill, PDF는 내장 로더. 이미 있으면 다시 만들지 않는다)
+python scripts/build_index_new_parser.py --input <HWP/HWPX 폴더> --parse-only
+python scripts/index_pdf_originals.py --input <PDF 폴더> --parse-only
+
+# 2) 메타데이터: 엑셀(data_index/입찰공고목록*.xlsx)로 metadata.csv와 기관명 사전 만들기
+python scripts/build_metadata.py --markdown-dir output/new_parser_md output
+
+# 3) 청킹과 DB 구축 (2번이 없으면 멈춘다)
+python scripts/build_index_new_parser.py --input <HWP/HWPX 폴더>
+python scripts/index_pdf_originals.py --input <PDF 폴더>
 ```
 
 결과는 `data_index/`(git 제외)에 쌓인다.

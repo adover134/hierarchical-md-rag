@@ -7,7 +7,8 @@
 HWP 경로만 새 파서로 바뀌었을 뿐, PDF 경로는 원래 팀 파이프라인 로직을 그대로 신뢰한다.
 
 사용법:
-    python scripts/index_pdf_originals.py --input <PDF 원본 폴더> [--limit N]
+    python scripts/index_pdf_originals.py --input <PDF 원본 폴더> --parse-only   # 1) Markdown까지만
+    python scripts/index_pdf_originals.py --input <PDF 원본 폴더> [--limit N]      # 3) 메타데이터 단계 뒤에 DB 구축
 """
 
 from __future__ import annotations
@@ -21,23 +22,27 @@ from typing import Dict, List
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from preprocessor import process_single_pdf
+from preprocessor import parse_pdf_to_markdown, process_single_pdf
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--input", "-i", required=True, help="PDF 원본 폴더")
     ap.add_argument("--limit", type=int)
-    ap.add_argument("--bid-list-xlsx", help="입찰공고목록 엑셀. 기관명을 Kiwi 사용자 사전으로 등록한다(기본: data_index/입찰공고목록*.xlsx)")
+    ap.add_argument("--parse-only", action="store_true", help="PDF를 Markdown으로만 바꾸고 멈춘다(메타데이터 단계 전에 쓴다)")
     args = ap.parse_args()
 
-    # build_db를 불러오기 전에 사전을 만들어야 BM25 명사 추출이 기관명을 한 덩어리로 본다
-    from src.utils.org_dictionary import refresh_dictionary
-
-    org_words = refresh_dictionary(args.bid_list_xlsx)
-    print(f"기관명 사전: {len(org_words)}개 낱말" if org_words else "기관명 사전: 엑셀이 없어 만들지 않음")
-
     from src.utils.config import PROJECT_ROOT
+
+    if not args.parse_only:
+        # build_db를 불러오기 전에 메타데이터 단계(CSV, 기관명 사전)가 끝나 있어야 한다. 여기서는 만들지 않고 읽기만 한다.
+        from src.metadata.build import MetadataError, require_metadata
+        from src.utils.org_dictionary import DEFAULT_DICTIONARY_PATH
+
+        try:
+            require_metadata(PROJECT_ROOT / "data_index" / "metadata.csv", DEFAULT_DICTIONARY_PATH)
+        except MetadataError as e:
+            raise SystemExit(str(e))
 
     data_dir = Path(args.input).resolve()
     output_dir = PROJECT_ROOT / "output"
@@ -47,6 +52,13 @@ def main() -> None:
     if args.limit:
         files = files[: args.limit]
     print(f"대상 {len(files)}개 PDF")
+
+    if args.parse_only:
+        for i, f in enumerate(files, 1):
+            print(f"[{i}/{len(files)}] {f.name}")
+            parse_pdf_to_markdown(f, output_dir)
+        print(f"Markdown 변환 완료: {output_dir}")
+        return
 
     results: List[Dict] = []
     for i, f in enumerate(files, 1):

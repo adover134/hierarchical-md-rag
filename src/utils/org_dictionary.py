@@ -1,8 +1,8 @@
-"""입찰공고 엑셀의 기관명으로 Kiwi 사용자 사전을 만들고, 그 사전을 불러온 Kiwi를 돌려준다.
+"""입찰공고 메타데이터(`metadata.csv`, 원본은 엑셀)의 기관명으로 Kiwi 사용자 사전을 만들고, 그 사전을 불러온 Kiwi를 돌려준다.
 
 `전주사랑의집`, `신목중학교` 같은 기관 고유명은 일반 사전에 없어 `전주사랑 / 의 / 집`처럼 쪼개진다. 기관명을 미리 고유명사(NNP)로 등록하면
-DB 구축(BM25 명사 추출)과 질의 처리(키워드 추출)가 같은 방식으로 기관명을 한 덩어리로 다룬다. 사전 파일은 DB 구축 단계에서 만들고
-(`scripts/build_index_new_parser.py`, `scripts/index_pdf_originals.py`), 질의 시점에는 읽기만 한다.
+DB 구축(BM25 명사 추출)과 질의 처리(키워드 추출)가 같은 방식으로 기관명을 한 덩어리로 다룬다. 사전 파일은 메타데이터 단계(`scripts/build_metadata.py`)에서만 만들고,
+DB 구축과 질의 시점에는 읽기만 한다.
 """
 
 from __future__ import annotations
@@ -74,10 +74,13 @@ def org_words(names: Iterable[str]) -> list[str]:
     return list(seen)
 
 
-def org_words_from_xlsx(xlsx_path: Path | str) -> list[str]:
-    from src.utils.bid_list_xlsx import read_bid_list_rows
+def org_words_from_metadata_csv(csv_path: Path | str) -> list[str]:
+    """`data_index/metadata.csv`의 기관 열(공고기관, 수요기관, 발주 기관)에서 사전 낱말을 모은다."""
+    import csv
 
-    names = [row.get(col, "") for row in read_bid_list_rows(xlsx_path) for col in _ORG_COLUMNS]
+    with open(csv_path, encoding="utf-8-sig", newline="") as f:
+        rows = list(csv.DictReader(f))
+    names = [row.get(col, "") for row in rows for col in _ORG_COLUMNS]
     return org_words(n for n in names if n)
 
 
@@ -89,22 +92,11 @@ def write_user_dictionary(words: Iterable[str], path: Path | str = DEFAULT_DICTI
     return out
 
 
-def build_dictionary_from_xlsx(xlsx_path: Path | str, path: Path | str = DEFAULT_DICTIONARY_PATH) -> list[str]:
-    """DB 구축 단계에서 부른다. 엑셀의 기관명 낱말을 사전 파일로 쓰고 그 목록을 돌려준다."""
-    words = org_words_from_xlsx(xlsx_path)
+def build_dictionary_from_metadata(csv_path: Path | str, path: Path | str = DEFAULT_DICTIONARY_PATH) -> list[str]:
+    """메타데이터 단계에서만 부른다. metadata.csv의 기관명 낱말을 사전 파일로 쓰고 그 목록을 돌려준다."""
+    words = org_words_from_metadata_csv(csv_path)
     write_user_dictionary(words, path)
     return words
-
-
-def refresh_dictionary(xlsx_path: Path | str | None = None, path: Path | str = DEFAULT_DICTIONARY_PATH) -> list[str]:
-    """DB 구축 스크립트가 처음에 부른다. 엑셀을 지정하지 않으면 `data_index/입찰공고목록*.xlsx` 중 첫 파일을 쓰고,
-    엑셀이 없으면 사전을 건드리지 않는다(기존 사전 파일은 그대로 둔다)."""
-    if xlsx_path is None:
-        found = sorted((PROJECT_ROOT / "data_index").glob("입찰공고목록*.xlsx"))
-        if not found:
-            return []
-        xlsx_path = found[0]
-    return build_dictionary_from_xlsx(xlsx_path, path)
 
 
 def new_kiwi(dictionary_path: Path | str | None = None):

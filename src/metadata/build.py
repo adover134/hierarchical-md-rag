@@ -110,6 +110,17 @@ def build_metadata_rows(
     return header, rows
 
 
+def require_metadata(csv_path: Path | str, dictionary_path: Path | str) -> None:
+    """DB 구축 단계가 시작하기 전에 부른다. 메타데이터 CSV와 기관명 사전이 없으면 멈춘다."""
+    missing = [str(p) for p in (csv_path, dictionary_path) if not Path(p).is_file()]
+    if missing:
+        raise MetadataError(
+            "메타데이터 단계가 먼저 필요하다. 없는 파일: " + ", ".join(missing)
+            + "\n  1) python scripts/build_index_new_parser.py --input <폴더> --parse-only (PDF는 index_pdf_originals.py --parse-only)"
+            + "\n  2) python scripts/build_metadata.py --markdown-dir output/new_parser_md output"
+        )
+
+
 def write_metadata_csv(header: list[str], rows: list[dict[str, str]], out_csv: Path | str) -> Path:
     out = Path(out_csv)
     out.parent.mkdir(parents=True, exist_ok=True)

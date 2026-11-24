@@ -185,11 +185,19 @@ def cmd_build(cfg: dict, args: argparse.Namespace) -> None:
             rows = _read_summary_csv(root / "output" / "execution_summary.csv")
             info.update(total_seconds=round(secs, 1), per_doc=_per_doc(rows, "file"))
         else:
-            secs = run([py, "scripts/build_index_new_parser.py", "--input", str(_path(cfg["corpus_dir"])),
-                        "--backend", "openai", "--base-url", llm["base_url"], "--api-key", llm["api_key"],
-                        "--model", llm["model"]]
-                       + (["--max-candidates-per-call", str(llm["parser_max_candidates_per_call"])]
-                          if llm.get("parser_max_candidates_per_call") else []),
+            parser_args = ["--backend", "openai", "--base-url", llm["base_url"], "--api-key", llm["api_key"],
+                           "--model", llm["model"]]
+            if llm.get("parser_max_candidates_per_call"):
+                parser_args += ["--max-candidates-per-call", str(llm["parser_max_candidates_per_call"])]
+            corpus_arg = str(_path(cfg["corpus_dir"]))
+            # 순서: 파싱(Markdown) → 메타데이터(CSV, 기관명 사전) → 청킹과 DB
+            run([py, "scripts/build_index_new_parser.py", "--input", corpus_arg, "--parse-only"] + parser_args,
+                cwd=root, env=env, log=rd / f"{system['name']}_parse_hwp.log")
+            run([py, "scripts/index_pdf_originals.py", "--input", corpus_arg, "--parse-only"],
+                cwd=root, env=env, log=rd / f"{system['name']}_parse_pdf.log")
+            run([py, "scripts/build_metadata.py", "--markdown-dir", "output/new_parser_md", "output"],
+                cwd=root, env=env, log=rd / f"{system['name']}_metadata.log")
+            secs = run([py, "scripts/build_index_new_parser.py", "--input", corpus_arg] + parser_args,
                        cwd=root, env=env, log=rd / f"{system['name']}_build_hwp.log")
             secs_pdf = run([py, "scripts/index_pdf_originals.py", "--input", str(_path(cfg["corpus_dir"]))],
                            cwd=root, env=env, log=rd / f"{system['name']}_build_pdf.log")

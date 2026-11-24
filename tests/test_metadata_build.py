@@ -124,3 +124,29 @@ def test_write_csv_round_trip_with_bom(tmp_path):
         back = list(csv.DictReader(f))
     assert back[0]["입찰마감일시"] == "2026/08/14 10:00"
     assert list(back[0].keys()) == header
+
+
+def test_dictionary_is_built_from_the_metadata_csv_only(tmp_path):
+    from src.utils.org_dictionary import build_dictionary_from_metadata
+
+    x = tmp_path / "list.xlsx"
+    row = ["공사", "-", "등록공고", "R4-000", "교복 구매", "서울특별시강서교육청 신목 중학교", "서울특별시강서교육청 신목 중학교", "2026/08/09 10:00(-)", None]
+    make_xlsx(x, [row])
+    docs = tmp_path / "md"
+    make_docs(docs, ["교복 구매_서울특별시강서교육청 신목 중학교.md"])
+    header, rows = build_metadata_rows(x, docs)
+    csv_path = write_metadata_csv(header, rows, tmp_path / "metadata.csv")
+    words = build_dictionary_from_metadata(csv_path, tmp_path / "org_dictionary.txt")
+    assert "신목중학교" in words and "신목" in words
+    assert (tmp_path / "org_dictionary.txt").read_text(encoding="utf-8").count("\tNNP\t0") == len(words)
+
+
+def test_db_build_stops_without_metadata_or_dictionary(tmp_path):
+    from src.metadata.build import require_metadata
+
+    with pytest.raises(MetadataError) as e:
+        require_metadata(tmp_path / "metadata.csv", tmp_path / "org_dictionary.txt")
+    assert "build_metadata.py" in str(e.value)
+    (tmp_path / "metadata.csv").write_text("x", encoding="utf-8")
+    (tmp_path / "org_dictionary.txt").write_text("x", encoding="utf-8")
+    require_metadata(tmp_path / "metadata.csv", tmp_path / "org_dictionary.txt")
