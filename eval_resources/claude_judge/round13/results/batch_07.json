@@ -1,0 +1,182 @@
+{
+ "j0061": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 공사기간 '착공일로부터 120일'을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "유일한 주된 포인트인 120일이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 120일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업명과 공사기간이 명시되어 있어 질문에 충분히 관련된다."
+  }
+ },
+ "j0062": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 770,250,000원이 정확하며 '사업비' 라벨 차이와 괄호 내역 누락은 감점하지 않는다(규칙1, 규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 추정금액이 포함되어 있고 추정가격·부가세 내역 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액 '약 7.7억 원 (770,250,000원)'이 context에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 필요한 금액은 있으나 사업명 등 해당 사업을 식별할 정보가 없이 '사업비' 한 줄만 있다."
+  }
+ },
+ "j0063": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 100,000,000원이 정확하며 '사업비' 라벨 차이는 감점하지 않는다(규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "유일한 주된 포인트인 기초금액 값이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 그대로 있으나 주어로 쓴 '충청남도 아산시'는 context에서 확인되지 않는다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 필요한 금액은 있으나 사업명 등 식별 정보가 없이 '사업비' 한 줄만 있다."
+  }
+ },
+ "j0064": {
+  "correctness": {
+   "score": 5,
+   "reason": "더 큰 쪽으로 영남영농조합법인을 정확히 선택했고 두 금액도 기대 답변과 일치한다(규칙5)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "선택 대상과 두 예산 값이 모두 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "두 금액은 context에 있으나 context에는 업체명이 없어 금액과 업체의 연결은 추론에 해당한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "비교에 필요한 두 예산 금액은 있으나 어느 업체의 것인지 식별 정보가 없다."
+  }
+ },
+ "j0065": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 낙찰하한율 86.245%를 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "유일한 주된 포인트인 86.245%가 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '낙찰하한율: 86.245%'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 낙찰하한율이 명시되어 있어 질문에 충분히 관련된다."
+  }
+ },
+ "j0066": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 공사기간 '착공일로부터 60일'을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "유일한 주된 포인트인 60일이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업명과 공사기간이 명시되어 있어 질문에 충분히 관련된다."
+  }
+ },
+ "j0067": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 공사기간 120일을 정확히 제시했으며 '착공일로부터' 생략은 의미를 바꾸지 않는다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "유일한 주된 포인트인 120일이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 120일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업명(건축)과 공사기간이 명시되어 있어 질문에 충분히 관련된다."
+  }
+ },
+ "j0068": {
+  "correctness": {
+   "score": 3,
+   "reason": "주된 값 두 개 중 동복 납품기한(2027년 2월 22일)만 맞고 하복 납품기한(2027년 5월 10일)이 빠졌다(규칙2, 규칙7)."
+  },
+  "answer_coverage": {
+   "score": 3,
+   "reason": "주된 포인트 두 개 중 하복 납품기한이 누락되어 절반만 커버했다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "동복 납품기한 2027. 2. 22.(월)이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 신목중학교 교복의 동복·하복 납품기한이 모두 명시되어 있다."
+  }
+ },
+ "j0069": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027년 2월 19일(금), 하복 2027년 5월 7일(금) 두 주된 값을 모두 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 포인트인 동복·하복 납품기한이 모두 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '동복: 2027. 2. 19.(금)', '하복 : 2027. 5. 7.(금)'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 서야고등학교 교복의 동복·하복 납품기한이 명시되어 있다."
+  }
+ },
+ "j0070": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 사실인 선택 대상(한서대학교 산업디자인 개발 프로젝트)을 정확히 골랐고 괄호 안 금액은 부차 정보다(규칙1, 규칙5, 규칙7)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 포인트인 선택 대상이 포함되어 있어 금액 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "context에 220,000,000원과 150,000,000원이 있어 판단 근거는 있으나 사업명이 없어 금액과 사업의 연결은 추론이다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "비교에 필요한 두 사업예산은 있으나 어느 사업의 것인지 식별 정보가 없다."
+  }
+ }
+}

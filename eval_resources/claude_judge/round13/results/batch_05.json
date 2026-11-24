@@ -1,0 +1,62 @@
+{
+ "j0041": {
+  "correctness": {"score": 4, "reason": "주된 값 608,881,900원은 기대 답변과 일치하나(규칙4) 답변이 사업 주체를 질문과 다른 '두산에너빌리티 (주)'로 잘못 적었다."},
+  "answer_coverage": {"score": 5, "reason": "주된 값인 예산 608,881,900원이 답변에 들어 있다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context에 그대로 있으나 '두산에너빌리티 (주)'라는 기관명은 context에 없는 내용이다."},
+  "context_relevance": {"score": 4, "reason": "context에 답이 되는 금액은 있으나 사업명이나 기관 식별 정보가 없고 같은 줄이 중복되어 있다."}
+ },
+ "j0042": {
+  "correctness": {"score": 5, "reason": "과업기간 '착수일로부터 365일'이 기대 답변과 정확히 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 365일이 빠짐없이 포함되어 있다."},
+  "faithfulness": {"score": 5, "reason": "context의 '과업기간: 착수일로부터 365일'에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "해당 공고의 과업기간이 포함되어 있으나 입찰참가자격·유의사항 등 무관한 내용이 많다."}
+ },
+ "j0043": {
+  "correctness": {"score": 5, "reason": "계약기간 420일이 기대 답변과 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 420일이 포함되어 있으며 기산점 생략은 사소하다."},
+  "faithfulness": {"score": 5, "reason": "context의 '계약기간: 계약체결일로부터 420일'에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "해당 입찰의 계약기간이 포함되어 있으나 보증금·낙찰자 결정 등 불필요한 내용이 많다."}
+ },
+ "j0044": {
+  "correctness": {"score": 5, "reason": "주된 값 78,364,000원이 일치하며 괄호 안 추정가격 내역 누락과 '사업비' 라벨은 감점하지 않는다(규칙1, 규칙2, 규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 78,364,000원이 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "금액은 context에 그대로 있고 기관명은 질문의 ㈜헤르스를 옮긴 것이다."},
+  "context_relevance": {"score": 4, "reason": "답이 되는 금액은 있으나 사업명 등 식별 정보 없이 같은 줄만 중복되어 있다."}
+ },
+ "j0045": {
+  "correctness": {"score": 5, "reason": "주된 값 50,000,000원이 일치하며 괄호 안 추정가격·부가세 누락은 감점하지 않는다(규칙1, 규칙2, 규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 50,000,000원이 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "금액은 context에 그대로 있고 기관명은 질문에서 온 것이다."},
+  "context_relevance": {"score": 4, "reason": "답이 되는 금액은 있으나 사업명 등 식별 정보 없이 같은 줄만 중복되어 있다."}
+ },
+ "j0046": {
+  "correctness": {"score": 5, "reason": "240kW 파워뱅크 1기와 디스펜서 2기가 기대 답변과 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "주된 포인트(파워뱅크 1기, 디스펜서 2기)가 모두 포함되어 있다."},
+  "faithfulness": {"score": 4, "reason": "설치대수는 context에서 확인되나 '총 3기'는 서로 다른 장비를 합산한 context에 없는 추론이다."},
+  "context_relevance": {"score": 5, "reason": "해당 공고의 설치대수가 명확히 포함되어 있고 대부분 같은 공고의 개요 내용이다."}
+ },
+ "j0047": {
+  "correctness": {"score": 5, "reason": "주된 값 390,000원이 일치하며 '사업비' 라벨은 감점하지 않는다(규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 390,000원이 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context에 있으나 '인천광역시교육청 덕적고등학교'라는 기관명은 context와 질문 어디에도 그대로 없다."},
+  "context_relevance": {"score": 4, "reason": "답이 되는 금액은 있으나 사업명 등 식별 정보 없이 같은 줄만 중복되어 있다."}
+ },
+ "j0048": {
+  "correctness": {"score": 5, "reason": "주된 값 99,000,000원이 일치하며 '사업비' 라벨과 부가세 표기 누락은 감점하지 않는다(규칙1, 규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 99,000,000원이 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "금액은 context에 그대로 있고 기관명은 질문에서 온 것이다."},
+  "context_relevance": {"score": 4, "reason": "답이 되는 금액은 있으나 사업명 등 식별 정보 없이 같은 줄만 중복되어 있다."}
+ },
+ "j0049": {
+  "correctness": {"score": 5, "reason": "낙찰하한율 86.245%가 기대 답변과 정확히 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 86.245%가 포함되어 있다."},
+  "faithfulness": {"score": 5, "reason": "context의 '낙찰하한율: 86.245%'에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "해당 공고의 낙찰하한율이 포함되어 있으나 청렴계약·보증금 등 무관한 내용이 많고 중복된다."}
+ },
+ "j0050": {
+  "correctness": {"score": 5, "reason": "예정가격 82.495% 이상, 최저가 순 적격심사, 종합평점 85점 이상이 기대 답변과 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "주된 포인트(82.495%, 최저가 순 적격심사, 85점)가 모두 포함되어 있다."},
+  "faithfulness": {"score": 5, "reason": "context의 낙찰자 결정 조항에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "해당 공고의 낙찰자 결정 기준이 포함되어 있으나 안내사항 등 불필요한 내용도 섞여 있다."}
+ }
+}
