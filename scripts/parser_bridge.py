@@ -113,9 +113,14 @@ def process_file_no_regex_reextraction(file_path: Path) -> list[dict]:
     source = doc_meta.get("document_title", "Unknown")
     name = source.rsplit(".", 1)[0] if "." in source else source
     institution, project_name = "N/A", "N/A"
-    if "_" in name:
-        # `src/parsers/chunker.py::process_file()`와 동일하게 맞춘다 — 자세한 이유는
-        # chunker.py 쪽 주석 참고.
+    from src.metadata.lookup import org_fields_for
+
+    from_csv = org_fields_for(file_path.name)
+    if from_csv:
+        # 메타데이터 CSV(엑셀에서 만든 것)의 값을 쓴다 — 공고명에 `_`가 있어도 틀리게 쪼개지지 않는다.
+        institution, project_name = from_csv
+    elif "_" in name:
+        # CSV에 없는 파일의 대비책이다(파일 이름 쪼개기). 자세한 이유는 chunker.py 쪽 주석 참고.
         institution, project_name = name.split("_", 1)
 
     chunks: list[dict] = []

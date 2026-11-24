@@ -3,7 +3,9 @@ audit 경로 대신 `parser_bridge.py`(파서 skill 직결)를 쓴다는 것만 
 `preprocessor.py`의 `process_single_pdf()`와 동일한 `build_db.py` 함수들을 그대로 재사용한다.
 
 사용법:
-    python scripts/build_index_new_parser.py --input <HWP/HWPX 폴더> [--backend groq]
+    python scripts/build_index_new_parser.py --input <HWP/HWPX 폴더> --parse-only   # 1) Markdown까지만
+    # 2) python scripts/build_metadata.py --markdown-dir output/new_parser_md output
+    python scripts/build_index_new_parser.py --input <HWP/HWPX 폴더> [--backend groq]   # 3) DB 구축
         [--model openai/gpt-oss-20b] [--limit N]
 """
 
@@ -86,16 +88,20 @@ def main() -> None:
     ap.add_argument("--max-candidates-per-call", type=int,
                     help="Pass1b LLM 호출 하나당 헤더 후보 최대 개수(skill 옵션). 느린 로컬 GPU에서 호출 제한 시간 초과를 피하려면 줄인다")
     ap.add_argument("--limit", type=int, help="처리할 문서 수 상한 (테스트용)")
-    ap.add_argument("--bid-list-xlsx", help="입찰공고목록 엑셀. 기관명을 Kiwi 사용자 사전으로 등록한다(기본: data_index/입찰공고목록*.xlsx)")
+    ap.add_argument("--parse-only", action="store_true", help="HWP를 Markdown으로만 바꾸고 멈춘다(메타데이터 단계 전에 쓴다)")
     args = ap.parse_args()
 
-    # build_db를 불러오기 전에 사전을 만들어야 BM25 명사 추출이 기관명을 한 덩어리로 본다
-    from src.utils.org_dictionary import refresh_dictionary
-
-    org_words = refresh_dictionary(args.bid_list_xlsx)
-    print(f"기관명 사전: {len(org_words)}개 낱말" if org_words else "기관명 사전: 엑셀이 없어 만들지 않음")
-
     from src.utils.config import PROJECT_ROOT
+
+    if not args.parse_only:
+        # build_db를 불러오기 전에 메타데이터 단계(CSV, 기관명 사전)가 끝나 있어야 한다. 여기서는 만들지 않고 읽기만 한다.
+        from src.metadata.build import MetadataError, require_metadata
+        from src.utils.org_dictionary import DEFAULT_DICTIONARY_PATH
+
+        try:
+            require_metadata(PROJECT_ROOT / "data_index" / "metadata.csv", DEFAULT_DICTIONARY_PATH)
+        except MetadataError as e:
+            raise SystemExit(str(e))
 
     data_dir = Path(args.input).resolve()
     work_dir = PROJECT_ROOT / "output" / "new_parser_md"
@@ -105,6 +111,14 @@ def main() -> None:
     if args.limit:
         files = files[: args.limit]
     print(f"대상 {len(files)}개 파일")
+
+    if args.parse_only:
+        for i, f in enumerate(files, 1):
+            print(f"[{i}/{len(files)}] {f.name}")
+            convert_with_new_parser(f, work_dir, backend=args.backend, model=args.model, base_url=args.base_url,
+                                    api_key=args.api_key, max_candidates_per_call=args.max_candidates_per_call)
+        print(f"Markdown 변환 완료: {work_dir}")
+        return
 
     results: List[Dict] = []
     for i, f in enumerate(files, 1):
