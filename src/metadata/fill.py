@@ -20,7 +20,8 @@ _DEADLINE_FORM = re.compile(r"^\d{4}/\d{2}/\d{2} \d{2}:\d{2}$")
 RULES = {
     AMOUNT: "① 문서의 기초금액 → ② 없으면 예산·사업금액 중 큰 쪽 → ③ 그것도 없으면 사업금액 표의 `계`. "
             "단가계약이면 문서에 적힌 단가를 그대로 쓰고 수량을 곱하지 않는다. 숫자만(원 단위, 쉼표 없이). 문서에 없으면 빈 값.",
-    DEADLINE: "입찰서 제출 마감 일시. `YYYY/MM/DD HH:MM` 형식. 문서에 없으면 빈 값.",
+    DEADLINE: "입찰 참가 등록 마감 일시('마감일시'는 이것의 줄임말이다). 따로 정해진 등록 마감이 없는 용역이면 제안서 접수·제출 마감을 쓰되 근거에 그렇다고 적는다. "
+               "개찰 시각은 쓰지 않는다. `YYYY/MM/DD HH:MM` 형식. 문서에 없으면 빈 값.",
 }
 EVIDENCE_COLUMN = {AMOUNT: AMOUNT_EVIDENCE, DEADLINE: DEADLINE_EVIDENCE}
 
