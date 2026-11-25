@@ -15,7 +15,7 @@ llm:
   api_key: ollama-local
   model: gpt-oss:20b          # 답변·질의의도·파서(Pass1b) 모델
   timeout_sec: 1200
-  # 파서 skill의 Pass1b 호출당 헤더 후보 수. 기본(70)에서는 후보가 많은 문서의 한 호출이 느린 로컬 GPU에서
+  # 파서 skill의 계층 추출 호출당 헤더 후보 수(skill 기본값도 30). 예전 기본(70)에서는 후보가 많은 문서의 한 호출이 느린 로컬 GPU에서
   # skill의 호출 제한(300초)을 넘어 실패한다(RTX 4060 8GB에서 실측). 후보를 나눠 호출하면 해결된다.
   parser_max_candidates_per_call: 30
 
