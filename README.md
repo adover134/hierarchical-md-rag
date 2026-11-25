@@ -87,7 +87,7 @@ python scripts/index_pdf_originals.py --input <PDF 폴더>
 
 - 같은 내용의 문서를 다시 넣으면 덮어쓴다(upsert).
 - 내용이 바뀐 문서는 새 문서로 취급되어 이전 청크가 남는다.
-  - 파서나 kordoc 버전을 바꿔 Markdown이 달라졌다면 `data_index/chroma_B/`만 지우고 다시 만든다(같은 폴더의 공고 목록 엑셀과 `org_dictionary.txt`는 남긴다).
+  - 파서나 kordoc 버전을 바꿔 Markdown이 달라졌다면 `data_index/chroma_B/`만 지우고 다시 만든다(같은 폴더의 `metadata.csv`와 `org_dictionary.txt`는 남긴다).
 
 ## 2. 질문하기 (두 가지 방법)
 
