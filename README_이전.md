@@ -137,7 +137,7 @@ skill 내부(kordoc 변환, 표 정규화, 헤더 후보 추출, LLM 계층 판�
 
 | 위치 | 변경 | 효과 |
 |---|---|---|
-| 이 저장소 `table_flattener.py` | 헤더 없는 숫자 표 감지(`:`·`%` 단독 셀, 쉼표·소수점 수 둘 이상)와 병합 2단 헤더 합성 추가. 기존 규칙(1~3, 6번)은 유지 | 업종별 비율 표, 금액 표, 등급표의 `라벨: 값` 짝 복원 (`87cdde7`) |
+| 이 저장소 `table_flattener.py` | 헤더 없는 숫자 표 감지(`:`·`%` 단독 셀, 쉼표·소수점 수 둘 이상)와 병합 2단 헤더 합성 추가. 기존 규칙(1\~3, 6번)은 유지 | 업종별 비율 표, 금액 표, 등급표의 `라벨: 값` 짝 복원 (`87cdde7`) |
 | skill (`korean_official_document_parser_skill`) | kordoc을 4.9.0에서 **4.24.29**로 올림(`07880b9`). 4.17.0부터 테두리 없는 틀 표를 글로 풀어낸다 | 4.9.0에서 `합계: :, 85,530,000: 100, %`처럼 깨지던 표가 `합계 : 85,530,000` 한 줄로 나옴 |
 | skill | 첨자 태그 정리(`strip_underline_tags.py`): `<sup>`·`<sub>` 등을 벗기되 수식(㎡, 영문·숫자만 있는 첨자)은 유지(`e23da8f`) | 본문에 섞이던 HTML 태그 제거 |
 | 이 저장소 `src/evaluation/metrics.py` | 로더 검출 정의 변경: 표 블록 안뿐 아니라 한 줄의 `라벨 : 값`·`값 : 라벨`·`값(라벨)`도 검출로 인정 | kordoc 4.17 이후 글로 나온 표를 미검출로 오판하지 않음 |
@@ -177,7 +177,7 @@ QUERY_INTENT_MODEL=openai/gpt-oss-20b
 Groq 무료 한도(일일 200,000 토큰)를 소진하면 로컬 Ollama로 즉시 전환 가능하다
 — **반드시 같은 모델(`gpt-oss:20b`)을 써야 결과가 비교 가능하다**(다른 모델,
 특히 VLM 계열은 이 파이프라인의 2단계 프롬프트에 안 맞아 결과가 왜곡될 수
-있음, `docs/BUGFIXES_PLAIN.md` 참고). 로컬은 응답이 느려서(질문당 1~2분)
+있음, `docs/BUGFIXES_PLAIN.md` 참고). 로컬은 응답이 느려서(질문당 1\~2분)
 타임아웃을 넉넉히 잡아야 한다:
 
 ```bash
@@ -281,8 +281,8 @@ python scripts/build_eval_report.py --label <라벨>   # eval_resources/eval_rep
 (`src/` 비의존) 두 저장소 어디서 돌려도 그대로 동작한다. 결과 JSON/HTML은 둘 다
 gitignore됨(`eval_resources/eval_results_*.json`, `eval_resources/eval_report_*.html`).
 
-- `eval_resources/eval_dataset_57docs.yaml`(q1~q8) — 초기 재현 케이스 중심
-- `eval_resources/eval_dataset_new8.yaml`(n1~n8) — 문서/기관 겹치지 않는 신규
+- `eval_resources/eval_dataset_57docs.yaml`(q1\~q8) — 초기 재현 케이스 중심
+- `eval_resources/eval_dataset_new8.yaml`(n1\~n8) — 문서/기관 겹치지 않는 신규
   세트, 문서 단위+청크 단위(`chunk_uids`) 정답 라벨 포함, 최신 상태에서 8/8 정답
 - `--judge_model`은 반드시 지정할 것 — 기본값(`gpt-5-mini`)은 Groq에 없어서
   판정 자체가 실패한다
