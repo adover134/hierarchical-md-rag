@@ -190,13 +190,16 @@ def cmd_build(cfg: dict, args: argparse.Namespace) -> None:
             if llm.get("parser_max_candidates_per_call"):
                 parser_args += ["--max-candidates-per-call", str(llm["parser_max_candidates_per_call"])]
             corpus_arg = str(_path(cfg["corpus_dir"]))
-            # 순서: 파싱(Markdown) → 메타데이터(CSV, 기관명 사전) → 청킹과 DB
+            # 순서: 파싱(Markdown) → 메타데이터(CSV, 기관명 사전; 한 번 만들고, 채운 뒤에는 다시 만들지 않는다) → 채우기(Claude, 별도) → 청킹과 DB
             run([py, "scripts/build_index_new_parser.py", "--input", corpus_arg, "--parse-only"] + parser_args,
                 cwd=root, env=env, log=rd / f"{system['name']}_parse_hwp.log")
             run([py, "scripts/index_pdf_originals.py", "--input", corpus_arg, "--parse-only"],
                 cwd=root, env=env, log=rd / f"{system['name']}_parse_pdf.log")
-            run([py, "scripts/build_metadata.py", "--markdown-dir", "output/new_parser_md", "output"],
-                cwd=root, env=env, log=rd / f"{system['name']}_metadata.log")
+            if (root / "data_index" / "metadata.csv").is_file() and (root / "data_index" / "org_dictionary.txt").is_file():
+                print(f"[{system['name']}] metadata.csv가 이미 있어 메타데이터 단계를 건너뜀(채운 값을 지키려고 다시 만들지 않는다)")
+            else:
+                run([py, "scripts/build_metadata.py", "--markdown-dir", "output/new_parser_md", "output"],
+                    cwd=root, env=env, log=rd / f"{system['name']}_metadata.log")
             secs = run([py, "scripts/build_index_new_parser.py", "--input", corpus_arg] + parser_args,
                        cwd=root, env=env, log=rd / f"{system['name']}_build_hwp.log")
             secs_pdf = run([py, "scripts/index_pdf_originals.py", "--input", str(_path(cfg["corpus_dir"]))],

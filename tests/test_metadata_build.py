@@ -150,3 +150,11 @@ def test_db_build_stops_without_metadata_or_dictionary(tmp_path):
     (tmp_path / "metadata.csv").write_text("x", encoding="utf-8")
     (tmp_path / "org_dictionary.txt").write_text("x", encoding="utf-8")
     require_metadata(tmp_path / "metadata.csv", tmp_path / "org_dictionary.txt")
+
+
+def test_filled_count_counts_evidence_cells(tmp_path):
+    from src.metadata.build import filled_count
+    csv_path = tmp_path / "m.csv"
+    csv_path.write_text("공고명,사업 금액,사업 금액 근거,입찰마감일시 근거\nA,100,표의 계,\nB,,,\n", encoding="utf-8-sig")
+    assert filled_count(csv_path) == 1
+    assert filled_count(tmp_path / "none.csv") == 0
