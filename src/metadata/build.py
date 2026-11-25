@@ -121,6 +121,16 @@ def require_metadata(csv_path: Path | str, dictionary_path: Path | str) -> None:
         )
 
 
+def filled_count(csv_path: Path | str) -> int:
+    """이미 Claude가 채운 값(`<열> 근거`가 적힌 칸)의 수. CSV가 없으면 0."""
+    path = Path(csv_path)
+    if not path.is_file():
+        return 0
+    with open(path, encoding="utf-8-sig", newline="") as f:
+        rows = list(csv.DictReader(f))
+    return sum(1 for r in rows for k, v in r.items() if k.endswith(" 근거") and (v or "").strip())
+
+
 def write_metadata_csv(header: list[str], rows: list[dict[str, str]], out_csv: Path | str) -> Path:
     out = Path(out_csv)
     out.parent.mkdir(parents=True, exist_ok=True)
