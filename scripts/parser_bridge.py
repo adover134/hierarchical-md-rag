@@ -89,7 +89,7 @@ def convert_with_new_parser(
         if api_key:
             cmd += ["--api-key", api_key]
         if max_candidates_per_call:
-            # skill 옵션: Pass1b LLM 호출 하나에 넘길 헤더 후보 수. 느린 로컬 환경에서 한 호출이
+            # skill 옵션: 계층 추출 LLM 호출 하나에 넘길 헤더 후보 수. 느린 로컬 환경에서 한 호출이
             # skill의 호출 제한 시간(300초)을 넘지 않게 줄이는 용도.
             cmd += ["--max-candidates-per-call", str(max_candidates_per_call)]
         subprocess.run(cmd, check=True)
