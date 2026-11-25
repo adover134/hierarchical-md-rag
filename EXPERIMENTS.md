@@ -18,7 +18,7 @@
 - **같은 엑셀 입력**: `입찰공고목록_20260808_20260809.xlsx` 한 파일을 모두에 넣는다(공고명이 문서 파일명과 57/57 일치).
   팀 버전은 자기 스키마(`data_list.csv`)로 변환해 읽고(엑셀에 없는 금액·요약·본문 컬럼은 빈 값), 현 버전은
   문서 존재 판정에 같은 엑셀을 읽는다(`src/utils/bid_list_xlsx.py`).
-- **LLM 역할**: 답변 생성·질의의도, 파서 skill의 헤더 판단(Pass1b)은 로컬 `gpt-oss:20b`이고, **채점(Judge)은 항상 Claude(서브에이전트)**다(아래 "채점 방식"). 팀 코드는
+- **LLM 역할**: 답변 생성·질의의도, 파서 skill의 헤더 판단(계층 추출)은 로컬 `gpt-oss:20b`이고, **채점(Judge)은 항상 Claude(서브에이전트)**다(아래 "채점 방식"). 팀 코드는
   `OPENAI_BASE_URL` 환경변수로 같은 로컬 엔드포인트를 쓴다(코드 수정 없음). skill은 Ollama 전용 백엔드가
   아니라 문서화된 OpenAI 호환 백엔드(`--backend openai --base-url http://localhost:11434/v1`)로 호출한다.
 - **로더 버전**: 현 버전의 HWP/HWPX 로더는 파서 skill(`korean_official_document_parser_skill`)이고 그 안에서 kordoc을 쓴다.
@@ -846,7 +846,7 @@ kordoc 4.24.29의 JSON에는 블록별 `pageNumber`와 `pages`가 있고 청커�
 | build(현재) | HWP/HWPX 42건 전부 실패 | ① 이 저장소의 변환 호출이 예전 `hwp2md` 명령에 의존(이 명령은 skill이 아니라 별도 서비스 패키지의 콘솔 스크립트이고, 이 머신에서는 그 editable 설치 경로가 사라져 있었음) ② 실행기가 실패를 "색인 완료"로 보고 | 변환을 **파서 skill의 `run_pipeline.py` 직접 호출**로 교체(`scripts/parser_bridge.py`, 위치는 `HWP_SKILL_DIR`). 실행기는 성공 건수가 코퍼스 문서 수와 다르면 오류로 중단하도록 수정 |
 | build(현재) | skill을 gpt-oss:20b로 돌리면 `JSONDecodeError: Expecting value: line 1 column 1` | skill 기본 백엔드(`--backend ollama`)는 Ollama 네이티브 `/api/chat`에 `think:false`+`format:json`을 보내는데 gpt-oss는 이를 따르지 않고 빈 응답을 돌려줌 | skill 문서(SKILL.md)의 OpenAI 호환 백엔드 사용: `--backend openai --base-url http://localhost:11434/v1 --api-key ollama-local` |
 | build(현재) | 위 백엔드로도 같은 오류 | Ollama `/v1` 기본 컨텍스트 4096토큰 — 실측: `prompt_tokens 4050 + completion_tokens 46 = 4096`, `finish_reason: length`, 본문은 비고 추론(reasoning)만 채워짐 | `OLLAMA_CONTEXT_LENGTH=32768`으로 Ollama 서버를 재기동 |
-| build(현재) | HWP/HWPX 42건 중 5건 실패(`HTTP 500`, 정확히 5분 경과) | skill이 LLM 호출에 300초 제한을 두는데, 후보가 많은 문서는 한 번의 Pass1b 호출이 8GB GPU에서 그보다 오래 걸림(기본 호출당 후보 70개) | skill 문서의 `--max-candidates-per-call`을 30으로 낮춰 전체를 다시 구축(`llm.parser_max_candidates_per_call`). 그래도 실패한 5건은 10으로 낮춰 재처리. 문서별 값은 `current_default_build.json`의 `parser_batch` 필드 |
+| build(현재) | HWP/HWPX 42건 중 5건 실패(`HTTP 500`, 정확히 5분 경과) | skill이 LLM 호출에 300초 제한을 두는데, 후보가 많은 문서는 한 번의 계층 추출 호출이 8GB GPU에서 그보다 오래 걸림(기본 호출당 후보 70개) | skill 문서의 `--max-candidates-per-call`을 30으로 낮춰 전체를 다시 구축(`llm.parser_max_candidates_per_call`). 그래도 실패한 5건은 10으로 낮춰 재처리. 문서별 값은 `current_default_build.json`의 `parser_batch` 필드 |
 
 원인을 확인한 방법(재현 가능):
 

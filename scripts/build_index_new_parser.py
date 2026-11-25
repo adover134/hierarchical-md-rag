@@ -86,7 +86,7 @@ def main() -> None:
     ap.add_argument("--base-url", help="OpenAI 호환 엔드포인트(예: Ollama의 http://localhost:11434/v1)")
     ap.add_argument("--api-key", help="--backend가 ollama가 아닐 때의 API 키(로컬 Ollama는 아무 문자열)")
     ap.add_argument("--max-candidates-per-call", type=int,
-                    help="Pass1b LLM 호출 하나당 헤더 후보 최대 개수(skill 옵션). 느린 로컬 GPU에서 호출 제한 시간 초과를 피하려면 줄인다")
+                    help="계층 추출 LLM 호출 하나당 헤더 후보 최대 개수(skill 옵션). 느린 로컬 GPU에서 호출 제한 시간 초과를 피하려면 줄인다")
     ap.add_argument("--limit", type=int, help="처리할 문서 수 상한 (테스트용)")
     ap.add_argument("--parse-only", action="store_true", help="HWP를 Markdown으로만 바꾸고 멈춘다(메타데이터 단계 전에 쓴다)")
     args = ap.parse_args()
