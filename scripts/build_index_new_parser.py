@@ -82,7 +82,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--input", "-i", required=True, help="HWP/HWPX 원본 폴더")
     ap.add_argument("--backend", default="ollama", choices=["ollama", "openai", "groq", "gemini"])
-    ap.add_argument("--model", default="qwen3.5:9b")
+    ap.add_argument("--model", default="gpt-oss:20b")
     ap.add_argument("--base-url", help="OpenAI 호환 엔드포인트(예: Ollama의 http://localhost:11434/v1)")
     ap.add_argument("--api-key", help="--backend가 ollama가 아닐 때의 API 키(로컬 Ollama는 아무 문자열)")
     ap.add_argument("--max-candidates-per-call", type=int,
