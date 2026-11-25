@@ -53,7 +53,7 @@ def convert_with_new_parser(
     hwp_path: Path,
     work_dir: Path,
     backend: str = "ollama",
-    model: str = "qwen3.5:9b",
+    model: str = "gpt-oss:20b",
     skip_if_exists: bool = True,
     base_url: str | None = None,
     api_key: str | None = None,
