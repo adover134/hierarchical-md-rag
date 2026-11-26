@@ -1,0 +1,14 @@
+{
+  "j0003": {
+    "correctness": {"score": 2, "reason": "주된 값인 240kW 파워뱅크 2기와 디스펜서 5기를 밝히지 않고 합계 7기만 제시해 두 값을 합한 수는 맞지만 기대 답변의 구성은 전혀 확인되지 않는다(규칙2)."},
+    "answer_coverage": {"score": 1, "reason": "주된 포인트인 파워뱅크 2기·디스펜서 5기·240kW 용량이 모두 빠지고 합계만 남아 핵심 정보가 거의 없다(규칙3, 규칙7)."},
+    "faithfulness": {"score": 3, "reason": "context의 파워뱅크 2기와 디스펜서 5기를 종류가 다른 설비인데도 더해 '총 7기'로 만든 것은 context에 없는 일반화이다."},
+    "context_relevance": {"score": 5, "reason": "context에 해당 사업(14_온양교통_공사)의 설치대수가 '240kW 파워뱅크 2기, 디스펜서 5기'로 직접 적혀 있어 질문에 완전히 관련된다."}
+  },
+  "j0004": {
+    "correctness": {"score": 5, "reason": "주된 값인 240kW 파워뱅크 1기와 디스펜서 2기를 정확히 제시했다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "기대 답변의 주된 포인트(240kW, 파워뱅크 1기, 디스펜서 2기)가 모두 들어 있다(규칙3)."},
+    "faithfulness": {"score": 4, "reason": "파워뱅크 1기와 디스펜서 2기는 context에서 직접 확인되지만 '총 3기가 보급'이라는 합산은 context에 없는 사소한 추론이다."},
+    "context_relevance": {"score": 5, "reason": "context에 해당 사업(16_의성여객_공사)의 설치대수가 직접 적혀 있어 질문에 완전히 관련된다."}
+  }
+}

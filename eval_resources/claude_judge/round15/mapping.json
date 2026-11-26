@@ -1,0 +1,30 @@
+{
+ "j0001": {
+  "run": "listfix_judge",
+  "system": "before",
+  "dataset": "new20_v2",
+  "id": "n17",
+  "repeat": 1
+ },
+ "j0002": {
+  "run": "listfix_judge",
+  "system": "after",
+  "dataset": "new20_v2",
+  "id": "n16",
+  "repeat": 1
+ },
+ "j0003": {
+  "run": "listfix_judge",
+  "system": "before",
+  "dataset": "new20_v2",
+  "id": "n16",
+  "repeat": 1
+ },
+ "j0004": {
+  "run": "listfix_judge",
+  "system": "after",
+  "dataset": "new20_v2",
+  "id": "n17",
+  "repeat": 1
+ }
+}
