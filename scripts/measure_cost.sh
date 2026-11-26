@@ -28,22 +28,27 @@ stop() {
     [ -z "$sampler" ] || kill "$sampler" 2>/dev/null || true
     [ -z "$server" ] || kill "$server" 2>/dev/null || true
     wait 2>/dev/null || true
+    server=""
+    sampler=""
 }
 trap stop EXIT
 
-OLLAMA_CONTEXT_LENGTH="$CTX" OLLAMA_NUM_PARALLEL=1 ollama serve >"$out/ollama.log" 2>&1 &
-server=$!
-curl -s -f --retry 30 --retry-delay 1 --retry-connrefused -m 5 "$URL/api/version" >/dev/null
-ollama show "$MODEL" >/dev/null 2>&1 || ollama create "$MODEL" -f experiments/Modelfile.batch256
-
 for system in "${systems[@]}"; do
+    # 방식마다 서버를 새로 띄워, 앞 방식의 프롬프트 캐시가 다음 방식의 시간을 줄이지 않게 한다.
+    OLLAMA_CONTEXT_LENGTH="$CTX" OLLAMA_NUM_PARALLEL=1 ollama serve >"$out/${system}_ollama.log" 2>&1 &
+    server=$!
+    curl -s -f --retry 30 --retry-delay 1 --retry-connrefused -m 5 "$URL/api/version" >/dev/null
+    ollama show "$MODEL" >/dev/null 2>&1 || ollama create "$MODEL" -f experiments/Modelfile.batch256
+    # 웜 스타트: 모델을 미리 올려, 첫 문항의 시간에 로드 시간이 섞이지 않게 한다.
+    curl -s -f -m 600 "$URL/api/generate" \
+        -d "{\"model\": \"$MODEL\", \"prompt\": \"ok\", \"stream\": false, \"options\": {\"num_predict\": 1}}" >/dev/null
     nvidia-smi --query-gpu=timestamp,memory.used,utilization.gpu --format=csv,noheader,nounits -l 2 \
         >"$out/${system}_gpu.csv" &
     sampler=$!
     "$PY" scripts/run_experiment.py query --run-id "$run_id" --systems "$system" --model "$MODEL" \
         ${LIMIT:+--limit "$LIMIT"}
-    kill "$sampler" 2>/dev/null || true
-    sampler=""
+    curl -s -m 10 "$URL/api/ps" >"$out/${system}_ps.json"
+    stop
 done
 
 "$PY" scripts/cost_report.py --run-id "$run_id" --systems "${systems[@]}" --context "$CTX"
