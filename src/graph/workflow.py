@@ -35,6 +35,7 @@ sys.path.insert(0, 'src')
 from src.utils.config import *
 from src.utils.helpers import *
 from src.utils.korean_keywords import stem_words
+from src.utils.langfuse_tracing import instrument as instrument_langfuse
 from src.utils.org_match import distinctive_token_candidates
 from src.utils.rerank_rules import FUNCTION_WORDS, has_answer_number
 from src.graph.state import QueryIntent, QuestionPlan, EvidenceSpan, AnswerDraft
@@ -12053,6 +12054,10 @@ class RAGChatbotV17:
 # ============================================================================
 # 메인 함수
 # ============================================================================
+
+# Langfuse 키가 있을 때만 질문별 시간과 토큰 수를 기록한다(원문은 보내지 않는다).
+instrument_langfuse(ChatOpenAI, RAGChatbotV17)
+
 
 def main() -> None:
     """메인 진입점 함수."""
