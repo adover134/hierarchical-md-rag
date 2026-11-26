@@ -4148,8 +4148,6 @@ class RAGChatbotV17:
                     style_hint = self._infer_answer_style(query)
                 is_csv_short = bool(payload.get("csv_short_circuit"))
                 answer_mode = str(payload.get("answer_mode", "") or "").strip().lower()
-                formatted_answer = self._format_answer_for_readability(answer_text, style=style_hint)
-                polish_started = time.perf_counter()
                 use_llm_polish = bool(
                     self.llm
                     and query
@@ -4157,6 +4155,11 @@ class RAGChatbotV17:
                     and answer_mode == "generative"
                     and not self._is_summary_focus_query(query)
                 )
+                # 다듬기를 거치는 답만 긴 목록을 자르지 않는다. 건너뛰는 답은 줄 수를 제한한다.
+                formatted_answer = self._format_answer_for_readability(
+                    answer_text, style=style_hint, keep_list=use_llm_polish
+                )
+                polish_started = time.perf_counter()
                 if use_llm_polish:
                     polished_answer = self._polish_answer_with_llm(
                         query,
@@ -4167,11 +4170,13 @@ class RAGChatbotV17:
                     polished_answer = self._compact_answer_sections(
                         formatted_answer,
                         style=style_hint,
+                        keep_list=use_llm_polish,
                     )
                 if not polished_answer:
                     polished_answer = self._compact_answer_sections(
                         formatted_answer,
                         style=style_hint,
+                        keep_list=use_llm_polish,
                     )
                 if (
                     self._normalize_answer_for_compare(polished_answer)
@@ -4180,6 +4185,7 @@ class RAGChatbotV17:
                     polished_answer = self._compact_answer_sections(
                         formatted_answer,
                         style=style_hint,
+                        keep_list=use_llm_polish,
                     )
                 if answer_mode == "generative" and not self._is_summary_focus_query(query):
                     polished_answer = self._restrict_answer_to_evidence(
@@ -4241,7 +4247,7 @@ class RAGChatbotV17:
                     if (
                         "\n" in polished_final
                         and not answer_is_comparison_shaped
-                        and not prompt_find_list_answer(polished_final)
+                        and not (use_llm_polish and prompt_find_list_answer(polished_final))
                     ):
                         lines = [ln.strip() for ln in polished_final.splitlines() if ln.strip()]
                         if len(lines) >= 2:
@@ -4699,7 +4705,7 @@ class RAGChatbotV17:
 
         normalized_style = str(style).lower()
         answer_style = "guide" if normalized_style in {"guide", "descriptive"} else "concise"
-        raw_formatted = self._format_answer_for_readability(raw_answer, style=answer_style)
+        raw_formatted = self._format_answer_for_readability(raw_answer, style=answer_style, keep_list=True)
         if answer_style == "guide":
             style_guide = (
                 "- 설명형 질의는 가이드/에이전트형으로 작성할 것.\n"
@@ -4758,15 +4764,16 @@ class RAGChatbotV17:
             polished_formatted = self._format_answer_for_readability(
                 polished_raw or raw_formatted,
                 style=answer_style,
+                keep_list=True,
             )
-            compacted = self._compact_answer_sections(polished_formatted, style=answer_style)
+            compacted = self._compact_answer_sections(polished_formatted, style=answer_style, keep_list=True)
             # LLM 결과가 사실상 원문과 동일할 때도 최소한의 압축 요약을 강제 적용한다.
             if self._normalize_answer_for_compare(compacted) == self._normalize_answer_for_compare(raw_formatted):
-                return self._compact_answer_sections(raw_formatted, style=answer_style)
+                return self._compact_answer_sections(raw_formatted, style=answer_style, keep_list=True)
             return compacted
         except Exception:
             # 후처리 실패 시에도 길이/중복을 줄인 압축 요약 형태로 반환한다.
-            return self._compact_answer_sections(raw_formatted, style=answer_style)
+            return self._compact_answer_sections(raw_formatted, style=answer_style, keep_list=True)
 
     @staticmethod
     def _normalize_answer_for_compare(answer: str) -> str:
@@ -4904,7 +4911,7 @@ class RAGChatbotV17:
         return "\n".join(kept_lines)
 
     @staticmethod
-    def _compact_answer_sections(answer: str, style: str = "concise") -> str:
+    def _compact_answer_sections(answer: str, style: str = "concise", keep_list: bool = False) -> str:
         """답변을 자연문장 중심으로 1~3줄 요약 형태로 압축한다."""
         return prompt_compact_answer_sections(
             answer=answer,
@@ -4913,7 +4920,9 @@ class RAGChatbotV17:
                 answer=text,
                 style=text_style,
                 looks_incomplete_clause_fn=util_looks_incomplete_clause,
+                keep_list=keep_list,
             ),
+            keep_list=keep_list,
         )
 
     @staticmethod
@@ -7756,12 +7765,13 @@ class RAGChatbotV17:
         return attachments[:max_items]
 
     @staticmethod
-    def _format_answer_for_readability(answer: str, style: str = "concise") -> str:
+    def _format_answer_for_readability(answer: str, style: str = "concise", keep_list: bool = False) -> str:
         """답변을 읽기 쉬운 자연문장(최종 사용자용)으로 정규화합니다."""
         return prompt_format_answer_for_readability(
             answer=answer,
             style=style,
             looks_incomplete_clause_fn=util_looks_incomplete_clause,
+            keep_list=keep_list,
         )
 
     def _estimate_slot_fill_rate(
