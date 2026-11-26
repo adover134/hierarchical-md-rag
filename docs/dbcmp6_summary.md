@@ -1,61 +1,61 @@
 ## 칸별 평균 (Claude 채점)
-| 프로세스 | DB | Correctness | Answer coverage | Faithfulness | Context relevance | Correctness 5점 문항 |
+| process | DB | Correctness | Answer coverage | Faithfulness | Context relevance | Correctness 5점 문항 |
 |---|---|---|---|---|---|---|
-| 팀 프로세스 | 팀 DB | 1.225 | 1.200 | 2.353 (거부 6건 제외) | 4.075 | 9/40 |
-| 팀 프로세스 | 현재 DB(main2) | 1.075 | 1.075 | 2.156 (거부 8건 제외) | 3.575 | 8/40 |
+| 팀 process | 팀 DB | 1.225 | 1.200 | 2.353 (거부 6건 제외) | 4.075 | 9/40 |
+| 팀 process | 현재 DB(main2) | 1.075 | 1.075 | 2.156 (거부 8건 제외) | 3.575 | 8/40 |
 | main(two_stage) | 팀 DB | 4.775 | 4.775 | 4.800 | 4.925 | 36/40 |
 | main(two_stage) | 현재 DB(main2) | 4.900 | 4.900 | 4.900 | 4.775 | 38/40 |
-| 멀티 에이전트 | 팀 DB | 5.000 | 5.000 | 4.975 | 4.950 | 40/40 |
-| 멀티 에이전트 | 현재 DB(main2) | 5.000 | 5.000 | 4.975 | 4.975 | 40/40 |
+| multi-agent | 팀 DB | 5.000 | 5.000 | 4.975 | 4.950 | 40/40 |
+| multi-agent | 현재 DB(main2) | 5.000 | 5.000 | 4.975 | 4.975 | 40/40 |
 
 ## 쌍체 비교: Correctness
 | 비교 | 평균 차이 | 올라간/내려간/같음 | p (부호검정) |
 |---|---|---|---|
-| DB 효과, 팀 프로세스: 팀 DB → 현재 DB | -0.150 | 1/3/36 | 0.625 |
+| DB 효과, 팀 process: 팀 DB → 현재 DB | -0.150 | 1/3/36 | 0.625 |
 | DB 효과, main(two_stage): 팀 DB → 현재 DB | +0.125 | 3/0/37 | 0.250 |
-| DB 효과, 멀티 에이전트: 팀 DB → 현재 DB | +0.000 | 0/0/40 | 1.000 |
-| 프로세스 효과, 팀 DB: 팀 프로세스 → main(two_stage) | +3.550 | 31/0/9 | 0.000 |
-| 프로세스 효과, 팀 DB: main(two_stage) → 멀티 에이전트 | +0.225 | 4/0/36 | 0.125 |
-| 프로세스 효과, 팀 DB: 팀 프로세스 → 멀티 에이전트 | +3.775 | 31/0/9 | 0.000 |
-| 프로세스 효과, 현재 DB(main2): 팀 프로세스 → main(two_stage) | +3.825 | 32/0/8 | 0.000 |
-| 프로세스 효과, 현재 DB(main2): main(two_stage) → 멀티 에이전트 | +0.100 | 2/0/38 | 0.500 |
-| 프로세스 효과, 현재 DB(main2): 팀 프로세스 → 멀티 에이전트 | +3.925 | 32/0/8 | 0.000 |
+| DB 효과, multi-agent: 팀 DB → 현재 DB | +0.000 | 0/0/40 | 1.000 |
+| process 효과, 팀 DB: 팀 process → main(two_stage) | +3.550 | 31/0/9 | 0.000 |
+| process 효과, 팀 DB: main(two_stage) → multi-agent | +0.225 | 4/0/36 | 0.125 |
+| process 효과, 팀 DB: 팀 process → multi-agent | +3.775 | 31/0/9 | 0.000 |
+| process 효과, 현재 DB(main2): 팀 process → main(two_stage) | +3.825 | 32/0/8 | 0.000 |
+| process 효과, 현재 DB(main2): main(two_stage) → multi-agent | +0.100 | 2/0/38 | 0.500 |
+| process 효과, 현재 DB(main2): 팀 process → multi-agent | +3.925 | 32/0/8 | 0.000 |
 
 ## 쌍체 비교: Answer coverage
 | 비교 | 평균 차이 | 올라간/내려간/같음 | p (부호검정) |
 |---|---|---|---|
-| DB 효과, 팀 프로세스: 팀 DB → 현재 DB | -0.125 | 1/2/37 | 1.000 |
+| DB 효과, 팀 process: 팀 DB → 현재 DB | -0.125 | 1/2/37 | 1.000 |
 | DB 효과, main(two_stage): 팀 DB → 현재 DB | +0.125 | 2/0/38 | 0.500 |
-| DB 효과, 멀티 에이전트: 팀 DB → 현재 DB | +0.000 | 0/0/40 | 1.000 |
-| 프로세스 효과, 팀 DB: 팀 프로세스 → main(two_stage) | +3.575 | 31/0/9 | 0.000 |
-| 프로세스 효과, 팀 DB: main(two_stage) → 멀티 에이전트 | +0.225 | 3/0/37 | 0.250 |
-| 프로세스 효과, 팀 DB: 팀 프로세스 → 멀티 에이전트 | +3.800 | 31/0/9 | 0.000 |
-| 프로세스 효과, 현재 DB(main2): 팀 프로세스 → main(two_stage) | +3.825 | 32/0/8 | 0.000 |
-| 프로세스 효과, 현재 DB(main2): main(two_stage) → 멀티 에이전트 | +0.100 | 2/0/38 | 0.500 |
-| 프로세스 효과, 현재 DB(main2): 팀 프로세스 → 멀티 에이전트 | +3.925 | 32/0/8 | 0.000 |
+| DB 효과, multi-agent: 팀 DB → 현재 DB | +0.000 | 0/0/40 | 1.000 |
+| process 효과, 팀 DB: 팀 process → main(two_stage) | +3.575 | 31/0/9 | 0.000 |
+| process 효과, 팀 DB: main(two_stage) → multi-agent | +0.225 | 3/0/37 | 0.250 |
+| process 효과, 팀 DB: 팀 process → multi-agent | +3.800 | 31/0/9 | 0.000 |
+| process 효과, 현재 DB(main2): 팀 process → main(two_stage) | +3.825 | 32/0/8 | 0.000 |
+| process 효과, 현재 DB(main2): main(two_stage) → multi-agent | +0.100 | 2/0/38 | 0.500 |
+| process 효과, 현재 DB(main2): 팀 process → multi-agent | +3.925 | 32/0/8 | 0.000 |
 
 ## 쌍체 비교: Faithfulness
 | 비교 | 평균 차이 | 올라간/내려간/같음 | p (부호검정) |
 |---|---|---|---|
-| DB 효과, 팀 프로세스: 팀 DB → 현재 DB | -0.281 | 4/6/22 | 0.754 |
+| DB 효과, 팀 process: 팀 DB → 현재 DB | -0.281 | 4/6/22 | 0.754 |
 | DB 효과, main(two_stage): 팀 DB → 현재 DB | +0.100 | 5/1/34 | 0.219 |
-| DB 효과, 멀티 에이전트: 팀 DB → 현재 DB | +0.000 | 1/1/38 | 1.000 |
-| 프로세스 효과, 팀 DB: 팀 프로세스 → main(two_stage) | +2.529 | 24/1/9 | 0.000 |
-| 프로세스 효과, 팀 DB: main(two_stage) → 멀티 에이전트 | +0.175 | 5/0/35 | 0.062 |
-| 프로세스 효과, 팀 DB: 팀 프로세스 → 멀티 에이전트 | +2.618 | 24/0/10 | 0.000 |
-| 프로세스 효과, 현재 DB(main2): 팀 프로세스 → main(two_stage) | +2.750 | 24/0/8 | 0.000 |
-| 프로세스 효과, 현재 DB(main2): main(two_stage) → 멀티 에이전트 | +0.075 | 3/1/36 | 0.625 |
-| 프로세스 효과, 현재 DB(main2): 팀 프로세스 → 멀티 에이전트 | +2.844 | 24/0/8 | 0.000 |
+| DB 효과, multi-agent: 팀 DB → 현재 DB | +0.000 | 1/1/38 | 1.000 |
+| process 효과, 팀 DB: 팀 process → main(two_stage) | +2.529 | 24/1/9 | 0.000 |
+| process 효과, 팀 DB: main(two_stage) → multi-agent | +0.175 | 5/0/35 | 0.062 |
+| process 효과, 팀 DB: 팀 process → multi-agent | +2.618 | 24/0/10 | 0.000 |
+| process 효과, 현재 DB(main2): 팀 process → main(two_stage) | +2.750 | 24/0/8 | 0.000 |
+| process 효과, 현재 DB(main2): main(two_stage) → multi-agent | +0.075 | 3/1/36 | 0.625 |
+| process 효과, 현재 DB(main2): 팀 process → multi-agent | +2.844 | 24/0/8 | 0.000 |
 
 ## 쌍체 비교: Context relevance
 | 비교 | 평균 차이 | 올라간/내려간/같음 | p (부호검정) |
 |---|---|---|---|
-| DB 효과, 팀 프로세스: 팀 DB → 현재 DB | -0.500 | 11/14/15 | 0.690 |
+| DB 효과, 팀 process: 팀 DB → 현재 DB | -0.500 | 11/14/15 | 0.690 |
 | DB 효과, main(two_stage): 팀 DB → 현재 DB | -0.150 | 2/8/30 | 0.109 |
-| DB 효과, 멀티 에이전트: 팀 DB → 현재 DB | +0.025 | 2/1/37 | 1.000 |
-| 프로세스 효과, 팀 DB: 팀 프로세스 → main(two_stage) | +0.850 | 21/0/19 | 0.000 |
-| 프로세스 효과, 팀 DB: main(two_stage) → 멀티 에이전트 | +0.025 | 2/1/37 | 1.000 |
-| 프로세스 효과, 팀 DB: 팀 프로세스 → 멀티 에이전트 | +0.875 | 23/0/17 | 0.000 |
-| 프로세스 효과, 현재 DB(main2): 팀 프로세스 → main(two_stage) | +1.200 | 22/7/11 | 0.008 |
-| 프로세스 효과, 현재 DB(main2): main(two_stage) → 멀티 에이전트 | +0.200 | 9/1/30 | 0.021 |
-| 프로세스 효과, 현재 DB(main2): 팀 프로세스 → 멀티 에이전트 | +1.400 | 21/0/19 | 0.000 |
+| DB 효과, multi-agent: 팀 DB → 현재 DB | +0.025 | 2/1/37 | 1.000 |
+| process 효과, 팀 DB: 팀 process → main(two_stage) | +0.850 | 21/0/19 | 0.000 |
+| process 효과, 팀 DB: main(two_stage) → multi-agent | +0.025 | 2/1/37 | 1.000 |
+| process 효과, 팀 DB: 팀 process → multi-agent | +0.875 | 23/0/17 | 0.000 |
+| process 효과, 현재 DB(main2): 팀 process → main(two_stage) | +1.200 | 22/7/11 | 0.008 |
+| process 효과, 현재 DB(main2): main(two_stage) → multi-agent | +0.200 | 9/1/30 | 0.021 |
+| process 효과, 현재 DB(main2): 팀 process → multi-agent | +1.400 | 21/0/19 | 0.000 |

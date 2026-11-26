@@ -1,12 +1,12 @@
-# 채점기 규칙 (현재: 루브릭 v2)
+# 채점기 규칙 (현재: rubric v2)
 
-이 문서는 **지금 쓰는 채점 규칙**의 기준 문서다. 규칙이 바뀐 이유와 검증은 [`judge_improvement.md`](judge_improvement.md)에 있다. 아래 "루브릭 전문"은 코드(`scripts/claude_judge.py`의 `INSTRUCTIONS_V2`와 `src/evaluation/llm_judge.py`의 `JUDGE_SYSTEM_PROMPT`)에서 그대로 가져온 것이고, 서브에이전트가 읽는 `rubric.md`(`--rubric v2`)와 같다. 규칙을 고칠 때는 코드와 이 문서를 같이 고친다.
+이 문서는 **지금 쓰는 채점 규칙**의 기준 문서다. 규칙이 바뀐 이유와 검증은 [`judge_improvement.md`](judge_improvement.md)에 있다. 아래 "rubric 전문"은 코드(`scripts/claude_judge.py`의 `INSTRUCTIONS_V2`와 `src/evaluation/llm_judge.py`의 `JUDGE_SYSTEM_PROMPT`)에서 그대로 가져온 것이고, subagent가 읽는 `rubric.md`(`--rubric v2`)와 같다. 규칙을 고칠 때는 코드와 이 문서를 같이 고친다.
 
 ## 원칙
 
-- 생성은 로컬 `gpt-oss:20b`, 채점은 항상 Claude 서브에이전트(Opus)다. 별도 API 키는 쓰지 않는다. gpt-oss로는 채점하지 않는다.
-- 채점자는 항목이 어느 시스템·실행에서 나왔는지 모른다(`claude_judge.py export`가 시스템·실행 식별 없이 섞어 10건씩 배치로 낸다).
-- 점수는 4개 축 모두 0\~5 정수이고 축마다 한 문장 근거를 쓴다. 보고하는 모든 점수 문서에 "심사: Claude(서브에이전트)"와 루브릭 버전을 적는다.
+- 생성은 local `gpt-oss:20b`, 채점은 항상 Claude subagent(Opus)다. 별도 API 키는 쓰지 않는다. gpt-oss로는 채점하지 않는다.
+- 채점자는 항목이 어느 시스템·실행에서 나왔는지 모른다(`claude_judge.py export`가 시스템·실행 식별 없이 섞어 10건씩 batch로 낸다).
+- 점수는 4개 축 모두 0\~5 정수이고 축마다 한 문장 근거를 쓴다. 보고하는 모든 점수 문서에 "심사: Claude(subagent)"와 rubric 버전을 적는다.
 
 ## 요약: 축과 규칙
 
@@ -25,14 +25,14 @@
 | 4 표기와 라벨 | 숫자 표기 차이는 같은 값. 금액 이름(기초금액, 사업비 등)이 달라도 값이 같으면 감점 없음 |
 | 5 비교 질문 | 주된 사실은 선택한 대상(과 있으면 그 값) |
 | 6 답변 거부 | Correctness·Answer coverage 0점, **Faithfulness는 해당 없음(N/A)** |
-| 7 힌트 | 스크립트가 뽑은 주된 값과 답변에 없는 값을 참고용으로 제공 |
+| 7 힌트 | script가 뽑은 주된 값과 답변에 없는 값을 참고용으로 제공 |
 
 ## 집계 규칙 (점수를 평균낼 때)
 
 - **거부 답변의 Faithfulness는 평균과 쌍체 비교에서 뺀다.** 거부 판정은 `claude_judge.is_refusal`(`확인되지 않`, `찾을 수 없`, `근거 부족`, `정보가 없` 문구)이고, `grid_report.load_scores`가 그 항목의 Faithfulness를 `None`으로 둔다. 분모가 그만큼 줄어든다.
 - **표에는 항상 `거부 N건 제외`를 Faithfulness 옆에 적는다**(`grid_report.summary_table`). 거부를 많이 하는 시스템의 Faithfulness가 부풀려 보이는 선택 편향을 독자가 가늠할 수 있게 하기 위해서다. 거부는 Correctness와 Answer coverage에서 이미 0점을 받으므로 Faithfulness에서 한 번 더 벌주지 않는다(0점으로 넣으면 "환각"과 "답을 못 냄"이 한 숫자에 섞인다).
 - `scripts/run_experiment.py evaluate`의 `summary.json` 평균에는 이 제외를 적용하지 않는다. 보고하는 표는 `scripts/grid_report.py` 기준이다.
-- 라운드가 다른 점수를 비교할 때는 같은 루브릭 버전끼리만 비교한다. 이전 라운드(v1) 점수는 `judge_cache_v1_ref/`에 보존돼 있다(재채점 후).
+- 라운드가 다른 점수를 비교할 때는 같은 rubric 버전끼리만 비교한다. 이전 라운드(v1) 점수는 `judge_cache_v1_ref/`에 보존돼 있다(재채점 후).
 
 ## 사용법
 
@@ -46,7 +46,7 @@ python scripts/claude_judge.py import --out-dir eval_resources/claude_judge/<rou
 python scripts/grid_report.py --run-id <run-id> --summary-out <path> --answers-out <path>
 ```
 
-## 루브릭 전문 (v2, 서브에이전트가 읽는 `rubric.md`)
+## rubric 전문 (v2, subagent가 읽는 `rubric.md`)
 
 # 채점 지시 (루브릭 v2)
 
