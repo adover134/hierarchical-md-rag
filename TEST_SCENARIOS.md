@@ -1,14 +1,14 @@
 # 배포 전 테스트 시나리오
 
 `scripts/gradio_app.py`를 배포하기 전, 아래 질문들을 직접 입력해 답변을 확인해 주세요.
-전부 이번 세션에서 실제 검증된 문항(기대 답변이 이미 확인된 문항)이라 정답과 바로
+전부 이번 session에서 실제 검증된 문항(기대 답변이 이미 확인된 문항)이라 정답과 바로
 비교할 수 있습니다.
 
-## 실행 방법(로컬 확인용)
+## 실행 방법(local 확인용)
 
 `scripts/gradio_app.py`가 `HWP_RAG_ANSWER_STRATEGY=multi_agent` + `gpt-oss:20b`
-조합을 스크립트 안에서 직접 고정하므로(환경변수로 덮어쓸 수 없음 — "왜 이렇게
-했는지"는 스크립트 상단 docstring 참고), 환경변수를 따로 안 붙여도 된다:
+조합을 script 안에서 직접 고정하므로(환경변수로 덮어쓸 수 없음 — "왜 이렇게
+했는지"는 script 상단 docstring 참고), 환경변수를 따로 안 붙여도 된다:
 
 ```bash
 conda activate langc
@@ -18,7 +18,7 @@ python scripts/gradio_app.py --port 7860
 ```
 
 실행 즉시 Ollama/gpt-oss:20b 연결을 확인하고, 안 되면 바로 실패 사유를 출력하고
-종료합니다(모호한 런타임 에러 대신).
+종료합니다(모호한 runtime 에러 대신).
 
 **응답 시간 기대치**: 단일 사실 질문은 보통 10\~30초, 비교 질문은 여러 단계를 거쳐 더
 오래 걸릴 수 있습니다(1분 이상도 정상). #5/#6이 #1/#2보다 느려도 버그가 아닙니다.
@@ -29,9 +29,9 @@ python scripts/gradio_app.py --port 7860
 |---|---|---|---|
 | 1 | 단일 사실 | SRT 감속기 모터피니언기어 구매 입찰의 낙찰자 결정 기준은 무엇인가요? | 예정가격의 82.495% 이상, 최저가격순, 적격심사, 종합평점 85점 이상 |
 | 2 | 단일 사실(마감일) | 2026년 대전광역시립요양원 식자재 구매의 납품기한은 언제까지인가요? | 2026. 12. 31. |
-| 3 | 2곳 비교(예산 숏컷 경로) | 쏘유팜과 영남영농조합법인의 히트펌프 물품 구매 중 예산이 더 큰 곳은 어디인가요? | 영남영농조합법인이 더 큼 (608,881,900원 vs 245,339,600원) |
+| 3 | 2곳 비교(예산 shortcut 경로) | 쏘유팜과 영남영농조합법인의 히트펌프 물품 구매 중 예산이 더 큰 곳은 어디인가요? | 영남영농조합법인이 더 큼 (608,881,900원 vs 245,339,600원) |
 | 4 | 3곳 비교(오늘 새로 고친 부분 — 꼭 확인) | 쏘유팜, 영남영농조합법인, 진주올팜의 히트펌프 물품 구매 중 예산이 가장 큰 곳은 어디인가요? | 영남영농조합법인이 최고(608,881,900원), 나머지 두 곳도 목록에 나와야 함 |
-| 5 | 2단계 비교(multi_agent 자체 경로, 예산 숏컷 아님) | 장성경찰서 장애인승강기 설치공사(건축)와 (통신) 중 기초금액이 더 큰 공사는 무엇인가요? | 건축이 더 큼 (368,467,000원 vs 24,867,000원) |
+| 5 | 2단계 비교(multi_agent 자체 경로, 예산 shortcut 아님) | 장성경찰서 장애인승강기 설치공사(건축)와 (통신) 중 기초금액이 더 큰 공사는 무엇인가요? | 건축이 더 큼 (368,467,000원 vs 24,867,000원) |
 | 6 | **알려진 미해결 사례** — 비교가 아닌 복합 질문 | SRT 감속기 모터피니언기어 구매 입찰의 낙찰자 결정 기준과 계약기간을 각각 알려주세요. | 두 사실 다 나와야 하나, 낙찰자 기준이 짧은 인용("조달청 물품구매적격심사 세부기준 제9조")으로만 나올 수 있음 — 우리가 "그 정도면 충분"으로 판단했던 사례, 직접 확인해 보세요 |
 | 7 | 정직한 실패 확인 | 존재하지 않는 가상의 기관명으로 질문(예: "가나다주식회사의 계약기간은 언제인가요?") | "문서에서 확인되지 않습니다" 류의 정직한 실패만 나와야 함 — 절대 지어낸 답을 내면 안 됨 |
 
@@ -44,9 +44,9 @@ python scripts/gradio_app.py --port 7860
 
 ---
 
-# 실제 도메인 + HTTPS 배포 가이드
+# 실제 domain + HTTPS 배포 가이드
 
-`--share`(72시간 임시 링크)가 아니라 실제 도메인으로 테스터에게 링크를 주고 싶을 때
+`--share`(72시간 임시 링크)가 아니라 실제 domain으로 테스터에게 링크를 주고 싶을 때
 쓰는 구성이다. 전체 그림:
 
 ```
@@ -57,25 +57,25 @@ python scripts/gradio_app.py --port 7860
 ```
 
 **핵심 원칙**: 인터넷에 직접 노출되는 건 nginx(80/443)뿐이어야 한다. Gradio
-프로세스(7860)와 Ollama(11434)는 반드시 `127.0.0.1`에만 바인딩해서 외부에서 직접
+process(7860)와 Ollama(11434)는 반드시 `127.0.0.1`에만 바인딩해서 외부에서 직접
 접근 못 하게 막는다 — 특히 Ollama API는 인증이 없어서 그대로 열어두면 누구나 그
 서버의 GPU/CPU로 무료 추론을 돌릴 수 있게 된다.
 
 ## 0) 사전 준비
 
-- **GPU 인스턴스**: GCP 기준 `g2-standard-4`(또는 `-8`) + NVIDIA L4(24GB) 권장.
-  L4는 지금 쓰는 gpt-oss:20b GGUF(\~14GB)를 KV 캐시 여유까지 두고 올릴 수 있고,
+- **GPU instance**: GCP 기준 `g2-standard-4`(또는 `-8`) + NVIDIA L4(24GB) 권장.
+  L4는 지금 쓰는 gpt-oss:20b GGUF(\~14GB)를 KV cache 여유까지 두고 올릴 수 있고,
   T4 대비 연산 성능이 훨씬 좋아 응답 지연이 크게 줄어든다. GB200/B200/H200/H100/
   A100 80GB 같은 데이터센터급 GPU는 이 규모(20B 모델, 소수 베타 테스터)엔 완전히
-  과한 스펙이니 고를 필요 없다. vCPU/메모리는 GPU가 병목이라 4\~8 vCPU면 충분(호스트
-  쪽에서 임베딩 모델 CPU 연산 + nginx + Gradio가 같이 돌아가는 정도 여유만 있으면 됨).
-- 도메인의 A 레코드가 이 서버의 공인 IP를 가리키도록 설정(DNS 전파는 수 분\~수십 분
+  과한 spec이니 고를 필요 없다. vCPU/메모리는 GPU가 병목이라 4\~8 vCPU면 충분(host
+  쪽에서 embedding 모델 CPU 연산 + nginx + Gradio가 같이 돌아가는 정도 여유만 있으면 됨).
+- domain의 A record가 이 서버의 공인 IP를 가리키도록 설정(DNS 전파는 수 분\~수십 분
   걸릴 수 있음 — `dig <도메인>`으로 확인).
 - **방화벽은 두 겹이다 — 둘 다 해야 한다.** GCP는 OS 방화벽(`ufw`)과 별개로
-  VPC 자체 방화벽(네트워크 레벨, 트래픽이 서버에 도달하기도 전에 막거나 허용)이
+  VPC 자체 방화벽(네트워크 레벨, traffic이 서버에 도달하기도 전에 막거나 허용)이
   있다. `ufw`만 설정하고 GCP 쪽 방화벽 규칙을 안 건드리면, VPC 기본 규칙이 뭘
   허용/차단하느냐에 따라 (a) `ufw`가 막아도 원래 다 막혀 있던 거라 의미가 없거나
-  (b) 반대로 `ufw`로 막았다고 생각한 포트가 VPC 레벨에서 이미 열려 있어서 실제로는
+  (b) 반대로 `ufw`로 막았다고 생각한 port가 VPC 레벨에서 이미 열려 있어서 실제로는
   안 막힐 수 있다 — 둘 다 명시적으로 확인해야 한다.
   ```bash
   # OS 레벨(ufw)
@@ -94,12 +94,12 @@ python scripts/gradio_app.py --port 7860
                                        # 의도치 않게 넓게 열린 규칙이 없는지 확인
   ```
 
-## 0.5) 코드·데이터 이전, 파이썬 환경 준비
+## 0.5) 코드·데이터 이전, Python 환경 준비
 
-**코드+데이터 옮기기**: 이 저장소는 `data_index/`(벡터 DB, 존재 게이트용 엑셀)와
-`output/`(존재 게이트 CSV 폴백)가 전부 `.gitignore` 대상이라 `git clone`만으로는
-안 딸려온다. 별도로 필요한 것만 옮기느니, 로컬에서 검증된 상태 그대로 통째로
-옮기는 게 안전하다(로컬 디렉토리 전체 약 50MB 수준, `.git`/`__pycache__` 제외):
+**코드+데이터 옮기기**: 이 저장소는 `data_index/`(vector DB, 존재 gate용 엑셀)와
+`output/`(존재 gate CSV fallback)가 전부 `.gitignore` 대상이라 `git clone`만으로는
+안 딸려온다. 별도로 필요한 것만 옮기느니, local에서 검증된 상태 그대로 통째로
+옮기는 게 안전하다(local directory 전체 약 50MB 수준, `.git`/`__pycache__` 제외):
 
 ```bash
 rsync -avz --exclude='.git' --exclude='__pycache__' --exclude='.hf_cache' \
@@ -110,7 +110,7 @@ rsync -avz --exclude='.git' --exclude='__pycache__' --exclude='.hf_cache' \
 강제 설정한다. `python-dotenv`가 `override=False`로 불려서 `.env`가 있어도 이미
 설정된 값은 절대 덮어쓰지 않는다.)
 
-**파이썬 환경**: `requirements.txt`로 새 가상환경을 만든다(로컬처럼 팀 공유 conda
+**Python 환경**: `requirements.txt`로 새 가상환경을 만든다(local처럼 팀 공유 conda
 환경에 기대지 않아도 됨):
 
 ```bash
@@ -125,7 +125,7 @@ pip install -r requirements.txt
 
 ## 1) Ollama 실행
 
-Ollama 공식 설치 스크립트(`curl -fsSL https://ollama.com/install.sh | sh`)는 리눅스에서
+Ollama 공식 설치 script(`curl -fsSL https://ollama.com/install.sh | sh`)는 Linux에서
 보통 systemd 서비스(`ollama.service`)를 함께 설치한다. 먼저 이미 떠 있는지 확인:
 
 ```bash
@@ -146,9 +146,9 @@ sudo systemctl enable --now ollama
 systemctl show ollama -p Environment   # OLLAMA_HOST=0.0.0.0가 보이면 반드시 제거
 ```
 
-**병렬 처리(다중 사용자)**: `scripts/gradio_app.py`는 기본적으로 챗봇 인스턴스를
+**병렬 처리(다중 사용자)**: `scripts/gradio_app.py`는 기본적으로 chatbot instance를
 2개(`GRADIO_APP_POOL_SIZE`, 기본값 2) 준비해 테스터 2명까지는 동시에 응답을 생성할
-수 있다. 하지만 이건 앱 쪽 큐일 뿐이고, Ollama 서버 자체도 `OLLAMA_NUM_PARALLEL`을
+수 있다. 하지만 이건 앱 쪽 queue일 뿐이고, Ollama 서버 자체도 `OLLAMA_NUM_PARALLEL`을
 그만큼 올려주지 않으면 Ollama가 내부에서 다시 요청을 직렬화해 버려 체감 이득이 없다.
 systemd로 띄운다면 override로 추가한다:
 
@@ -168,7 +168,7 @@ sudo systemctl restart ollama
 systemctl show ollama -p Environment   # OLLAMA_NUM_PARALLEL=2 확인
 ```
 
-L4(24GB) 기준 모델(\~14GB)을 빼면 \~10GB가 남는데, 병렬 슬롯마다 KV 캐시가 늘어나므로
+L4(24GB) 기준 모델(\~14GB)을 빼면 \~10GB가 남는데, 병렬 slot마다 KV cache가 늘어나므로
 2가 안전한 기본값이다. `GRADIO_APP_POOL_SIZE`와 `OLLAMA_NUM_PARALLEL`은 반드시 같은
 값으로 맞출 것 — 한쪽만 올리면 남는 이득이 없거나(Ollama만 올림) 요청이 쌓이기만
 한다(앱만 올림).
@@ -182,11 +182,11 @@ ollama list   # gpt-oss:20b가 보이면 완료
 
 ## 2) Gradio 앱을 systemd 서비스로 등록
 
-SSH 세션이 끊겨도 계속 돌고, 크래시 시 자동 재시작되도록 systemd unit을 만든다.
+SSH session이 끊겨도 계속 돌고, crash 시 자동 재시작되도록 systemd unit을 만든다.
 `--host 127.0.0.1`로 바인딩해 nginx를 거치지 않은 직접 접근을 막는다.
 
-**인증 필수**: 도메인이 뜨는 순간 이 앱은 인터넷에 공개된다 — `GRADIO_APP_USERNAME`과
-`GRADIO_APP_PASSWORD`를 반드시 설정할 것(프로젝트 루트의 `.env` 또는 아래 `EnvironmentFile`). 안 하면 시작 로그에 경고가 찍히고 그대로 인증 없이 열린다(로컬
+**인증 필수**: domain이 뜨는 순간 이 앱은 인터넷에 공개된다 — `GRADIO_APP_USERNAME`과
+`GRADIO_APP_PASSWORD`를 반드시 설정할 것(프로젝트 root의 `.env` 또는 아래 `EnvironmentFile`). 안 하면 시작 log에 경고가 찍히고 그대로 인증 없이 열린다(local
 단독 확인용 예외 처리이지, 실제 배포에서 무시해도 되는 경고가 아니다). 테스터
 전원이 같은 계정(`.env`에 적은 아이디와 비밀번호)을 공유한다.
 
@@ -211,9 +211,9 @@ RestartSec=5
 WantedBy=multi-user.target
 ```
 
-systemd unit 파일은 보통 다른 로컬 사용자도 읽을 수 있어(`644`), 비밀번호를 위처럼
+systemd unit 파일은 보통 다른 local 사용자도 읽을 수 있어(`644`), 비밀번호를 위처럼
 바로 적기보다 별도 파일로 분리하고 권한을 잠그는 게 더 안전하다(같은 서버를 혼자
-쓰는 전용 인스턴스라면 생략해도 되는 정도지만, 습관으로 들이는 게 낫다):
+쓰는 전용 instance라면 생략해도 되는 정도지만, 습관으로 들이는 게 낫다):
 
 ```bash
 printf 'GRADIO_APP_USERNAME=<아이디>\nGRADIO_APP_PASSWORD=<비밀번호>\n' | sudo tee /etc/rag-gradio.env
@@ -229,14 +229,14 @@ sudo systemctl status rag-gradio      # active (running) 확인
 journalctl -u rag-gradio -f           # 로그 실시간 확인(문제 생기면 여기부터 본다)
 ```
 
-**로깅/텔레메트리 방침**(코드에 이미 반영돼 있어 별도 설정 불필요, 참고용):
+**logging/telemetry 방침**(코드에 이미 반영돼 있어 별도 설정 불필요, 참고용):
 - 모든 질의/답변은 `eval_resources/gradio_query_log.jsonl`에 남는다(👍/👎 안 한
-  것, 오류로 끝난 것 포함) — 피드백 분석용, 로컬에만 저장되고 git에는 안 올라감.
-- HuggingFace Hub로 나가던 임베딩 모델 사용 텔레메트리는 차단돼 있다
+  것, 오류로 끝난 것 포함) — 피드백 분석용, local에만 저장되고 git에는 안 올라감.
+- HuggingFace Hub로 나가던 embedding 모델 사용 telemetry는 차단돼 있다
   (`HF_HUB_DISABLE_TELEMETRY=1`) — 질의 내용과 무관하게 외부로 나가는 사용
   내역이라 별도로 막아둔 것.
 
-## 3) nginx 리버스 프록시 설정
+## 3) nginx reverse proxy 설정
 
 Apache로도 가능하지만(`mod_proxy` + `mod_proxy_wstunnel` 활성화 필요), Gradio는
 실시간 UI 업데이트에 WebSocket을 쓰기 때문에 nginx 쪽이 설정이 더 간단하고 표준적이라
@@ -248,7 +248,7 @@ sudo apt install nginx   # 데비안/우분투 기준
 
 **인증(Basic Auth) — 어차피 nginx를 쓰니 여기서 거는 게 가장 간단하다**: 앱
 자체의 `GRADIO_APP_USERNAME`/`GRADIO_APP_PASSWORD`(2번 항목)도 있지만, 어차피 nginx가 이미
-리버스 프록시로 앞단에 있으니 표준 HTTP Basic Auth로 nginx 레벨에서 막는 게 더
+reverse proxy로 앞단에 있으니 표준 HTTP Basic Auth로 nginx 레벨에서 막는 게 더
 간단하고, 요청이 앱까지 가기도 전에 걸러진다는 장점이 있다(둘 다 걸어도 충돌 없이
 같이 동작함 — nginx가 먼저 막고, 통과하면 앱이 한 번 더 확인).
 
@@ -261,7 +261,7 @@ sudo htpasswd -c /etc/nginx/.htpasswd <아이디>   # 최초 1회는 -c(파일 �
 
 **요청 속도 제한**: 인증을 걸어도 계정 하나를 테스터 전원이 공유하다 보니,
 악의적/실수로 반복 요청이 몰리면 GPU가 계속 점유돼 다른 테스터가 못 쓰게 된다.
-`/etc/nginx/conf.d/rag-gradio-ratelimit.conf`(반드시 `http {}` 컨텍스트, 즉
+`/etc/nginx/conf.d/rag-gradio-ratelimit.conf`(반드시 `http {}` context, 즉
 `sites-available` 파일이 아니라 `conf.d`에 별도로):
 
 ```nginx
@@ -323,8 +323,8 @@ sudo apt install certbot python3-certbot-nginx
 sudo certbot --nginx -d <도메인>
 ```
 
-`--nginx` 플러그인이 위에서 만든 서버 블록을 자동으로 찾아 443 리스너와 인증서
-설정을 추가해 준다(대화형으로 이메일 입력, HTTP→HTTPS 리다이렉트 여부 질문 — 리다이렉트는
+`--nginx` plugin이 위에서 만든 서버 블록을 자동으로 찾아 443 listener와 인증서
+설정을 추가해 준다(대화형으로 이메일 입력, HTTP→HTTPS redirect 여부 질문 — redirect는
 "예"로 해도 된다). 완료 후:
 
 ```bash
@@ -338,15 +338,15 @@ sudo certbot renew --dry-run   # 자동 갱신이 정상 동작하는지 확인(
 
 - [ ] `data_index/chroma_B`, `data_index/나라장터_RFP_메타데이터.xlsx`,
       `output/execution_summary_*.csv`가 서버에 실제로 존재하는가(0.5단계에서
-      rsync 누락되면 DB가 비어 있거나 존재 게이트가 오탐/과탐할 수 있음)
+      rsync 누락되면 DB가 비어 있거나 존재 gate가 오탐/과탐할 수 있음)
 - [ ] `pip install -r requirements.txt`가 가상환경에서 에러 없이 끝났는가
 - [ ] `https://<도메인>`으로 접속되고 인증서 경고가 없는가(브라우저 자물쇠 아이콘)
-- [ ] `http://<도메인>`으로 접속 시 `https://`로 자동 리다이렉트되는가
+- [ ] `http://<도메인>`으로 접속 시 `https://`로 자동 redirect되는가
 - [ ] `https://<도메인>` 접속 시 브라우저 기본 Basic Auth 팝업이 뜨는가(nginx
       `.htpasswd`) — **인증 없이 화면이 바로 열리면 배포하지 말 것**. 앱 자체의
       `GRADIO_APP_USERNAME`/`GRADIO_APP_PASSWORD`를 같이 걸었다면 nginx 인증 통과 후 Gradio
       로그인 화면이 한 번 더 뜨는지도 확인(안 뜨면 `journalctl -u rag-gradio`에
-      경고 로그가 있는지 확인)
+      경고 log가 있는지 확인)
 - [ ] 외부에서 `curl http://<서버IP>:7860`, `curl http://<서버IP>:11434`가 **막혀야** 정상
       (ufw뿐 아니라 `gcloud compute firewall-rules list`로 VPC 레벨도 함께 확인)
 - [ ] `systemctl status ollama rag-gradio nginx` 셋 다 active (running)
@@ -354,4 +354,4 @@ sudo certbot renew --dry-run   # 자동 갱신이 정상 동작하는지 확인(
       (다중 사용자 병렬 처리를 실제로 켜고 싶다면)
 - [ ] 재부팅 후에도 세 서비스가 자동으로 다시 뜨는가(`sudo reboot` 후 확인 — 테스트
       환경이면 한 번은 실제로 재부팅해 보는 걸 권장)
-- [ ] `TEST_SCENARIOS.md` 위쪽 테스트 문항을 실제 도메인 URL로 한 번 더 확인
+- [ ] `TEST_SCENARIOS.md` 위쪽 테스트 문항을 실제 domain URL로 한 번 더 확인

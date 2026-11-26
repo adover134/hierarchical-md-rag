@@ -1,7 +1,7 @@
-# m1 반복 20회 (main 프로세스 × 최신 DB, 단계별 기록)
+# m1 반복 20회 (main process × 최신 DB, 단계별 기록)
 
 목적: `dbcmp5`에서 main × 최신 DB의 m1 답변이 도입 한 줄만 남고 잘린 원인을 단계별 기록으로 찾는다.
-조건: `HWP_RAG_ANSWER_STRATEGY=two_stage`, `CSV_SHORTCIRCUIT_ENABLED=false`, `HWP_RAG_FORCE_RETRIEVAL=1`, 로컬 `gpt-oss:20b`, `top_k=5`. 질문: m1(SRT 감속기 모터피니언기어 구매 입찰의 낙찰자 결정 기준). 정답의 주된 값은 `82.495`.
+조건: `HWP_RAG_ANSWER_STRATEGY=two_stage`, `CSV_SHORTCIRCUIT_ENABLED=false`, `HWP_RAG_FORCE_RETRIEVAL=1`, local `gpt-oss:20b`, `top_k=5`. 질문: m1(SRT 감속기 모터피니언기어 구매 입찰의 낙찰자 결정 기준). 정답의 주된 값은 `82.495`.
 원본 기록: [`m1_repeat_trace.json`](m1_repeat_trace.json) (회차별 답변, 소요 시간, LLM 호출과 후처리 단계의 출력, `finish_reason`).
 
 ## 결과 (측정값)
@@ -14,6 +14,6 @@
 ## 읽는 법 (해석, 측정값과 구분)
 
 - `dbcmp5`의 잘림은 재현되지 않았다. 원인(생성이 도입 한 줄에서 멈춤, 또는 다듬기 단계가 도입 한 줄만 돌려줌)은 확정하지 못했다.
-- 1번째 실행의 빈 출력은 모델이 처음 올라올 때(콜드 스타트)의 일시적 문제로 보이지만 확인하지는 않았다. 의도 분류 호출이라 답변 자체에는 영향이 없었다.
-- 같은 조건 `dbcmp6`의 main/멀티 칸에서도 m1은 모두 정상이었다. 잘림은 드물게 나타나는 일시적 현상일 가능성이 있다.
+- 1번째 실행의 빈 출력은 모델이 처음 올라올 때(cold start)의 일시적 문제로 보이지만 확인하지는 않았다. 의도 분류 호출이라 답변 자체에는 영향이 없었다.
+- 같은 조건 `dbcmp6`의 main/multi 칸에서도 m1은 모두 정상이었다. 잘림은 드물게 나타나는 일시적 현상일 가능성이 있다.
 - 이후 실행은 단계별 기록(`--run-id`의 raw 결과 안 `trace`)을 남기므로, 다시 나타나면 어느 단계가 짧아졌는지 바로 볼 수 있다.

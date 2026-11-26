@@ -50,15 +50,15 @@ nav button{font:inherit;color:var(--fg);background:var(--card);border:1px solid 
 
 <section class="slide">
   <h2>구조 한눈에</h2>
-  <div class="flow"><div class="box">HWP / HWPX</div><span class="arrow">→</span><div class="box">파서 (skill / service)</div><span class="arrow">→</span><div class="box hl">Markdown</div></div>
-  <div class="flow"><div class="box">PDF</div><span class="arrow">→</span><div class="box">PDF 로더(내장)</div><span class="arrow">→</span><div class="box hl">Markdown</div></div>
+  <div class="flow"><div class="box">HWP / HWPX</div><span class="arrow">→</span><div class="box">parser (skill / service)</div><span class="arrow">→</span><div class="box hl">Markdown</div></div>
+  <div class="flow"><div class="box">PDF</div><span class="arrow">→</span><div class="box">PDF loader(내장)</div><span class="arrow">→</span><div class="box hl">Markdown</div></div>
   <div class="flow"><div class="box hl">Markdown</div><span class="arrow">→</span><div class="box">DB 구축</div><span class="arrow">→</span><div class="box">ChromaDB</div><span class="arrow">→</span><div class="box">질의응답</div><span class="arrow">→</span><div class="box">API / Gradio</div></div>
-  <p class="sub">입력은 항상 Markdown이다. HWP를 Markdown으로 바꾸는 일은 파서 저장소를 활용한다.</p>
+  <p class="sub">입력은 항상 Markdown이다. HWP를 Markdown으로 바꾸는 일은 parser 저장소를 활용한다.</p>
 </section>
 
 <section class="slide">
   <h2>DB 만들기</h2>
-  <div class="flow"><div class="box">표 평탄화</div><span class="arrow">→</span><div class="box">텍스트 정리</div><span class="arrow">→</span><div class="box">섹션 분할</div><span class="arrow">→</span><div class="box">청크 1,000자 / 겹침 200자</div><span class="arrow">→</span><div class="box">임베딩 + 저장</div></div>
+  <div class="flow"><div class="box">표 평탄화</div><span class="arrow">→</span><div class="box">텍스트 정리</div><span class="arrow">→</span><div class="box">섹션 분할</div><span class="arrow">→</span><div class="box">chunk 1,000자 / 겹침 200자</div><span class="arrow">→</span><div class="box">embedding + 저장</div></div>
   <ul>
     <li>표 한 줄이 <b>구분: 송림리, 기초금액: 285,125,000</b>처럼 풀린다.</li>
     <li>같은 내용이면 덮어쓰고(upsert), 내용이 바뀌면 새 문서로 본다.</li>
@@ -68,7 +68,7 @@ nav button{font:inherit;color:var(--fg);background:var(--card);border:1px solid 
 <section class="slide">
   <h2>질문 한 건의 흐름</h2>
   <div class="flow"><div class="box">질문 분석</div><span class="arrow">→</span><div class="box">순위·탐색은 엑셀로 바로 답</div></div>
-  <div class="flow"><div class="box">기관 필터</div><span class="arrow">→</span><div class="box">후보 풀(요청×15, 최소 150)</div><span class="arrow">→</span><div class="box">재정렬 0.6 밀집 + 0.4 낱말</div><span class="arrow">→</span><div class="box">답변</div></div>
+  <div class="flow"><div class="box">기관 필터</div><span class="arrow">→</span><div class="box">후보 pool(요청×15, 최소 150)</div><span class="arrow">→</span><div class="box">재정렬 0.6 밀집 + 0.4 낱말</div><span class="arrow">→</span><div class="box">답변</div></div>
   <p>답변 방식 두 가지</p>
   <ul>
     <li><b>two_stage</b>: 근거를 정리한 뒤 답한다(기본).</li>
@@ -78,10 +78,10 @@ nav button{font:inherit;color:var(--fg);background:var(--card);border:1px solid 
 
 <section class="slide">
   <h2>어떻게 평가했나</h2>
-  <p><b>프로세스 3가지 × DB 2가지 = 6칸</b>, 같은 질문 40개(문서 57건)</p>
-  <div class="flow"><div class="box">팀 프로세스</div><div class="box">main two_stage</div><div class="box">multi-agent</div><span class="arrow">×</span><div class="box">팀 DB</div><div class="box">현재 DB</div></div>
+  <p><b>process 3가지 × DB 2가지 = 6칸</b>, 같은 질문 40개(문서 57건)</p>
+  <div class="flow"><div class="box">팀 process</div><div class="box">main two_stage</div><div class="box">multi-agent</div><span class="arrow">×</span><div class="box">팀 DB</div><div class="box">현재 DB</div></div>
   <ul>
-    <li>답변은 로컬 모델이 만들고, 채점은 <b>항상 Claude</b>(서브에이전트)가 한다.</li>
+    <li>답변은 local 모델이 만들고, 채점은 <b>항상 Claude</b>(subagent)가 한다.</li>
     <li>채점자는 어느 시스템의 답인지 모른다.</li>
   </ul>
 </section>
@@ -89,13 +89,13 @@ nav button{font:inherit;color:var(--fg);background:var(--card);border:1px solid 
 <section class="slide">
   <h2>결과: 정답 점수 (5점 만점)</h2>
   <table>
-    <tr><th>프로세스</th><th>팀 DB</th><th>현재 DB</th></tr>
-    <tr><td>팀 프로세스</td><td class="n">1.225</td><td class="n">1.075</td></tr>
+    <tr><th>process</th><th>팀 DB</th><th>현재 DB</th></tr>
+    <tr><td>팀 process</td><td class="n">1.225</td><td class="n">1.075</td></tr>
     <tr><td>main (two_stage)</td><td class="n">4.775</td><td class="n">4.900</td></tr>
-    <tr><td>멀티 에이전트</td><td class="n">5.000</td><td class="n">5.000</td></tr>
+    <tr><td>multi-agent</td><td class="n">5.000</td><td class="n">5.000</td></tr>
   </table>
-  <p><span class="ok">프로세스가 점수를 올렸다</span>(+3.6~+3.8, p &lt; 0.001).
-  <br>main → 멀티 에이전트와 DB 교체 효과는 우연과 구분되지 않았다.</p>
+  <p><span class="ok">process가 점수를 올렸다</span>(+3.6~+3.8, p &lt; 0.001).
+  <br>main → multi-agent와 DB 교체 효과는 우연과 구분되지 않았다.</p>
 </section>
 
 <section class="slide">
@@ -103,10 +103,10 @@ nav button{font:inherit;color:var(--fg);background:var(--card);border:1px solid 
   <table>
     <tr><th>지표</th><th>팀 DB</th><th>현재 DB</th><th></th></tr>
     <tr><td>표 짝 유지(60쌍)</td><td class="n">23.3%</td><td class="n">100%</td><td class="ok">나아짐</td></tr>
-    <tr><td>청크 누락 coverage</td><td class="n">0.938</td><td class="n">0.978</td><td class="ok">나아짐</td></tr>
-    <tr><td>순수 밀집 풀 Recall@360</td><td class="n">0.957</td><td class="n">0.938</td><td class="warn">나아지지 않음</td></tr>
+    <tr><td>chunk 누락 coverage</td><td class="n">0.938</td><td class="n">0.978</td><td class="ok">나아짐</td></tr>
+    <tr><td>순수 밀집 pool Recall@360</td><td class="n">0.957</td><td class="n">0.938</td><td class="warn">나아지지 않음</td></tr>
   </table>
-  <p class="sub">표 처리와 누락 방지는 좋아졌지만, 임베딩만으로 찾는 능력은 같거나 약간 낮다.</p>
+  <p class="sub">표 처리와 누락 방지는 좋아졌지만, embedding만으로 찾는 능력은 같거나 약간 낮다.</p>
 </section>
 
 <section class="slide">
@@ -120,13 +120,13 @@ nav button{font:inherit;color:var(--fg);background:var(--card);border:1px solid 
 </section>
 
 <section class="slide">
-  <h2>버전과 브랜치</h2>
+  <h2>버전과 branch</h2>
   <table>
     <tr><th>버전</th><th>내용</th></tr>
-    <tr><td>1.0</td><td>팀 프로젝트에 전용 로더·계층 청킹·답변 전략 추가</td></tr>
-    <tr><td>1.1.0</td><td>표 평탄화, 키워드·기관 사전, 후보 풀·기관 필터 수정</td></tr>
+    <tr><td>1.0</td><td>팀 프로젝트에 전용 loader·계층 chunking·답변 전략 추가</td></tr>
+    <tr><td>1.1.0</td><td>표 평탄화, 키워드·기관 사전, 후보 pool·기관 필터 수정</td></tr>
     <tr><td>1.2.0</td><td>채점 규칙 v2로 전 칸 재채점</td></tr>
-    <tr><td>1.3.0</td><td>엑셀 기반 메타데이터 단계, DB 재구축</td></tr>
+    <tr><td>1.3.0</td><td>엑셀 기반 metadata 단계, DB 재구축</td></tr>
   </table>
   <p><b>multi-agent</b>: 최신(평가 도구·결과 문서 포함) · <b>main</b>: two_stage 경로만</p>
   <p class="sub">자세한 내용은 docs/ 폴더의 01~09 문서를 본다.</p>
