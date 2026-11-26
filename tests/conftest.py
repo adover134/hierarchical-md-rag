@@ -9,3 +9,6 @@ import sys
 _REPO_ROOT = os.path.join(os.path.dirname(__file__), "..")
 sys.path.insert(0, os.path.join(_REPO_ROOT, "scripts"))
 sys.path.insert(0, _REPO_ROOT)
+
+# .env에 Langfuse 키가 있어도 테스트 실행은 기록하지 않는다(load_dotenv는 이미 있는 값을 덮어쓰지 않는다).
+os.environ["LANGFUSE_TRACING_ENABLED"] = "false"

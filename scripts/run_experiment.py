@@ -266,7 +266,7 @@ def cmd_query(cfg: dict, args: argparse.Namespace) -> None:
         run([sys.executable, str(Path(__file__).resolve()), "_execute",
              "--project-root", str(root), "--questions", str(questions), "--out", str(out),
              "--top-k", str(cfg["top_k"]), "--repeat", str(repeat)],
-            cwd=root, env=system_env(cfg, system), log=None)
+            cwd=root, env={**system_env(cfg, system), "HWP_RAG_TRACE_SESSION": f"{args.run_id}:{system['name']}"}, log=None)
 
 
 # 중간 초안 기록: 프로세스 코드는 건드리지 않고 LLM 호출(입력·출력·종료 사유)과 답변 후처리 단계의 출력을 질문별로 모은다.
@@ -350,6 +350,7 @@ def _execute(args: argparse.Namespace) -> None:
     for rep in range(args.repeat):
         for i, q in enumerate(questions, 1):
             print(f"[rep {rep + 1}/{args.repeat}] [{i}/{len(questions)}] {q['dataset']}:{q['id']} {q['question'][:50]}", flush=True)
+            os.environ["HWP_RAG_TRACE_LABEL"] = f"{q['dataset']}:{q['id']}#{rep + 1}"  # Langfuse에서 문항을 구분
             t0 = time.time()
             trace.clear()
             rec: dict[str, Any] = {"dataset": q["dataset"], "id": q["id"], "question": q["question"], "repeat": rep + 1}
@@ -699,6 +700,7 @@ def main() -> None:
     ap.add_argument("--systems", nargs="*", help="특정 시스템만(예: team_final current_default)")
     ap.add_argument("--limit", type=int, help="데이터셋별 앞 N문항만(드라이런용)")
     ap.add_argument("--repeat", type=int, help="config의 repeat를 덮어씀")
+    ap.add_argument("--model", help="config의 llm.model을 덮어씀(예: 비용 측정용 gpt-oss:20b-batch256)")
     ap.add_argument("--tag", help="parsing: 결과 파일 이름 꼬리표(예: before/after)")
     ap.add_argument("--write", action="store_true", help="report: EXPERIMENTS.md 결과 절에 기록")
     # 내부용
@@ -713,6 +715,8 @@ def main() -> None:
 
     sys.path.insert(0, str(REPO_ROOT))
     cfg = load_config(Path(args.config))
+    if args.model:
+        cfg["llm"]["model"] = args.model
     args.run_id = args.run_id or _dt.datetime.now().strftime("%Y%m%d_%H%M%S")
     print(f"run_id={args.run_id}")
     steps = {
