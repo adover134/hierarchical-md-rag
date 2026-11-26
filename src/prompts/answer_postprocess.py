@@ -115,8 +115,12 @@ def format_answer_for_readability(
     answer: str,
     style: str = "concise",
     looks_incomplete_clause_fn: Callable[[str], bool] | None = None,
+    keep_list: bool = False,
 ) -> str:
-    """답변을 읽기 쉬운 자연문장(최종 사용자용)으로 정규화합니다."""
+    """답변을 읽기 쉬운 자연문장(최종 사용자용)으로 정규화합니다.
+
+    keep_list는 결과가 다듬기(최종 생성)의 입력일 때 켠다. 답이 목록에 있으면 줄 수를 제한하지 않는다.
+    """
     text = (answer or "").replace("\r\n", "\n").strip()
     if not text:
         return ""
@@ -318,7 +322,7 @@ def format_answer_for_readability(
             deduped.append(cleaned)
         return deduped
 
-    list_answer = find_list_answer(text)
+    list_answer = find_list_answer(text) if keep_list else None
     if list_answer:
         head = _dedupe([line for line in list_answer[0] if not _is_source_line(line)])
         body = []
@@ -419,10 +423,13 @@ def compact_answer_sections(
     answer: str,
     style: str = "concise",
     format_answer_for_readability_fn: Callable[[str, str], str] | None = None,
+    keep_list: bool = False,
 ) -> str:
     normalized_style = str(style).lower()
     answer_style = "guide" if normalized_style in {"guide", "descriptive"} else "concise"
-    formatter = format_answer_for_readability_fn or format_answer_for_readability
+    formatter = format_answer_for_readability_fn or (
+        lambda value, value_style: format_answer_for_readability(value, value_style, keep_list=keep_list)
+    )
     text = formatter(answer, answer_style)
     lines = [
         unicodedata.normalize("NFKC", str(raw_line or "")).strip()
@@ -440,7 +447,7 @@ def compact_answer_sections(
     ]
     if not lines:
         return ""
-    if find_list_answer("\n".join(lines)):
+    if keep_list and find_list_answer("\n".join(lines)):
         return "\n".join(lines)
 
     if answer_style == "guide":

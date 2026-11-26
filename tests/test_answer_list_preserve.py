@@ -33,15 +33,15 @@ def _items(text):
 
 @pytest.mark.parametrize("draft, count", [(N16, 3), (M1, 4), (N4, 3)])
 def test_list_answer_keeps_every_item_and_survives_repeated_processing(draft, count):
-    once = format_answer_for_readability(draft)
+    once = format_answer_for_readability(draft, keep_list=True)
 
     assert len(_items(once)) == count
-    assert format_answer_for_readability(once) == once
-    assert compact_answer_sections(once) == once
+    assert format_answer_for_readability(once, keep_list=True) == once
+    assert compact_answer_sections(once, keep_list=True) == once
 
 
 def test_sentence_after_the_list_is_not_part_of_it():
-    assert "최종 낙찰자가 선정" not in format_answer_for_readability(M1)
+    assert "최종 낙찰자가 선정" not in format_answer_for_readability(M1, keep_list=True)
 
 
 def test_indented_line_belongs_to_the_item_above_it():
@@ -52,7 +52,7 @@ def test_indented_line_belongs_to_the_item_above_it():
 
 def test_answer_in_the_first_sentence_is_still_shortened():
     assert find_list_answer(N7) is None
-    out = format_answer_for_readability(N7)
+    out = format_answer_for_readability(N7, keep_list=True)
     assert not _items(out) and len(out.splitlines()) <= 2
 
 
@@ -60,7 +60,7 @@ def test_section_labels_are_not_treated_as_a_list_intro():
     assert find_list_answer("핵심 답변: 60일\n근거 요약:\n- 착공일 기준\n- 공고문 p.1") is None
 
 
-def _run_answer(draft, polish_output, query="설치대수는 몇 기인가요?", evidence="", prompts=None):
+def _run_answer(draft, polish_output, query="설치대수는 몇 기인가요?", evidence="", prompts=None, mode="generative"):
     """초안이 answer()의 마지막 처리 전체(최종 생성, 근거 검사, 말투)를 거치게 한다."""
     bot = RAGChatbotV17.__new__(RAGChatbotV17)
     bot.vector_store = SimpleNamespace(last_search_results=[])
@@ -68,7 +68,7 @@ def _run_answer(draft, polish_output, query="설치대수는 몇 기인가요?",
         parse=lambda q: SimpleNamespace(org_name=None, query_type="ranking", confidence=1.0))
     bot._extract_org_names_from_query = lambda *a, **k: []
     bot._handle_ranking_query = lambda intent: {
-        "answer": draft, "answer_mode": "generative", "evidence": [{"text": evidence or draft}]}
+        "answer": draft, "answer_mode": mode, "evidence": [{"text": evidence or draft}]}
     bot._build_visual_attachments = lambda **k: []
     bot._is_visual_intent_query = lambda q: False
     bot._serialize_retrieved_docs = lambda results: []
@@ -155,3 +155,20 @@ def test_every_item_is_required_when_no_item_has_a_number():
 
     required = _required_block(prompts[0])
     assert "입찰서" in required and "사업자등록증" in required
+
+
+LONG = "제출 서류는 다음과 같습니다.\n" + "\n".join(f"- 서류 {i}호" for i in range(1, 11))
+
+
+@pytest.mark.parametrize("mode, query, max_lines", [
+    ("extractive", "제출 서류는 무엇인가요?", 2),   # 생성형이 아닌 답
+    ("generative", "사업범위를 알려주세요", 6),     # 요약 질문은 설명형이라 6줄까지
+])
+def test_answer_that_skips_polishing_is_limited_even_if_it_is_a_list(mode, query, max_lines):
+    prompts = []
+
+    final = _run_answer(LONG, "쓰이면 안 되는 문장", query=query, prompts=prompts, mode=mode)
+
+    assert not prompts
+    assert len(final.splitlines()) <= max_lines
+    assert "서류 10호" not in final
