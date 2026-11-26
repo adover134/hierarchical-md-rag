@@ -126,6 +126,7 @@ python scripts/gradio_app.py
 | 7 | [결과](docs/07_결과.md) | 무엇이 점수를 바꿨는가, 믿어도 되는 범위 |
 | 8 | [버전과 브랜치](docs/08_버전과_브랜치.md) | 버전별 변화, 브랜치 차이 |
 | 9 | [용어집](docs/09_용어집.md) | 문서에 나온 말의 뜻 |
+| 필요할 때 | [질의 비용 측정](docs/11_비용측정.md) | 시간과 토큰 비용, 측정 방법과 개발 환경(GPU 메모리 8GB) |
 | 요약 | [발표.html](docs/발표.html) | 브라우저에서 여는 슬라이드 요약(← → 키) |
 | 기록 | [`EXPERIMENTS.md`](EXPERIMENTS.md) | 실험 전 과정과 측정값 |
 | 기록 | [채점 규칙](docs/judge_rules.md), [채점기 개선](docs/judge_improvement.md), [버그 수정](docs/BUGFIXES.md) | 채점과 수정의 상세 기록 |
