@@ -13,6 +13,42 @@ def normalize_answer_for_compare(answer: str) -> str:
     return normalized
 
 
+_LIST_ITEM = re.compile(r"^[ \t]*(?P<mark>[-*•‣▪◦]\s+|\d{1,2}[.)]\s+|[①-⑳]\s*|[가-하][.)]\s+)(?P<body>.*)$")
+# 목록을 여는 문장: 답이 이어지는 목록에 있다.
+_LIST_INTRO = re.compile(r"다음과\s*같|아래와\s*같|[:：][\s*]*$|총[\s*]*\d")
+_SECTION_HEADING = re.compile(r"^(?:#{1,6}\s*)?\[?(?:핵심 답변|근거 요약|근거|출처)\]?\s*(?::|$)")
+
+
+def find_list_answer(text: str) -> tuple[list[str], list[str]] | None:
+    """답이 목록에 있는 글이면 (목록 앞 문장들, 항목들)을 돌려준다.
+
+    목록은 첫 표식 줄에서 시작하고, 표식도 들여쓰기도 없는 첫 글줄이나 글의 끝에서 끝난다.
+    빈 줄은 건너뛰고, 들여쓴 줄은 앞 항목에 붙인다.
+    """
+    lines = (text or "").replace("\r\n", "\n").split("\n")
+    start = next((i for i, line in enumerate(lines) if _LIST_ITEM.match(line)), None)
+    if start is None:
+        return None
+    normalized = [unicodedata.normalize("NFKC", line).strip() for line in lines]
+    head = [line for line in normalized[:start] if line]
+    if not head or not _LIST_INTRO.search(head[-1]) or any(_SECTION_HEADING.match(line) for line in normalized):
+        return None
+    items: list[str] = []
+    for line, clean in zip(lines[start:], normalized[start:]):
+        if not clean:
+            continue
+        match = _LIST_ITEM.match(line)
+        if match:
+            mark = match["mark"].strip()
+            mark = mark if mark[-1] in ".)" else "-"
+            items.append(f"{mark} {unicodedata.normalize('NFKC', match['body']).strip()}")
+        elif line[0] in " \t":
+            items[-1] = f"{items[-1]} {clean}"
+        else:
+            break
+    return head, items
+
+
 def enforce_honorific_tone(answer: str) -> str:
     """최종 답변의 문장 어미를 존댓말 중심으로 정규화합니다."""
     text = unicodedata.normalize("NFKC", str(answer or "")).strip()
@@ -282,6 +318,18 @@ def format_answer_for_readability(
             deduped.append(cleaned)
         return deduped
 
+    list_answer = find_list_answer(text)
+    if list_answer:
+        head = _dedupe([line for line in list_answer[0] if not _is_source_line(line)])
+        body = []
+        for item in list_answer[1]:
+            mark, content = item.split(" ", 1)
+            content = _clean_item(f"- {content}")  # 앞의 강조 표시(**)가 표식으로 지워지지 않게 한다.
+            if content and not _is_source_line(content):
+                body.append(f"{mark} {content}")
+        if head and body:
+            return "\n".join(head + body)
+
     core_limit = 3 if answer_style == "guide" else 2
     evidence_limit = 6 if answer_style == "guide" else 2
     core_items = [_trim_item(item, 320 if answer_style == "guide" else 280) for item in _dedupe(sections["핵심 답변"])][:core_limit]
@@ -392,6 +440,8 @@ def compact_answer_sections(
     ]
     if not lines:
         return ""
+    if find_list_answer("\n".join(lines)):
+        return "\n".join(lines)
 
     if answer_style == "guide":
         trimmed = [re.sub(r"\s+", " ", line).strip() for line in lines if line.strip()]

@@ -84,6 +84,7 @@ from src.parsers.csv_runtime_utils import (
 from src.prompts.answer_postprocess import (
     compact_answer_sections as prompt_compact_answer_sections,
     enforce_honorific_tone as prompt_enforce_honorific_tone,
+    find_list_answer as prompt_find_list_answer,
     format_answer_for_readability as prompt_format_answer_for_readability,
     normalize_answer_for_compare as prompt_normalize_answer_for_compare,
 )
@@ -4075,7 +4076,12 @@ class RAGChatbotV17:
                                     polished_final = f"{lines[0]} {lines[1]}".strip()
                                 else:
                                     polished_final = lines[0]
-                    if "\n" in polished_final and not answer_is_comparison_shaped:
+                    # 최종 생성이 실패해 목록이 그대로 남은 답은 둘째 줄부터 버리지 않는다.
+                    if (
+                        "\n" in polished_final
+                        and not answer_is_comparison_shaped
+                        and not prompt_find_list_answer(polished_final)
+                    ):
                         lines = [ln.strip() for ln in polished_final.splitlines() if ln.strip()]
                         if len(lines) >= 2:
                             norm0 = re.sub(r"[^0-9a-zA-Z가-힣]+", "", unicodedata.normalize("NFKC", lines[0].lower()))
@@ -4534,6 +4540,16 @@ class RAGChatbotV17:
             f"[질문]\n{query}\n\n"
             f"[기존 답변]\n{raw_answer}\n"
         )
+        # 답이 목록에 있으면, 문장 길이 지시 때문에 항목이 빠지지 않도록 필수 내용으로 따로 준다.
+        list_answer = prompt_find_list_answer(raw_formatted)
+        if list_answer:
+            prompt = prompt.replace(
+                "- 단답형 질의이므로 핵심 답을 1~2문장으로 짧게 제시할 것.\n",
+                "- 1~2문장으로 쓰되, [답에 반드시 담을 내용]의 대상과 값을 하나도 빼지 말고 문장 안에 짝지어 넣을 것.\n",
+            )
+            # 부가 설명이 답에 섞이지 않게 숫자(날짜 포함)가 있는 항목만 요구한다. 숫자가 하나도 없는 목록은 전부 요구한다.
+            numbered = [item for item in list_answer[1] if re.search(r"\d", item.split(" ", 1)[1])]
+            prompt += "\n[답에 반드시 담을 내용]\n" + "\n".join(numbered or list_answer[1]) + "\n"
         try:
             from langchain_core.messages import HumanMessage, SystemMessage
 
