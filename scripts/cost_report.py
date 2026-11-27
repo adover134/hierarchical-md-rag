@@ -60,7 +60,7 @@ def fetch(session: str, hours: float) -> list[dict]:
     rows: list[dict] = []
     cursor = None
     while True:
-        page = api.get_many(fields="core,basic,usage,metadata,io,model,time,trace_context",
+        page = api.get_many(fields="core,basic,usage,metadata,io,model,time,metrics,trace_context",  # latency는 metrics에 있다
                             from_start_time=since, limit=100, cursor=cursor)
         rows += [o if isinstance(o, dict) else o.dict() for o in page.data]
         meta = page.meta if isinstance(page.meta, dict) else page.meta.dict()
