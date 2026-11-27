@@ -424,6 +424,21 @@ def _chunk_lookup(chunks: list[dict]) -> dict[str, dict]:
     return {c["id"]: c for c in chunks}
 
 
+def team_retrieval_metrics(docs: list[dict], ground_truth: dict, k: int) -> dict[str, Any]:
+    """팀 평가 코드의 검색 지표(문서 Recall@K, 문서 순위, chunk Recall@K). chunk 라벨이 없으면 chunk Recall은 None이다."""
+    from src.evaluation import metrics as M
+
+    gt_sources = ground_truth.get("sources", [])
+    # 단축 경로의 문서 이름에 붙는 `step2_audited_` 접두를 떼고 정답 문서 이름과 비교한다.
+    retrieved_for_metrics = [{"source": str(d.get("source") or "").removeprefix("step2_audited_"), "page": d.get("page"), "score": d.get("score", 0.0)} for d in docs]
+    labels = {key: ground_truth.get(key, []) for key in ("chunk_uids", "chunk_ids", "chunks", "chunk_orders")}
+    return {
+        "source_hit_position": M.calculate_hit_position(retrieved_for_metrics, gt_sources) if gt_sources else None,
+        "source_recall": M.calculate_recall_at_k(retrieved_for_metrics, gt_sources, k=k) if gt_sources else None,
+        "chunk_recall": M.calculate_recall_at_k_chunk(docs, labels, k=k),
+    }
+
+
 def cmd_evaluate(cfg: dict, args: argparse.Namespace) -> None:
     sys.path.insert(0, str(REPO_ROOT))
     from src.evaluation import metrics as M
@@ -433,6 +448,9 @@ def cmd_evaluate(cfg: dict, args: argparse.Namespace) -> None:
     rd = run_dir(cfg, args.run_id)
     k = cfg["top_k"]
     items = {(i["dataset"], i["id"]): i for i in load_eval_items(cfg)}
+    # chunk 라벨은 DB마다 다르다. 현재 DB에 맞춰 다시 만든 평가셋 사본(--chunk-labels)이 있을 때만 chunk Recall을 계산한다.
+    chunk_labels = {q["id"]: q["ground_truth"] for path in (getattr(args, "chunk_labels", None) or [])
+                    for q in yaml.safe_load(Path(path).read_text(encoding="utf-8"))}
     tags = cfg.get("tags", {})
     reg = {(ds, i) for ds, ids in (tags.get("regression") or {}).items() for i in ids}
     numeric = {(ds, i): spec for ds, group in (tags.get("numeric_compare") or {}).items() for i, spec in group.items()}
@@ -472,8 +490,9 @@ def cmd_evaluate(cfg: dict, args: argparse.Namespace) -> None:
 
             key_values = M.extract_key_values(expected)
             kv_pos = M.calculate_key_value_hit_position(texts, key_values) if key_values else None
-            retrieved_for_metrics = [{"source": d.get("source"), "page": d.get("page"), "score": d.get("score", 0.0)} for d in docs]
-            hit_pos = M.calculate_hit_position(retrieved_for_metrics, gt_sources) if gt_sources else None
+            labelled = chunk_labels.get(rec["id"], {})
+            retrieval = team_retrieval_metrics(docs, {**{key: labelled.get(key, []) for key in ("chunk_uids", "chunk_orders")},
+                                                      "sources": gt_sources}, k)
             header_meta = [lookup.get(str(d.get("chunk_id")), {}) for d in docs]
 
             row = {
@@ -486,7 +505,7 @@ def cmd_evaluate(cfg: dict, args: argparse.Namespace) -> None:
                 "key_values": key_values,
                 "kv_eligible": bool(key_values),
                 "kv_hit_position": kv_pos,
-                "source_hit_position": hit_pos,
+                **retrieval,
                 "header_inclusion": M.calculate_header_inclusion_rate(header_meta, k) if chunks else None,
                 "regression": (rec["dataset"], rec["id"]) in reg,
                 "latencies": rec.get("latencies", {}),
@@ -575,6 +594,14 @@ def aggregate(per_query: list[dict], cfg: dict, table_samples: list[dict], chunk
         "context_hit_at_3": M.calculate_context_hit_rate(positions, 3), "context_hit_at_5": M.calculate_context_hit_rate(positions, k),
         "kv_mrr": M.calculate_key_value_mrr(positions), "kv_eligible_n": len(elig),
         "source_mrr": round(M.calculate_mrr([r["source_hit_position"] for r in ok]), 4) if ok else None,
+        "source_recall_at_k": round(M.calculate_recall_at_k_summary([r["source_recall"] for r in ok]), 4) if ok else None,
+        "chunk_recall_at_k": _mean([r["chunk_recall"] for r in ok]),
+        "chunk_recall_labeled_n": sum(r["chunk_recall"] is not None for r in ok),
+        "chunk_recall_at_k_searched": _mean([r["chunk_recall"] for r in ok if not r["csv_short_circuit"]]),
+        "chunk_recall_searched_n": sum(r["chunk_recall"] is not None and not r["csv_short_circuit"] for r in ok),
+        "answer_coverage_all": _mean([r["answer_coverage"] for r in ok]),
+        "faithfulness_all": _mean([r["faithfulness"] for r in ok]),
+        "context_relevance_all": _mean([r["context_relevance"] for r in ok]),
         "header_inclusion": _mean([r["header_inclusion"] for r in ok]),
         "table_pair_accuracy": table_acc, "table_pairs_n": table_n,
         "chunk_docs_indexed": len(doc_keys) if chunks else None, "chunk_count": len(chunks) or None,
@@ -706,6 +733,7 @@ def main() -> None:
     # 내부용
     ap.add_argument("--project-root"); ap.add_argument("--questions"); ap.add_argument("--out")
     ap.add_argument("--top-k", type=int)
+    ap.add_argument("--chunk-labels", nargs="*", help="evaluate: 현재 DB에 맞춘 평가셋 사본(chunk 라벨)")
     args = ap.parse_args()
 
     if args.command == "_execute":
