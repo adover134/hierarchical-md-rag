@@ -1,5 +1,8 @@
 # 성능 비교 실험
 
+> **기록 문서다.** 여기의 점수와 측정값은 적힌 실행과 버전 시점의 값이고 현재 값이 아니다.</br>
+    현재 점수와 비용은 [07 결과](docs/07_결과.md)의 "현재 결과" 한 곳에만 있다.
+
 팀 프로젝트 최종 RAG와 이 저장소의 두 가지 답변 방식을 **같은 문서·같은 평가셋·같은 local LLM**으로 측정해
 비교한다. 설정은 [`experiments/config.yaml`](experiments/config.yaml), 실행기는
 [`scripts/run_experiment.py`](scripts/run_experiment.py)이다.
@@ -477,7 +480,7 @@ process의 검색 함수(`_retrieve_results`, 재정렬 포함)로 40문항을 �
 
 ### 1.2 최종 수치: rubric v2 재채점 (채점: Claude subagent)
 
-보고한 칸을 모두 rubric v2([`docs/judge_rules.md`](docs/judge_rules.md))로 다시 채점했다(경과와 검증은 [`docs/judge_improvement.md`](docs/judge_improvement.md)). 이전(v1) 점수는 `judge_cache_v1_ref/`에 있다. **이 절의 수치가 최종값이고, 아래 3×2 비교, 단축 켠 조건, 1.2 개선 ① 절의 표는 v1 채점값(기록)이다.** 평균은 거부 답변의 Faithfulness를 뺀 값이고 표에 `거부 N건 제외`를 적었다. 문항당 한 번씩만 돌렸고 40문항이다.
+보고한 칸을 모두 rubric v2([`docs/judge_rules.md`](docs/judge_rules.md))로 다시 채점했다(경과와 검증은 [`docs/judge_improvement.md`](docs/judge_improvement.md)). 이전(v1) 점수는 `judge_cache_v1_ref/`에 있다. **이 절의 수치는 1.2의 최종값이고(현재 값이 아니다), 아래 3×2 비교, 단축 켠 조건, 1.2 개선 ① 절의 표는 v1 채점값(기록)이다.** 평균은 거부 답변의 Faithfulness를 뺀 값이고 표에 `거부 N건 제외`를 적었다. 문항당 한 번씩만 돌렸고 40문항이다.
 
 **3×2 비교 `dbcmp6` (단축 끔, 같은 조건):**
 
@@ -834,6 +837,12 @@ DB 구축 단계의 누락을 loader 출력의 연속 8글자 조각이 최종 c
 kordoc 4.24.29의 JSON에는 블록별 `pageNumber`와 `pages`가 있고 chunker는 `<<PAGE: N>>` marker를 이미 해석하지만, parser skill이 marker를 내보내지 않는다.
 한글(HWP) 실제 쪽 번호와 맞는지는 검증하지 않았으므로 적용은 미룬다.
 
+### 현재 코드 전체 실행 (`eval_20261127`, 2026-11-27, 채점: Claude subagent)
+
+목록 답 후처리와 줄 제한 수정(`b4784d3`, `204e084`) 뒤의 코드(commit `3d9c004`)로 `two_stage`와 `multi_agent`를 40문항씩 새로 실행하고 80개 답을 모두 채점했다(rubric v2, `eval_resources/claude_judge/round16/`).
+2026-11-28에 채점 입력과 비교 질문 규칙을 고치고(rubric v3) 같은 답을 다시 채점했다(`eval_resources/claude_judge/round17/`, [채점기 개선](docs/judge_improvement.md)).
+점수, 시간, token, 환산 요금은 [07 결과](docs/07_결과.md)에만 적는다.
+
 ## 실행 기록과 겪은 문제 (재현 시 참고)
 
 실험을 처음 돌릴 때 실제로 막혔던 지점과 해결을 순서대로 남긴다. 같은 환경에서는 위 "직접 실행하기"만 따르면
@@ -871,10 +880,10 @@ python ~/project/korean_official_document_parser_skill/scripts/run_pipeline.py \
 
 ## 실험 결과
 
-> **후속 계획 (미실시):** 엑셀에 사업 금액·요약이 없어 팀 CSV 단축 경로가 금액류 질문에 오답을 낸다. 이를 해소하려면 팀 프로젝트처럼 입찰공고목록에 해당 정보를 보강해야 한다. 나라장터가 11월 2일 재개되면 해당 날짜(2026-08-08 \~ 08-09) 공고의 금액·요약을 엑셀에 추가한다. 엑셀은 질의 시점에만 읽히고 DB 구축에는 쓰이지 않으므로 **팀 DB는 그대로 재사용**하고, 현 버전 DB는 새 kordoc(4.24.29)과 최종 평탄화 코드로 `main2`로 이미 다시 만들었다(57/57). 이후 질의·채점을 새 `run-id`로 다시 돌린다. 이 `main1`의 질의·채점은 금액 column이 없는 입력 기준이라 새 결과와 합치지 않고 참고로만 둔다.
+> **당시의 후속 계획(이후 `dbcmp7`에서 실시):** 엑셀에 사업 금액·요약이 없어 팀 CSV 단축 경로가 금액류 질문에 오답을 낸다. 이를 해소하려면 팀 프로젝트처럼 입찰공고목록에 해당 정보를 보강해야 한다. 나라장터가 11월 2일 재개되면 해당 날짜(2026-08-08 \~ 08-09) 공고의 금액·요약을 엑셀에 추가한다. 엑셀은 질의 시점에만 읽히고 DB 구축에는 쓰이지 않으므로 **팀 DB는 그대로 재사용**하고, 현 버전 DB는 새 kordoc(4.24.29)과 최종 평탄화 코드로 `main2`로 이미 다시 만들었다(57/57). 이후 질의·채점을 새 `run-id`로 다시 돌린다. 이 `main1`의 질의·채점은 금액 column이 없는 입력 기준이라 새 결과와 합치지 않고 참고로만 둔다.
 
 <!-- RESULTS:BEGIN -->
-(아직 실행하지 않음 — 실행 후 `report --write`가 이 절을 채운다)
+(`report --write`가 채우는 자리이고 쓰지 않았다. 실행별 결과는 위의 각 절에, 현재 결과는 [07 결과](docs/07_결과.md)에 있다)
 <!-- RESULTS:END -->
 
 ## 한계와 주의

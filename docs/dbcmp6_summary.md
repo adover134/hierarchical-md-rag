@@ -1,3 +1,6 @@
+> **기록 문서다.** 여기의 점수와 측정값은 적힌 실행과 버전 시점의 값이고 현재 값이 아니다.</br>
+    현재 점수와 비용은 [07 결과](07_결과.md)의 "현재 결과" 한 곳에만 있다.
+
 ## 칸별 평균 (Claude 채점)
 | process | DB | Correctness | Answer coverage | Faithfulness | Context relevance | Correctness 5점 문항 |
 |---|---|---|---|---|---|---|
