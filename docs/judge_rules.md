@@ -1,90 +1,77 @@
-# 채점기 규칙 (현재: rubric v4)
+# 채점기 규칙 (현재: 팀 rubric + 추가 기준 3개, v5)
 
-이 문서는 **지금 쓰는 채점 규칙**의 기준 문서다. 규칙이 바뀐 이유와 검증은 [`judge_improvement.md`](judge_improvement.md)에 있다. 아래 "rubric 전문"은 코드(`scripts/claude_judge.py`의 `INSTRUCTIONS_V4`와 `src/evaluation/llm_judge.py`의 `JUDGE_SYSTEM_PROMPT`)에서 그대로 가져온 것이고, subagent가 읽는 `rubric.md`(`--rubric v4`, 기본값)와 같다. 규칙을 고칠 때는 코드와 이 문서를 같이 고친다.
+> 이 문서에서 알게 되는 것</br>
+    1. 지금 쓰는 채점 기준의 전문</br>
+    2. 채점자가 받는 것과 채점 방식</br>
+    3. 점수를 평균내는 방법</br>
+    4. 아직 구현하지 않은 것
 
-## 원칙
+## 기준
+
+- 채점 기준은 **팀 프로젝트의 rubric**(`src/evaluation/llm_judge.py`의 `JUDGE_SYSTEM_PROMPT`, 팀 저장소와 같다)에 **추가 기준 3개**를 붙인 것이다.
+- 추가 기준은 2026-11-28에 사용자가 원문을 보고 승인했다.
+- **점수에 영향을 주는 것(기준 문장, 지시문, 채점 입력, 묶는 방식, 평균 계산)을 바꿀 때는 바꾸기 전과 후의 원문이나 code를 보이고 승인받는다.**
+
+## 채점자가 받는 것
+
+| 항목 | 내용 |
+|---|---|
+| 질문 | 평가 set의 질문 |
+| 기대 답변 | 평가 set의 기대 답변 |
+| context | 근거(evidence) + 검색 상위 5개 chunk 본문 |
+| 생성 답변 | 저장된 답변 원문 |
+
+context 구성은 2026-08-24부터의 방식이다. 근거만 주면 근거가 있는 답의 Faithfulness가 낮게 나와서 chunk 본문을 더했다.
+
+## 채점 방식
 
 - 생성은 local `gpt-oss:20b`, 채점은 항상 Claude subagent(Opus)다. 별도 API 키는 쓰지 않는다. gpt-oss로는 채점하지 않는다.
+- 답을 시스템 이름 없이 섞어 10개씩 묶고, 묶음마다 subagent 하나가 채점한다.
+- subagent에게 보내는 지시문은 아래가 전부다(`round19`는 실행하는 회차의 폴더, `NN`은 묶음 번호).
+
+```text
+당신은 RAG 답변 채점자다.
+1) eval_resources/claude_judge/round19/rubric.md 를 읽는다.
+2) 같은 폴더 batches/batch_NN.json 의 모든 항목을 루브릭대로 채점한다.
+3) 결과를 results/batch_NN.json 에 루브릭의 JSON 형식(item_id를 키로)으로 쓴다.
+위 파일 외에는 열지 않는다.
+```
+
+## 점수 평균
+
+- 축마다 모든 문항(40개)의 평균이다. 거부 답변도 그대로 넣는다.
 - 현재 점수는 [07 결과](07_결과.md)의 "현재 결과"에만 적는다.
-- 채점자는 항목이 어느 시스템·실행에서 나왔는지 모른다(`claude_judge.py export`가 시스템·실행 식별 없이 섞어 10건씩 batch로 낸다).
-- 채점 입력(질문, 기대 답변, context, 생성 답변, 힌트)이 글자까지 같은 답은 한 항목으로 합쳐 **한 번만 채점**하고, 그 점수를 합친 답 모두에 쓴다.
-- 점수는 4개 축 모두 0\~5 정수이고 축마다 한 문장 근거를 쓴다. 보고하는 모든 점수 문서에 "심사: Claude(subagent)"와 rubric 버전을 적는다.
-
-## 요약: 축과 규칙
-
-Correctness와 Answer coverage를 판단할 때는 context와 문서 이름을 보지 않는다(v4).
-
-| 축 | 무엇을 보나 | 볼 때 쓰는 정보 |
-|---|---|---|
-| Correctness | 주된 값이 맞는가 | 질문, 기대 답변, 생성 답변 |
-| Answer coverage | 주된 값이 빠짐없이 들어 있는가 | 질문, 기대 답변, 생성 답변 |
-| Faithfulness | 답변이 context에 근거하는가(환각 없음) | `context`만 |
-| Context relevance | context가 질문에 관련 있는가 | `context`만 |
-
-| 규칙 | 한 줄 요약 |
-|---|---|
-| 1 주된 값 | 기대 답변의 괄호 밖 값이 주된 값, 괄호 안 내역은 부차 정보 |
-| 2 Correctness | 주된 값만으로 판단. 모두 맞으면 5점, 하나 틀리거나 빠지면 최대 3점 |
-| 3 Answer coverage | 주된 값이 모두 있는가만 본다. 괄호 안 내역 누락은 감점 없음 |
-| 4 표기와 라벨 | 숫자 표기 차이는 같은 값. 금액 이름(기초금액, 사업비 등)이 달라도 값이 같으면 감점 없음 |
-| 5 비교 질문 | 주된 사실은 선택한 대상 하나. 비교한 값은 부차 정보(질문이 값도 물으면 주된 값) |
-| 6 답변 거부 | Correctness·Answer coverage 0점, **Faithfulness는 해당 없음(N/A)** |
-| 7 힌트 | script가 뽑은 주된 값과 답변에 없는 값을 참고용으로 제공. 비교 질문에는 값 후보를 주지 않는다 |
-
-## 채점자가 보는 context
-
-- 근거 문장과 상위 5개 chunk를 블록마다 `[문서: 이름]`을 붙여 담는다. 답변 모델의 prompt에도 문서 이름이 들어간다.
-- 근거 문장이 이미 보이는 chunk에 들어 있으면 다시 넣지 않는다(공백과 기호 차이는 무시한다).
-- 근거 문장의 문서를 찾지 못하면 `[문서: 표시 없음]`으로 둔다.
-
-## 집계 규칙 (점수를 평균낼 때)
-
-- **거부 답변의 Faithfulness는 평균과 쌍체 비교에서 뺀다.** 거부 판정은 `claude_judge.is_refusal`(`확인되지 않`, `찾을 수 없`, `근거 부족`, `정보가 없` 문구)이고, `grid_report.load_scores`가 그 항목의 Faithfulness를 `None`으로 둔다. 분모가 그만큼 줄어든다.
-- **표에는 항상 `거부 N건 제외`를 Faithfulness 옆에 적는다**(`grid_report.summary_table`). 거부를 많이 하는 시스템의 Faithfulness가 부풀려 보이는 선택 편향을 독자가 가늠할 수 있게 하기 위해서다. 거부는 Correctness와 Answer coverage에서 이미 0점을 받으므로 Faithfulness에서 한 번 더 벌주지 않는다(0점으로 넣으면 "환각"과 "답을 못 냄"이 한 숫자에 섞인다).
-- `scripts/run_experiment.py evaluate`의 `summary.json` 평균에는 이 제외를 적용하지 않는다. 보고하는 표는 `scripts/grid_report.py` 기준이다.
-- 라운드가 다른 점수를 비교할 때는 같은 rubric 버전끼리만 비교한다. 다시 채점하기 전의 점수는 `judge_cache_v1_ref/`(v1), `judge_cache_v2_ref/`(v2), `judge_cache_v3_ref/`(v3)에 보존돼 있다. v2까지의 채점은 context에 문서 이름이 없었다.
+- 보고하는 모든 점수 문서에 "심사: Claude(subagent)"와 rubric 버전을 적는다.
 
 ## 사용법
 
 ```bash
-# 내보내기: 저장된 답변을 시스템 식별 없이 섞어 배치로 (기본 --rubric v4)
-python scripts/claude_judge.py export --runs <run-id>:<system> [<run-id>:<system> ...] --out-dir eval_resources/claude_judge/<round> [--batch-size 10] [--seed N] [--rubric v1|v4]
-# 서브에이전트가 <round>/rubric.md를 읽고 batches/batch_NN.json을 채점해 results/batch_NN.json을 쓴다
-# 가져오기: 검증(빠진 항목, 0~5 정수) 후 judge_cache로 옮긴다. v4 재채점이면 이전 캐시는 judge_cache_v3_ref/에 남는다
+# 내보내기: 저장된 답변을 시스템 식별 없이 섞어 배치로
+python scripts/claude_judge.py export --runs <run-id>:<system> [<run-id>:<system> ...] --out-dir eval_resources/claude_judge/<round> [--batch-size 10] [--seed N]
+# subagent가 <round>/rubric.md를 읽고 batches/batch_NN.json을 채점해 results/batch_NN.json을 쓴다
+# 가져오기: 검증(빠진 항목, 0~5 정수) 후 judge_cache로 옮긴다
 python scripts/claude_judge.py import --out-dir eval_resources/claude_judge/<round>
-# 보고서: 칸별 평균, 쌍체 비교, 칸별 답변 부록
-python scripts/grid_report.py --run-id <run-id> --summary-out <path> --answers-out <path>
+# 평균과 팀 검색 지표. chunk label은 현재 DB에 맞춘 평가 set 사본을 준다
+python scripts/run_experiment.py evaluate --run-id <run-id> --systems <system> ... \
+    --chunk-labels eval_resources/retrieval/chunk_synced_new20.yaml eval_resources/retrieval/chunk_synced_new20_v2.yaml
+# 이력 한 줄 추가
+python scripts/eval_history.py --run-id <run-id> --commit <답변을 만든 commit> --rubric v5
 ```
 
-## rubric 전문 (v4, subagent가 읽는 `rubric.md`)
+chunk label 사본은 팀 저장소의 `scripts/sync_eval_chunk_labels.py`로 만든다(`--dataset`, `--output`, `--db-path data_index/chroma_B`, `--collection chunks`). DB를 새로 만들면 다시 만든다.
 
-# 채점 지시 (루브릭 v4)
+## 아직 구현하지 않은 것
 
-아래 루브릭으로 배치 파일의 항목을 하나씩 채점한다. 항목마다 질문, 기대 답변, 검색된 컨텍스트, 생성된 답변, 힌트(`hint`)가 있다.
+- **채점기가 직접 RAG로 확인하는 방식**(2026-11-02 요청): 채점자가 같은 DB에서 근거를 직접 찾아 답과 대조하는 방식이다.
+  - 값이 같아도 다른 금액을 가져온 답을 지금 기준으로는 가리지 못한다.
+  - 구현하기 전에 지시문과 code를 보이고 승인받는다.
 
-- 항목의 출처(어느 시스템·실행인지)는 알려지지 않았고 알려고 하지 않는다. 항목끼리 비교하지 말고 각 항목을 루브릭에만 비추어 독립적으로 채점한다.
-- 점수는 0\~5 정수. 4개 축(correctness, answer_coverage, faithfulness, context_relevance) 모두, 각각 한 문장 근거(reason)를 쓴다. 아래 규칙을 적용했으면 근거에 규칙 번호를 적는다(예: "규칙2").
-- Correctness와 Answer coverage는 질문, 기대 답변, 생성 답변만으로 판단한다. `context`와 문서 이름은 보지 않으며, 값의 출처를 따져 이 두 점수를 바꾸지 않는다.
-- Faithfulness와 Context Relevance는 항목의 `context` 필드만 기준으로 한다. 외부 지식으로 답이 맞는지 추측하지 않는다.
-- `context`의 `[문서: 이름]`은 그 아래 본문이 나온 문서 이름이며 context의 일부다. 문서 이름에 있는 사업명과 기관명은 context에서 확인되는 내용으로 본다.
-- 결과는 JSON 파일 하나로 쓴다: `{"<item_id>": {"correctness": {"score": 0, "reason": "..."}, "answer_coverage": {...}, "faithfulness": {...}, "context_relevance": {...}}, ...}`.
-  배치의 모든 item_id가 빠짐없이 들어 있어야 한다.
+## rubric 전문 (v5, subagent가 읽는 `rubric.md`)
 
-## 판정 규칙 (라운드가 달라도 같은 기준을 쓰기 위한 명시 규칙)
-
-1. **주된 값.** 기대 답변에서 괄호 밖에 있는 값·사실이 주된 값이다. 괄호 안의 내역(추정가격, 부가가치세, 동복·하복 금액, 구성 항목)은 부차 정보다. 괄호 밖에 값이 하나도 없을 때만 괄호 안 값을 주된 값으로 본다(비교 질문에는 적용하지 않고 규칙5를 따른다).
-2. **Correctness.** 주된 값만으로 판단한다. 주된 값이 모두 맞으면 부차 정보가 빠지거나 달라도 5점이다. 주된 값 하나가 틀리거나 빠지면 최대 3점(값이 여럿이면 맞은 비율로), 핵심 값이 틀리면 0\~2점이다.
-3. **Answer coverage.** 주된 값(사실 포인트)이 답변에 모두 들어 있는가만 본다. 부차 정보(괄호 안 내역) 누락은 감점하지 않는다. 주된 포인트 일부가 빠지면 빠진 비율대로 낮춘다. 모두 있으면 5점이다.
-4. **표기와 라벨.** (a) 숫자 표기 차이(쉼표, `원`, 공백, `약 …억`과 정확한 값의 병기, `5천만 원`=`50,000,000원`)는 같은 값이다. (b) 질문이 묻는 금액 이름(기초금액, 추정금액, 사업예산, 사업금액, 예산)과 답변이 쓴 이름(예: 사업비)이 달라도 값이 기대 주된 값과 같으면 감점하지 않는다.
-5. **비교 질문**(어느 쪽이 더 큰가). 주된 사실은 선택한 대상 하나다. 비교한 값(금액 등)은 기대 답변의 어디에 있든 부차 정보라서, 답변에 없거나 달라도 Correctness와 Answer coverage를 깎지 않는다. 질문이 그 값이나 차이도 함께 물으면 그것도 주된 값이다.
-6. **답변 거부**(`문서에서 확인되지 않습니다` 등, `hint.refusal`이 true인 항목). Correctness와 Answer coverage는 0점이다. Faithfulness는 주장이 없어 채점 대상이 아니므로 해당 없음(N/A)이다. 점수 칸에는 0을 쓰고 근거를 `N/A(거부 답변)`으로 시작한다. 집계는 이 항목의 Faithfulness를 평균에서 뺀다. Context Relevance는 context만 본다.
-7. **힌트.** `hint.primary_values`는 스크립트가 기대 답변에서 뽑은 주된 값 후보이고 `hint.missing`은 그중 답변에 문자열로 없는 값이다. 문자열 일치 힌트일 뿐이다. 표기 차이나 환산으로 같은 값이면 `missing`이어도 맞다고 보고, 문자열이 있어도 생성 답변이 그 값을 다른 대상이나 다른 항목의 값으로 말하면 틀리다고 본다. `hint.comparison`이 true면 주된 값 후보를 주지 않는다(규칙5).
-
----
-
+````text
 당신은 RAG(Retrieval-Augmented Generation) 시스템의 응답 품질을 평가하는 전문 심사관입니다.
 
-주어진 정보를 바탕으로 아래 4가지 기준을 각각 0\~5점으로 채점하고, 각 점수에 대한 1줄 근거를 작성하세요.
+주어진 정보를 바탕으로 아래 4가지 기준을 각각 0~5점으로 채점하고, 각 점수에 대한 1줄 근거를 작성하세요.
 
 ## 채점 기준
 
@@ -100,7 +87,7 @@ python scripts/grid_report.py --run-id <run-id> --summary-out <path> --answers-o
 ### Answer Coverage (답변 커버리지)
 기대 답변의 핵심 정보가 생성 답변에 얼마나 누락 없이 포함되었는가. Correctness와 달리 빠진 정보가 있는가에 초점.
 - 5: 기대 답변의 모든 핵심 포인트를 빠짐없이 포함
-- 4: 대부분 포함하나 사소한 항목 1\~2개 누락
+- 4: 대부분 포함하나 사소한 항목 1~2개 누락
 - 3: 핵심 포인트의 절반 정도만 커버
 - 2: 주요 정보 대부분 누락, 일부만 언급
 - 1: 핵심 정보가 거의 없음
@@ -129,3 +116,13 @@ python scripts/grid_report.py --run-id <run-id> --summary-out <path> --answers-o
 reason은 반드시 한 문장으로 작성하세요.
 
 {"correctness": {"score": 0, "reason": "..."}, "answer_coverage": {"score": 0, "reason": "..."}, "faithfulness": {"score": 0, "reason": "..."}, "context_relevance": {"score": 0, "reason": "..."}}
+
+## 추가 기준
+1. Correctness는 기대 답변의 주된 값(괄호 밖의 값과 사실)으로 판단한다.
+   괄호 안의 값이 빠지거나 달라도 Correctness를 깎지 않는다.
+   괄호 밖의 값과 사실은 모두 있어야 한다.
+2. 비교 질문의 답은 비교 결과다. 비교의 근거가 된 값이 답변에 없어도
+   Correctness와 Answer coverage를 깎지 않는다.
+3. 질문이 묻는 금액의 이름과 답변이 쓴 이름이 달라도(예: 기초금액을 사업비로)
+   값이 같으면 Correctness와 Answer coverage를 깎지 않는다.
+````
