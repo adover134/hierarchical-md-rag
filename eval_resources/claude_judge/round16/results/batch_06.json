@@ -1,0 +1,62 @@
+{
+  "j0051": {
+    "correctness": {"score": 5, "reason": "주된 값 245,339,600원이 정확하고 '사업비' 라벨 차이는 감점하지 않는다(규칙2, 규칙4)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 예산 금액이 답변에 들어 있고 괄호 안 부가세 포함 표기 누락은 감점하지 않는다(규칙3)."},
+    "faithfulness": {"score": 4, "reason": "금액은 context에 그대로 있으나 주체로 쓴 '두산에너빌리티 (주)'는 context에 없는 내용이다."},
+    "context_relevance": {"score": 3, "reason": "context에 금액은 있으나 사업명이 없어 질문한 사업의 값인지 확인할 수 없다."}
+  },
+  "j0052": {
+    "correctness": {"score": 5, "reason": "주된 값 26,750,000원이 정확하고 '사업비' 라벨 차이는 감점하지 않는다(규칙2, 규칙4)."},
+    "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 주된 값인 기초금액이 답변에 들어 있다(규칙3)."},
+    "faithfulness": {"score": 4, "reason": "금액은 context에 있으나 주체로 쓴 '충청북도 영동군'은 context에 없는 내용이다."},
+    "context_relevance": {"score": 3, "reason": "context에 금액은 있으나 사업명이 없어 질문한 사업의 값인지 확인할 수 없다."}
+  },
+  "j0053": {
+    "correctness": {"score": 5, "reason": "납품기한 2026년 12월 31일이 기대 답변과 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 납품기한이 빠짐없이 들어 있다."},
+    "faithfulness": {"score": 5, "reason": "context의 '납품기한 : 2026. 12. 31.'에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "해당 사업 공고문의 납품기한 항목을 포함해 질문에 바로 답할 수 있다."}
+  },
+  "j0054": {
+    "correctness": {"score": 5, "reason": "낙찰하한율 86.245%가 기대 답변과 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 낙찰하한율이 들어 있다."},
+    "faithfulness": {"score": 5, "reason": "context의 '낙찰하한율: 86.245%'에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "해당 입찰 공고의 사업명과 낙찰하한율이 모두 context에 있다."}
+  },
+  "j0055": {
+    "correctness": {"score": 5, "reason": "사업기간 60일이 기대 답변과 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 60일이 들어 있고 기산점 표현 누락은 사소하다."},
+    "faithfulness": {"score": 5, "reason": "context의 '사업기간: 착공일로부터 60일간'에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "해당 공사 공고문의 사업기간 항목이 context에 있다."}
+  },
+  "j0056": {
+    "correctness": {"score": 5, "reason": "공사기간 착공일로부터 60일이 기대 답변과 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 공사기간이 빠짐없이 들어 있다."},
+    "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 60일'에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "해당 사업 공고문의 공사기간 항목이 context에 있다."}
+  },
+  "j0057": {
+    "correctness": {"score": 5, "reason": "공사기간 착공일로부터 180일이 기대 답변과 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 공사기간이 빠짐없이 들어 있다."},
+    "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 180일'에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "해당 공사 공고문의 공사기간 항목이 context에 있다."}
+  },
+  "j0058": {
+    "correctness": {"score": 5, "reason": "행사 기간 2026년 10월 20일~10월 22일이 정확하고 3일간은 이 날짜에서 그대로 도출되는 같은 값이다(규칙7)."},
+    "answer_coverage": {"score": 4, "reason": "시작일과 종료일은 모두 있으나 '3일간'을 명시하지 않았다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "context의 '행 사 기 간: 2026년 10월 20일(화) ~ 10월 22일(수), 3일간'에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "해당 행사 용역 공고문의 행사 기간 항목이 context에 있다."}
+  },
+  "j0059": {
+    "correctness": {"score": 5, "reason": "주된 값 33,690,000원이 정확하고 '사업비' 라벨 차이는 감점하지 않는다(규칙2, 규칙4)."},
+    "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 주된 값인 기초금액이 답변에 들어 있다(규칙3)."},
+    "faithfulness": {"score": 4, "reason": "금액은 context에 있으나 주체로 쓴 '충청북도 영동군'은 context에 없는 내용이다."},
+    "context_relevance": {"score": 3, "reason": "context에 금액은 있으나 사업명이 없어 질문한 사업의 값인지 확인할 수 없다."}
+  },
+  "j0060": {
+    "correctness": {"score": 5, "reason": "낙찰하한율 86.245%가 기대 답변과 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 낙찰하한율이 들어 있다."},
+    "faithfulness": {"score": 5, "reason": "context의 '낙찰하한율: 86.245%'에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "해당 입찰 공고의 사업명과 낙찰하한율이 모두 context에 있다."}
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "j0021": {
+    "correctness": {"score": 5, "reason": "주된 값인 2026년 8월 12일 15:00을 정확히 제시했다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "날짜와 시각이라는 주된 포인트를 모두 포함했다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "context의 입찰일정 표에 '전자입찰서 접수마감일시 2026. 08. 12. 15:00'이 그대로 있다."},
+    "context_relevance": {"score": 5, "reason": "해당 사업의 입찰공고와 입찰일정 표가 검색되어 답에 필요한 정보가 충분하다."}
+  },
+  "j0022": {
+    "correctness": {"score": 5, "reason": "주된 값 120일이 기대 답변과 일치한다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "공사기간 120일이라는 주된 포인트를 포함했고 '착공일로부터'라는 기산점 표현만 빠졌다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "context에 '공사기간: 착공일로부터 120일'이 명시되어 있다."},
+    "context_relevance": {"score": 5, "reason": "해당 공사의 견적제출 안내 공고가 검색되어 공사기간 정보를 직접 담고 있다."}
+  },
+  "j0023": {
+    "correctness": {"score": 5, "reason": "동복 2027년 2월 22일(월), 하복 2027년 5월 10일(월)을 모두 정확히 제시했다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "동복과 하복 두 납품기한을 모두 포함했다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "context의 공고와 특수조건 제3조에 두 날짜가 그대로 있다."},
+    "context_relevance": {"score": 5, "reason": "신목중학교 교복 구매 공고와 계약 특수조건이 검색되어 납품기한을 충분히 담고 있다."}
+  },
+  "j0024": {
+    "correctness": {"score": 5, "reason": "영남영농조합법인을 더 큰 쪽으로 고르고 두 금액도 맞게 제시했으며 '사업비' 표기는 감점하지 않는다(규칙5, 규칙4b)."},
+    "answer_coverage": {"score": 5, "reason": "선택 대상과 두 예산 금액을 모두 포함했다(규칙3, 규칙5)."},
+    "faithfulness": {"score": 3, "reason": "두 금액은 context에 있으나 context에는 어느 금액이 어느 기관의 것인지 표시가 없어 기관-금액 대응은 context로 확인할 수 없다."},
+    "context_relevance": {"score": 3, "reason": "두 예산 금액은 검색되었지만 기관명이나 사업명이 없어 비교에 필요한 대응 정보가 부족하다."}
+  },
+  "j0025": {
+    "correctness": {"score": 5, "reason": "240kW 파워뱅크 2기와 디스펜서 5기를 정확히 제시했다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "파워뱅크와 디스펜서 수량이라는 주된 포인트를 모두 포함했다(규칙3)."},
+    "faithfulness": {"score": 4, "reason": "설치대수는 context에 그대로 있으나 종류가 다른 장비를 더한 '총 7기'는 context에 없는 추론이다."},
+    "context_relevance": {"score": 5, "reason": "해당 사업의 견적제출 안내서가 검색되어 설치대수를 직접 담고 있다."}
+  },
+  "j0026": {
+    "correctness": {"score": 5, "reason": "'2026. 08. 12. 15:00'은 기대 값 2026년 8월 12일 15:00과 표기만 다른 같은 값이다(규칙4a, 규칙7)."},
+    "answer_coverage": {"score": 5, "reason": "날짜와 시각을 모두 포함했다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "context의 입찰일정 표에 같은 표기로 마감일시가 있다."},
+    "context_relevance": {"score": 5, "reason": "해당 사업의 입찰공고와 입찰일정 표가 검색되어 답에 필요한 정보가 충분하다."}
+  },
+  "j0027": {
+    "correctness": {"score": 5, "reason": "631,400,000원이 기대 주된 값과 같고 '사업비'라는 이름 차이는 감점하지 않는다(규칙4b, 규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 금액을 포함했고 부가가치세 포함 여부는 부차 정보다(규칙3)."},
+    "faithfulness": {"score": 4, "reason": "금액은 context에 그대로 있으나 context에 사업명이 없어 이 금액을 ㈜한성케미칼 사업에 연결한 것은 질문에 기댄 추론이다."},
+    "context_relevance": {"score": 3, "reason": "금액 한 줄만 검색되어 사업명이나 기초금액 항목과의 연결 정보가 부족하다."}
+  },
+  "j0028": {
+    "correctness": {"score": 5, "reason": "동복 2027년 2월 19일(금), 하복 2027년 5월 7일(금)을 정확히 제시했다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "동복과 하복 두 납품기한을 모두 포함했다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "context의 입찰 개요 표와 계약특수조건 제1조에 두 날짜가 그대로 있다."},
+    "context_relevance": {"score": 5, "reason": "서야고등학교 교복 구매 재공고 문서가 검색되어 납품기한을 충분히 담고 있다."}
+  },
+  "j0029": {
+    "correctness": {"score": 5, "reason": "주된 값 78,364,000원이 일치하며 괄호 안 추정가격과 내역은 부차 정보이고 '사업비' 표기는 감점하지 않는다(규칙1, 규칙2, 규칙4b)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 기초금액을 포함했고 괄호 안 내역 누락은 감점하지 않는다(규칙3)."},
+    "faithfulness": {"score": 4, "reason": "금액은 context에 그대로 있으나 context에 사업명이 없어 주식회사 헤르스 사업에 연결한 것은 질문에 기댄 추론이다."},
+    "context_relevance": {"score": 3, "reason": "금액 한 줄만 검색되어 사업명이나 기초금액 항목과의 연결 정보가 부족하다."}
+  },
+  "j0030": {
+    "correctness": {"score": 5, "reason": "주된 값 387,660원이 일치하며 동복·하복 내역은 부차 정보이고 '사업비' 표기는 감점하지 않는다(규칙1, 규칙2, 규칙4b)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 기초금액을 포함했고 괄호 안 내역 누락은 감점하지 않는다(규칙3)."},
+    "faithfulness": {"score": 3, "reason": "금액은 context에 있으나 '충청북도교육청'은 context에도 질문에도 없는 내용이고 사업과의 연결도 context로 확인되지 않는다."},
+    "context_relevance": {"score": 3, "reason": "금액 한 줄만 검색되어 학교명이나 기초금액 항목과의 연결 정보가 부족하다."}
+  }
+}

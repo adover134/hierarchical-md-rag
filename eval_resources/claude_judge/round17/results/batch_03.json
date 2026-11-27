@@ -1,0 +1,62 @@
+{
+  "j0021": {
+    "correctness": {"score": 5, "reason": "주된 값인 과업기간 365일을 정확히 답했다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값 365일이 답변에 들어 있다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "context의 '과업기간: 착수일로부터 365일'에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "해당 사업 공고의 입찰 사항 절이 검색되어 답에 필요한 정보를 충분히 담고 있다."}
+  },
+  "j0022": {
+    "correctness": {"score": 5, "reason": "주된 값인 공사기간 60일을 정확히 답했다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값 60일이 답변에 들어 있다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 60일'에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "해당 사업 공고의 입찰 사항 절이 검색되어 필요한 정보를 충분히 포함한다."}
+  },
+  "j0023": {
+    "correctness": {"score": 3, "reason": "100,000,000원이라는 값은 기대 답변과 같지만 질문한 교통신호기 사업이 아니라 도로조명 유지보수공사 문서에서 가져온 값이고 답변도 사업을 특정하지 못해 엉뚱한 맥락의 일치로 본다(규칙7)."},
+    "answer_coverage": {"score": 3, "reason": "값 문자열은 있으나 질문한 사업의 기초금액으로 제시되지 않아 주된 포인트를 온전히 충족했다고 보기 어렵다(규칙7)."},
+    "faithfulness": {"score": 2, "reason": "context는 도로조명 유지보수공사의 사업비만 담고 있어 이를 교통신호기 사업의 기초금액 답으로 제시한 것은 context로 뒷받침되지 않는다."},
+    "context_relevance": {"score": 1, "reason": "검색된 context는 같은 시의 다른 사업(도로조명 유지보수공사) 문서 한 줄뿐이라 질문한 사업과 거의 무관하다."}
+  },
+  "j0024": {
+    "correctness": {"score": 5, "reason": "주된 값인 공사기간 착공일로부터 180일을 정확히 답했다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값 180일이 답변에 들어 있다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 180일'에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "해당 사업 공고의 견적 부치는 사항 절이 검색되어 필요한 정보를 충분히 포함한다."}
+  },
+  "j0025": {
+    "correctness": {"score": 5, "reason": "주된 값 50,000,000원이 맞고 괄호 안 추정가격·부가세 누락과 '사업비' 라벨은 감점하지 않는다(규칙1, 규칙2, 규칙4)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값 50,000,000원이 답변에 들어 있고 부차 정보 누락은 감점 대상이 아니다(규칙3)."},
+    "faithfulness": {"score": 4, "reason": "context의 전주사랑의집 시설공사 사업비 50,000,000원에 근거하나 그것이 남자생활실 타일공사의 금액이라는 점은 문서 이름 수준의 추론이다."},
+    "context_relevance": {"score": 4, "reason": "전주사랑의집 시설공사 공고의 사업비 한 줄로 답에 필요한 값은 있으나 타일공사를 명시하지 않는다."}
+  },
+  "j0026": {
+    "correctness": {"score": 5, "reason": "비교 질문에서 더 큰 사업으로 한서대학교 산업디자인 개발 프로젝트를 정확히 골랐다(규칙5)."},
+    "answer_coverage": {"score": 5, "reason": "주된 사실인 선택 대상이 답변에 있고 비교 금액 누락은 감점하지 않는다(규칙5)."},
+    "faithfulness": {"score": 5, "reason": "context의 220,000,000원과 150,000,000원 비교로 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "두 사업의 사업예산이 모두 검색되어 비교에 필요한 정보를 충분히 담고 있다."}
+  },
+  "j0027": {
+    "correctness": {"score": 5, "reason": "주된 값인 계약기간 420일을 정확히 답했다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값 420일이 답변에 들어 있다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "context의 '계약기간: 계약체결일로부터 420일'에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "해당 입찰 공고의 입찰사항 절이 검색되어 필요한 정보를 충분히 포함한다."}
+  },
+  "j0028": {
+    "correctness": {"score": 5, "reason": "주된 값 245,339,600원이 맞고 '약 2.5억' 병기와 '사업비' 라벨은 같은 값으로 본다(규칙4)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값 245,339,600원이 답변에 들어 있다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "쏘유팜 히트펌프 물품 구매 문서의 사업비 245,339,600원에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "질문한 사업 문서의 금액 정보가 검색되어 답에 필요한 값을 담고 있다."}
+  },
+  "j0029": {
+    "correctness": {"score": 5, "reason": "주된 값 102,000,000원이 맞고 괄호 안 내역 누락은 감점하지 않는다(규칙1, 규칙2, 규칙4)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값 102,000,000원이 답변에 들어 있다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "G램프사업단 연구시설장비 구입 문서의 사업비 102,000,000원에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "질문한 사업 문서의 금액 정보가 검색되어 답에 필요한 값을 담고 있다."}
+  },
+  "j0030": {
+    "correctness": {"score": 5, "reason": "주된 값 285,125,000원이 맞고 '사업비' 라벨 차이는 감점하지 않는다(규칙4)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값 285,125,000원이 답변에 들어 있다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "송림리 마을만들기사업(건축,기계) 문서의 사업비 285,125,000원에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "질문한 사업 문서의 금액 정보가 검색되어 답에 필요한 값을 담고 있다."}
+  }
+}

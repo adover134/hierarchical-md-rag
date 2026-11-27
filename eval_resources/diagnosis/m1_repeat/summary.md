@@ -1,5 +1,8 @@
 # m1 반복 20회 (main process × 최신 DB, 단계별 기록)
 
+> **기록 문서다.** 여기의 점수와 측정값은 적힌 실행과 버전 시점의 값이고 현재 값이 아니다.</br>
+    현재 점수와 비용은 [07 결과](../../../docs/07_결과.md)의 "현재 결과" 한 곳에만 있다.
+
 목적: `dbcmp5`에서 main × 최신 DB의 m1 답변이 도입 한 줄만 남고 잘린 원인을 단계별 기록으로 찾는다.
 조건: `HWP_RAG_ANSWER_STRATEGY=two_stage`, `CSV_SHORTCIRCUIT_ENABLED=false`, `HWP_RAG_FORCE_RETRIEVAL=1`, local `gpt-oss:20b`, `top_k=5`. 질문: m1(SRT 감속기 모터피니언기어 구매 입찰의 낙찰자 결정 기준). 정답의 주된 값은 `82.495`.
 원본 기록: [`m1_repeat_trace.json`](m1_repeat_trace.json) (회차별 답변, 소요 시간, LLM 호출과 후처리 단계의 출력, `finish_reason`).

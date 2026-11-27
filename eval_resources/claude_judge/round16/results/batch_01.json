@@ -1,0 +1,62 @@
+{
+ "j0001": {
+  "correctness": {"score": 5, "reason": "주된 값인 계약기간 420일을 정확히 제시했다(규칙2)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 420일이 답변에 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "context의 '계약기간: 계약체결일로부터 420일'에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 입찰공고 본문으로 입찰명과 계약기간을 모두 포함한다."}
+ },
+ "j0002": {
+  "correctness": {"score": 5, "reason": "사업비 55,800,000원이 기대 사업예산과 같은 값이다(규칙2, 규칙4b)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 55,800,000원이 답변에 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context에 있으나 '울산광역시사회복지협의회'라는 기관명은 context에서 확인되지 않는다."},
+  "context_relevance": {"score": 4, "reason": "필요한 금액은 있으나 어느 사업의 사업비인지 식별 정보가 context에 없다."}
+ },
+ "j0003": {
+  "correctness": {"score": 5, "reason": "비교 질문의 주된 사실인 선택 대상(건축)이 맞다(규칙5, 규칙1)."},
+  "answer_coverage": {"score": 5, "reason": "선택 대상이 포함되었고 괄호 안 금액 누락은 감점하지 않는다(규칙3, 규칙5)."},
+  "faithfulness": {"score": 3, "reason": "context에 두 금액은 있으나 어느 금액이 건축·통신인지 라벨이 없어 선택이 추론에 의존한다."},
+  "context_relevance": {"score": 3, "reason": "두 기초금액은 있지만 공사명과의 연결 정보가 없어 핵심 정보가 일부 부족하다."}
+ },
+ "j0004": {
+  "correctness": {"score": 5, "reason": "비교 질문의 주된 사실인 선택 대상(한서대학교 산업디자인 용역)이 맞다(규칙5, 규칙1)."},
+  "answer_coverage": {"score": 5, "reason": "선택 대상이 포함되었고 괄호 안 금액 누락은 감점하지 않는다(규칙3, 규칙5)."},
+  "faithfulness": {"score": 3, "reason": "context에 두 사업예산 값은 있으나 사업명 라벨이 없어 어느 쪽이 한서대 사업인지는 추론이다."},
+  "context_relevance": {"score": 3, "reason": "두 금액은 있지만 각 사업명과의 연결 정보가 없어 핵심 정보가 일부 부족하다."}
+ },
+ "j0005": {
+  "correctness": {"score": 5, "reason": "공사기간 착공일로부터 180일을 정확히 제시했다(규칙2)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 180일이 답변에 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "context의 '라. 공사기간: 착공일로부터 180일'에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 공사의 견적 공고로 공사명과 공사기간을 포함한다."}
+ },
+ "j0006": {
+  "correctness": {"score": 5, "reason": "주된 값 78,364,000원이 맞고 괄호 안 추정가격 내역은 부차 정보다(규칙1, 규칙2, 규칙4b)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값이 포함되었고 괄호 안 내역 누락은 감점하지 않는다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context에 있으나 '주식회사 헤르스'라는 주체 표기는 context에서 확인되지 않는다."},
+  "context_relevance": {"score": 4, "reason": "필요한 금액은 있으나 어느 사업인지 식별 정보가 context에 없다."}
+ },
+ "j0007": {
+  "correctness": {"score": 5, "reason": "사업비 26,750,000원이 기대 기초금액과 같은 값이다(규칙2, 규칙4b)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 26,750,000원이 답변에 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context에 있으나 '충청북도 영동군'이라는 기관명은 context에서 확인되지 않는다."},
+  "context_relevance": {"score": 4, "reason": "필요한 금액은 있으나 어느 사업인지 식별 정보가 context에 없다."}
+ },
+ "j0008": {
+  "correctness": {"score": 5, "reason": "사업비 100,000,000원이 기대 기초금액과 같은 값이다(규칙2, 규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 100,000,000원이 답변에 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context에 있으나 '충청남도 아산시'라는 기관명은 context에서 확인되지 않는다."},
+  "context_relevance": {"score": 4, "reason": "필요한 금액은 있으나 어느 사업인지 식별 정보가 context에 없다."}
+ },
+ "j0009": {
+  "correctness": {"score": 5, "reason": "공사기간 60일이 기대 답변과 일치한다(규칙2)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 60일이 답변에 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 60일'에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 사업 공고로 사업명과 공사기간을 포함한다."}
+ },
+ "j0010": {
+  "correctness": {"score": 5, "reason": "주된 값 102,000,000원이 맞고 괄호 안 추정가격·부가세는 부차 정보다(규칙1, 규칙2, 규칙4b)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값이 포함되었고 괄호 안 내역 누락은 감점하지 않는다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context에 있으나 '전북대학교 산학협력단'이라는 주체는 context에서 확인되지 않는다."},
+  "context_relevance": {"score": 4, "reason": "필요한 금액은 있으나 어느 사업인지 식별 정보가 context에 없다."}
+ }
+}
