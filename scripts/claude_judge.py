@@ -48,13 +48,14 @@ INSTRUCTIONS = """\
 
 """
 
-INSTRUCTIONS_V3 = """\
-# 채점 지시 (루브릭 v3)
+INSTRUCTIONS_V4 = """\
+# 채점 지시 (루브릭 v4)
 
 아래 루브릭으로 배치 파일의 항목을 하나씩 채점한다. 항목마다 질문, 기대 답변, 검색된 컨텍스트, 생성된 답변, 힌트(`hint`)가 있다.
 
 - 항목의 출처(어느 시스템·실행인지)는 알려지지 않았고 알려고 하지 않는다. 항목끼리 비교하지 말고 각 항목을 루브릭에만 비추어 독립적으로 채점한다.
 - 점수는 0~5 정수. 4개 축(correctness, answer_coverage, faithfulness, context_relevance) 모두, 각각 한 문장 근거(reason)를 쓴다. 아래 규칙을 적용했으면 근거에 규칙 번호를 적는다(예: "규칙2").
+- Correctness와 Answer coverage는 질문, 기대 답변, 생성 답변만으로 판단한다. `context`와 문서 이름은 보지 않으며, 값의 출처를 따져 이 두 점수를 바꾸지 않는다.
 - Faithfulness와 Context Relevance는 항목의 `context` 필드만 기준으로 한다. 외부 지식으로 답이 맞는지 추측하지 않는다.
 - `context`의 `[문서: 이름]`은 그 아래 본문이 나온 문서 이름이며 context의 일부다. 문서 이름에 있는 사업명과 기관명은 context에서 확인되는 내용으로 본다.
 - 결과는 JSON 파일 하나로 쓴다: `{"<item_id>": {"correctness": {"score": 0, "reason": "..."}, "answer_coverage": {...}, "faithfulness": {...}, "context_relevance": {...}}, ...}`.
@@ -68,7 +69,7 @@ INSTRUCTIONS_V3 = """\
 4. **표기와 라벨.** (a) 숫자 표기 차이(쉼표, `원`, 공백, `약 …억`과 정확한 값의 병기, `5천만 원`=`50,000,000원`)는 같은 값이다. (b) 질문이 묻는 금액 이름(기초금액, 추정금액, 사업예산, 사업금액, 예산)과 답변이 쓴 이름(예: 사업비)이 달라도 값이 기대 주된 값과 같으면 감점하지 않는다.
 5. **비교 질문**(어느 쪽이 더 큰가). 주된 사실은 선택한 대상 하나다. 비교한 값(금액 등)은 기대 답변의 어디에 있든 부차 정보라서, 답변에 없거나 달라도 Correctness와 Answer coverage를 깎지 않는다. 질문이 그 값이나 차이도 함께 물으면 그것도 주된 값이다.
 6. **답변 거부**(`문서에서 확인되지 않습니다` 등, `hint.refusal`이 true인 항목). Correctness와 Answer coverage는 0점이다. Faithfulness는 주장이 없어 채점 대상이 아니므로 해당 없음(N/A)이다. 점수 칸에는 0을 쓰고 근거를 `N/A(거부 답변)`으로 시작한다. 집계는 이 항목의 Faithfulness를 평균에서 뺀다. Context Relevance는 context만 본다.
-7. **힌트.** `hint.primary_values`는 스크립트가 기대 답변에서 뽑은 주된 값 후보이고 `hint.missing`은 그중 답변에 문자열로 없는 값이다. 문자열 일치 힌트일 뿐이다. 표기 차이나 환산으로 같은 값이면 `missing`이어도 맞다고 보고, 문자열이 있어도 엉뚱한 맥락이면 틀리다고 본다. `hint.comparison`이 true면 주된 값 후보를 주지 않는다(규칙5).
+7. **힌트.** `hint.primary_values`는 스크립트가 기대 답변에서 뽑은 주된 값 후보이고 `hint.missing`은 그중 답변에 문자열로 없는 값이다. 문자열 일치 힌트일 뿐이다. 표기 차이나 환산으로 같은 값이면 `missing`이어도 맞다고 보고, 문자열이 있어도 생성 답변이 그 값을 다른 대상이나 다른 항목의 값으로 말하면 틀리다고 본다. `hint.comparison`이 true면 주된 값 후보를 주지 않는다(규칙5).
 
 ---
 
@@ -207,7 +208,7 @@ def cmd_export(a: argparse.Namespace) -> None:
     out = Path(a.out_dir)
     (out / "batches").mkdir(parents=True, exist_ok=True)
     (out / "results").mkdir(exist_ok=True)
-    (out / "rubric.md").write_text((INSTRUCTIONS_V3 if a.rubric == "v3" else INSTRUCTIONS) + JUDGE_SYSTEM_PROMPT, encoding="utf-8")
+    (out / "rubric.md").write_text((INSTRUCTIONS_V4 if a.rubric == "v4" else INSTRUCTIONS) + JUDGE_SYSTEM_PROMPT, encoding="utf-8")
     (out / "rubric_version.txt").write_text(a.rubric + "\n", encoding="utf-8")
     (out / "mapping.json").write_text(json.dumps(mapping, ensure_ascii=False, indent=1), encoding="utf-8")
     batches = split_batches(items, a.batch_size)
@@ -227,11 +228,11 @@ def cmd_import(a: argparse.Namespace) -> None:
         print("검증 실패:\n  " + "\n  ".join(problems[:40]))
         raise SystemExit(1)
     touched = set()
-    # 이전 캐시를 어디에 남기는지: v3 재채점이면 이전 v2 채점을 `judge_cache_v2_ref`에, v2면 v1을 `judge_cache_v1_ref`에,
+    # 이전 캐시를 어디에 남기는지: 재채점이면 바로 앞 버전의 채점을 `judge_cache_<버전>_ref`에(v4면 v3, v3면 v2, v2면 v1),
     # 그 밖에는 이전 gpt-oss 채점을 `judge_cache_gptoss_ref`에 둔다.
     version_file = out / "rubric_version.txt"
     version = version_file.read_text(encoding="utf-8").strip() if version_file.exists() else ""
-    previous = {"v3": "v2", "v2": "v1"}.get(version, "gptoss")
+    previous = {"v4": "v3", "v3": "v2", "v2": "v1"}.get(version, "gptoss")
     ref_name, summary_ref = f"judge_cache_{previous}_ref", f"summary_{previous}_ref.json"
     # v3부터 한 항목이 여러 출처를 가진다. 이전 라운드의 매핑은 항목마다 출처 하나다.
     graded = [(item_id, origin) for item_id, entry in mapping.items() for origin in entry.get("origins", [entry])]
@@ -261,8 +262,8 @@ def main() -> None:
     e.add_argument("--batch-size", type=int, default=10)
     e.add_argument("--k", type=int, default=5, help="컨텍스트에 넣는 검색 청크 수(run_experiment의 top_k와 같게)")
     e.add_argument("--seed", type=int, default=20261102)
-    e.add_argument("--rubric", choices=["v1", "v3"], default="v3",
-                   help="v1: 첫 루브릭(힌트 없음), v3: 규칙을 명시한 루브릭 + 주된 값 힌트(기본). v2 라운드의 지시문은 라운드 폴더의 rubric.md에 있다")
+    e.add_argument("--rubric", choices=["v1", "v4"], default="v4",
+                   help="v1: 첫 루브릭(힌트 없음), v4: 규칙을 명시한 루브릭 + 주된 값 힌트(기본). v2·v3 라운드의 지시문은 라운드 폴더의 rubric.md에 있다")
     e.set_defaults(fn=cmd_export)
     i = sub.add_parser("import")
     i.add_argument("--out-dir", required=True)

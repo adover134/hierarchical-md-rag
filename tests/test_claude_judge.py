@@ -131,18 +131,25 @@ def test_primary_hint_reports_missing_values_and_tolerates_notation():
     assert primary_hint("사업비는 50,000,000원입니다.", "사업비는 약 5,000만 원 (50,000,000 원)입니다.")["missing"] == []
 
 
-def test_rubric_v3_states_the_rules_that_drifted_between_rounds():
-    from claude_judge import INSTRUCTIONS_V3
+def test_rubric_v4_states_the_rules_that_drifted_between_rounds():
+    from claude_judge import INSTRUCTIONS_V4
 
     for needle in ("주된 값", "괄호", "Answer coverage", "라벨", "문서에서 확인되지 않습니다", "[문서: "):
-        assert needle in INSTRUCTIONS_V3
+        assert needle in INSTRUCTIONS_V4
 
 
-def test_rubric_v3_makes_the_chosen_target_the_only_primary_fact_of_a_comparison():
-    from claude_judge import INSTRUCTIONS_V3
+def test_rubric_v4_makes_the_chosen_target_the_only_primary_fact_of_a_comparison():
+    from claude_judge import INSTRUCTIONS_V4
 
-    assert "선택한 대상 하나" in INSTRUCTIONS_V3
-    assert "과 있으면 그 값" not in INSTRUCTIONS_V3
+    assert "선택한 대상 하나" in INSTRUCTIONS_V4
+    assert "과 있으면 그 값" not in INSTRUCTIONS_V4
+
+
+def test_rubric_v4_judges_correctness_and_coverage_without_the_context():
+    from claude_judge import INSTRUCTIONS_V4
+
+    assert "Correctness와 Answer coverage는 질문, 기대 답변, 생성 답변만으로 판단한다" in INSTRUCTIONS_V4
+    assert "문자열이 있어도 엉뚱한 맥락이면 틀리다고 본다" not in INSTRUCTIONS_V4
 
 
 def test_comparison_question_hint_does_not_list_compared_values():
@@ -182,10 +189,10 @@ def test_is_refusal_detects_not_found_answers_only():
     assert not is_refusal("")
 
 
-def test_rubric_v3_marks_refusal_faithfulness_as_not_applicable():
-    from claude_judge import INSTRUCTIONS_V3
+def test_rubric_v4_marks_refusal_faithfulness_as_not_applicable():
+    from claude_judge import INSTRUCTIONS_V4
 
-    assert "N/A" in INSTRUCTIONS_V3
+    assert "N/A" in INSTRUCTIONS_V4
 
 
 def test_hint_flags_refusal_items():
@@ -246,6 +253,28 @@ def test_import_v3_writes_every_origin_and_keeps_the_v2_cache(tmp_path, monkeypa
         assert (runs / "r1" / "judge_cache_v2_ref" / system / "new20__m1__1.json").exists()
         new = runs / "r1" / "judge_cache" / system / "new20__m1__1.json"
         assert _json.loads(new.read_text(encoding="utf-8"))["correctness"]["score"] == 5
+
+
+def test_import_v4_keeps_the_v3_cache(tmp_path, monkeypatch):
+    import argparse
+    import json as _json
+
+    import claude_judge as cj
+
+    cache = tmp_path / "runs" / "r1" / "judge_cache" / "a"
+    cache.mkdir(parents=True)
+    (cache / "new20__m1__1.json").write_text('{"old": true}', encoding="utf-8")
+    out = tmp_path / "round"
+    (out / "results").mkdir(parents=True)
+    (out / "rubric_version.txt").write_text("v4\n", encoding="utf-8")
+    origin = {"run": "r1", "system": "a", "dataset": "new20", "id": "m1", "repeat": 1}
+    (out / "mapping.json").write_text(_json.dumps({"j0001": {"origins": [origin]}}), encoding="utf-8")
+    axes = {ax: {"score": 5, "reason": "ok"} for ax in cj.AXES}
+    (out / "results" / "batch_01.json").write_text(_json.dumps({"j0001": axes}), encoding="utf-8")
+    monkeypatch.setattr(cj, "RUNS_DIR", tmp_path / "runs")
+
+    cj.cmd_import(argparse.Namespace(out_dir=str(out)))
+    assert (tmp_path / "runs" / "r1" / "judge_cache_v3_ref" / "a" / "new20__m1__1.json").exists()
 
 
 def test_is_refusal_ignores_a_stray_not_found_line_after_a_real_answer():
