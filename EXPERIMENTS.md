@@ -841,6 +841,7 @@ kordoc 4.24.29의 JSON에는 블록별 `pageNumber`와 `pages`가 있고 chunker
 
 목록 답 후처리와 줄 제한 수정(`b4784d3`, `204e084`) 뒤의 코드(commit `3d9c004`)로 `two_stage`와 `multi_agent`를 40문항씩 새로 실행하고 80개 답을 모두 채점했다(rubric v2, `eval_resources/claude_judge/round16/`).
 2026-11-28에 채점 입력과 비교 질문 규칙을 고치고(rubric v3) 같은 답을 다시 채점했다(`eval_resources/claude_judge/round17/`, [채점기 개선](docs/judge_improvement.md)).
+같은 날 규칙 문장을 한 번 더 고쳐(rubric v4) 다시 채점했다(`eval_resources/claude_judge/round18/`). 현재 값은 이 채점이다.
 점수, 시간, token, 환산 요금은 [07 결과](docs/07_결과.md)에만 적는다.
 
 ## 실행 기록과 겪은 문제 (재현 시 참고)
