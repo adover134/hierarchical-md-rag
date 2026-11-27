@@ -1,0 +1,38 @@
+{
+  "j0051": {
+    "correctness": {"score": 5, "reason": "답변의 770,250,000원은 기대 주된 값과 같고 '사업비' 라벨 차이는 감점하지 않는다(규칙4)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 추정금액이 들어 있고 괄호 안 추정가격·부가세 내역 누락은 감점하지 않는다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "답변의 금액 '약 7.7억 원 (770,250,000원)'이 context에 그대로 있다."},
+    "context_relevance": {"score": 5, "reason": "문서 이름이 해당 사업·기관과 일치하고 질문에 필요한 금액을 담고 있다."}
+  },
+  "j0052": {
+    "correctness": {"score": 5, "reason": "50,000,000원은 기대 주된 값인 기초금액과 같고 라벨 차이는 감점하지 않는다(규칙4)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값이 들어 있고 추정가격·부가세 내역 누락은 감점하지 않는다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "답변의 금액이 context의 '사업비: 약 5,000만 원 (50,000,000원)'과 일치한다."},
+    "context_relevance": {"score": 4, "reason": "전주사랑의집 문서의 금액은 있으나 문서 이름과 본문에서 '남자생활실 타일공사'임이 직접 확인되지 않는다."}
+  },
+  "j0053": {
+    "correctness": {"score": 5, "reason": "기초금액이 더 큰 대상으로 (건축)을 골라 기대 답변과 같다(규칙5)."},
+    "answer_coverage": {"score": 5, "reason": "주된 사실인 선택 대상이 들어 있고 비교 금액 누락은 감점하지 않는다(규칙5)."},
+    "faithfulness": {"score": 5, "reason": "context의 368,467,000원과 24,867,000원으로 (건축)이 더 큼이 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "두 공사의 기초금액이 각각의 문서에서 정확히 제공된다."}
+  },
+  "j0054": {
+    "correctness": {"score": 5, "reason": "'2026. 08. 12. 15:00'은 2026년 8월 12일 15:00과 같은 값이다(규칙4, 규칙7)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 날짜와 시각이 모두 들어 있다."},
+    "faithfulness": {"score": 5, "reason": "입찰일정 표의 전자입찰서 접수마감일시 '2026. 08. 12. 15:00'과 일치한다."},
+    "context_relevance": {"score": 4, "reason": "입찰일정 청크에 답이 있으나 참가자격·기타사항 등 불필요한 청크도 다수 포함된다."}
+  },
+  "j0055": {
+    "correctness": {"score": 5, "reason": "계약기간 420일은 기대 답변의 '계약체결일로부터 420일'과 같은 값이다."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 420일이 들어 있어 핵심 포인트를 모두 포함한다."},
+    "faithfulness": {"score": 5, "reason": "context의 '계약기간: 계약체결일로부터 420일'에서 직접 확인된다."},
+    "context_relevance": {"score": 4, "reason": "입찰사항 청크에 답이 있으나 보증금·낙찰자 결정 등 무관한 청크도 포함된다."}
+  },
+  "j0056": {
+    "correctness": {"score": 5, "reason": "낙찰하한율 86.245%가 기대 답변과 정확히 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "주된 값인 86.245%가 들어 있다."},
+    "faithfulness": {"score": 5, "reason": "context의 '낙찰하한율: 86.245%'에서 직접 확인된다."},
+    "context_relevance": {"score": 4, "reason": "낙찰하한율이 명시된 청크가 있으나 청렴계약·보증금 등 불필요한 내용과 중복 청크가 포함된다."}
+  }
+}
