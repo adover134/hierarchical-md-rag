@@ -92,7 +92,7 @@ class TestValidateResults:
 
 # --- 채점 기준: 팀 rubric + 추가 기준 4개 -------------------------------------------------------------
 
-def test_rubric_is_the_team_prompt_followed_only_by_the_four_approved_criteria():
+def test_rubric_is_the_team_prompt_followed_only_by_the_five_approved_criteria():
     from claude_judge import rubric_text
     from src.evaluation.llm_judge import JUDGE_SYSTEM_PROMPT
 
@@ -110,6 +110,10 @@ def test_rubric_is_the_team_prompt_followed_only_by_the_four_approved_criteria()
    판단하지 않는다. 답변이 문서나 context의 공고명, 기관명을 쓴 것도 감점하지 않는다.
    공고명 말고도 다른 문서임을 보여 주는 내용(질문과 다른 기관, 질문과 무관한 본문)이 있으면 그 내용으로 판단한다.
    이 기준은 네 축 모두에 적용한다.
+5. Context relevance는 기대 답변에서 context 방향으로 판단한다.
+   질문의 공고(검증 결과의 공고)에서 온 context에 기대 답변의 주된 값(괄호 밖의 값과 사실)이 있으면 5점이고,
+   함께 있는 다른 내용은 깎지 않는다. 확인되지 않는 정도에 따라 깎는다.
+   다른 공고의 context는 값이 같아도 인정하지 않는다.
 """
 
 
@@ -124,7 +128,7 @@ def test_import_writes_the_scores_and_keeps_the_v6_cache(tmp_path, monkeypatch):
     (cache / "new20__m1__1.json").write_text('{"old": true}', encoding="utf-8")
     out = tmp_path / "round"
     (out / "results").mkdir(parents=True)
-    (out / "rubric_version.txt").write_text("v6.1\n", encoding="utf-8")
+    (out / "rubric_version.txt").write_text("v6.2\n", encoding="utf-8")
     origin = {"run": "r1", "system": "sys", "dataset": "new20", "id": "m1", "repeat": 1}
     (out / "mapping.json").write_text(_json.dumps({"j0001": origin}), encoding="utf-8")
     axes = {ax: {"score": 5, "reason": "ok"} for ax in cj.AXES}
