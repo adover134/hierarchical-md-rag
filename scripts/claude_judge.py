@@ -30,7 +30,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 RUNS_DIR = REPO_ROOT / "eval_resources" / "experiment_runs"
 DATASETS = ("eval_resources/eval_dataset_new20.yaml", "eval_resources/eval_dataset_new20_v2.yaml")
 AXES = ("correctness", "answer_coverage", "faithfulness", "context_relevance")
-RUBRIC_VERSION = "v6"
+# 큰 번호는 프로젝트 버전이 바뀔 때만 올리고, 같은 프로젝트 버전 안의 변경은 소수점 뒤를 올린다.
+RUBRIC_VERSION = "v6.1"
 
 EXTRA_CRITERIA = """
 
@@ -40,8 +41,8 @@ EXTRA_CRITERIA = """
    괄호 밖의 값과 사실은 모두 있어야 한다.
 2. 비교 질문의 답은 비교 결과다. 비교의 근거가 된 값이 답변에 없어도
    Correctness와 Answer coverage를 깎지 않는다.
-3. 질문이 묻는 금액의 이름과 답변이 쓴 이름이 달라도(예: 기초금액을 사업비로)
-   값이 같으면 Correctness와 Answer coverage를 깎지 않는다.
+3. 질문이 묻는 금액의 이름과 답변이나 context가 쓴 이름이 달라도(예: 기초금액을 사업비로)
+   값이 같으면 Correctness, Answer coverage, Context relevance를 깎지 않는다.
 4. 질문에 적힌 사업 이름과 context의 공고명이나 문서 이름이 달라도, 그것만으로 다른 문서나 다른 사업이라고
    판단하지 않는다. 답변이 문서나 context의 공고명, 기관명을 쓴 것도 감점하지 않는다.
    공고명 말고도 다른 문서임을 보여 주는 내용(질문과 다른 기관, 질문과 무관한 본문)이 있으면 그 내용으로 판단한다.
@@ -185,11 +186,11 @@ def cmd_import(a: argparse.Namespace) -> None:
         print("검증 실패:\n  " + "\n  ".join(problems[:40]))
         raise SystemExit(1)
     touched = set()
-    # 이전 캐시를 어디에 남기는지: v6 채점이면 이전 v5 채점을 `judge_cache_v5_ref`에,
+    # 이전 캐시를 어디에 남기는지: 지금 버전의 채점이면 이전 v6 채점을 `judge_cache_v6_ref`에,
     # 그 밖에는 이전 gpt-oss 채점을 `judge_cache_gptoss_ref`에 둔다.
     version_file = out / "rubric_version.txt"
     version = version_file.read_text(encoding="utf-8").strip() if version_file.exists() else ""
-    previous = "v5" if version == RUBRIC_VERSION else "gptoss"
+    previous = "v6" if version == RUBRIC_VERSION else "gptoss"
     ref_name, summary_ref = f"judge_cache_{previous}_ref", f"summary_{previous}_ref.json"
     for item_id, origin in mapping.items():
         run_dir = RUNS_DIR / origin["run"]

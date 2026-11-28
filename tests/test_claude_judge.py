@@ -104,8 +104,8 @@ def test_rubric_is_the_team_prompt_followed_only_by_the_four_approved_criteria()
    괄호 밖의 값과 사실은 모두 있어야 한다.
 2. 비교 질문의 답은 비교 결과다. 비교의 근거가 된 값이 답변에 없어도
    Correctness와 Answer coverage를 깎지 않는다.
-3. 질문이 묻는 금액의 이름과 답변이 쓴 이름이 달라도(예: 기초금액을 사업비로)
-   값이 같으면 Correctness와 Answer coverage를 깎지 않는다.
+3. 질문이 묻는 금액의 이름과 답변이나 context가 쓴 이름이 달라도(예: 기초금액을 사업비로)
+   값이 같으면 Correctness, Answer coverage, Context relevance를 깎지 않는다.
 4. 질문에 적힌 사업 이름과 context의 공고명이나 문서 이름이 달라도, 그것만으로 다른 문서나 다른 사업이라고
    판단하지 않는다. 답변이 문서나 context의 공고명, 기관명을 쓴 것도 감점하지 않는다.
    공고명 말고도 다른 문서임을 보여 주는 내용(질문과 다른 기관, 질문과 무관한 본문)이 있으면 그 내용으로 판단한다.
@@ -113,7 +113,7 @@ def test_rubric_is_the_team_prompt_followed_only_by_the_four_approved_criteria()
 """
 
 
-def test_import_writes_the_scores_and_keeps_the_v5_cache(tmp_path, monkeypatch):
+def test_import_writes_the_scores_and_keeps_the_v6_cache(tmp_path, monkeypatch):
     import argparse
     import json as _json
 
@@ -124,7 +124,7 @@ def test_import_writes_the_scores_and_keeps_the_v5_cache(tmp_path, monkeypatch):
     (cache / "new20__m1__1.json").write_text('{"old": true}', encoding="utf-8")
     out = tmp_path / "round"
     (out / "results").mkdir(parents=True)
-    (out / "rubric_version.txt").write_text("v6\n", encoding="utf-8")
+    (out / "rubric_version.txt").write_text("v6.1\n", encoding="utf-8")
     origin = {"run": "r1", "system": "sys", "dataset": "new20", "id": "m1", "repeat": 1}
     (out / "mapping.json").write_text(_json.dumps({"j0001": origin}), encoding="utf-8")
     axes = {ax: {"score": 5, "reason": "ok"} for ax in cj.AXES}
@@ -132,5 +132,5 @@ def test_import_writes_the_scores_and_keeps_the_v5_cache(tmp_path, monkeypatch):
     monkeypatch.setattr(cj, "RUNS_DIR", tmp_path / "runs")
 
     cj.cmd_import(argparse.Namespace(out_dir=str(out)))
-    assert (tmp_path / "runs" / "r1" / "judge_cache_v5_ref" / "sys" / "new20__m1__1.json").exists()
+    assert (tmp_path / "runs" / "r1" / "judge_cache_v6_ref" / "sys" / "new20__m1__1.json").exists()
     assert _json.loads((cache / "new20__m1__1.json").read_text(encoding="utf-8"))["correctness"]["score"] == 5
