@@ -1,0 +1,110 @@
+{
+ "p0041": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 60일이라는 핵심 값이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "기산점인 '착공일로부터'가 빠져 사소한 누락이 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 영동군 공고 문서에 공사기간 값이 명시되어 있다."
+  }
+ },
+ "p0042": {
+  "correctness": {
+   "score": 5,
+   "reason": "240kW 파워뱅크 2기, 디스펜서 5기를 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 설치대수 항목을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "설치대수는 context에 있으나 종류가 다른 설비를 합산한 '총 7기'는 context에 없는 추론이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 온양교통 공고 문서에 설치대수가 명시되어 있다."
+  }
+ },
+ "p0043": {
+  "correctness": {
+   "score": 4,
+   "reason": "기준 비율·종합평점·최저가순 적격심사는 맞으나 '예정가격'을 '예산'으로 잘못 표현했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "82.495%, 최저가순 적격심사, 85점 이상 등 핵심 포인트를 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "대부분 context에 근거하나 '예산'이라는 표현은 원문과 다르다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 에스알 공고 문서의 낙찰자 결정 조항에 기대 답변이 그대로 있다."
+  }
+ },
+ "p0044": {
+  "correctness": {
+   "score": 5,
+   "reason": "100,000,000원이라는 값이 기대 답변의 기초금액과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심인 금액을 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 검색된 context의 사업비 값에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context는 검증된 1지역 공고가 아닌 2지역 도로조명 공고 문서여서 인정되지 않는다."
+  }
+ },
+ "p0045": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 계약체결일로부터 365일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "단가발주는 발주일로부터 180일 이내라는 부가 조건이 누락됐다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 계약기간 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 코일스프링 공고 문서에 계약기간이 명시되어 있다."
+  }
+ },
+ "p0046": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 120일이라는 핵심 값이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "기산점인 '착공일로부터'가 빠져 사소한 누락이 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 120일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 (건축) 공고 문서에 공사기간 값이 명시되어 있다."
+  }
+ }
+}

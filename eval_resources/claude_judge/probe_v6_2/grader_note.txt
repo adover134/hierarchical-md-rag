@@ -1,0 +1,7 @@
+격리 호출(`scripts/judge_grade.py`)로 채점했다.
+
+- 모델: claude-haiku-5-5, claude-opus-5-5. 호출 5회, 호출 하나가 batch 하나를 채점했다.
+- 채점자가 받은 것: system prompt(rubric.md + instruction.txt)와 batch 파일의 내용.
+- 지시 파일, memory, git 상태, 도구는 붙지 않는다(`claude -p --safe-mode --tools ""`, 빈 폴더).
+  Claude Code가 붙이는 계정 email과 실행 환경 정보는 남는다.
+- 호출 기록에 haiku가 함께 남으면 Claude Code가 덧붙인 호출이다. 용도는 확인하지 못했다.

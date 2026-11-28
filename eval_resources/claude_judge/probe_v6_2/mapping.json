@@ -1,0 +1,534 @@
+{
+ "p0001": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20_v2",
+  "id": "n14",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0058",
+  "source_round_c": "round25"
+ },
+ "p0002": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m7",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0057",
+  "source_round_c": "round25"
+ },
+ "p0003": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m14",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0016",
+  "source_round_c": "round25"
+ },
+ "p0004": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m4",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0060",
+  "source_round_c": "round25"
+ },
+ "p0005": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n18",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0011",
+  "source_round_c": "round25"
+ },
+ "p0006": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n9",
+  "repeat": 1,
+  "kind_c": "값 바꿈",
+  "change": [
+   [
+    "약 2,675만 원 (26,750,000원)",
+    "약 2,975만 원 (29,750,000원)"
+   ]
+  ],
+  "source_item": "j0003",
+  "source_round_c": "round24",
+  "source_item_v6_1c": "p0012"
+ },
+ "p0007": {
+  "id": "m8",
+  "system": "current_default",
+  "kind": "다른 기관·다른 사업",
+  "note": "m7의 context",
+  "dataset": "new20",
+  "source_round": "probe_verify2",
+  "source_item": "p0010",
+  "source_item_v6_1": "p0011",
+  "kind_c": "context 바꿈",
+  "source_item_v6_1c": "p0032"
+ },
+ "p0008": {
+  "id": "n18",
+  "system": "current_multi_agent",
+  "kind": "다른 기관·다른 사업",
+  "note": "n15의 context",
+  "dataset": "new20_v2",
+  "source_round": "probe_verify2",
+  "source_item": "p0008",
+  "source_item_v6_1": "p0012",
+  "kind_c": "context 바꿈",
+  "source_item_v6_1c": "p0010"
+ },
+ "p0009": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20",
+  "id": "m14",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0075",
+  "source_round_c": "round25"
+ },
+ "p0010": {
+  "id": "n4",
+  "system": "current_default",
+  "kind": "다른 학교의 같은 종류",
+  "note": "n5(다른 학교)의 context",
+  "dataset": "new20_v2",
+  "source_round": "probe_verify2",
+  "source_item": "p0007",
+  "source_item_v6_1": "p0016",
+  "kind_c": "context 바꿈",
+  "source_item_v6_1c": "p0019"
+ },
+ "p0011": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n8",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0043",
+  "source_round_c": "round25"
+ },
+ "p0012": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20_v2",
+  "id": "n18",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0013",
+  "source_round_c": "round25"
+ },
+ "p0013": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20_v2",
+  "id": "n17",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0031",
+  "source_round_c": "round25"
+ },
+ "p0014": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m2",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0049",
+  "source_round_c": "round25"
+ },
+ "p0015": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m9",
+  "repeat": 1,
+  "kind_c": "값 바꿈",
+  "change": [
+   [
+    "8월 12일 15:00",
+    "8월 17일 15:00"
+   ]
+  ],
+  "source_item": "j0079",
+  "source_round_c": "round24",
+  "source_item_v6_1c": "p0006"
+ },
+ "p0016": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n14",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0054",
+  "source_round_c": "round25"
+ },
+ "p0017": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20",
+  "id": "m16",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0042",
+  "source_round_c": "round25"
+ },
+ "p0018": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m3",
+  "repeat": 1,
+  "kind_c": "값 바꿈",
+  "change": [
+   [
+    "약 7.7억 원 (770,250,000원)",
+    "약 7.1억 원 (707,250,000원)"
+   ]
+  ],
+  "source_item": "j0015",
+  "source_round_c": "round24",
+  "source_item_v6_1c": "p0011"
+ },
+ "p0019": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n11",
+  "repeat": 1,
+  "kind_c": "값 바꿈",
+  "change": [
+   [
+    "약 2.3억 원 (228,081,000원)",
+    "약 2.8억 원 (282,081,000원)"
+   ]
+  ],
+  "source_item": "j0030",
+  "source_round_c": "round24",
+  "source_item_v6_1c": "p0013"
+ },
+ "p0020": {
+  "id": "n15",
+  "system": "current_multi_agent",
+  "kind": "같은 기관·같은 금액",
+  "note": "1지역 질문에 3지역 공고",
+  "dataset": "new20_v2",
+  "source_round": "probe_verify2",
+  "source_item": "p0015",
+  "source_item_v6_1": "p0010",
+  "kind_c": "context 바꿈",
+  "source_item_v6_1c": "p0028"
+ },
+ "p0021": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m5",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0055",
+  "source_round_c": "round25"
+ },
+ "p0022": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m18",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0001",
+  "source_round_c": "round25"
+ },
+ "p0023": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m17",
+  "repeat": 1,
+  "kind_c": "값 바꿈",
+  "change": [
+   [
+    "착공일로부터 60일",
+    "착공일로부터 90일"
+   ]
+  ],
+  "source_item": "j0017",
+  "source_round_c": "round24",
+  "source_item_v6_1c": "p0020"
+ },
+ "p0024": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20_v2",
+  "id": "n2",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0034",
+  "source_round_c": "round25"
+ },
+ "p0025": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20",
+  "id": "m10",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0053",
+  "source_round_c": "round25"
+ },
+ "p0026": {
+  "id": "m13",
+  "system": "current_default",
+  "kind": "값이 같은 다른 사업",
+  "note": "n13의 context",
+  "dataset": "new20",
+  "source_round": "probe_verify2",
+  "source_item": "p0003",
+  "source_item_v6_1": "p0021",
+  "kind_c": "context 바꿈",
+  "source_item_v6_1c": "p0021"
+ },
+ "p0027": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n19",
+  "repeat": 1,
+  "kind_c": "값 바꿈",
+  "change": [
+   [
+    "약 6.1억 원 (608,881,900원)",
+    "약 6.8억 원 (680,881,900원)"
+   ]
+  ],
+  "source_item": "j0041",
+  "source_round_c": "round24",
+  "source_item_v6_1c": "p0023"
+ },
+ "p0028": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n6",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0073",
+  "source_round_c": "round25"
+ },
+ "p0029": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n17",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0046",
+  "source_round_c": "round25"
+ },
+ "p0030": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m4",
+  "repeat": 1,
+  "kind_c": "값 바꿈",
+  "change": [
+   [
+    "2026년 12월 31일",
+    "2026년 11월 30일"
+   ]
+  ],
+  "source_item": "j0060",
+  "source_round_c": "round24",
+  "source_item_v6_1c": "p0014"
+ },
+ "p0031": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m3",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0015",
+  "source_round_c": "round25"
+ },
+ "p0032": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20",
+  "id": "m8",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0010",
+  "source_round_c": "round25"
+ },
+ "p0033": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20",
+  "id": "m5",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0020",
+  "source_round_c": "round25"
+ },
+ "p0034": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m10",
+  "repeat": 1,
+  "kind_c": "값 바꿈",
+  "change": [
+   [
+    "10월 20일(화)부터 10월 22일(수)",
+    "10월 27일(화)부터 10월 29일(목)"
+   ]
+  ],
+  "source_item": "j0004",
+  "source_round_c": "round24",
+  "source_item_v6_1c": "p0003"
+ },
+ "p0035": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n7",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0012",
+  "source_round_c": "round25"
+ },
+ "p0036": {
+  "id": "n18",
+  "system": "current_default",
+  "kind": "같은 기관·다른 금액",
+  "note": "n19(다른 조합)의 context",
+  "dataset": "new20_v2",
+  "source_round": "probe_verify2",
+  "source_item": "p0002",
+  "source_item_v6_1": "p0007",
+  "kind_c": "context 바꿈",
+  "source_item_v6_1c": "p0034"
+ },
+ "p0037": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n16",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0032",
+  "source_round_c": "round25"
+ },
+ "p0038": {
+  "id": "m19",
+  "system": "current_default",
+  "kind": "다른 기관·다른 사업",
+  "note": "n20(비교 문항)의 context",
+  "dataset": "new20",
+  "source_round": "probe_verify2",
+  "source_item": "p0006",
+  "source_item_v6_1": "p0002",
+  "kind_c": "context 바꿈",
+  "source_item_v6_1c": "p0025"
+ },
+ "p0039": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20",
+  "id": "m4",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0052",
+  "source_round_c": "round25"
+ },
+ "p0040": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20",
+  "id": "m1",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0059",
+  "source_round_c": "round25"
+ },
+ "p0041": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n2",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0007",
+  "source_round_c": "round25"
+ },
+ "p0042": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20_v2",
+  "id": "n16",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0023",
+  "source_round_c": "round25"
+ },
+ "p0043": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m1",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0050",
+  "source_round_c": "round25"
+ },
+ "p0044": {
+  "id": "n15",
+  "system": "current_default",
+  "kind": "같은 기관·같은 금액",
+  "note": "1지역 질문에 2지역 공고",
+  "dataset": "new20_v2",
+  "source_round": "probe_verify2",
+  "source_item": "p0011",
+  "source_item_v6_1": "p0019",
+  "kind_c": "context 바꿈",
+  "source_item_v6_1c": "p0029"
+ },
+ "p0045": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20_v2",
+  "id": "n7",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0071",
+  "source_round_c": "round25"
+ },
+ "p0046": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m13",
+  "repeat": 1,
+  "kind_c": "감점 항목",
+  "source_item": "j0002",
+  "source_round_c": "round25"
+ }
+}

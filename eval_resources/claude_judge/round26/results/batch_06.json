@@ -1,0 +1,182 @@
+{
+ "j0051": {
+  "correctness": {
+   "score": 5,
+   "reason": "The answer gives 390,000 won, which matches the expected base amount even though it is labelled 사업비 (project cost)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "The only key point, the 390,000 won base amount, is included."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The answer copies the context's '약 39만 원 (390,000원)' exactly."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified 덕적고등학교 notice and contains the same 390,000 won value."
+  }
+ },
+ "j0052": {
+  "correctness": {
+   "score": 5,
+   "reason": "The delivery deadline of 2026-12-31 matches the expected answer."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "The deadline, the only key point, is included."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The context states '납품기한 : 2026. 12. 31.' directly."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified notice and includes the deadline clause."
+  }
+ },
+ "j0053": {
+  "correctness": {
+   "score": 5,
+   "reason": "The event period of 2026-10-20 (Tue) to 10-22 (Wed), 3 days, matches the expected answer."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "The start date, end date and 3-day length are all included."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The context's '행 사 기 간' line confirms the period directly."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified 한국불교종단협의회 notice and contains the event period."
+  }
+ },
+ "j0054": {
+  "correctness": {
+   "score": 5,
+   "reason": "The construction period of 90 days matches the expected answer."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "The 90-day period, the only key point, is included."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The 90-day period and the extra details (registration dates, contact) all appear in the context's table."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified 옥천군 농업기술센터 notice and contains '공사 기간: 90일'."
+  }
+ },
+ "j0055": {
+  "correctness": {
+   "score": 5,
+   "reason": "The answer gives 47,820,800 won, which matches the expected base amount; per rule 1 the bracketed breakdown is not required."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "The main amount is there, but the bracketed estimated price and VAT breakdown is missing."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The answer copies the amount in the context exactly."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified 울산 중구 notice and contains 47,820,800 won."
+  }
+ },
+ "j0056": {
+  "correctness": {
+   "score": 5,
+   "reason": "The answer correctly says the (건축) work has the larger base amount."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "The comparison result is included, and per rule 2 the missing supporting amounts are not penalised."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The context confirms both amounts (368,467,000 won vs 24,867,000 won), so the answer is grounded."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context includes the base amounts from both verified notices, (건축) and (통신)."
+  }
+ },
+ "j0057": {
+  "correctness": {
+   "score": 5,
+   "reason": "The answer gives 55,800,000 won, which matches the expected project budget."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "The main amount is included, but the bracketed note that VAT is included is missing."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The answer copies the amount in the context exactly."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified 울산광역시사회복지협의회 notice and contains 55,800,000 won."
+  }
+ },
+ "j0058": {
+  "correctness": {
+   "score": 5,
+   "reason": "The construction period of 90 days matches the expected answer."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "The 90-day period, the only key point, is included."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The context states '공사 기간: 90일' directly."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified notice and contains the construction period."
+  }
+ },
+ "j0059": {
+  "correctness": {
+   "score": 5,
+   "reason": "The 82.495% threshold, lowest-price-first qualification review and 85-point score cutoff all match the expected answer."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "All key points of the expected answer are included."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The answer matches the context's '8. 낙찰자 결정' section almost word for word."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified 에스알 notice and includes the award criteria section."
+  }
+ },
+ "j0060": {
+  "correctness": {
+   "score": 5,
+   "reason": "The delivery deadline of 2026-12-31 matches the expected answer."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "The deadline, the only key point, is included."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The context confirms the deadline clause directly."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified notice and contains the delivery deadline."
+  }
+ }
+}

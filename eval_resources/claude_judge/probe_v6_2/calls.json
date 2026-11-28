@@ -1,0 +1,107 @@
+[
+ {
+  "cost_usd": 0.32985139999999996,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "usage": {
+   "claude-haiku-5-5": {
+    "inputTokens": 31618,
+    "outputTokens": 26,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 0
+   },
+   "claude-opus-5-5": {
+    "inputTokens": 2,
+    "outputTokens": 2950,
+    "cacheReadInputTokens": 4543,
+    "cacheCreationInputTokens": 33345
+   }
+  }
+ },
+ {
+  "cost_usd": 0.3265071,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "usage": {
+   "claude-haiku-5-5": {
+    "inputTokens": 30810,
+    "outputTokens": 35,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 0
+   },
+   "claude-opus-5-5": {
+    "inputTokens": 2,
+    "outputTokens": 3111,
+    "cacheReadInputTokens": 4543,
+    "cacheCreationInputTokens": 32534
+   }
+  }
+ },
+ {
+  "cost_usd": 0.3258086,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "usage": {
+   "claude-haiku-5-5": {
+    "inputTokens": 26496,
+    "outputTokens": 30,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 0
+   },
+   "claude-opus-5-5": {
+    "inputTokens": 2,
+    "outputTokens": 3052,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 32762
+   }
+  }
+ },
+ {
+  "cost_usd": 0.2684993,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "usage": {
+   "claude-haiku-5-5": {
+    "inputTokens": 22977,
+    "outputTokens": 26,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 0
+   },
+   "claude-opus-5-5": {
+    "inputTokens": 2,
+    "outputTokens": 3382,
+    "cacheReadInputTokens": 4543,
+    "cacheCreationInputTokens": 24704
+   }
+  }
+ },
+ {
+  "cost_usd": 0.27150029999999997,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "usage": {
+   "claude-haiku-5-5": {
+    "inputTokens": 22953,
+    "outputTokens": 26,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 0
+   },
+   "claude-opus-5-5": {
+    "inputTokens": 2,
+    "outputTokens": 2428,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 27578
+   }
+  }
+ }
+]

@@ -319,3 +319,32 @@ code로 계산하는 지표의 변경이다. LLM 채점 기준과 점수는 바�
 - 320개 점수 중 41개가 바뀌었다(Correctness 2, Answer coverage 15, Faithfulness 0, Context relevance 24).
 - 시험은 통과했지만, 감점돼도 안 돼도 되는 유형의 점수가 채점마다 달라진다([채점 규칙](judge_rules.md)의 "채점기의 알려진 한계").
 
+## v6.2 (2026-11-29): Context relevance의 방향
+
+**왜**
+
+- `round25`에서 맞는 공고의 context에 다른 조항이 섞였다는 감점이 났고, 같은 입력의 점수가 회차마다 달라졌다.
+- 지표의 방향을 "chunk가 답에 얼마나 필요한가"에서 "필요한 내용이 chunk에 있는가"로 바꾸기로 했다.
+
+**무엇을** (문장을 보고 승인받았다)
+
+```text
+5. Context relevance는 기대 답변에서 context 방향으로 판단한다.
+   질문의 공고(검증 결과의 공고)에서 온 context에 기대 답변의 주된 값(괄호 밖의 값과 사실)이 있으면 5점이고,
+   함께 있는 다른 내용은 깎지 않는다. 확인되지 않는 정도에 따라 깎는다.
+   다른 공고의 context는 값이 같아도 인정하지 않는다.
+```
+
+- 채점기 시험(`probe_v6_2`)의 네 기준을 통과한 뒤 80개를 다시 채점했다(`round26`).
+
+**생성한 답의 점수** (심사: Claude(격리 호출))
+
+| 회차 | 방식 | Correctness | Answer coverage | Faithfulness | Context relevance |
+|---|---|---|---|---|---|
+| `round25`(v6.1) | `two_stage` | 4.925 | 4.700 | 4.950 | 4.675 |
+| `round26`(v6.2) | `two_stage` | 4.975 | 4.725 | 4.950 | 5.000 |
+| `round25`(v6.1) | `multi_agent` | 4.950 | 4.825 | 4.950 | 4.775 |
+| `round26`(v6.2) | `multi_agent` | 4.975 | 4.775 | 4.950 | 5.000 |
+
+- Context relevance는 모두 만점이 돼 이번 답에서는 chunk Recall@5와 겹친다.
+

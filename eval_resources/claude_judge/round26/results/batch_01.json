@@ -1,0 +1,182 @@
+{
+ "j0001": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 50,000,000원은 기대 답변의 주된 기초금액과 같고, 사업비라는 명칭 차이는 감점하지 않습니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 금액은 들어 있지만 괄호 안의 추정가격과 부가가치세 내역이 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context의 '사업비: 약 5,000만 원 (50,000,000원)'과 그대로 일치합니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 전북대 GPU그래픽카드 공고 문서에서 온 context에 50,000,000원 값이 있습니다."
+  }
+ },
+ "j0002": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 120일이 기대 답변 및 원문과 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심인 120일을 담고 있어 빠진 핵심 정보가 없습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 120일'에 근거한 답변입니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 영동군 (건축) 공고 문서에 공사기간이 명시되어 있습니다."
+  }
+ },
+ "j0003": {
+  "correctness": {
+   "score": 5,
+   "reason": "26,750,000원이 기대 답변의 기초금액과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 유일한 핵심인 금액을 포함합니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 적힌 사업비 값을 그대로 옮겼습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 고양골소하천 공고 문서의 context에 같은 금액이 있습니다."
+  }
+ },
+ "j0004": {
+  "correctness": {
+   "score": 5,
+   "reason": "2026년 10월 20일부터 22일까지 3일간으로 기대 답변과 정확히 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "시작일, 종료일, 기간(3일간)을 모두 담고 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '행 사 기 간' 항목에서 바로 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 한국불교종단협의회 공고 문서에 행사 기간이 명시되어 있습니다."
+  }
+ },
+ "j0005": {
+  "correctness": {
+   "score": 5,
+   "reason": "한서대학교 용역이 예산이 더 크다는 비교 결과가 맞습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "비교 질문의 답인 비교 결과를 담고 있어, 근거 금액이 없어도 감점하지 않습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 나온 두 예산(2.2억, 1.5억)으로 비교 결과를 낼 수 있습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 두 공고 문서에서 각각의 사업예산을 가져왔습니다."
+  }
+ },
+ "j0006": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027.2.19., 하복 2027.5.7.로 기대 답변과 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "동복과 하복의 납품기한을 둘 다 포함합니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 납품기한 항목과 계약특수조건에서 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 서야고등학교 재공고 문서에 납품기한이 명시되어 있습니다."
+  }
+ },
+ "j0007": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 60일이 기대 답변과 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 정보인 60일을 포함합니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'에 근거합니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 영동군 임도구조개량사업 공고 문서에 공사기간이 있습니다."
+  }
+ },
+ "j0008": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027.2.22., 하복 2027.5.10.로 기대 답변과 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "동복과 하복의 납품기한을 모두 포함합니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 납품기한 항목과 계약특수조건 제3조에서 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 신목중학교 공고 문서에 납품기한이 명시되어 있습니다."
+  }
+ },
+ "j0009": {
+  "correctness": {
+   "score": 5,
+   "reason": "33,690,000원이 기대 답변의 기초금액과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 유일한 핵심인 금액을 포함합니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 적힌 사업비 값을 그대로 옮겼습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 양안이골소하천 공고 문서의 context에 같은 금액이 있습니다."
+  }
+ },
+ "j0010": {
+  "correctness": {
+   "score": 5,
+   "reason": "631,400,000원이 기대 답변의 주된 기초금액과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "금액은 들어 있지만 부가가치세 포함이라는 단서가 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 적힌 사업비 값을 그대로 옮겼습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 (주)한성케미칼 태양광 발전설비 공고 문서의 context에 같은 금액이 있습니다."
+  }
+ }
+}
