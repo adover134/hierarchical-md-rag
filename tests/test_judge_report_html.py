@@ -78,6 +78,12 @@ def test_html_shows_the_verification_result_that_the_grader_received(tmp_path):
     assert all(word in page for word in ("가 공고", "1호", "이름 일치", "검증한 답", "확인 못 한 것"))
 
 
+def test_a_round_graded_by_isolated_calls_is_labelled_as_such(tmp_path):
+    rd, runs, dataset = _fixture(tmp_path)
+    (rd / "calls.json").write_text("[]", encoding="utf-8")
+    assert build_results(rd, "r1", "s", dataset, runs)["meta"]["judge_model"] == "Claude(격리 호출, Opus)"
+
+
 def test_html_shows_the_grading_input_escaped_and_no_claims_from_the_old_run(tmp_path):
     rd, runs, dataset = _fixture(tmp_path)
     page = build_html(build_results(rd, "r1", "s", dataset, runs))

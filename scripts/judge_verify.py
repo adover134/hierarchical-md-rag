@@ -4,10 +4,10 @@
 도구 없이 `claude -p`로 부르고, 검증자가 요청한 목록·검색·보기만 이 코드가 대신 실행하므로 평가 set과 점수 파일에 접근할 수 없다.
 
 사용 예:
-    python scripts/judge_search.py build
+    python scripts/judge_search.py build          # 원본 문서의 검색 자료. 공고 목록은 실행할 때 엑셀에서 읽는다
     python scripts/judge_verify.py run --out eval_resources/claude_judge/<round>/verification.json
     python scripts/judge_verify.py attach --round-dir eval_resources/claude_judge/<round> --verification <위 파일>
-`attach`는 batch의 항목마다 "검증 결과"를 붙이고 지시문에 한 줄을 더한다. 채점(2단계)은 지금처럼 subagent가 한다.
+`attach`는 batch의 항목마다 "검증 결과"를 붙이고 지시문에 두 줄을 더한다. 채점(2단계)은 `scripts/judge_grade.py`가 한다.
 """
 
 from __future__ import annotations
@@ -26,17 +26,21 @@ from typing import Callable
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from judge_search import CORPUS_PATH, list_text, load_corpus, search_text, show_text  # noqa: E402
+from judge_excel import excel_text, read_notices  # noqa: E402
+from judge_grade import BASE_INSTRUCTION  # noqa: E402
+from judge_search import CORPUS_PATH, docs_text, load_corpus, search_text, show_text  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-VERIFY_PROMPT = """당신은 RAG 답 채점을 위한 검증자다. 아래 질문의 답을 원본 문서에서 직접 찾는다.
+VERIFY_PROMPT = """당신은 RAG 답 채점을 위한 검증자다. 아래 질문의 답을 원본에서 직접 찾는다. 공고 목록(엑셀)을 먼저 보고, 목록에 없는 내용은 원본 문서에서 찾는다.
 - 질문이 가리키는 공고를 먼저 특정한다. 이름이 비슷한 공고가 여럿이면 지역, 차수, 공고번호, 본문을 대조해 하나로 좁히고 이유를 적는다.
 - 근거가 된 원문 구절을 그대로 인용한다. 찾지 못하면 "확인 불가"라고 쓴다.
+- "answer"에는 목록에서 확인한 값과 문서에서만 확인한 내용을 구분해 적는다.
 출력: {"notices": [{"file": "", "notice_no": "", "why": "", "quotes": []}], "answer": "", "unverified": ""}
 
 원본을 직접 열 수는 없고, 아래 행동을 한 번에 하나씩 JSON으로 요청하면 결과를 받는다.
-- {"action": "list", "query": "낱말"}: 공고 목록(엑셀)에서 낱말이 든 공고. query가 비면 문서 목록
+- {"action": "excel", "query": "낱말 낱말"}: 공고 목록(엑셀)에서 낱말이 든 행. 모든 열(사업 금액 포함)을 보여준다. query가 비면 열 이름
+- {"action": "docs"}: 원본 문서 목록
 - {"action": "search", "query": "낱말 낱말"}: 원본 본문에서 낱말이 많이 든 부분
 - {"action": "show", "doc": 문서번호, "start": 시작줄}: 원본 한 문서의 본문
 - {"action": "final", "result": {위 출력 형식}}: 검증을 마치고 결과를 낸다. file에는 문서 이름을 그대로 적는다."""
@@ -44,7 +48,7 @@ VERIFY_PROMPT = """당신은 RAG 답 채점을 위한 검증자다. 아래 질�
 SCHEMA = {
     "type": "object",
     "properties": {
-        "action": {"type": "string", "enum": ["list", "search", "show", "final"]},
+        "action": {"type": "string", "enum": ["excel", "docs", "search", "show", "final"]},
         "query": {"type": "string"}, "doc": {"type": "integer"}, "start": {"type": "integer"},
         "result": {
             "type": "object",
@@ -59,12 +63,15 @@ SCHEMA = {
     "required": ["action"],
 }
 
-INSTRUCTION_LINE = '항목의 "검증 결과"는 원본에서 따로 확인한 것이다. 채점하기 전에 context의 문서가 검증 결과의 공고와 같은지 대조한다.'
+INSTRUCTION_LINE = ('항목의 "검증 결과"는 원본에서 따로 확인한 것이다. 채점하기 전에 context의 문서가 검증 결과의 공고와 같은지 대조한다.\n'
+                    '생성 답이나 context가 기대 답변과 다르게 표현돼도, 검증 결과의 값이나 원문 구절로 같은 내용임이 확인되면 맞은 것으로 본다.')
 
 
 def _run_action(corpus: dict, reply: dict) -> str:
-    if reply["action"] == "list":
-        return list_text(corpus, reply.get("query", ""))
+    if reply["action"] == "excel":
+        return excel_text(corpus.get("notices", []), corpus["documents"], reply.get("query", ""))
+    if reply["action"] == "docs":
+        return docs_text(corpus)
     if reply["action"] == "search":
         return search_text(corpus, reply.get("query", ""))
     if reply["action"] == "show":
@@ -130,7 +137,7 @@ def attach(round_dir: Path, verification: dict) -> None:
             item["검증 결과"] = verification[f"{origin['dataset']}/{origin['id']}"]["result"]
         path.write_text(json.dumps(items, ensure_ascii=False, indent=1), encoding="utf-8")
     instruction = round_dir / "instruction.txt"
-    text = instruction.read_text(encoding="utf-8")
+    text = instruction.read_text(encoding="utf-8") if instruction.exists() else BASE_INSTRUCTION
     if INSTRUCTION_LINE not in text:
         instruction.write_text(text.rstrip("\n") + "\n" + INSTRUCTION_LINE + "\n", encoding="utf-8")
 
@@ -139,6 +146,7 @@ def cmd_run(a: argparse.Namespace) -> None:
     from claude_judge import _load_dataset_items
 
     corpus = load_corpus(Path(a.corpus))
+    corpus["notices"] = read_notices()  # 실행할 때마다 엑셀 원본을 읽는다
     items = _load_dataset_items()
     out = Path(a.out)
     done = json.loads(out.read_text(encoding="utf-8")) if out.exists() else {}

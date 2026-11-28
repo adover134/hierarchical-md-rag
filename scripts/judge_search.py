@@ -1,8 +1,9 @@
-"""채점 검증용 원본 검색. 프로젝트의 parser와 DB를 거치지 않고 원본 문서(PDF, HWP, HWPX)와 공고 목록 엑셀만 읽는다.
+"""채점 검증용 원본 문서 검색. 프로젝트의 parser와 DB를 거치지 않고 원본 문서(PDF, HWP, HWPX)를 읽는다.
+공고 목록 엑셀은 `scripts/judge_excel.py`가 읽는다.
 
 사용 예:
     python scripts/judge_search.py build
-    python scripts/judge_search.py list 아산시
+    python scripts/judge_search.py docs
     python scripts/judge_search.py search "교통신호기 1지역 기초금액"
     python scripts/judge_search.py show 3 --start 1
 
@@ -26,8 +27,6 @@ from xml.etree import ElementTree as ET
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SOURCE_DIR = REPO_ROOT / "RAG_프로세스_테스트_데이터_원본"
 CORPUS_PATH = REPO_ROOT / "eval_resources" / "judge_corpus" / "corpus.json"
-NOTICE_LIST = "입찰공고목록*.xlsx"
-NOTICE_COLUMNS = ("입찰공고번호", "공고명", "공고기관", "수요기관")
 PASSAGE, STEP = 12, 8  # 검색 단위(줄)
 MAX_OUTPUT = 4000      # 한 번에 돌려주는 글자 수
 
@@ -96,17 +95,13 @@ READERS = {".pdf": pdf_text, ".hwpx": hwpx_text, ".hwp": hwp_text}
 
 
 def build_corpus(source_dir: Path) -> dict:
-    sys.path.insert(0, str(REPO_ROOT))
-    from src.utils.bid_list_xlsx import read_bid_list_rows  # 엑셀 한 장을 행으로 읽는 일만 한다
-
     files = sorted((p for p in source_dir.iterdir() if p.suffix.lower() in READERS), key=lambda p: unicodedata.normalize("NFC", p.name))
     documents = []
     for no, path in enumerate(files, 1):
         text = READERS[path.suffix.lower()](path)
         lines = [unicodedata.normalize("NFC", line.rstrip()) for line in text.split("\n") if line.strip()]
         documents.append({"no": no, "file": unicodedata.normalize("NFC", path.stem), "lines": lines})
-    notices = [row for xlsx in sorted(source_dir.glob(NOTICE_LIST)) for row in read_bid_list_rows(xlsx)]
-    return {"documents": documents, "notices": notices}
+    return {"documents": documents}
 
 
 # --- 검색 ------------------------------------------------------------------------------------
@@ -119,21 +114,9 @@ def _clip(text: str) -> str:
     return text if len(text) <= MAX_OUTPUT else text[:MAX_OUTPUT] + "\n... (이하 생략)"
 
 
-def list_text(corpus: dict, query: str = "") -> str:
-    """공고 목록에서 낱말이 든 공고와 문서 번호. 낱말이 없으면 문서 목록."""
-    words = [norm(w) for w in query.split() if norm(w)]
-    if not words:
-        return _clip("\n".join(f"문서 {d['no']}: {d['file']}" for d in corpus["documents"]))
-    rows = []
-    for row in corpus["notices"]:
-        joined = norm(" ".join(str(row.get(c, "")) for c in NOTICE_COLUMNS))
-        hits = sum(w in joined for w in words)
-        if hits:
-            title = norm(row.get("공고명", ""))
-            docs = [f"문서 {d['no']}" for d in corpus["documents"] if norm(d["file"]).startswith(title + "_")]
-            rows.append((hits, " | ".join(f"{c}={row.get(c, '')}" for c in NOTICE_COLUMNS) + f" | {', '.join(docs) or '문서 없음'}"))
-    best = [text for _, text in sorted(rows, key=lambda r: -r[0])]
-    return _clip("\n".join(best[:30])) if best else "찾은 것이 없습니다."
+def docs_text(corpus: dict) -> str:
+    """원본 문서의 번호와 이름."""
+    return _clip("\n".join(f"문서 {d['no']}: {d['file']}" for d in corpus["documents"]))
 
 
 def search_text(corpus: dict, query: str, limit: int = 8) -> str:
@@ -176,7 +159,7 @@ def main() -> None:
     sub = ap.add_subparsers(dest="cmd", required=True)
     b = sub.add_parser("build")
     b.add_argument("--source", default=str(SOURCE_DIR))
-    sub.add_parser("list").add_argument("query", nargs="*")
+    sub.add_parser("docs")
     sub.add_parser("search").add_argument("query", nargs="+")
     s = sub.add_parser("show")
     s.add_argument("no", type=int)
@@ -189,13 +172,13 @@ def main() -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(corpus, ensure_ascii=False), encoding="utf-8")
         empty = [d["file"] for d in corpus["documents"] if sum(map(len, d["lines"])) < 100]
-        print(f"문서 {len(corpus['documents'])}개, 공고 {len(corpus['notices'])}건 → {path}")
+        print(f"문서 {len(corpus['documents'])}개 → {path}")
         if empty:
             print("글자가 거의 없는 문서:", ", ".join(empty))
         return
     corpus = load_corpus(path)
-    if a.cmd == "list":
-        print(list_text(corpus, " ".join(a.query)))
+    if a.cmd == "docs":
+        print(docs_text(corpus))
     elif a.cmd == "search":
         print(search_text(corpus, " ".join(a.query)))
     else:

@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-from judge_search import hwp_section_text, hwpx_text, list_text, search_text, show_text  # noqa: E402
+from judge_search import docs_text, hwp_section_text, hwpx_text, search_text, show_text  # noqa: E402
 
 HP = "http://www.hancom.co.kr/hwpml/2011/paragraph"
 
@@ -43,10 +43,6 @@ CORPUS = {
         {"no": 1, "file": "도로 공사(1지역)_아산시", "lines": ["아산시 공고 제1호", "공사건명: 도로 공사(1지역)", "기초금액: 100,000,000원"]},
         {"no": 2, "file": "도로 공사(2지역)_아산시", "lines": ["아산시 공고 제2호", "공사건명: 도로 공사(2지역)", "기초금액: 100,000,000원"]},
     ],
-    "notices": [
-        {"입찰공고번호": "R1", "공고명": "도로 공사(1지역)", "공고기관": "아산시", "수요기관": "아산시"},
-        {"입찰공고번호": "R2", "공고명": "도로 공사(2지역)", "공고기관": "아산시", "수요기관": "아산시"},
-    ],
 }
 
 
@@ -60,10 +56,8 @@ def test_search_matches_numbers_written_with_or_without_commas():
     assert "[문서 1]" in search_text(CORPUS, "100000000")
 
 
-def test_list_shows_the_notice_number_and_the_document_number():
-    out = list_text(CORPUS, "2지역")
-    assert "R2" in out and "문서 2" in out and "R1" not in out
-    assert "문서 1" in list_text(CORPUS, "")
+def test_docs_lists_every_document_with_its_number():
+    assert docs_text(CORPUS) == "문서 1: 도로 공사(1지역)_아산시\n문서 2: 도로 공사(2지역)_아산시"
 
 
 def test_show_returns_numbered_lines_from_the_start_line():

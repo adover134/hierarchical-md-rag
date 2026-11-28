@@ -75,7 +75,7 @@ def build_results(round_dir: Path, run: str, system: str, dataset: dict, runs_di
         },
         "per_query": per_query,
         "meta": {
-            "label": f"{label} · {round_dir.name}", "judge_model": "Claude(subagent, Opus)",
+            "label": f"{label} · {round_dir.name}", "judge_model": "Claude(격리 호출, Opus)" if (round_dir / "calls.json").exists() else "Claude(subagent, Opus)",
             "generated": dt.date.today().isoformat(), "elapsed_seconds": "-", "insights": False,
             "rubric": _read(round_dir / "rubric.md"), "instruction": _read(round_dir / "instruction.txt"),
             "grader_note": _read(round_dir / "grader_note.txt"),
