@@ -691,3 +691,12 @@ chunk 수)·검색 호출(org_name/top_k/결과 수)·최종 생성 prompt conte
 - **원인**: 공고 목록의 행으로 답하는 단축 경로 18문항은 chunk가 없는데 0점으로 평균에 들어갔다.
 - **수정**: 그 답은 chunk Recall을 null로 두고 뺀다(`run_experiment.py`의 `team_retrieval_metrics`). 문서 단위 지표는 그대로 40문항이다.
 - **확인**: 저장된 결과를 다시 집계해 18문항의 chunk Recall만 달라졌고, 22문항 평균은 1.000이다.
+
+## 검색 지표가 비교 질문에서 만점이 될 수 없었고, 다른 문서의 chunk를 맞은 것으로 셀 수 있었음 (2026-11-28)
+
+- **증상**: 정답 문서 두 개를 1위와 2위에 모두 찾은 `m19`, `m20`, `n20`의 문서 MRR이 0.5였다. 그래서 40문항 MRR의 최댓값이 0.9625였다.
+- **원인**: MRR은 정답 문서가 모두 모이는 순위의 역수다. 문서가 2개면 그 순위가 2 이상이다.
+  chunk Recall은 chunk 번호만 따로 맞춘 결과와 ID를 맞춘 결과 중 큰 값을 써서, 다른 문서의 같은 번호 chunk도 맞은 것이 될 수 있었다.
+- **수정**: 문서 MRR 자리를 문서 nDCG@N(`metrics.py`의 `calculate_document_ndcg`)으로 바꿨다. chunk Recall은 `chunk_id` 전체가 같을 때만 센다. chunk 번호만 있는 label은 채점하지 않는다(None).
+- **확인**: test 8개를 더해 전체 306개가 통과했다. `eval_20261128`을 다시 계산해 nDCG@N은 두 방식 1.000, chunk Recall은 22문항 1.000이다. chunk Recall의 허점은 이 실행의 값에는 영향이 없었다.
+

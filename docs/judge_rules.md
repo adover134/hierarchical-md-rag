@@ -1,10 +1,11 @@
-# 채점기 규칙 (현재: 팀 rubric + 추가 기준 4개, v6)
+# 채점기 규칙 (현재: 팀 rubric + 추가 기준 4개, v6 + 원본 검증)
 
 > 이 문서에서 알게 되는 것</br>
     1. 지금 쓰는 채점 기준의 전문</br>
     2. 채점자가 받는 것과 채점 방식</br>
     3. 점수를 평균내는 방법</br>
-    4. 아직 구현하지 않은 것
+    4. 원본 검증의 방식과 지시문
+    5. 채점기의 알려진 한계
 
 ## 기준
 
@@ -20,6 +21,7 @@
 | 기대 답변 | 평가 set의 기대 답변 |
 | context | 근거(evidence) + 검색 상위 5개 chunk의 머리글과 본문. 머리글은 `[공고명 - 문서 p.N] \| project=기관명`이고 답변 모델이 받는 것과 같다 |
 | 생성 답변 | 저장된 답변 원문 |
+| 검증 결과 | 원본 검증이 찾은 대상 공고(문서, 공고번호, 특정한 이유, 인용), 답, 확인하지 못한 것. 2026-11-28부터 넣는다 |
 
 chunk 본문은 2026-08-24부터 넣는다. 근거만 주면 근거가 있는 답의 Faithfulness가 낮게 나와서 더했다.
 머리글은 2026-11-28부터 넣는다. 본문만 주면 어느 사업의 값인지 알 수 없다는 감점이 났다.
@@ -27,16 +29,45 @@ chunk 본문은 2026-08-24부터 넣는다. 근거만 주면 근거가 있는 �
 
 ## 채점 방식
 
-- 생성은 local `gpt-oss:20b`, 채점은 항상 Claude subagent(Opus)다. 별도 API 키는 쓰지 않는다. gpt-oss로는 채점하지 않는다.
+- 생성은 local `gpt-oss:20b`, 채점은 항상 Claude(Opus)다. 별도 API 키는 쓰지 않는다. gpt-oss로는 채점하지 않는다.
+- 두 단계다. 먼저 검증자가 원본에서 대상 공고와 답을 찾고, 다음에 채점자가 그 결과를 함께 받아 채점한다.
 - 답을 시스템 이름 없이 섞어 10개씩 묶고, 묶음마다 subagent 하나가 채점한다.
-- subagent에게 보내는 지시문은 아래가 전부다(`round22`는 실행하는 회차의 폴더, `NN`은 묶음 번호).
+- 채점 subagent에게 보내는 지시문은 아래가 전부다(`round23`은 실행하는 회차의 폴더, `NN`은 묶음 번호). 마지막 줄은 원본 검증과 함께 2026-11-28에 더했다.
 
 ```text
 당신은 RAG 답변 채점자다.
-1) eval_resources/claude_judge/round22/rubric.md 를 읽는다.
+1) eval_resources/claude_judge/round23/rubric.md 를 읽는다.
 2) 같은 폴더 batches/batch_NN.json 의 모든 항목을 루브릭대로 채점한다.
 3) 결과를 results/batch_NN.json 에 루브릭의 JSON 형식(item_id를 키로)으로 쓴다.
 위 파일 외에는 열지 않는다.
+항목의 "검증 결과"는 원본에서 따로 확인한 것이다. 채점하기 전에 context의 문서가 검증 결과의 공고와 같은지 대조한다.
+```
+
+## 원본 검증
+
+2026-11-28부터 쓴다. 질문과 답변의 이름만 견주지 않고 원본 문서를 확인하게 하려는 것이다(2026-11-02 요청).
+
+| 항목 | 내용 |
+|---|---|
+| 검증자가 받는 것 | 아래 지시문과 **질문**, 자기가 요청한 검색 결과. 생성 답, 기대 답변, 검색 context는 받지 않는다 |
+| 검색 대상 | 원본 PDF, HWP, HWPX와 공고 목록 엑셀(`scripts/judge_search.py`). 프로젝트의 parser와 DB를 거치지 않는다 |
+| 호출 | `claude -p --safe-mode --tools ""`(Opus). 지시 파일, memory, 도구 없이 빈 폴더에서 부른다. 요청한 목록·검색·보기만 code가 실행한다 |
+| 결과의 사용 | 문항마다 한 번 만들고, 두 방식의 채점 항목에 같은 결과를 붙인다 |
+| 측정(`verify01`) | 40문항, 호출 127회, CLI가 알려준 환산 비용 $2.97. 특정한 문서는 40문항 모두 평가 set의 정답 문서와 같았다 |
+
+검증자의 지시문은 아래가 전부다.
+
+```text
+당신은 RAG 답 채점을 위한 검증자다. 아래 질문의 답을 원본 문서에서 직접 찾는다.
+- 질문이 가리키는 공고를 먼저 특정한다. 이름이 비슷한 공고가 여럿이면 지역, 차수, 공고번호, 본문을 대조해 하나로 좁히고 이유를 적는다.
+- 근거가 된 원문 구절을 그대로 인용한다. 찾지 못하면 "확인 불가"라고 쓴다.
+출력: {"notices": [{"file": "", "notice_no": "", "why": "", "quotes": []}], "answer": "", "unverified": ""}
+
+원본을 직접 열 수는 없고, 아래 행동을 한 번에 하나씩 JSON으로 요청하면 결과를 받는다.
+- {"action": "list", "query": "낱말"}: 공고 목록(엑셀)에서 낱말이 든 공고. query가 비면 문서 목록
+- {"action": "search", "query": "낱말 낱말"}: 원본 본문에서 낱말이 많이 든 부분
+- {"action": "show", "doc": 문서번호, "start": 시작줄}: 원본 한 문서의 본문
+- {"action": "final", "result": {위 출력 형식}}: 검증을 마치고 결과를 낸다. file에는 문서 이름을 그대로 적는다.
 ```
 
 ## 점수 평균
@@ -50,6 +81,11 @@ chunk 본문은 2026-08-24부터 넣는다. 근거만 주면 근거가 있는 �
 ```bash
 # 내보내기: 저장된 답변을 시스템 식별 없이 섞어 배치로
 python scripts/claude_judge.py export --runs <run-id>:<system> [<run-id>:<system> ...] --out-dir eval_resources/claude_judge/<round> [--batch-size 10] [--seed N]
+# 원본 검증: 검색 자료를 만들고, 질문만으로 검증한다(질문이 바뀌지 않으면 전에 만든 결과를 다시 쓴다)
+python scripts/judge_search.py build
+python scripts/judge_verify.py run --out eval_resources/claude_judge/<verify>/verification.json
+# 위 "채점 방식"의 지시문 중 앞 다섯 줄을 <round>/instruction.txt로 저장한 뒤 검증 결과를 붙인다(여섯째 줄은 attach가 더한다)
+python scripts/judge_verify.py attach --round-dir eval_resources/claude_judge/<round> --verification eval_resources/claude_judge/<verify>/verification.json
 # subagent가 <round>/rubric.md를 읽고 batches/batch_NN.json을 채점해 results/batch_NN.json을 쓴다
 # 가져오기: 검증(빠진 항목, 0~5 정수) 후 judge_cache로 옮긴다
 python scripts/claude_judge.py import --out-dir eval_resources/claude_judge/<round>
@@ -57,7 +93,7 @@ python scripts/claude_judge.py import --out-dir eval_resources/claude_judge/<rou
 python scripts/run_experiment.py evaluate --run-id <run-id> --systems <system> ... \
     --chunk-labels eval_resources/retrieval/chunk_synced_new20.yaml eval_resources/retrieval/chunk_synced_new20_v2.yaml
 # 이력 한 줄 추가
-python scripts/eval_history.py --run-id <run-id> --commit <답변을 만든 commit> --rubric v6
+python scripts/eval_history.py --run-id <run-id> --commit <답변을 만든 commit> --rubric "v6+원본검증"
 ```
 
 chunk label 사본은 팀 저장소의 `scripts/sync_eval_chunk_labels.py`로 만든다(`--dataset`, `--output`, `--db-path data_index/chroma_B`, `--collection chunks`). DB를 새로 만들면 다시 만든다.
@@ -68,33 +104,41 @@ chunk label 사본은 팀 저장소의 `scripts/sync_eval_chunk_labels.py`로 �
 - 문항별 채점 입력과 점수, 사유는 HTML 보고서로 만든다(git 제외).
 
 ```bash
-python scripts/judge_report_html.py --round-dir eval_resources/claude_judge/round22
+python scripts/judge_report_html.py --round-dir eval_resources/claude_judge/round23
 ```
 
 ## 채점기의 알려진 한계
 
-**이 절의 점수는 답의 성능이 아니다.** 채점기를 시험하려고 근거를 일부러 바꿔 넣은 결과이며, 어떤 점수 보고에도 넣지 않는다.
+### 실제 채점(`round23`)에서 본 것
 
-- 시험 방법(`eval_resources/claude_judge/probe_wrong_doc/`, 2026-11-28, 심사: Claude(subagent), v6): 저장된 답, 질문, 기대 답변은 그대로 두고 **context만 다른 공고의 것으로 바꿔** 채점했다. 바꾼 것 8건과 원래 것 8건을 섞었다.
+심사: Claude(subagent). 점수는 [07 결과](07_결과.md)의 "현재 결과"에 있다.
 
-| 바꾼 context | 건수 | Faithfulness / Context relevance | 감점 |
-|---|---|---|---|
-| 다른 기관, 다른 사업 | 3 | 0\~1 / 0 | ✅ |
-| 다른 학교의 같은 종류 공고 | 1 | 1 / 1 | ✅ |
-| 같은 기관, 다른 금액 | 1 | 2 / 2 | ✅ |
-| 값이 같은 다른 사업(전기와 건축) | 1 | 3 / 3 | ✅ |
-| 1지역 질문에 같은 기관, 같은 금액의 2\~3지역 공고 | 2 | 5 / 5 | 🔴 감점 없음 |
-
-- 원래 context 8건은 Context relevance 4점 1건 말고 감점이 없었다.
-- **지역 번호만 다른 공고는 걸러내지 못한다.** 추가 기준 4에 따라 채점자가 공고명의 차이를 감점 이유로 삼지 않기 때문이다. 아직 고치지 않았다.
+- **한 줄 context의 감점이 늘었다.** 단축 경로 답 36개 중 Context relevance 4점이 원본 검증 없는 `round22`에서 2개, `round23`에서 13개다. 검색한 chunk를 받은 44개는 22개에서 21개다.
+  - 8개는 "기초금액 같은 항목명이 없다", 5개는 "금액 내역·부가세 포함 여부가 없다"는 이유다.
+  - 추가 기준 3(금액 이름)은 Correctness와 Answer coverage에만 적용돼 Context relevance의 감점을 막지 않는다.
+- **추가 기준 4와 어긋난 감점이 있었다.** `n15`의 한 항목이 "교통신호기와의 연결 근거가 없다"는 이유를 포함해 Context relevance 4점이다. 입력이 같은 다른 방식의 항목은 5점이다.
 - 같은 입력도 채점 묶음에 따라 점수가 갈린다([07 결과](07_결과.md)의 "믿어도 되는 범위").
 - 추가 기준 1(주된 값)은 Correctness에만 적용된다. 괄호 안 내용이 빠진 답의 Answer coverage 감점은 채점자에 따라 다르다.
+- 검증은 문항마다 한 번이다. 검증이 틀리면 그 문항의 채점이 함께 틀릴 수 있다.
 
-## 아직 구현하지 않은 것
+### 근거를 바꿔 넣은 시험
 
-- **채점기가 직접 RAG로 확인하는 방식**(2026-11-02 요청): 채점자가 같은 DB에서 근거를 직접 찾아 답과 대조하는 방식이다.
-  - 값이 같아도 다른 금액을 가져온 답을 지금 기준으로는 가리지 못한다.
-  - 구현하기 전에 지시문과 code를 보이고 승인받는다.
+**아래 점수는 답의 성능이 아니다.** 채점기를 시험하려고 context를 일부러 바꿔 넣은 결과이며, 어떤 점수 보고에도 넣지 않는다.
+
+저장된 답, 질문, 기대 답변은 그대로 두고 **context만 다른 공고의 것으로 바꾼** 8건과 원래 것 8건을 섞어 채점했다(2026-11-28, 심사: Claude(subagent), v6).
+
+| 바꾼 context | 건수 | 검증 없음(`probe_wrong_doc`) F / CR | 원본 검증(`probe_verify2`) F / CR |
+|---|---|---|---|
+| 다른 기관, 다른 사업 | 3 | 0\~1 / 0 | 0 / 0 |
+| 다른 학교의 같은 종류 공고 | 1 | 1 / 1 | 0 / 1 |
+| 같은 기관, 다른 금액 | 1 | 2 / 2 | 1 / 1 |
+| 값이 같은 다른 사업(전기와 건축) | 1 | 3 / 3 | 2 / 2 |
+| 1지역 질문에 같은 기관, 같은 금액의 2\~3지역 공고 | 2 | 5 / 5 | 5 / 2 |
+
+- 검증이 없으면 **지역 번호만 다른 공고를 걸러내지 못했다.** 원본 검증에서는 Context relevance가 2점이 됐다.
+  답의 값과 기관명이 받은 context에 있으므로 Faithfulness 5점은 맞는 채점이다(Faithfulness는 받은 context 기준).
+- 원본 검증에서 바꾼 8건의 Context relevance는 두 번의 시험(`probe_verify`, `probe_verify2`) 모두 3점 이하였다.
+- 원래 context 8건 중 네 축 모두 5점인 것은 검증 없음 7건, 원본 검증 첫 번째 5건, 두 번째 7건이다. 두 번의 시험은 입력이 같다.
 
 ## rubric 전문 (v6, subagent가 읽는 `rubric.md`)
 
