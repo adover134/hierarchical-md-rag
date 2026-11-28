@@ -8,7 +8,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from claude_judge import AXES, build_items, split_batches, validate_results  # noqa: E402
+from claude_judge import AXES, build_items, shortcut_metadata, split_batches, validate_results  # noqa: E402
 
 
 def _rec(i, answer="답", error=None):
@@ -23,11 +23,22 @@ ITEMS = {("new20", f"m{i}"): {"question": f"질문{i}", "expected_answer": f"정
 
 
 class TestBuildItems:
-    def test_context_is_evidence_plus_top_k_chunk_text_without_document_names(self):
+    def test_context_is_evidence_plus_top_k_chunks_each_with_the_metadata_header(self):
         rec = _rec(1)
-        rec["retrieved_docs"][0]["source"] = "문서 이름"
-        items, _ = build_items({("run", "sys"): [rec]}, ITEMS, k=5, seed=1)
-        assert items[0]["context"] == "근거1\n\n" + "\n\n".join(f"청크1-{j}" for j in range(5))
+        for j, doc in enumerate(rec["retrieved_docs"]):
+            doc.update(chunk_id=f"h_{j}", page=j + 1)
+        chunks = {f"h_{j}": {"source": f"문서{j}", "org": "공고명", "project_name": "기관명"} for j in range(7)}
+        items, _ = build_items({("run", "sys"): [rec]}, ITEMS, k=5, seed=1, chunks=chunks)
+        assert items[0]["context"] == "근거1\n\n" + "\n\n".join(
+            f"[공고명 - 문서{j} p.{j + 1}] | project=기관명\n청크1-{j}" for j in range(5))
+
+    def test_a_shortcut_row_takes_its_header_from_the_notice_list(self, tmp_path):
+        listing = tmp_path / "metadata.csv"
+        listing.write_text("파일명,공고명,공고기관\n가 공사.md,가 공사,가 기관\n", encoding="utf-8-sig")
+        rec = _rec(1)
+        rec["retrieved_docs"] = [{"source": "가 공사.md", "content": "사업비: 1원", "chunk_id": None, "page": None}]
+        items, _ = build_items({("r", "s"): [rec]}, ITEMS, k=5, seed=1, rows=shortcut_metadata(listing))
+        assert items[0]["context"] == "근거1\n\n[가 공사 - 가 공사.md] | project=가 기관\n사업비: 1원"
 
     def test_item_ids_are_blind_and_mapping_keeps_the_origin(self):
         items, mapping = build_items({("dbcmp3", "A"): [_rec(1)], ("dbcmp4", "B"): [_rec(1)]}, ITEMS, k=5, seed=1)
@@ -79,9 +90,9 @@ class TestValidateResults:
         assert any("j9" in p for p in validate_results({"j1": _ok(), "j9": _ok()}, ["j1"]))
 
 
-# --- 채점 기준: 팀 rubric + 추가 기준 3개 -------------------------------------------------------------
+# --- 채점 기준: 팀 rubric + 추가 기준 4개 -------------------------------------------------------------
 
-def test_rubric_is_the_team_prompt_followed_only_by_the_three_approved_criteria():
+def test_rubric_is_the_team_prompt_followed_only_by_the_four_approved_criteria():
     from claude_judge import rubric_text
     from src.evaluation.llm_judge import JUDGE_SYSTEM_PROMPT
 
@@ -95,10 +106,14 @@ def test_rubric_is_the_team_prompt_followed_only_by_the_three_approved_criteria(
    Correctness와 Answer coverage를 깎지 않는다.
 3. 질문이 묻는 금액의 이름과 답변이 쓴 이름이 달라도(예: 기초금액을 사업비로)
    값이 같으면 Correctness와 Answer coverage를 깎지 않는다.
+4. 질문에 적힌 사업 이름과 context의 공고명이나 문서 이름이 달라도, 그것만으로 다른 문서나 다른 사업이라고
+   판단하지 않는다. 답변이 문서나 context의 공고명, 기관명을 쓴 것도 감점하지 않는다.
+   공고명 말고도 다른 문서임을 보여 주는 내용(질문과 다른 기관, 질문과 무관한 본문)이 있으면 그 내용으로 판단한다.
+   이 기준은 네 축 모두에 적용한다.
 """
 
 
-def test_import_writes_the_scores_and_keeps_the_v4_cache(tmp_path, monkeypatch):
+def test_import_writes_the_scores_and_keeps_the_v5_cache(tmp_path, monkeypatch):
     import argparse
     import json as _json
 
@@ -109,7 +124,7 @@ def test_import_writes_the_scores_and_keeps_the_v4_cache(tmp_path, monkeypatch):
     (cache / "new20__m1__1.json").write_text('{"old": true}', encoding="utf-8")
     out = tmp_path / "round"
     (out / "results").mkdir(parents=True)
-    (out / "rubric_version.txt").write_text("v5\n", encoding="utf-8")
+    (out / "rubric_version.txt").write_text("v6\n", encoding="utf-8")
     origin = {"run": "r1", "system": "sys", "dataset": "new20", "id": "m1", "repeat": 1}
     (out / "mapping.json").write_text(_json.dumps({"j0001": origin}), encoding="utf-8")
     axes = {ax: {"score": 5, "reason": "ok"} for ax in cj.AXES}
@@ -117,5 +132,5 @@ def test_import_writes_the_scores_and_keeps_the_v4_cache(tmp_path, monkeypatch):
     monkeypatch.setattr(cj, "RUNS_DIR", tmp_path / "runs")
 
     cj.cmd_import(argparse.Namespace(out_dir=str(out)))
-    assert (tmp_path / "runs" / "r1" / "judge_cache_v4_ref" / "sys" / "new20__m1__1.json").exists()
+    assert (tmp_path / "runs" / "r1" / "judge_cache_v5_ref" / "sys" / "new20__m1__1.json").exists()
     assert _json.loads((cache / "new20__m1__1.json").read_text(encoding="utf-8"))["correctness"]["score"] == 5

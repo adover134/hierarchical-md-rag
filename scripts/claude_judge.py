@@ -3,7 +3,7 @@
 생성은 로컬 gpt-oss:20b가 하고, 채점은 항상 Claude가 한다(별도 API 키 없이 서브에이전트가 채점). 이 스크립트는 그 중간 단계다.
 
   export  저장된 답변(`<run>/<system>_raw.json`)을 시스템·실행 식별 없이 섞어 배치 파일로 내보낸다. 루브릭(`rubric.md`)과 매핑도 함께 쓴다.
-          루브릭은 팀 rubric(`src/evaluation/llm_judge.py`)에 추가 기준 3개를 붙인 것이다(docs/judge_rules.md).
+          루브릭은 팀 rubric(`src/evaluation/llm_judge.py`)에 추가 기준 4개를 붙인 것이다(docs/judge_rules.md).
           서브에이전트는 배치 파일마다 채점해 `results/batch_XX.json`을 쓴다.
   import  결과를 검증하고 `run_experiment.py evaluate`가 읽는 캐시(`<run>/judge_cache/<system>/…json`)로 옮긴다.
           기존 gpt-oss 채점 캐시는 `judge_cache_gptoss_ref/`로 옮겨 참고용으로 남기고, 기존 summary.json도 `summary_gptoss_ref.json`으로 둔다.
@@ -16,6 +16,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import random
 import shutil
@@ -29,7 +30,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 RUNS_DIR = REPO_ROOT / "eval_resources" / "experiment_runs"
 DATASETS = ("eval_resources/eval_dataset_new20.yaml", "eval_resources/eval_dataset_new20_v2.yaml")
 AXES = ("correctness", "answer_coverage", "faithfulness", "context_relevance")
-RUBRIC_VERSION = "v5"
+RUBRIC_VERSION = "v6"
 
 EXTRA_CRITERIA = """
 
@@ -41,27 +42,61 @@ EXTRA_CRITERIA = """
    Correctness와 Answer coverage를 깎지 않는다.
 3. 질문이 묻는 금액의 이름과 답변이 쓴 이름이 달라도(예: 기초금액을 사업비로)
    값이 같으면 Correctness와 Answer coverage를 깎지 않는다.
+4. 질문에 적힌 사업 이름과 context의 공고명이나 문서 이름이 달라도, 그것만으로 다른 문서나 다른 사업이라고
+   판단하지 않는다. 답변이 문서나 context의 공고명, 기관명을 쓴 것도 감점하지 않는다.
+   공고명 말고도 다른 문서임을 보여 주는 내용(질문과 다른 기관, 질문과 무관한 본문)이 있으면 그 내용으로 판단한다.
+   이 기준은 네 축 모두에 적용한다.
 """
 
 
 def rubric_text() -> str:
-    """채점자가 읽는 `rubric.md`: 팀 rubric 그대로에 승인받은 추가 기준 3개만 붙인다."""
+    """채점자가 읽는 `rubric.md`: 팀 rubric 그대로에 승인받은 추가 기준 4개만 붙인다."""
     sys.path.insert(0, str(REPO_ROOT))
     from src.evaluation.llm_judge import JUDGE_SYSTEM_PROMPT
 
     return JUDGE_SYSTEM_PROMPT + EXTRA_CRITERIA
 
 
-def _context(rec: dict, k: int) -> str:
-    texts = [str(d.get("content", "")) for d in (rec.get("retrieved_docs") or [])[:k]]
-    return "\n\n".join(p for p in (rec.get("evidence", ""), "\n\n".join(t for t in texts if t)) if p)
+def chunk_metadata(db_path: Path) -> dict[str, dict]:
+    """DB의 chunk id별 metadata(읽기만 한다)."""
+    import chromadb
+
+    got = chromadb.PersistentClient(path=str(db_path)).get_collection("chunks").get(include=["metadatas"])
+    return dict(zip(got["ids"], got["metadatas"]))
+
+
+def shortcut_metadata(csv_path: Path) -> dict[str, dict]:
+    """단축 경로 답의 문서(파일 이름)별 metadata. DB와 같이 `org`는 공고명, `project_name`은 기관명이다."""
+    with open(csv_path, encoding="utf-8-sig", newline="") as f:
+        return {r["파일명"]: {"source": r["파일명"], "org": r["공고명"], "project_name": r["공고기관"]} for r in csv.DictReader(f)}
+
+
+def _header(doc: dict, chunks: dict, rows: dict) -> str:
+    """답변 모델의 prompt에 붙는 머리글과 같은 형식(src/graph/workflow.py의 `_build_context`)."""
+    md = chunks.get(str(doc.get("chunk_id"))) or rows.get(doc.get("source")) or {}
+    source = md.get("source") or doc.get("source") or "Unknown"
+    page = doc.get("page")  # 검색 결과의 쪽 번호(prompt의 p.N)
+    header = f"[{md.get('org', '')} - {source}{f' p.{page}' if page is not None else ''}]"
+    project_name = md.get("project_name") or md.get("사업명")
+    if project_name:
+        header += f" | project={project_name}"
+    if md.get("notice_num"):
+        header += f" | notice={md['notice_num']}"
+    return header
+
+
+def _context(rec: dict, k: int, chunks: dict, rows: dict) -> str:
+    texts = [f"{_header(d, chunks, rows)}\n{d.get('content', '')}"
+             for d in (rec.get("retrieved_docs") or [])[:k] if d.get("content")]
+    return "\n\n".join(p for p in (rec.get("evidence", ""), "\n\n".join(texts)) if p)
 
 
 def build_items(
     records: dict[tuple[str, str], list[dict]], dataset_items: dict[tuple[str, str], dict], k: int, seed: int,
+    chunks: dict | None = None, rows: dict | None = None,
 ) -> tuple[list[dict], dict[str, dict]]:
     """(run, system)별 기록을 하나로 합쳐 섞고 항목 번호를 새로 붙인다. 번호는 출처와 무관해서 채점자는 어느 시스템인지 알 수 없다."""
-    rows: list[tuple[dict, dict]] = []
+    collected: list[tuple[dict, dict]] = []
     for (run, system), recs in records.items():
         for rec in recs:
             item = dataset_items.get((rec.get("dataset"), rec.get("id")))
@@ -70,14 +105,14 @@ def build_items(
             body = {
                 "question": item["question"],
                 "expected_answer": item.get("expected_answer", ""),
-                "context": _context(rec, k),
+                "context": _context(rec, k, chunks or {}, rows or {}),
                 "generated_answer": rec.get("answer", ""),
             }
             origin = {"run": run, "system": system, "dataset": rec["dataset"], "id": rec["id"], "repeat": rec.get("repeat", 1)}
-            rows.append((body, origin))
-    random.Random(seed).shuffle(rows)
+            collected.append((body, origin))
+    random.Random(seed).shuffle(collected)
     items, mapping = [], {}
-    for n, (body, origin) in enumerate(rows, start=1):
+    for n, (body, origin) in enumerate(collected, start=1):
         item_id = f"j{n:04d}"
         items.append({"item_id": item_id, **body})
         mapping[item_id] = origin
@@ -123,7 +158,10 @@ def cmd_export(a: argparse.Namespace) -> None:
     for spec in a.runs:
         run, system = spec.split(":", 1)
         records[(run, system)] = json.loads((RUNS_DIR / run / f"{system}_raw.json").read_text(encoding="utf-8"))
-    items, mapping = build_items(records, _load_dataset_items(), a.k, a.seed)
+    data_index = Path(a.data_index)
+    items, mapping = build_items(records, _load_dataset_items(), a.k, a.seed,
+                                 chunks=chunk_metadata(data_index / "chroma_B"),
+                                 rows=shortcut_metadata(data_index / "metadata.csv"))
     out = Path(a.out_dir)
     (out / "batches").mkdir(parents=True, exist_ok=True)
     (out / "results").mkdir(exist_ok=True)
@@ -147,11 +185,11 @@ def cmd_import(a: argparse.Namespace) -> None:
         print("검증 실패:\n  " + "\n  ".join(problems[:40]))
         raise SystemExit(1)
     touched = set()
-    # 이전 캐시를 어디에 남기는지: v5 채점이면 이전 v4 채점을 `judge_cache_v4_ref`에,
+    # 이전 캐시를 어디에 남기는지: v6 채점이면 이전 v5 채점을 `judge_cache_v5_ref`에,
     # 그 밖에는 이전 gpt-oss 채점을 `judge_cache_gptoss_ref`에 둔다.
     version_file = out / "rubric_version.txt"
     version = version_file.read_text(encoding="utf-8").strip() if version_file.exists() else ""
-    previous = "v4" if version == RUBRIC_VERSION else "gptoss"
+    previous = "v5" if version == RUBRIC_VERSION else "gptoss"
     ref_name, summary_ref = f"judge_cache_{previous}_ref", f"summary_{previous}_ref.json"
     for item_id, origin in mapping.items():
         run_dir = RUNS_DIR / origin["run"]
@@ -179,6 +217,7 @@ def main() -> None:
     e.add_argument("--batch-size", type=int, default=10)
     e.add_argument("--k", type=int, default=5, help="컨텍스트에 넣는 검색 청크 수(run_experiment의 top_k와 같게)")
     e.add_argument("--seed", type=int, default=20261102)
+    e.add_argument("--data-index", default=str(REPO_ROOT / "data_index"), help="실행에 쓴 DB 폴더(머리글의 metadata를 읽는다)")
     e.set_defaults(fn=cmd_export)
     i = sub.add_parser("import")
     i.add_argument("--out-dir", required=True)
