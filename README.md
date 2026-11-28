@@ -176,7 +176,7 @@ python scripts/judge_report_html.py --round-dir eval_resources/claude_judge/<rou
 
 | 버전 | 바뀐 것 |
 |---|---|
-| 1.4.1 | 채점기: 질문만 받은 원본 검증, 격리 채점, 추가 기준 5개(`v6.2`), 문서 MRR 자리에 nDCG@N, chunk Recall은 chunk ID로 대조. 답변 code와 DB는 그대로다 |
+| 1.4.1 | 채점기: 질문만 받은 원본 검증, 격리 채점, 추가 기준 5개(`v6.2`), 문서 MRR 자리에 nDCG@N, chunk Recall은 chunk ID로 대조. 채점 agent file(`.claude/agents/`)과 [채점기 시험](docs/12_채점기_시험.md). 답변 code와 DB는 그대로다 |
 | 1.4.0 | 채점기: 팀 rubric + 추가 기준 4개, 채점 context에 chunk 머리글, chunk를 보지 않는 답은 chunk Recall에서 제외, 문항별 HTML 보고서. 목록 답이 잘리던 후처리를 고치고, 질의 비용 측정을 넣었다 |
 | 1.3.2 | 채운 metadata를 덮어쓰지 않는다(`build_metadata.py`는 채운 값이 있으면 멈추고, build는 CSV가 있으면 metadata 단계를 건너뛴다). build 순서를 끝까지 돌려 확인했다 |
 | 1.3.1 | parser(계층 추출)의 기본 모델을 `gpt-oss:20b`로 바꿨다. 전처리에서 LLM이 쓰이는 곳을 [DB 구축](docs/04_DB구축.md)에 그림으로 넣었다 |
