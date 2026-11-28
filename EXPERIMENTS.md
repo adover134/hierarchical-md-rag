@@ -49,7 +49,7 @@
 | 그룹 | 지표 | 측정 방법 |
 |---|---|---|
 | 검색 | Context Hit Rate@3/@5 | 정답 핵심값(금액·일수·날짜 등)이 상위 K 검색 텍스트에 **모두** 있는 문항의 비율. 핵심값이 추출되는 문항만 대상(N 병기) |
-| 검색 | 핵심값 MRR / 문서 단위 MRR | 핵심값이 처음 모두 확보된 순위의 역수 평균 / 정답 문서가 처음 나온 순위의 역수 평균 |
+| 검색 | 핵심값 MRR / 문서 단위 nDCG@N | 핵심값이 처음 모두 확보된 순위의 역수 평균 / 정답 문서 N개의 순위 가중 점수([평가](docs/06_평가.md)). 2026-11-28 전의 결과 표에 있는 것은 문서 단위 MRR |
 | 검색 | Header Context Inclusion | 상위 K chunk 중 대분류·중분류(`section_level1/2`) metadata가 보존된 비율 |
 | parsing·chunking | 색인된 문서 수, chunk 수·길이, 섹션 metadata 보유 chunk 비율 | DB 전체 chunk dump 기준 |
 | parsing | 표 데이터 정합률 (종단) | [`experiments/table_samples.yaml`](experiments/table_samples.yaml)의 정답 `라벨: 값` 쌍이 해당 문서 chunk에 그대로 존재하는 비율. 단계별 값은 아래 "표 지표" 절 |

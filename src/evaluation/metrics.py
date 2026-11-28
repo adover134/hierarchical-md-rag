@@ -5,6 +5,7 @@
 - Empty Retrieval Rate
 - Recall@K
 - MRR
+- 문서 nDCG@N
 
 답변 품질(정확성/충실성 등)은 `llm_judge.py`의 LLM-as-Judge가 담당한다 — 여기서는
 검색 결과 자체의 정확도만 다룬다.
@@ -12,6 +13,7 @@
 
 from __future__ import annotations
 
+import math
 import unicodedata
 from pathlib import Path
 
@@ -155,6 +157,30 @@ def calculate_hit_position(
     return None  # 하나 이상 미발견
 
 
+def calculate_document_ndcg(
+    retrieved_docs: list[dict],
+    ground_truth_source: str | list[str] | tuple[str, ...] | set[str],
+) -> float | None:
+    """문서 nDCG@N. N은 정답 문서 수다.
+
+    같은 문서의 chunk는 처음 나온 순서의 문서 하나로 센다. 상위 N개 문서 중 정답 문서가 있는 순위의
+    가중치 1/log2(순위+1)을 더해, 1~N위가 모두 정답일 때의 합으로 나눈다.
+
+    Returns:
+        0.0 ~ 1.0. 정답 문서 라벨이 없으면 None.
+    """
+    gt_sources = _normalize_ground_truth_sources(ground_truth_source)
+    if not gt_sources:
+        return None
+    ranked: list[str] = []
+    for doc in retrieved_docs:
+        source = doc.get("source")
+        if not any(_is_equivalent_source_name(seen, source) for seen in ranked):
+            ranked.append(source)
+    weights = [1 / math.log2(rank + 1) for rank in range(1, len(gt_sources) + 1)]
+    return sum(w for w, source in zip(weights, ranked) if _is_source_match(source, gt_sources)) / sum(weights)
+
+
 def calculate_empty_retrieval_rate(
     query_results: list[list[dict]],
 ) -> float:
@@ -274,47 +300,18 @@ def calculate_recall_at_k_chunk(
 ) -> float | None:
     """Recall@K (chunk) — top-K 내 정답 청크 커버리지.
 
+    `chunk_id`(문서 ID_chunk 번호) 전체가 같아야 맞은 것으로 센다. chunk 번호만 있는 라벨은
+    어느 문서의 chunk인지 알 수 없어 쓰지 않는다.
+
     반환값:
-    - GT chunk 라벨이 없으면 None
+    - 문서 ID가 있는 GT chunk 라벨이 없으면 None
     - 있으면 [0,1] 범위 비율 (matched / total_gt_chunks)
     """
-    gt_uid_labels, gt_order_labels = _split_chunk_gt_labels(ground_truth_chunks)
-    if not gt_uid_labels and not gt_order_labels:
+    gt_uid_labels, _ = _split_chunk_gt_labels(ground_truth_chunks)
+    if not gt_uid_labels:
         return None
-
-    top_k_docs = retrieved_docs[:k]
-    retrieved_uid_keys: set[str] = set()
-    retrieved_order_keys: set[str] = set()
-    for doc in top_k_docs:
-        if not isinstance(doc, dict):
-            continue
-        chunk_id = _normalize_chunk_label(doc.get("chunk_id"))
-        chunk_index = _normalize_chunk_label(doc.get("chunk_index"))
-        if chunk_id:
-            retrieved_uid_keys.add(chunk_id)
-            # chunk_id가 "hash_12" 형태면 trailing order도 보조키로 추가한다.
-            if "_" in chunk_id:
-                trailing = chunk_id.rsplit("_", 1)[-1].strip()
-                if trailing.isdigit():
-                    retrieved_order_keys.add(trailing)
-        if chunk_index:
-            retrieved_order_keys.add(chunk_index)
-
-    if not retrieved_uid_keys and not retrieved_order_keys:
-        return 0.0
-
-    recalls: list[float] = []
-    if gt_uid_labels:
-        matched_uid = sum(1 for gt in gt_uid_labels if gt in retrieved_uid_keys)
-        recalls.append(matched_uid / len(gt_uid_labels))
-    if gt_order_labels:
-        matched_order = sum(1 for gt in gt_order_labels if gt in retrieved_order_keys)
-        recalls.append(matched_order / len(gt_order_labels))
-
-    if not recalls:
-        return 0.0
-    # uid/order 라벨이 동시에 있을 때는 더 신뢰도 높은 매칭 결과를 채택한다.
-    return max(recalls)
+    retrieved = {_normalize_chunk_label(d.get("chunk_id")) for d in retrieved_docs[:k] if isinstance(d, dict)}
+    return sum(gt in retrieved for gt in gt_uid_labels) / len(gt_uid_labels)
 
 
 def calculate_recall_at_k_chunk_summary(

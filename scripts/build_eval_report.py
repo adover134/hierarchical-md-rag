@@ -118,6 +118,9 @@ def build_html(results: dict) -> str:
             f"<span style=\"color:var(--text2);font-size:0.78rem\">... +{remaining}개</span>" if remaining > 0 else ""
         )
 
+        ndcg = q.get("ndcg")
+        ndcg_row = "" if ndcg is None else f"<span><strong>nDCG@N (source):</strong> {float(ndcg):.3f}</span>"
+
         lat = q.get("latencies") or {}
         analyze = float(lat.get("analyze_query", 0.0) or 0.0)
         retrieve = float(lat.get("retrieve", 0.0) or 0.0)
@@ -156,6 +159,7 @@ def build_html(results: dict) -> str:
           <span><strong>검색 문서:</strong> {min(int(q.get("num_retrieved", 0) or 0), _top_k)}개</span>
           <span><strong>Hit (source):</strong> <span class="{hit_cls}">{hit_text}</span></span>
           <span><strong>Recall@K (source):</strong> {float(q.get("recall_at_k", 0.0) or 0.0) * 100:.0f}%</span>
+          {ndcg_row}
         </div>
         <div class="meta-row" style="flex-direction:column;gap:0.4rem">
           <span><strong>정답 문서:</strong> {gt_sources}</span>
@@ -463,12 +467,13 @@ const cardDefs = [
       <div class="tt-kv"><strong>매칭:</strong> 파일명(source)만 일치하면 hit</div>
       <div class="tt-kv"><strong>multi_doc (Strict):</strong> sources 리스트의 모든 source가 top-K에 있어야 1.0. 하나라도 누락 시 0.0</div>
       <span class="tt-formula">(Recall@K > 0인 질문 수) / 전체 질문 수</span>`}},
-  {{label:'MRR (Source)',ko:'평균 역순위·문서',value:(S.mrr_source||0).toFixed(2),max:'',color:'var(--yellow)',
-    tooltip:`<div class="tt-title">MRR (Source) · 평균 역순위 — 문서 단위</div>
-      <div class="tt-desc">정답 문서(source 기준)가 검색 결과에서 몇 번째에 위치하는지의 역수 평균</div>
-      <div class="tt-kv"><strong>범위:</strong> 0.0 ~ 1.0</div>
-      <div class="tt-kv"><strong>매칭:</strong> 파일명(source)만 일치하면 hit</div>
-      <span class="tt-formula">mean(1/rank) — 정답 없으면 0</span>`}},
+  ...(S.ndcg_source===undefined||S.ndcg_source===null?[]:[{{label:'nDCG@N (Source)',ko:'순위 가중 점수·문서',value:S.ndcg_source.toFixed(3),max:'',color:'var(--yellow)',
+    tooltip:`<div class="tt-title">nDCG@N (Source) · 순위 가중 점수 — 문서 단위</div>
+      <div class="tt-desc">정답 문서 N개가 검색 상위 N개 문서에 얼마나, 얼마나 앞에 들었는가</div>
+      <div class="tt-kv"><strong>범위:</strong> 0.0 ~ 1.0 (정답 N개가 모두 상위 N개면 1)</div>
+      <div class="tt-kv"><strong>순위:</strong> 상위 K개 chunk에서 같은 문서는 한 번만 센다</div>
+      <div class="tt-kv"><strong>가중치:</strong> i위 = 1/log2(i+1)</div>
+      <span class="tt-formula">(정답이 있는 1~N위의 가중치 합) / (1~N위의 가중치 합)의 평균</span>`}}]),
   {{label:'Avg Latency',ko:'평균 응답시간',value:'{_lat_value}',max:'',color:'var(--cyan)',
     tooltip:`{_lat_tooltip}`}},
   {{label:'평가 건수',ko:'',value:S.num_evaluated+'/'+S.num_queries,max:'',color:'var(--text)',tooltip:null}},
@@ -487,10 +492,10 @@ try {{
 new Chart(document.getElementById('radarChart'), {{
   type: 'radar',
   data: {{
-    labels: ['Correctness', 'Answer Coverage', 'Faithfulness', 'Context Relevance', 'Recall@K (x5)', 'MRR (x5)'],
+    labels: ['Correctness', 'Answer Coverage', 'Faithfulness', 'Context Relevance', 'Recall@K (x5)', 'nDCG@N (x5)'],
     datasets: [{{
       label: '현재 성능',
-      data: [S.avg_correctness, S.avg_answer_coverage||0, S.avg_faithfulness, S.avg_context_relevance||0, (S.recall_at_k_source||0)*5, (S.mrr_source||0)*5],
+      data: [S.avg_correctness, S.avg_answer_coverage||0, S.avg_faithfulness, S.avg_context_relevance||0, (S.recall_at_k_source||0)*5, (S.ndcg_source||0)*5],
       backgroundColor: 'rgba(59,130,246,0.15)',
       borderColor: 'rgba(59,130,246,0.8)',
       pointBackgroundColor: 'rgba(59,130,246,1)',
@@ -709,6 +714,7 @@ PQ.forEach(q => {{
         <span><strong>검색 문서:</strong> ${{Math.min((q.num_retrieved||0), (S.top_k||5))}}개</span>
         <span><strong>Hit (source):</strong> <span class="${{hit?'hit-yes':'hit-no'}}">${{hit?'Hit@'+hit:'MISS'}}</span></span>
         <span><strong>Recall@K (source):</strong> ${{(q.recall_at_k*100).toFixed(0)}}%</span>
+        ${{q.ndcg===undefined||q.ndcg===null?'':`<span><strong>nDCG@N (source):</strong> ${{q.ndcg.toFixed(3)}}</span>`}}
       </div>
       <div class="meta-row" style="flex-direction:column;gap:0.4rem">
         <span><strong>정답 문서:</strong> ${{(q.ground_truth_sources||[]).map(s=>`<code style="font-size:0.76rem;background:rgba(59,130,246,0.1);color:#93c5fd;padding:0.1rem 0.4rem;border-radius:3px">${{s}}</code>`).join(' ')}}</span>
