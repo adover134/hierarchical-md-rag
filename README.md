@@ -122,7 +122,7 @@ python scripts/gradio_app.py
 | 항목 | 현재 방식(1.4.0 뒤의 변경 포함) |
 |---|---|
 | LLM 채점 지표 | Correctness, Answer coverage, Faithfulness, Context relevance (0\~5점) |
-| 채점 기준 | 팀 프로젝트의 rubric + 추가 기준 4개(`v6.1`) |
+| 채점 기준 | 팀 프로젝트의 rubric + 추가 기준 5개(`v6.2`) |
 | 채점자가 받는 것 | 질문, 기대 답변, 생성 답변, context, 원본 검증 결과 |
 | 원본 검증 | 질문만 받은 Claude가 공고 목록 엑셀과 원본 문서를 검색해 대상 공고와 답을 찾는다. 프로젝트의 parser와 DB는 거치지 않는다 |
 | context | 답의 근거 + 검색 상위 5개 chunk. chunk마다 답변 모델이 받는 것과 같은 머리글(공고명, 문서, 쪽, 기관명) |
@@ -140,7 +140,7 @@ python scripts/claude_judge.py import --out-dir eval_resources/claude_judge/<rou
 # 평균과 검색 지표, 이력, HTML 보고서
 python scripts/run_experiment.py evaluate --run-id <run-id> --systems <system> ... \
     --chunk-labels eval_resources/retrieval/chunk_synced_new20.yaml eval_resources/retrieval/chunk_synced_new20_v2.yaml
-python scripts/eval_history.py --run-id <run-id> --commit <답변을 만든 commit> --rubric "v6.1+원본검증+격리"
+python scripts/eval_history.py --run-id <run-id> --commit <답변을 만든 commit> --rubric "v6.2+원본검증+격리"
 python scripts/judge_report_html.py --round-dir eval_resources/claude_judge/<round>
 ```
 
