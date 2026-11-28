@@ -1,4 +1,4 @@
-# 채점기 규칙 (현재: 팀 rubric + 추가 기준 3개, v5)
+# 채점기 규칙 (현재: 팀 rubric + 추가 기준 4개, v6)
 
 > 이 문서에서 알게 되는 것</br>
     1. 지금 쓰는 채점 기준의 전문</br>
@@ -8,7 +8,7 @@
 
 ## 기준
 
-- 채점 기준은 **팀 프로젝트의 rubric**(`src/evaluation/llm_judge.py`의 `JUDGE_SYSTEM_PROMPT`, 팀 저장소와 같다)에 **추가 기준 3개**를 붙인 것이다.
+- 채점 기준은 **팀 프로젝트의 rubric**(`src/evaluation/llm_judge.py`의 `JUDGE_SYSTEM_PROMPT`, 팀 저장소와 같다)에 **추가 기준 4개**를 붙인 것이다.
 - 추가 기준은 2026-11-28에 사용자가 원문을 보고 승인했다.
 - **점수에 영향을 주는 것(기준 문장, 지시문, 채점 입력, 묶는 방식, 평균 계산)을 바꿀 때는 바꾸기 전과 후의 원문이나 code를 보이고 승인받는다.**
 
@@ -18,20 +18,22 @@
 |---|---|
 | 질문 | 평가 set의 질문 |
 | 기대 답변 | 평가 set의 기대 답변 |
-| context | 근거(evidence) + 검색 상위 5개 chunk 본문 |
+| context | 근거(evidence) + 검색 상위 5개 chunk의 머리글과 본문. 머리글은 `[공고명 - 문서 p.N] \| project=기관명`이고 답변 모델이 받는 것과 같다 |
 | 생성 답변 | 저장된 답변 원문 |
 
-context 구성은 2026-08-24부터의 방식이다. 근거만 주면 근거가 있는 답의 Faithfulness가 낮게 나와서 chunk 본문을 더했다.
+chunk 본문은 2026-08-24부터 넣는다. 근거만 주면 근거가 있는 답의 Faithfulness가 낮게 나와서 더했다.
+머리글은 2026-11-28부터 넣는다. 본문만 주면 어느 사업의 값인지 알 수 없다는 감점이 났다.
+머리글의 metadata는 DB(`data_index/chroma_B`)에서, 단축 경로의 행은 `data_index/metadata.csv`에서 읽는다.
 
 ## 채점 방식
 
 - 생성은 local `gpt-oss:20b`, 채점은 항상 Claude subagent(Opus)다. 별도 API 키는 쓰지 않는다. gpt-oss로는 채점하지 않는다.
 - 답을 시스템 이름 없이 섞어 10개씩 묶고, 묶음마다 subagent 하나가 채점한다.
-- subagent에게 보내는 지시문은 아래가 전부다(`round19`는 실행하는 회차의 폴더, `NN`은 묶음 번호).
+- subagent에게 보내는 지시문은 아래가 전부다(`round22`는 실행하는 회차의 폴더, `NN`은 묶음 번호).
 
 ```text
 당신은 RAG 답변 채점자다.
-1) eval_resources/claude_judge/round19/rubric.md 를 읽는다.
+1) eval_resources/claude_judge/round22/rubric.md 를 읽는다.
 2) 같은 폴더 batches/batch_NN.json 의 모든 항목을 루브릭대로 채점한다.
 3) 결과를 results/batch_NN.json 에 루브릭의 JSON 형식(item_id를 키로)으로 쓴다.
 위 파일 외에는 열지 않는다.
@@ -55,7 +57,7 @@ python scripts/claude_judge.py import --out-dir eval_resources/claude_judge/<rou
 python scripts/run_experiment.py evaluate --run-id <run-id> --systems <system> ... \
     --chunk-labels eval_resources/retrieval/chunk_synced_new20.yaml eval_resources/retrieval/chunk_synced_new20_v2.yaml
 # 이력 한 줄 추가
-python scripts/eval_history.py --run-id <run-id> --commit <답변을 만든 commit> --rubric v5
+python scripts/eval_history.py --run-id <run-id> --commit <답변을 만든 commit> --rubric v6
 ```
 
 chunk label 사본은 팀 저장소의 `scripts/sync_eval_chunk_labels.py`로 만든다(`--dataset`, `--output`, `--db-path data_index/chroma_B`, `--collection chunks`). DB를 새로 만들면 다시 만든다.
@@ -66,7 +68,7 @@ chunk label 사본은 팀 저장소의 `scripts/sync_eval_chunk_labels.py`로 �
   - 값이 같아도 다른 금액을 가져온 답을 지금 기준으로는 가리지 못한다.
   - 구현하기 전에 지시문과 code를 보이고 승인받는다.
 
-## rubric 전문 (v5, subagent가 읽는 `rubric.md`)
+## rubric 전문 (v6, subagent가 읽는 `rubric.md`)
 
 ````text
 당신은 RAG(Retrieval-Augmented Generation) 시스템의 응답 품질을 평가하는 전문 심사관입니다.
@@ -125,4 +127,8 @@ reason은 반드시 한 문장으로 작성하세요.
    Correctness와 Answer coverage를 깎지 않는다.
 3. 질문이 묻는 금액의 이름과 답변이 쓴 이름이 달라도(예: 기초금액을 사업비로)
    값이 같으면 Correctness와 Answer coverage를 깎지 않는다.
+4. 질문에 적힌 사업 이름과 context의 공고명이나 문서 이름이 달라도, 그것만으로 다른 문서나 다른 사업이라고
+   판단하지 않는다. 답변이 문서나 context의 공고명, 기관명을 쓴 것도 감점하지 않는다.
+   공고명 말고도 다른 문서임을 보여 주는 내용(질문과 다른 기관, 질문과 무관한 본문)이 있으면 그 내용으로 판단한다.
+   이 기준은 네 축 모두에 적용한다.
 ````

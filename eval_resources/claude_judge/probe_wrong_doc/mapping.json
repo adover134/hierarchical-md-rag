@@ -1,0 +1,98 @@
+{
+ "p0001": {
+  "id": "n15",
+  "system": "current_default",
+  "kind": "대조(원래 context)",
+  "note": ""
+ },
+ "p0002": {
+  "id": "n18",
+  "system": "current_default",
+  "kind": "같은 기관·다른 금액",
+  "note": "n19(다른 조합)의 context"
+ },
+ "p0003": {
+  "id": "m13",
+  "system": "current_default",
+  "kind": "값이 같은 다른 사업",
+  "note": "n13의 context"
+ },
+ "p0004": {
+  "id": "m8",
+  "system": "current_default",
+  "kind": "대조(원래 context)",
+  "note": ""
+ },
+ "p0005": {
+  "id": "m13",
+  "system": "current_default",
+  "kind": "대조(원래 context)",
+  "note": ""
+ },
+ "p0006": {
+  "id": "m19",
+  "system": "current_default",
+  "kind": "다른 기관·다른 사업",
+  "note": "n20(비교 문항)의 context"
+ },
+ "p0007": {
+  "id": "n4",
+  "system": "current_default",
+  "kind": "다른 학교의 같은 종류",
+  "note": "n5(다른 학교)의 context"
+ },
+ "p0008": {
+  "id": "n18",
+  "system": "current_multi_agent",
+  "kind": "다른 기관·다른 사업",
+  "note": "n15의 context"
+ },
+ "p0009": {
+  "id": "n15",
+  "system": "current_multi_agent",
+  "kind": "대조(원래 context)",
+  "note": ""
+ },
+ "p0010": {
+  "id": "m8",
+  "system": "current_default",
+  "kind": "다른 기관·다른 사업",
+  "note": "m7의 context"
+ },
+ "p0011": {
+  "id": "n15",
+  "system": "current_default",
+  "kind": "같은 기관·같은 금액",
+  "note": "1지역 질문에 2지역 공고"
+ },
+ "p0012": {
+  "id": "n19",
+  "system": "current_multi_agent",
+  "kind": "대조(원래 context)",
+  "note": ""
+ },
+ "p0013": {
+  "id": "n4",
+  "system": "current_default",
+  "kind": "대조(원래 context)",
+  "note": ""
+ },
+ "p0014": {
+  "id": "n18",
+  "system": "current_default",
+  "kind": "대조(원래 context)",
+  "note": ""
+ },
+ "p0015": {
+  "id": "n15",
+  "system": "current_multi_agent",
+  "kind": "같은 기관·같은 금액",
+  "note": "1지역 질문에 3지역 공고"
+ },
+ "p0016": {
+  "id": "m19",
+  "system": "current_default",
+  "kind": "대조(원래 context)",
+  "note": ""
+ }
+}
