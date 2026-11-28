@@ -1,0 +1,13 @@
+채점 subagent의 대화 기록에서 확인한 것이다(2026-11-28).
+
+- 모델은 8명 모두 claude-opus-5-5다.
+- 입력(batch 파일)은 round23과 같다. 루브릭의 추가 기준 3만 바뀌었다(v6.1).
+  지시문의 파일 위치는 절대 경로로 적었다.
+  "검증 결과"는 verify01에서 만들었다. 검증자는 질문만 받았다.
+- 위 지시문, rubric.md, batch 파일 말고도 다음을 함께 받았다.
+  - Claude Code의 기본 지시(system prompt)
+  - 지시 파일: ~/.claude/CLAUDE.md, ~/.claude/RTK.md, ~/project/.claude/CLAUDE.md, 저장소의 CLAUDE.md
+  - memory 색인(MEMORY.md). 채점 관련 줄이 들어 있다.
+  - git 상태 요약(파일 이름)
+- 채점자 한 명이 10개 항목을 한 번에 받았다. 팀 프로젝트는 문항마다 rubric과 그 문항만 한 번 호출했다.
+- 파일을 연 기록에는 round24의 rubric.md, 자기 batch 파일, 결과 파일과 round24 폴더 말고는 없다.

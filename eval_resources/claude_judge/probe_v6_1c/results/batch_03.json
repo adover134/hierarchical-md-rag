@@ -1,0 +1,182 @@
+{
+ "p0021": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 120일은 검증 결과의 (건축) 공고 원문 '착공일로부터 120일'과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 묻는 공사기간 일수인 120일을 빠짐없이 답했습니다."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "120일은 context에 있지만 (전기) 공고의 값이라 (건축) 공사의 기간이라는 주장은 context로 직접 뒷받침되지 않습니다."
+  },
+  "context_relevance": {
+   "score": 2,
+   "reason": "context는 질문한 (건축) 공고가 아니라 같은 사업의 (전기) 공고(제2026-1184호)라서 별개 문서입니다."
+  }
+ },
+ "p0022": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 180일이 기대 답변과 검증 결과의 원문 값과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 묻는 공사기간 일수를 빠짐없이 답했습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '라. 공사기간: 착공일로부터 180일'에서 직접 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 질문한 화성2리 마을만들기사업(토목) 공고 본문으로, 필요한 정보가 모두 있습니다."
+  }
+ },
+ "p0023": {
+  "correctness": {
+   "score": 1,
+   "reason": "생성 답변의 680,881,900원(약 6.8억)은 정답 608,881,900원과 다른 틀린 값입니다."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "정확한 예산 금액이 답변에 들어 있지 않습니다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에는 608,881,900원(약 6.1억)으로 적혀 있는데 답변은 이와 어긋나는 금액을 지어냈습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 해당 공고 문서에서 왔고 정답 금액 608,881,900원이 들어 있습니다."
+  }
+ },
+ "p0024": {
+  "correctness": {
+   "score": 5,
+   "reason": "631,400,000원이 기대 답변의 기초금액과 같으며, 기준 3에 따라 '사업비'라는 이름을 써도 감점하지 않습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 금액이 빠짐없이 들어 있고, 부가세 포함은 괄호 안 정보입니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업비: 약 6.3억 원 (631,400,000원)'과 똑같습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 해당 한성케미칼 공고 문서에서 왔고 필요한 금액이 들어 있습니다."
+  }
+ },
+ "p0025": {
+  "correctness": {
+   "score": 5,
+   "reason": "(건축) 공사의 기초금액이 더 크다는 비교 결과가 기대 답변과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "비교 질문에 대한 결과를 제시했으므로, 기준 2에 따라 근거 금액이 없어도 감점하지 않습니다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context는 히트펌프 공고뿐이고 장성경찰서 공사 정보가 전혀 없어 답변이 context에 근거하지 않습니다."
+  },
+  "context_relevance": {
+   "score": 0,
+   "reason": "context는 두산에너빌리티 히트펌프 공고로 질문과 전혀 관계가 없습니다."
+  }
+ },
+ "p0026": {
+  "correctness": {
+   "score": 5,
+   "reason": "과업기간 365일이 기대 답변과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 묻는 과업기간 일수를 빠짐없이 답했습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '과업기간: 착수일로부터 365일'에서 직접 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 해당 감리용역 공고 본문으로, 필요한 정보가 모두 있습니다."
+  }
+ },
+ "p0027": {
+  "correctness": {
+   "score": 4,
+   "reason": "82.495%, 최저가 순 적격심사, 85점 이상이라는 기준은 맞지만 '예정가격'을 '예산'으로 잘못 썼습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 요소(82.495% 이상, 최저가 순 적격심사, 종합평점 85점 이상)를 모두 담았습니다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "대부분 context에 근거하지만, context의 '예정가격'을 '예산'으로 바꿔 쓴 부정확한 표현이 있습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 해당 SRT 감속기 공고의 낙찰자 결정 조항을 그대로 담고 있습니다."
+  }
+ },
+ "p0028": {
+  "correctness": {
+   "score": 5,
+   "reason": "100,000,000원이 기대 답변의 기초금액과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 묻는 기초금액을 빠짐없이 답했습니다."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "금액은 context에 있지만 1지역이 아닌 3지역 공고의 값이라, 질문한 공고의 금액이라는 근거로는 간접적입니다."
+  },
+  "context_relevance": {
+   "score": 2,
+   "reason": "context는 질문한 1지역(제2026-2777호) 공고가 아니라 3지역 공고라서 별개 문서입니다."
+  }
+ },
+ "p0029": {
+  "correctness": {
+   "score": 5,
+   "reason": "100,000,000원이 기대 답변의 기초금액과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 묻는 기초금액을 빠짐없이 답했습니다."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "금액은 context에 있지만 1지역이 아닌 2지역 공고의 값이라, 질문한 공고의 금액이라는 근거로는 간접적입니다."
+  },
+  "context_relevance": {
+   "score": 2,
+   "reason": "context는 질문한 1지역 공고가 아니라 2지역 공고라서 별개 문서입니다."
+  }
+ },
+ "p0030": {
+  "correctness": {
+   "score": 4,
+   "reason": "365일은 맞지만 기준점인 '계약체결일로부터'가 빠졌습니다."
+  },
+  "answer_coverage": {
+   "score": 3,
+   "reason": "기간의 기준점과 '단가발주는 발주일로부터 180일 이내'라는 조건이 모두 빠져 핵심 일부만 담았습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '계약기간: 계약체결일로부터 365일'에 근거한 답입니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 해당 SRT 코일스프링 공고 본문으로, 계약기간 정보가 모두 들어 있습니다."
+  }
+ }
+}

@@ -1,0 +1,182 @@
+{
+ "p0001": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 387,660원을 정확히 제시했으며 괄호 안의 동·하복 내역 누락은 감점 대상이 아니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "핵심 금액은 포함했으나 동복 264,660원·하복 123,000원 내역이 누락되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액이 context의 사업비 387,660원과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고 문서의 금액 정보를 담고 있으나 동·하복 내역 등 세부 정보는 부족하다."
+  }
+ },
+ "p0002": {
+  "correctness": {
+   "score": 5,
+   "reason": "낙찰하한율 86.245%를 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 포인트를 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '낙찰하한율: 86.245%'가 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 낙찰자 결정방법 부분이 검색되어 질문에 완벽히 부합한다."
+  }
+ },
+ "p0003": {
+  "correctness": {
+   "score": 1,
+   "reason": "3일간이라는 점만 맞고 행사 날짜를 10월 27일~29일로 잘못 제시했다."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "정답인 10월 20일(화)~22일(수) 기간이 답변에 포함되지 않았다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에는 10월 20일~22일로 명시되어 있으나 답변은 이와 다른 날짜를 지어냈다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 행사 기간이 명확히 포함된 문서가 검색되었다."
+  }
+ },
+ "p0004": {
+  "correctness": {
+   "score": 5,
+   "reason": "240kW 파워뱅크 1기, 디스펜서 2기를 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 모든 핵심 정보를 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 설치대수 항목과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 공고개요가 검색되어 설치대수 정보를 충분히 담고 있다."
+  }
+ },
+ "p0005": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 60일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "60일은 포함했으나 '착공일로부터'라는 기산점이 누락되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "영동군 해당 공고 본문이 검색되어 공사기간 정보를 직접 포함한다."
+  }
+ },
+ "p0006": {
+  "correctness": {
+   "score": 1,
+   "reason": "마감일시를 8월 17일로 잘못 제시해 정답 8월 12일 15:00과 다르다."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "정답 날짜가 포함되지 않고 시각 15:00만 일치한다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에는 2026. 08. 12. 15:00으로 명시되어 있으나 답변은 다른 날짜를 제시했다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 입찰일정표가 검색되어 마감일시를 명확히 담고 있다."
+  }
+ },
+ "p0007": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 47,820,800원을 정확히 제시했으며 괄호 안 추정가격·부가세 누락은 감점 대상이 아니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "핵심 금액은 포함했으나 추정가격과 부가가치세 내역이 누락되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 사업비 47,820,800원과 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고의 금액은 담고 있으나 추정가격·부가세 내역은 없다."
+  }
+ },
+ "p0008": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업예산 55,800,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "금액은 포함했으나 부가세 포함 여부가 누락되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 사업비 55,800,000원과 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고의 금액은 담고 있으나 부가세 포함 여부 등 세부 정보는 없다."
+  }
+ },
+ "p0009": {
+  "correctness": {
+   "score": 5,
+   "reason": "계약기간 420일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "420일은 포함했으나 '계약체결일로부터'라는 기산점이 누락되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '계약기간: 계약체결일로부터 420일'에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "에스알 해당 공고의 입찰사항이 검색되어 계약기간을 직접 포함한다."
+  }
+ },
+ "p0010": {
+  "correctness": {
+   "score": 5,
+   "reason": "예산 245,339,600원은 검증 결과의 원문 금액과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "금액은 포함했으나 부가세 포함 여부가 누락되었다."
+  },
+  "faithfulness": {
+   "score": 0,
+   "reason": "context는 아산시 도로조명 공고의 1억 원뿐이어서 답변의 금액과 기관명은 context에 근거가 없다."
+  },
+  "context_relevance": {
+   "score": 0,
+   "reason": "검색된 context는 충청남도 아산시 도로조명 유지보수공사 문서로 질문과 완전히 무관하다."
+  }
+ }
+}

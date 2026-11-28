@@ -1,0 +1,182 @@
+{
+ "j0011": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 245,339,600원은 검증된 공고(R26BK01672804-000)의 예산 금액과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "금액은 들어 있지만 부가세 포함이라는 설명이 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context에 적힌 사업비 값을 그대로 옮긴 것입니다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 같은 공고이고 금액도 담고 있지만 부가세 포함 여부나 예산 원문 표기는 없습니다."
+  }
+ },
+ "j0012": {
+  "correctness": {
+   "score": 4,
+   "reason": "365일이라는 핵심 값은 맞지만 기산점인 '계약체결일로부터'가 빠졌습니다."
+  },
+  "answer_coverage": {
+   "score": 3,
+   "reason": "기산점과 단가발주 기간(발주일로부터 180일 이내)이 모두 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "365일은 context의 계약기간 항목에서 바로 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 같은 에스알 공고이고 계약기간 전문이 들어 있습니다."
+  }
+ },
+ "j0013": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 245,339,600원은 검증된 공고의 예산 금액과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "금액은 들어 있지만 부가세 포함이라는 설명이 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context에 적힌 사업비 값을 그대로 옮긴 것입니다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 같은 공고이고 금액도 담고 있지만 부가세 포함 여부는 없습니다."
+  }
+ },
+ "j0014": {
+  "correctness": {
+   "score": 5,
+   "reason": "착공일로부터 180일은 기대 답변과 정확히 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 내용이 모두 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '라. 공사기간: 착공일로부터 180일'과 일치합니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 같은 서천군농업기술센터 공고이고 공사기간이 명시되어 있습니다."
+  }
+ },
+ "j0015": {
+  "correctness": {
+   "score": 5,
+   "reason": "770,250,000원은 검증된 추정금액과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "금액은 들어 있지만 괄호 안의 추정가격과 부가가치세 구성이 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액은 context의 사업비 값을 그대로 옮긴 것입니다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 같은 공고이고 금액도 있지만 추정금액의 구성 내역은 없습니다."
+  }
+ },
+ "j0016": {
+  "correctness": {
+   "score": 5,
+   "reason": "102,000,000원은 검증된 기초금액과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "금액은 들어 있지만 추정가격과 부가가치세 내역이 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액은 context의 사업비 값을 그대로 옮긴 것입니다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 같은 전북대 공고이고 금액도 있지만 구성 내역은 없습니다."
+  }
+ },
+ "j0017": {
+  "correctness": {
+   "score": 5,
+   "reason": "착공일로부터 60일은 기대 답변과 정확히 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 내용이 모두 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'과 일치합니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 같은 영동군 공고이고 공사기간이 명시되어 있습니다."
+  }
+ },
+ "j0018": {
+  "correctness": {
+   "score": 5,
+   "reason": "26,750,000원은 검증된 기초금액과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 금액이 빠짐없이 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액은 context의 사업비 값을 그대로 옮긴 것입니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 같은 영동군 공고이고 기초금액과 같은 값이 들어 있습니다."
+  }
+ },
+ "j0019": {
+  "correctness": {
+   "score": 5,
+   "reason": "착공일로부터 60일간은 기대 답변과 정확히 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 내용이 모두 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '라. 사업기간: 착공일로부터 60일간'과 일치합니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 삼산면이 명시된 같은 여수시 상하수도사업단 공고이고 사업기간이 들어 있습니다."
+  }
+ },
+ "j0020": {
+  "correctness": {
+   "score": 5,
+   "reason": "47,820,800원은 검증된 기초금액과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "금액은 들어 있지만 추정가격과 부가가치세 내역이 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액은 context의 사업비 값을 그대로 옮긴 것입니다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 같은 울산 중구 공고이고 금액도 있지만 구성 내역은 없습니다."
+  }
+ }
+}

@@ -111,34 +111,35 @@ python scripts/gradio_app.py
 
 ## 3. 채점하기
 
-답은 local 모델이 만들고 **채점은 항상 Claude subagent**가 한다(별도 API 키 없음).
+답은 local 모델이 만들고 **채점은 항상 Claude**가 한다(별도 API 키 없음).
+채점자는 지시 파일과 memory가 붙지 않는 격리 호출(`claude -p`)이다.
 평가 도구는 `multi-agent` branch에 있다.
 
 | 항목 | 현재 방식(1.4.0 뒤의 변경 포함) |
 |---|---|
 | LLM 채점 지표 | Correctness, Answer coverage, Faithfulness, Context relevance (0\~5점) |
-| 채점 기준 | 팀 프로젝트의 rubric + 추가 기준 4개(`v6`) |
+| 채점 기준 | 팀 프로젝트의 rubric + 추가 기준 4개(`v6.1`) |
 | 채점자가 받는 것 | 질문, 기대 답변, 생성 답변, context, 원본 검증 결과 |
-| 원본 검증 | 질문만 받은 Claude가 원본 문서를 검색해 대상 공고와 답을 찾는다. 프로젝트의 parser와 DB는 거치지 않는다 |
+| 원본 검증 | 질문만 받은 Claude가 공고 목록 엑셀과 원본 문서를 검색해 대상 공고와 답을 찾는다. 프로젝트의 parser와 DB는 거치지 않는다 |
 | context | 답의 근거 + 검색 상위 5개 chunk. chunk마다 답변 모델이 받는 것과 같은 머리글(공고명, 문서, 쪽, 기관명) |
 | 검색 지표(code 계산) | 문서 Recall@5와 nDCG@N은 모든 문항, chunk Recall@5는 chunk를 보고 만든 답만 |
 | 결과 보기 | 문항별 채점 입력, 점수, 사유를 담은 HTML 보고서 |
 
 ```bash
-# 저장된 답을 시스템 이름 없이 내보내기 → 원본 검증 붙이기 → subagent 채점 → 가져오기
+# 저장된 답을 시스템 이름 없이 내보내기 → 원본 검증 붙이기 → 격리 채점 → 가져오기
 python scripts/claude_judge.py export --runs <run-id>:<system> ... --out-dir eval_resources/claude_judge/<round>
 python scripts/judge_search.py build
 python scripts/judge_verify.py run --out eval_resources/claude_judge/<verify>/verification.json
 python scripts/judge_verify.py attach --round-dir eval_resources/claude_judge/<round> --verification eval_resources/claude_judge/<verify>/verification.json
+python scripts/judge_grade.py --round-dir eval_resources/claude_judge/<round>
 python scripts/claude_judge.py import --out-dir eval_resources/claude_judge/<round>
 # 평균과 검색 지표, 이력, HTML 보고서
 python scripts/run_experiment.py evaluate --run-id <run-id> --systems <system> ... \
     --chunk-labels eval_resources/retrieval/chunk_synced_new20.yaml eval_resources/retrieval/chunk_synced_new20_v2.yaml
-python scripts/eval_history.py --run-id <run-id> --commit <답변을 만든 commit> --rubric "v6+원본검증"
+python scripts/eval_history.py --run-id <run-id> --commit <답변을 만든 commit> --rubric "v6.1+원본검증+격리"
 python scripts/judge_report_html.py --round-dir eval_resources/claude_judge/<round>
 ```
 
-`attach` 전에 채점 지시문을 `<round>/instruction.txt`로 저장한다.
 지시문, 채점 기준 전문, 알려진 한계는 [채점 규칙](docs/judge_rules.md)에 있다.
 
 ## 문서 읽는 순서

@@ -1,0 +1,182 @@
+{
+ "p0011": {
+  "correctness": {
+   "score": 1,
+   "reason": "답변의 707,250,000원은 기대 답변과 검증 결과의 추정금액 770,250,000원과 다릅니다."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "답변에 올바른 추정금액 770,250,000원이 없습니다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에는 770,250,000원이 있는데 답변은 이와 다른 707,250,000원을 제시했습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 같은 공고의 문서이고, 검증된 금액 770,250,000원이 사업비라는 이름으로 들어 있습니다."
+  }
+ },
+ "p0012": {
+  "correctness": {
+   "score": 1,
+   "reason": "답변의 29,750,000원은 기초금액 26,750,000원과 다릅니다."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "답변에 올바른 기초금액 26,750,000원이 없습니다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에 적힌 26,750,000원과 다른 금액을 제시했습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 같은 공고의 문서이고, 기초금액과 같은 값인 26,750,000원이 들어 있습니다."
+  }
+ },
+ "p0013": {
+  "correctness": {
+   "score": 1,
+   "reason": "답변의 282,081,000원은 기초금액 228,081,000원과 다릅니다."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "답변에 올바른 기초금액 228,081,000원이 없습니다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에 적힌 228,081,000원과 다른 금액을 제시했습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 같은 공고의 문서이고, 기초금액과 같은 값인 228,081,000원이 들어 있습니다."
+  }
+ },
+ "p0014": {
+  "correctness": {
+   "score": 1,
+   "reason": "답변의 2026년 11월 30일은 실제 납품기한 2026년 12월 31일과 다릅니다."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "답변에 올바른 납품기한 2026년 12월 31일이 없습니다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에는 납품기한이 2026. 12. 31.로 적혀 있는데 답변은 이와 다른 날짜를 제시했습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 같은 공고의 문서이고, 납품기한 2026. 12. 31.이 직접 나와 있습니다."
+  }
+ },
+ "p0015": {
+  "correctness": {
+   "score": 5,
+   "reason": "240kW 파워뱅크 2기와 디스펜서 5기를 정확히 제시했습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 두 항목을 모두 포함했습니다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "설치대수는 context에 근거하지만, '총 7기'라는 합산은 context에 없는 추론입니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 같은 공고의 문서이고, 설치대수가 직접 나와 있습니다."
+  }
+ },
+ "p0016": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 102,000,000원을 정확히 제시했습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "괄호 밖의 핵심 값인 102,000,000원을 포함했습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액이 context의 사업비 102,000,000원과 같습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 같은 공고의 문서이고, 기초금액과 같은 값이 들어 있습니다."
+  }
+ },
+ "p0017": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 78,364,000원을 정확히 제시했습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "괄호 밖의 핵심 값인 78,364,000원을 포함했습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액이 context의 사업비 78,364,000원과 같습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 같은 공고의 문서이고, 기초금액과 같은 값이 들어 있습니다."
+  }
+ },
+ "p0018": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 '계약체결일로부터 365일'을 정확히 제시했습니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "단가발주는 발주일로부터 180일 이내라는 괄호 안의 부가 조건이 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context의 계약기간 문구와 같습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 같은 공고의 문서이고, 계약기간이 직접 나와 있습니다."
+  }
+ },
+ "p0019": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027년 2월 22일, 하복 2027년 5월 10일로 검증 결과와 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "동복과 하복의 납품기한을 모두 포함했습니다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context는 서야고등학교 공고이고 2월 19일과 5월 7일만 있어서, 답변의 날짜는 context에서 확인되지 않습니다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context는 질문의 신목중학교가 아니라 다른 기관인 서야고등학교의 교복 공고입니다."
+  }
+ },
+ "p0020": {
+  "correctness": {
+   "score": 1,
+   "reason": "답변의 90일은 실제 공사기간인 착공일로부터 60일과 다릅니다."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "답변에 올바른 공사기간 60일이 없습니다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에는 '착공일로부터 60일'로 적혀 있는데 답변은 90일을 제시했습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 같은 공고의 문서이고, 공사기간 60일이 직접 나와 있습니다."
+  }
+ }
+}

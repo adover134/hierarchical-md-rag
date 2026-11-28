@@ -1,0 +1,170 @@
+[
+ {
+  "cost_usd": 0.2297814,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "usage": {
+   "claude-haiku-5-5": {
+    "inputTokens": 15559,
+    "outputTokens": 27,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 0
+   },
+   "claude-opus-5-5": {
+    "inputTokens": 2,
+    "outputTokens": 2743,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 21668
+   }
+  }
+ },
+ {
+  "cost_usd": 0.2713166,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "usage": {
+   "claude-haiku-5-5": {
+    "inputTokens": 19521,
+    "outputTokens": 33,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 0
+   },
+   "claude-opus-5-5": {
+    "inputTokens": 2,
+    "outputTokens": 3219,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 25620
+   }
+  }
+ },
+ {
+  "cost_usd": 0.3251284,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "usage": {
+   "claude-haiku-5-5": {
+    "inputTokens": 26159,
+    "outputTokens": 33,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 0
+   },
+   "claude-opus-5-5": {
+    "inputTokens": 2,
+    "outputTokens": 3220,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 32261
+   }
+  }
+ },
+ {
+  "cost_usd": 0.3665108,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "usage": {
+   "claude-haiku-5-5": {
+    "inputTokens": 31288,
+    "outputTokens": 28,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 0
+   },
+   "claude-opus-5-5": {
+    "inputTokens": 2,
+    "outputTokens": 3214,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 37385
+   }
+  }
+ },
+ {
+  "cost_usd": 0.34330669999999996,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "usage": {
+   "claude-haiku-5-5": {
+    "inputTokens": 28457,
+    "outputTokens": 26,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 0
+   },
+   "claude-opus-5-5": {
+    "inputTokens": 2,
+    "outputTokens": 3198,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 34560
+   }
+  }
+ },
+ {
+  "cost_usd": 0.42596400000000006,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "usage": {
+   "claude-haiku-5-5": {
+    "inputTokens": 39300,
+    "outputTokens": 292,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 0
+   },
+   "claude-opus-5-5": {
+    "inputTokens": 2,
+    "outputTokens": 2932,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 45405
+   }
+  }
+ },
+ {
+  "cost_usd": 0.4126509,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "usage": {
+   "claude-haiku-5-5": {
+    "inputTokens": 36784,
+    "outputTokens": 305,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 0
+   },
+   "claude-opus-5-5": {
+    "inputTokens": 2,
+    "outputTokens": 3285,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 42889
+   }
+  }
+ },
+ {
+  "cost_usd": 0.38039069999999997,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ],
+  "usage": {
+   "claude-haiku-5-5": {
+    "inputTokens": 32107,
+    "outputTokens": 328,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 0
+   },
+   "claude-opus-5-5": {
+    "inputTokens": 2,
+    "outputTokens": 3568,
+    "cacheReadInputTokens": 0,
+    "cacheCreationInputTokens": 38206
+   }
+  }
+ }
+]
