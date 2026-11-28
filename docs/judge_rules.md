@@ -62,6 +62,34 @@ python scripts/eval_history.py --run-id <run-id> --commit <답변을 만든 comm
 
 chunk label 사본은 팀 저장소의 `scripts/sync_eval_chunk_labels.py`로 만든다(`--dataset`, `--output`, `--db-path data_index/chroma_B`, `--collection chunks`). DB를 새로 만들면 다시 만든다.
 
+## 채점 결과를 보는 곳
+
+- 현재 점수(생성한 답의 지표)는 [07 결과](07_결과.md)의 "현재 결과"다.
+- 문항별 채점 입력과 점수, 사유는 HTML 보고서로 만든다(git 제외).
+
+```bash
+python scripts/judge_report_html.py --round-dir eval_resources/claude_judge/round22
+```
+
+## 채점기의 알려진 한계
+
+**이 절의 점수는 답의 성능이 아니다.** 채점기를 시험하려고 근거를 일부러 바꿔 넣은 결과이며, 어떤 점수 보고에도 넣지 않는다.
+
+- 시험 방법(`eval_resources/claude_judge/probe_wrong_doc/`, 2026-11-28, 심사: Claude(subagent), v6): 저장된 답, 질문, 기대 답변은 그대로 두고 **context만 다른 공고의 것으로 바꿔** 채점했다. 바꾼 것 8건과 원래 것 8건을 섞었다.
+
+| 바꾼 context | 건수 | Faithfulness / Context relevance | 감점 |
+|---|---|---|---|
+| 다른 기관, 다른 사업 | 3 | 0\~1 / 0 | ✅ |
+| 다른 학교의 같은 종류 공고 | 1 | 1 / 1 | ✅ |
+| 같은 기관, 다른 금액 | 1 | 2 / 2 | ✅ |
+| 값이 같은 다른 사업(전기와 건축) | 1 | 3 / 3 | ✅ |
+| 1지역 질문에 같은 기관, 같은 금액의 2\~3지역 공고 | 2 | 5 / 5 | 🔴 감점 없음 |
+
+- 원래 context 8건은 Context relevance 4점 1건 말고 감점이 없었다.
+- **지역 번호만 다른 공고는 걸러내지 못한다.** 추가 기준 4에 따라 채점자가 공고명의 차이를 감점 이유로 삼지 않기 때문이다. 아직 고치지 않았다.
+- 같은 입력도 채점 묶음에 따라 점수가 갈린다([07 결과](07_결과.md)의 "믿어도 되는 범위").
+- 추가 기준 1(주된 값)은 Correctness에만 적용된다. 괄호 안 내용이 빠진 답의 Answer coverage 감점은 채점자에 따라 다르다.
+
 ## 아직 구현하지 않은 것
 
 - **채점기가 직접 RAG로 확인하는 방식**(2026-11-02 요청): 채점자가 같은 DB에서 근거를 직접 찾아 답과 대조하는 방식이다.

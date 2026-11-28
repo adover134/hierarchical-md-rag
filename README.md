@@ -4,7 +4,7 @@
 
 [팀 프로젝트(AI_7-team)](https://github.com/Loah-Lee/AI_7-team)에서 출발했고, 문서 읽기와 표 처리, 검색, 답변, 채점을 바꿨다.
 
-현재 버전은 **1.3.2**이다([버전과 branch](docs/08_버전과_브랜치.md)). 1.2는 `release/1.2` branch로 남겨 두었다.
+현재 버전은 **1.4.0**이다([버전과 branch](docs/08_버전과_브랜치.md)). 1.2는 `release/1.2` branch로 남겨 두었다.
 
 ## 구조 한눈에
 
@@ -109,6 +109,33 @@ curl -X POST http://localhost:8001/v1/query -H "Content-Type: application/json" 
 python scripts/gradio_app.py
 ```
 
+## 3. 채점하기
+
+답은 local 모델이 만들고 **채점은 항상 Claude subagent**가 한다(별도 API 키 없음).
+평가 도구는 `multi-agent` branch에 있다.
+
+| 항목 | 현재 방식(1.4.0) |
+|---|---|
+| LLM 채점 지표 | Correctness, Answer coverage, Faithfulness, Context relevance (0\~5점) |
+| 채점 기준 | 팀 프로젝트의 rubric + 추가 기준 4개(`v6`) |
+| 채점자가 받는 것 | 질문, 기대 답변, 생성 답변, context |
+| context | 답의 근거 + 검색 상위 5개 chunk. chunk마다 답변 모델이 받는 것과 같은 머리글(공고명, 문서, 쪽, 기관명) |
+| 검색 지표(code 계산) | 문서 Recall@5와 MRR은 모든 문항, chunk Recall@5는 chunk를 보고 만든 답만 |
+| 결과 보기 | 문항별 채점 입력, 점수, 사유를 담은 HTML 보고서 |
+
+```bash
+# 저장된 답을 시스템 이름 없이 내보내기 → subagent 채점 → 가져오기
+python scripts/claude_judge.py export --runs <run-id>:<system> ... --out-dir eval_resources/claude_judge/<round>
+python scripts/claude_judge.py import --out-dir eval_resources/claude_judge/<round>
+# 평균과 검색 지표, 이력, HTML 보고서
+python scripts/run_experiment.py evaluate --run-id <run-id> --systems <system> ... \
+    --chunk-labels eval_resources/retrieval/chunk_synced_new20.yaml eval_resources/retrieval/chunk_synced_new20_v2.yaml
+python scripts/eval_history.py --run-id <run-id> --commit <답변을 만든 commit> --rubric v6
+python scripts/judge_report_html.py --round-dir eval_resources/claude_judge/<round>
+```
+
+지시문, 채점 기준 전문, 알려진 한계는 [채점 규칙](docs/judge_rules.md)에 있다.
+
 ## 문서 읽는 순서
 
 | 순서 | 문서 | 알게 되는 것 |
@@ -122,10 +149,11 @@ python scripts/gradio_app.py
 | 7 | [결과](docs/07_결과.md) | **현재 점수와 비용**, 믿어도 되는 범위, 이전 기록 |
 | 8 | [버전과 branch](docs/08_버전과_브랜치.md) | 버전별 변화, branch 차이 |
 | 9 | [용어집](docs/09_용어집.md) | 문서에 나온 말의 뜻 |
+| 필요할 때 | [채점 규칙](docs/judge_rules.md) | 채점 기준 전문, 채점자가 받는 것, 알려진 한계 |
 | 필요할 때 | [질의 비용 측정 방법](docs/11_비용측정.md) | 비용을 재는 방법, 요금 계산식, 개발 환경(GPU 메모리 8GB) |
 | 요약 | [발표.html](docs/발표.html) | 브라우저에서 여는 슬라이드 요약(← → 키) |
 | 기록 | [`EXPERIMENTS.md`](EXPERIMENTS.md) | 실험 전 과정과 측정값 |
-| 기록 | [채점 규칙](docs/judge_rules.md), [채점기 개선](docs/judge_improvement.md), [버그 수정](docs/BUGFIXES.md) | 채점과 수정의 상세 기록 |
+| 기록 | [채점기 개선](docs/judge_improvement.md), [버그 수정](docs/BUGFIXES.md) | 채점과 수정의 상세 기록 |
 | 기록 | [이전 README](README_이전.md) | 문서 개편 전의 README(설정, API, 평가 명령이 길게 적혀 있다) |
 
 ## 현재 결과와 한계
@@ -133,12 +161,14 @@ python scripts/gradio_app.py
 **현재 점수, 시간, token, 환산 요금은 [07 결과](docs/07_결과.md#현재-결과) 한 곳에만 적는다.** 다른 문서의 점수는 이전 기록이다.
 
 - 스캔 PDF는 다루지 않는다.
+- 채점 기준이 다른 버전의 점수는 서로 비교하지 않는다.
 - DB 변경의 효과는 문항 40개로는 통계적으로 구분되지 않았다.
 
 ## 변경 기록
 
 | 버전 | 바뀐 것 |
 |---|---|
+| 1.4.0 | 채점기: 팀 rubric + 추가 기준 4개, 채점 context에 chunk 머리글, chunk를 보지 않는 답은 chunk Recall에서 제외, 문항별 HTML 보고서. 목록 답이 잘리던 후처리를 고치고, 질의 비용 측정을 넣었다 |
 | 1.3.2 | 채운 metadata를 덮어쓰지 않는다(`build_metadata.py`는 채운 값이 있으면 멈추고, build는 CSV가 있으면 metadata 단계를 건너뛴다). build 순서를 끝까지 돌려 확인했다 |
 | 1.3.1 | parser(계층 추출)의 기본 모델을 `gpt-oss:20b`로 바꿨다. 전처리에서 LLM이 쓰이는 곳을 [DB 구축](docs/04_DB구축.md)에 그림으로 넣었다 |
 | 1.3.0 | metadata 단계 추가(엑셀 → `metadata.csv` → 기관명 사전 → DB). DB를 다시 만들었다 |
