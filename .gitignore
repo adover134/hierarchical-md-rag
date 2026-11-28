@@ -10,6 +10,7 @@ output/
 pipeline/
 eval_resources/eval_results_*.json
 eval_resources/eval_report_*.html
+eval_resources/judge_corpus/
 eval_resources/debug_logs/
 eval_resources/gradio_flagged/
 eval_resources/gradio_query_log.jsonl
