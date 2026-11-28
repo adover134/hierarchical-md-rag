@@ -262,3 +262,60 @@ code로 계산하는 지표의 변경이다. LLM 채점 기준과 점수는 바�
 - 근거를 바꿔 넣은 시험에서는 지역 번호만 다른 공고를 새로 걸러냈다.
 - 실제 채점에서는 한 줄 context(단축 경로)의 Context relevance 감점이 2개에서 13개로 늘었다. 자세한 내용은 [채점기 규칙](judge_rules.md)의 "채점기의 알려진 한계"에 있다.
 
+## v6.1 (2026-11-28): 금액 항목명이 없다는 감점
+
+**왜**
+
+- `round23`에서 한 줄 context(단축 경로)의 Context relevance 4점이 13개였고, 8개는 "기초금액 같은 항목명이 없다"는 이유였다.
+- 금액 이름 차이를 인정하는 추가 기준 3이 Correctness와 Answer coverage에만 적용되고, context가 쓴 이름은 다루지 않았다. `v5`를 정리하면서 좁아진 것이다.
+
+**무엇을** (원문을 보이고 승인받았다)
+
+```diff
+- 3. 질문이 묻는 금액의 이름과 답변이 쓴 이름이 달라도(예: 기초금액을 사업비로)
+-    값이 같으면 Correctness와 Answer coverage를 깎지 않는다.
++ 3. 질문이 묻는 금액의 이름과 답변이나 context가 쓴 이름이 달라도(예: 기초금액을 사업비로)
++    값이 같으면 Correctness, Answer coverage, Context relevance를 깎지 않는다.
+```
+
+- 금액 내역(추정가격, 부가세)이 context에 없다는 감점은 상세 정보의 유무이므로 타당한 것으로 본다(사용자 판단).
+- 채점기 시험(`probe_v6_1`) 뒤 80개를 다시 채점했다(`round24`).
+
+**생성한 답의 점수** (심사: Claude(subagent))
+
+| 회차 | 방식 | Correctness | Answer coverage | Faithfulness | Context relevance |
+|---|---|---|---|---|---|
+| `round23`(v6) | `two_stage` | 4.925 | 4.800 | 4.950 | 4.500 |
+| `round24`(v6.1) | `two_stage` | 4.950 | 4.800 | 4.950 | 4.800 |
+| `round23`(v6) | `multi_agent` | 4.975 | 4.825 | 4.950 | 4.650 |
+| `round24`(v6.1) | `multi_agent` | 4.975 | 4.850 | 4.950 | 4.900 |
+
+- 항목명 감점은 8개에서 0개가 됐다. 단축 경로의 Context relevance 4점은 13개에서 5개다.
+- 검색한 chunk의 4점도 21개에서 7개로 줄었다. 바꾼 기준의 대상이 아니며 원인은 가리지 못했다.
+
+## 엑셀 우선 검증, 검증 지시 문장, 격리 채점 (2026-11-28)
+
+**왜**
+
+- 검증자의 목록 검색 결과에 `사업 금액` 열이 빠져, 답변과 달리 원본 문서만 보고 금액을 확인했다.
+- 검증 결과를 "다르게 표현된 같은 내용"을 인정하는 데 쓰라는 말이 채점 지시문에 없었다.
+- 채점 subagent가 지시 파일과 memory 목록을 함께 받아, 작업 중에 적은 판단이 점수에 섞일 수 있었다.
+
+**무엇을** (원문과 code를 보이고 승인받았다)
+
+- 검증자 전용 도구 `scripts/judge_excel.py`: 공고 목록의 모든 열을 먼저 본다.
+- 채점 지시문에 한 줄 추가: "생성 답이나 context가 기대 답변과 다르게 표현돼도, 검증 결과의 값이나 원문 구절로 같은 내용임이 확인되면 맞은 것으로 본다."
+- 격리 채점 `scripts/judge_grade.py`.
+
+**생성한 답의 점수** (`round25`는 심사: Claude(격리 호출), `round24`는 Claude(subagent))
+
+| 회차 | 방식 | Correctness | Answer coverage | Faithfulness | Context relevance |
+|---|---|---|---|---|---|
+| `round24` | `two_stage` | 4.950 | 4.800 | 4.950 | 4.800 |
+| `round25` | `two_stage` | 4.925 | 4.700 | 4.950 | 4.675 |
+| `round24` | `multi_agent` | 4.975 | 4.850 | 4.950 | 4.900 |
+| `round25` | `multi_agent` | 4.950 | 4.825 | 4.950 | 4.775 |
+
+- 320개 점수 중 41개가 바뀌었다(Correctness 2, Answer coverage 15, Faithfulness 0, Context relevance 24).
+- 시험은 통과했지만, 감점돼도 안 돼도 되는 유형의 점수가 채점마다 달라진다([채점 규칙](judge_rules.md)의 "채점기의 알려진 한계").
+
