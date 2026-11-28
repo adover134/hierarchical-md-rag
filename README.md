@@ -113,7 +113,7 @@ python scripts/gradio_app.py
 
 답은 local 모델이 만들고 **채점은 항상 Claude**가 한다(별도 API 키 없음).
 채점자는 지시 파일과 memory가 붙지 않는 격리 호출(`claude -p`)이다.
-평가 도구는 `multi-agent` branch에 있다.
+채점 도구는 두 branch에 있다. `multi_agent` 방식의 실행과 비용 측정은 `multi-agent` branch에서 한다.
 
 | 항목 | 현재 방식(1.4.1) |
 |---|---|
@@ -186,4 +186,4 @@ python scripts/judge_report_html.py --round-dir eval_resources/claude_judge/<rou
 
 ## branch
 
-`multi-agent`(GitHub 기본, 최신: multi-agent, 평가 도구, 결과 문서), `main`(`two_stage` 경로만, 같은 문서 포함).
+`multi-agent`(GitHub 기본: `multi_agent` 답변 방식, 비용 측정과 비교 실험 도구 포함), `main`(`two_stage` 경로만, 채점 도구와 문서 포함).
