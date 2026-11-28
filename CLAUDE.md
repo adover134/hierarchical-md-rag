@@ -8,6 +8,7 @@
 - **채점(Judge)은 항상 Claude가 한다.** `gpt-oss:20b`로 채점하지 않는다. 성능이 낮고, 자기가 만든 답변을 스스로 채점하게 되기 때문이다.
 - 별도의 API 키를 쓰지 않고, **격리한 Claude 호출로 채점한다**(`scripts/judge_grade.py`: 지시 파일·memory·도구 없는 `claude -p`). 저장된 답변을 시스템·실행 식별 없이 섞어 넘기고, 같은 rubric(`src/evaluation/llm_judge.py`의 4개 축, 0\~5점)으로 채점한다. 내보내기와 가져오기는 `scripts/claude_judge.py`.
 - 채점 전에 원본 검증 결과를 채점 입력에 붙인다(`scripts/judge_verify.py`). 검증자에게는 질문만 준다.
+- 채점자와 검증자의 지시문은 `.claude/agents/rag-judge.md`, `rag-verifier.md`에만 둔다.
 - 보고하는 모든 점수 문서에 "심사: Claude(격리 호출)"을 명시한다. 예전 `gpt-oss:20b` 채점값은 참고용으로 표시해서만 남긴다.
 - `scripts/run_experiment.py evaluate`는 Claude 채점 cache가 없으면 gpt-oss로 대신 채점하지 않고 멈춘다. `scripts/eval_retrieval.py`의 `--judge_model` 경로는 팀에서 가져온 것이라 보고용 점수에 쓰지 않는다.
 - 최종 채점 결과도, 추가 개선 여부의 판단도 항상 Claude 채점을 기준으로 한다(2026-11-02 사용자 확정). gpt-oss 채점은 Correctness를 평균 0.1점 낮게 매기고(같은 답변 120건 중 차이 난 26건에서 19건) Context relevance는 크게 후하게 매겼다.

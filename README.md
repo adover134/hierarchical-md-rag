@@ -140,6 +140,7 @@ python scripts/eval_history.py --run-id <run-id> --commit <답변을 만든 comm
 python scripts/judge_report_html.py --round-dir eval_resources/claude_judge/<round>
 ```
 
+채점자와 검증자의 지시문은 `.claude/agents/`의 `rag-judge.md`, `rag-verifier.md`에 있다.
 지시문, 채점 기준 전문, 알려진 한계는 [채점 규칙](docs/judge_rules.md)에 있다.
 
 ## 문서 읽는 순서
@@ -157,6 +158,7 @@ python scripts/judge_report_html.py --round-dir eval_resources/claude_judge/<rou
 | 9 | [용어집](docs/09_용어집.md) | 문서에 나온 말의 뜻 |
 | 필요할 때 | [채점 규칙](docs/judge_rules.md) | 채점 기준 전문, 채점자가 받는 것, 알려진 한계 |
 | 필요할 때 | [질의 비용 측정 방법](docs/11_비용측정.md) | 비용을 재는 방법, 요금 계산식, 개발 환경(GPU 메모리 8GB) |
+| 필요할 때 | [채점기 시험](docs/12_채점기_시험.md) | 채점 기준이나 지시문을 바꾸기 전에 하는 시험, 통과 기준, 실행 방법 |
 | 요약 | [발표.html](docs/발표.html) | 브라우저에서 여는 슬라이드 요약(← → 키) |
 | 기록 | [`EXPERIMENTS.md`](EXPERIMENTS.md) | 실험 전 과정과 측정값 |
 | 기록 | [채점기 개선](docs/judge_improvement.md), [버그 수정](docs/BUGFIXES.md) | 채점과 수정의 상세 기록 |

@@ -49,6 +49,19 @@ chunk 본문은 2026-08-24부터 넣는다. 근거만 주면 근거가 있는 �
 생성 답이나 context가 기대 답변과 다르게 표현돼도, 검증 결과의 값이나 원문 구절로 같은 내용임이 확인되면 맞은 것으로 본다.
 ```
 
+## 채점 agent 정의 file
+
+지시문은 아래 두 file에만 있고, code가 이 file의 본문을 읽어 system prompt로 보낸다(`scripts/judge_agents.py`).
+
+| file | 내용 | 부르는 code |
+|---|---|---|
+| [`.claude/agents/rag-judge.md`](../.claude/agents/rag-judge.md) | 채점자: 루브릭(팀 rubric + 추가 기준)과 채점 지시 | `scripts/judge_grade.py` |
+| [`.claude/agents/rag-verifier.md`](../.claude/agents/rag-verifier.md) | 검증자: 원본에서 대상 공고와 답을 확인하는 지시문 | `scripts/judge_verify.py` |
+
+- 점수에 영향을 주므로, 본문을 바꾸기 전에 바꾸기 전과 후의 원문을 보이고 승인받는다. 루브릭을 바꾸면 `scripts/claude_judge.py`의 `RUBRIC_VERSION`도 올린다.
+- 팀 rubric 부분은 `src/evaluation/llm_judge.py`와 같아야 한다(test가 확인한다).
+- Claude Code는 이 file을 subagent로도 보여주지만, **subagent로 직접 불러 낸 점수는 보고하지 않는다.** 공식 점수는 위 code의 격리 호출로 낸다. 머리의 `model`, `tools`, `omitClaudeMd`는 subagent로 부를 때만 쓰인다.
+
 ## 원본 검증
 
 2026-11-28부터 쓴다. 질문과 답변의 이름만 견주지 않고 원본 문서를 확인하게 하려는 것이다(2026-11-02 요청).
@@ -106,6 +119,11 @@ python scripts/eval_history.py --run-id <run-id> --commit <답변을 만든 comm
 ```
 
 chunk label 사본은 팀 저장소의 `scripts/sync_eval_chunk_labels.py`로 만든다(`--dataset`, `--output`, `--db-path data_index/chroma_B`, `--collection chunks`). DB를 새로 만들면 다시 만든다.
+
+## 채점기 시험
+
+기준이나 지시문을 바꾸면, 80개를 다시 채점하기 전에 시험한다.
+시험 항목, 통과 기준, 실행 방법은 [12 채점기 시험](12_채점기_시험.md)에 있다.
 
 ## 채점 결과를 보는 곳
 
