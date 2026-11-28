@@ -62,6 +62,8 @@ def test_evaluate_and_report(tmp_path):
     # 핵심값: a1은 1위에서 확보, a2("60일")는 검색 텍스트에 없음 → 적격 2건 중 1건
     assert m["kv_eligible_n"] == 2
     assert m["context_hit_at_5"] == 0.5 and m["kv_mrr"] == 0.5
+    # 문서 nDCG@N: a1은 정답 문서가 1위, a2는 검색되지 않음
+    assert m["source_ndcg"] == 0.5 and "source_mrr" not in m
     # 헤더 포함률: c1은 섹션 있음, c2는 없음
     assert m["header_inclusion"] == 0.5
     # 회귀 묶음(a2)은 correctness 1 → 불통과

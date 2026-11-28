@@ -28,9 +28,9 @@ def _fixture(tmp_path):
            "csv_short_circuit": False, "source_type": "hwp"}
     (run / "s_raw.json").write_text(json.dumps([raw]), encoding="utf-8")
     metrics = {"n_queries": 1, "n_scored": 1, "correctness_all": 4.0, "answer_coverage_all": 4.0, "faithfulness_all": 4.0,
-               "context_relevance_all": 4.0, "source_recall_at_k": 1.0, "source_mrr": 1.0, "chunk_recall_at_k": 0.5,
+               "context_relevance_all": 4.0, "source_recall_at_k": 1.0, "source_ndcg": 0.75, "chunk_recall_at_k": 0.5,
                "chunk_recall_labeled_n": 1}
-    row = {"dataset": "new20", "id": "m1", "source_hit_position": 1, "source_recall": 1.0, "chunk_recall": 0.5}
+    row = {"dataset": "new20", "id": "m1", "source_hit_position": 1, "source_ndcg": 0.75, "source_recall": 1.0, "chunk_recall": 0.5}
     (run / "summary.json").write_text(json.dumps({"top_k": 5, "systems": {"s": {"metrics": metrics, "per_query": [row]}}}), encoding="utf-8")
     dataset = {("new20", "m1"): {"query_type": "single_doc", "ground_truth": {"sources": ["문서"]}}}
     return rd, tmp_path / "runs", dataset
@@ -54,6 +54,28 @@ def test_html_shows_chunk_recall_and_marks_answers_that_used_no_chunks(tmp_path)
     assert "Recall@5 (Chunk)" in page and "<strong>Recall@K (chunk):</strong> 50%" in page
     results["per_query"][0]["recall_at_k_chunk"] = None
     assert "<strong>Recall@K (chunk):</strong> 해당 없음" in build_html(results)
+
+
+def test_html_shows_ndcg_in_place_of_mrr(tmp_path):
+    rd, runs, dataset = _fixture(tmp_path)
+    results = build_results(rd, "r1", "s", dataset, runs)
+    assert results["summary"]["ndcg_source"] == 0.75 and results["per_query"][0]["ndcg"] == 0.75
+    page = build_html(results)
+    assert "nDCG@N (Source)" in page and "<strong>nDCG@N (source):</strong> 0.750" in page
+    assert "MRR" not in page
+
+
+def test_html_shows_the_verification_result_that_the_grader_received(tmp_path):
+    rd, runs, dataset = _fixture(tmp_path)
+    assert "원본 검증 결과" not in build_html(build_results(rd, "r1", "s", dataset, runs))
+    path = rd / "batches" / "batch_01.json"
+    items = json.loads(path.read_text(encoding="utf-8"))
+    items[0]["검증 결과"] = {"notices": [{"file": "가 공고", "notice_no": "1호", "why": "이름 일치", "quotes": ["<기초금액> 1원"]}],
+                           "answer": "검증한 답", "unverified": "확인 못 한 것"}
+    path.write_text(json.dumps(items), encoding="utf-8")
+    page = build_html(build_results(rd, "r1", "s", dataset, runs))
+    assert "채점 입력: 원본 검증 결과" in page and "&lt;기초금액&gt; 1원" in page and "<기초금액>" not in page.split("<script")[0]
+    assert all(word in page for word in ("가 공고", "1호", "이름 일치", "검증한 답", "확인 못 한 것"))
 
 
 def test_html_shows_the_grading_input_escaped_and_no_claims_from_the_old_run(tmp_path):

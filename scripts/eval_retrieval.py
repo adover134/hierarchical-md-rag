@@ -2,7 +2,7 @@
 
 전체 RAG 파이프라인(build_graph().invoke())을 실행한 뒤
 LLM Judge가 Correctness, Answer Coverage, Faithfulness, Context Relevance를 채점한다.
-Retrieval 보조 지표(Recall@K, MRR — Source 단위)도 병행 계산.
+Retrieval 보조 지표(Recall@K, nDCG@N — Source 단위)도 병행 계산.
 
 실행: uv run python scripts/eval_retrieval.py --label current --top_k 5
 """
@@ -43,7 +43,7 @@ def _get_eval_dir() -> Path:
 from src.evaluation.llm_judge import judge_rag_response
 from src.evaluation.metrics import (
     calculate_hit_position,
-    calculate_mrr,
+    calculate_document_ndcg,
     calculate_recall_at_k,
     calculate_recall_at_k_chunk,
     calculate_recall_at_k_chunk_summary,
@@ -387,7 +387,7 @@ def evaluate_e2e(
     context_relevance_scores: list[int] = []
     recalls: list[float] = []
     chunk_recalls: list[float | None] = []
-    hit_positions: list[int | None] = []
+    ndcg_scores: list[float | None] = []
 
     total = len(eval_items)
 
@@ -466,9 +466,10 @@ def evaluate_e2e(
         recall = calculate_recall_at_k(retrieved_for_metrics, gt_sources, k=top_k)
         chunk_recall = calculate_recall_at_k_chunk(retrieved_for_metrics, gt_chunk_labels, k=top_k)
         hit_pos = calculate_hit_position(retrieved_for_metrics, gt_sources)
+        ndcg = calculate_document_ndcg(retrieved_for_metrics[:top_k], gt_sources)
         recalls.append(recall)
         chunk_recalls.append(chunk_recall)
-        hit_positions.append(hit_pos)
+        ndcg_scores.append(ndcg)
 
         # 3) LLM Judge 채점
         # evidence(추출된 핵심 근거 요약)만 주면, 실제 답변 생성에는 더 넓은
@@ -532,6 +533,7 @@ def evaluate_e2e(
             "context_relevance": judge_result["context_relevance"],
             "hit_position": hit_pos,
             "recall_at_k": recall,
+            "ndcg": ndcg,
             "recall_at_k_chunk": chunk_recall,
             "num_retrieved": len(retrieved_docs),
             "csv_short_circuit": csv_short_circuit,
@@ -568,7 +570,8 @@ def evaluate_e2e(
     recall_at_k_source = calculate_recall_at_k_summary(recalls)
     recall_at_k_chunk = calculate_recall_at_k_chunk_summary(chunk_recalls)
     num_chunk_labeled = len([r for r in chunk_recalls if r is not None])
-    mrr = calculate_mrr(hit_positions)
+    labelled_ndcg = [s for s in ndcg_scores if s is not None]
+    ndcg_source = sum(labelled_ndcg) / len(labelled_ndcg) if labelled_ndcg else 0.0
 
     return {
         "summary": {
@@ -582,7 +585,7 @@ def evaluate_e2e(
             "recall_at_k_source": round(recall_at_k_source, 4),
             "recall_at_k_chunk": (round(recall_at_k_chunk, 4) if recall_at_k_chunk is not None else None),
             "num_chunk_labeled_queries": num_chunk_labeled,
-            "mrr_source": round(mrr, 4),
+            "ndcg_source": round(ndcg_source, 4),
         },
         "per_query": per_query_results,
     }
@@ -644,7 +647,7 @@ def main() -> None:
     print(f"    Context Relevance: {summary['avg_context_relevance']:.2f}")
     print(f"  [Retrieval 보조 지표 — Source Level (Strict Match)]")
     print(f"    Recall@{args.top_k}:       {summary['recall_at_k_source']:.4f}")
-    print(f"    MRR:               {summary['mrr_source']:.4f}")
+    print(f"    nDCG@N:            {summary['ndcg_source']:.4f}")
     if summary.get("recall_at_k_chunk") is not None:
         print(f"  [Retrieval 보조 지표 — Chunk Level]")
         print(f"    Recall@{args.top_k}:       {summary['recall_at_k_chunk']:.4f}")

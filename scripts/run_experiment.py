@@ -425,7 +425,7 @@ def _chunk_lookup(chunks: list[dict]) -> dict[str, dict]:
 
 
 def team_retrieval_metrics(docs: list[dict], ground_truth: dict, k: int, uses_chunks: bool = True) -> dict[str, Any]:
-    """팀 평가 코드의 검색 지표(문서 Recall@K, 문서 순위, chunk Recall@K).
+    """팀 평가 코드의 검색 지표(문서 Recall@K, 문서 순위, chunk Recall@K)와 문서 nDCG@N.
 
     chunk를 보지 않고 만든 답(단축 경로)은 chunk 단위 채점 대상이 아니므로 chunk Recall이 None이다.
     chunk 라벨이 없어도 None이다. 문서 단위 지표는 모든 답에 계산한다.
@@ -439,6 +439,7 @@ def team_retrieval_metrics(docs: list[dict], ground_truth: dict, k: int, uses_ch
     return {
         "source_hit_position": M.calculate_hit_position(retrieved_for_metrics, gt_sources) if gt_sources else None,
         "source_recall": M.calculate_recall_at_k(retrieved_for_metrics, gt_sources, k=k) if gt_sources else None,
+        "source_ndcg": M.calculate_document_ndcg(retrieved_for_metrics[:k], gt_sources),
         "chunk_recall": M.calculate_recall_at_k_chunk(docs, labels, k=k) if uses_chunks else None,
     }
 
@@ -598,7 +599,7 @@ def aggregate(per_query: list[dict], cfg: dict, table_samples: list[dict], chunk
         "n_queries": len(per_query), "n_scored": len(ok), "n_errors": len(per_query) - len(ok),
         "context_hit_at_3": M.calculate_context_hit_rate(positions, 3), "context_hit_at_5": M.calculate_context_hit_rate(positions, k),
         "kv_mrr": M.calculate_key_value_mrr(positions), "kv_eligible_n": len(elig),
-        "source_mrr": round(M.calculate_mrr([r["source_hit_position"] for r in ok]), 4) if ok else None,
+        "source_ndcg": _mean([r["source_ndcg"] for r in ok]),
         "source_recall_at_k": round(M.calculate_recall_at_k_summary([r["source_recall"] for r in ok]), 4) if ok else None,
         "chunk_recall_at_k": _mean([r["chunk_recall"] for r in ok]),
         "chunk_recall_labeled_n": sum(r["chunk_recall"] is not None for r in ok),
@@ -660,7 +661,7 @@ def render_report(summary: dict, cfg: dict) -> str:
     out = [f"실행 ID `{summary['run_id']}` · top_k={k} · LLM {cfg['llm']['model']} (심사: Claude 서브에이전트)", ""]
     out += ["### 1. 검색 품질", f"| 지표 | {heads} |", sep,
             row("Context Hit Rate@3", "context_hit_at_3"), row(f"Context Hit Rate@{k}", "context_hit_at_5"),
-            row("핵심값 MRR", "kv_mrr"), row("문서(source) 단위 MRR", "source_mrr"),
+            row("핵심값 MRR", "kv_mrr"), row("문서(source) nDCG@N", "source_ndcg"),
             row("Header Context Inclusion", "header_inclusion"), n_row("핵심값 적격 문항 수(N)", "kv_eligible_n"), ""]
     out += ["### 2. 파싱·청킹·전처리", f"| 지표 | {heads} |", sep,
             n_row("색인된 문서 수", "chunk_docs_indexed"), n_row("전체 청크 수", "chunk_count"),

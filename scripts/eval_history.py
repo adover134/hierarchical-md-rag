@@ -28,7 +28,7 @@ def build_entry(run_id: str, commit: str, rubric: str, summary: dict, cost: dict
             "faithfulness": m["faithfulness_all"],
             "context_relevance": m["context_relevance_all"],
             "source_recall_at_5": m["source_recall_at_k"],
-            "source_mrr": m["source_mrr"],
+            "source_ndcg": m["source_ndcg"],
             "chunk_recall_at_5": m["chunk_recall_at_k"],
             "chunk_recall_n": m["chunk_recall_labeled_n"],
             "chunk_recall_at_5_searched": m["chunk_recall_at_k_searched"],
