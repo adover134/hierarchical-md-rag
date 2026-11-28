@@ -1,0 +1,182 @@
+{
+ "j0021": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 55,800,000원은 기대 답변의 사업예산과 같고, 괄호 안의 부가세 포함 여부가 빠진 것은 감점하지 않는다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심인 예산 금액 55,800,000원이 빠짐없이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액은 context의 '사업비: 약 5,580만 원 (55,800,000원)'에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 울산광역시사회복지협의회 공고 문서에서 왔고 55,800,000원을 담고 있다."
+  }
+ },
+ "j0022": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 228,081,000원은 기대 답변의 기초금액과 같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심인 기초금액 228,081,000원이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액은 context의 '사업비 228,081,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 여수시 상하수도사업단의 화정면 상화도 공고에서 왔고 기초금액과 같은 값을 담고 있다."
+  }
+ },
+ "j0023": {
+  "correctness": {
+   "score": 4,
+   "reason": "파워뱅크 2기와 디스펜서 5기는 맞지만, 종류가 다른 설비를 합쳐 '총 7기'라고 한 것은 원문에 없는 다소 부정확한 표현이다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 240kW 파워뱅크 2기와 디스펜서 5기가 모두 들어 있다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "설치대수는 context에서 확인되지만, '총 7기'라는 합산은 context에 없는 추론이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 온양교통 공고 문서에서 왔고 설치대수 문구를 그대로 담고 있다."
+  }
+ },
+ "j0024": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 99,000,000원은 기대 답변의 사업예산과 같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심인 예산 금액 99,000,000원이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액은 context의 '사업비 99,000,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 선문대학교 반도체소재공학과 공고 문서에서 왔고 해당 금액을 담고 있다."
+  }
+ },
+ "j0025": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 50,000,000원은 기대 답변의 기초금액과 같고, 괄호 안의 세부 금액이 빠진 것은 감점하지 않는다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심인 기초금액 50,000,000원이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액은 context의 '사업비 50,000,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context 문서는 검증 결과에서 남자생활실 타일공사 공고(R26BK01672864-000)로 확인된 문서이고 같은 금액을 담고 있다."
+  }
+ },
+ "j0026": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 608,881,900원은 기대 답변의 예산과 같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심인 예산 금액 608,881,900원이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액은 context의 '사업비 608,881,900원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 영남영농조합법인 히트펌프 공고 문서에서 왔고 해당 금액을 담고 있다."
+  }
+ },
+ "j0027": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 '계약체결일로부터 420일'은 기대 답변과 똑같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 정보인 계약기간이 빠짐없이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용은 context의 '계약기간: 계약체결일로부터 420일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 에스알의 SRT 팬터그래프 집전판 공고에서 왔고 계약기간을 담고 있다."
+  }
+ },
+ "j0028": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 50,000,000원은 기대 답변의 기초금액과 같고, 괄호 안의 세부 금액이 빠진 것은 감점하지 않는다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심인 기초금액 50,000,000원이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액은 context의 '사업비 50,000,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 전북대학교 산학협력단의 GPU그래픽카드 공고 문서에서 왔고 해당 금액을 담고 있다."
+  }
+ },
+ "j0029": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 33,690,000원은 기대 답변의 기초금액과 같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심인 기초금액 33,690,000원이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액은 context의 '사업비 33,690,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 충청북도 영동군의 양안이골소하천 공고 문서에서 왔고 해당 금액을 담고 있다."
+  }
+ },
+ "j0030": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 228,081,000원은 기대 답변의 기초금액과 같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심인 기초금액 228,081,000원이 들어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액은 context의 '사업비 228,081,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 여수시 상하수도사업단의 화정면 상화도 공고에서 왔고 해당 금액을 담고 있다."
+  }
+ }
+}

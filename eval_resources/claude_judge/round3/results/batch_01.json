@@ -1,0 +1,182 @@
+{
+ "j0001": {
+  "correctness": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값(390,000원)과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 요구한 핵심 값을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 값이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공고의 해당 항목이 명시되어 있다."
+  }
+ },
+ "j0002": {
+  "correctness": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값(26,750,000원)과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 요구한 핵심 값을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 값이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공고의 해당 항목이 명시되어 있다."
+  }
+ },
+ "j0003": {
+  "correctness": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값(245,339,600원, 부가세 포함)과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 요구한 핵심 값을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 값이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공고의 해당 항목이 명시되어 있다."
+  }
+ },
+ "j0004": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 120일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 요구한 공사기간을 제시했다(착공일 기준 표현 생략은 사소함)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '착공일로부터 120일'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 공사기간이 명시되어 있다."
+  }
+ },
+ "j0005": {
+  "correctness": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값(착공일로부터 60일간)과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 요구한 핵심 값을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 값이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공고의 해당 항목이 명시되어 있다."
+  }
+ },
+ "j0006": {
+  "correctness": {
+   "score": 0,
+   "reason": "질문에 답하지 않고 무관한 비교 생략 문구만 출력했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기대 답변의 핵심 값이 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "질문과 무관한 '문서 A/B 비교' 문구로 context 내용에 근거하지 않는다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context는 장성경찰서·송림리·섬박람회 등 다른 공고뿐이고 용화지구 (건축) 공사 정보가 없다."
+  }
+ },
+ "j0007": {
+  "correctness": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값(2026. 8. 12. 15:00)과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 요구한 핵심 값을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 값이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공고의 해당 항목이 명시되어 있다."
+  }
+ },
+ "j0008": {
+  "correctness": {
+   "score": 0,
+   "reason": "질문에 답하지 않고 무관한 비교 생략 문구만 출력했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기대 답변의 핵심 값이 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "질문과 무관한 '문서 A/B 비교' 문구로 context 내용에 근거하지 않는다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 기초금액 631,400,000원(부가가치세 포함)이 명시되어 있다."
+  }
+ },
+ "j0009": {
+  "correctness": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값(78,364,000원)과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 요구한 핵심 값을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 값이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공고의 해당 항목이 명시되어 있다."
+  }
+ },
+ "j0010": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 50,000,000원이 일치하며 괄호 안 내역은 부차적이다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 요구한 금액을 제시했다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 context에 없는 '사업비'라는 명칭으로 표현했다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 기초금액이 명시되어 있다."
+  }
+ }
+}

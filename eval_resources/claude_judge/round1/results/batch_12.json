@@ -1,0 +1,62 @@
+{
+ "j0111": {
+  "correctness": {"score": 5, "reason": "기초금액 50,000,000원이라는 핵심 값을 정확히 제시했다."},
+  "answer_coverage": {"score": 4, "reason": "기초금액은 포함했으나 기대 답변의 추정가격(45,454,545원)과 부가가치세(4,545,455원) 내역이 빠졌다."},
+  "faithfulness": {"score": 5, "reason": "답변의 기초금액이 context의 '기초금액: 50,000,000원'에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 G-램프 GPU그래픽카드 구매 공고의 기초금액과 내역을 모두 담고 있다."}
+ },
+ "j0112": {
+  "correctness": {"score": 5, "reason": "공사기간 착공일로부터 180일을 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 핵심 정보인 180일을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 180 일'과 일치한다."},
+  "context_relevance": {"score": 5, "reason": "context가 서천읍 화성2리 마을만들기사업(토목) 공고문으로 공사기간 정보를 직접 포함한다."}
+ },
+ "j0113": {
+  "correctness": {"score": 5, "reason": "기초금액 102,000,000원이라는 핵심 값을 정확히 제시했다."},
+  "answer_coverage": {"score": 4, "reason": "기초금액은 포함했으나 추정가격(92,727,273원)과 부가가치세(9,272,727원) 내역이 누락되었다."},
+  "faithfulness": {"score": 5, "reason": "답변의 금액이 context의 '기초금액: 102,000,000원'에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "context가 G-램프사업단 컴퓨터 및 워크스테이션 구매 공고의 기초금액과 내역을 담고 있다."}
+ },
+ "j0114": {
+  "correctness": {"score": 5, "reason": "과업기간 착수일로부터 365일을 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심 정보를 모두 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context 표의 '과업기간 착수일로부터 365 일'과 일치한다."},
+  "context_relevance": {"score": 5, "reason": "context가 영동 스마트복합쉼터 감리용역 공고로 과업기간을 직접 포함한다."}
+ },
+ "j0115": {
+  "correctness": {"score": 5, "reason": "기초금액 285,125,000원을 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심인 기초금액 수치를 빠짐없이 포함했다."},
+  "faithfulness": {"score": 4, "reason": "금액과 공고 번호는 context에 있으나 'p.1'이라는 페이지 표기는 context에서 확인되지 않는다."},
+  "context_relevance": {"score": 5, "reason": "context가 송림리 마을만들기사업(건축,기계) 공고로 기초금액을 직접 포함한다."}
+ },
+ "j0116": {
+  "correctness": {"score": 5, "reason": "추정금액 770,250,000원과 추정가격 700,227,273원을 정확히 제시했다."},
+  "answer_coverage": {"score": 4, "reason": "추정금액과 추정가격은 포함했으나 부가가치세 70,022,727원이 누락되었다."},
+  "faithfulness": {"score": 5, "reason": "답변의 수치가 context의 '추정금액 : 770,250,000원 (추정가격 700,227,273원+ 부가가치세 70,022,727원)'에서 확인된다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 통신공사 공고로 추정금액 정보를 직접 포함한다."}
+ },
+ "j0117": {
+  "correctness": {"score": 5, "reason": "예정가격 82.495% 이상, 최저가 순 적격심사, 종합평점 85점 이상이라는 기준을 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 세 가지 핵심 조건을 모두 포함했다."},
+  "faithfulness": {"score": 5, "reason": "답변 내용이 context의 '8. 낙찰자 결정' 가항과 일치한다."},
+  "context_relevance": {"score": 5, "reason": "context가 SRT 감속기 모터피니언기어 구매 공고의 낙찰자 결정 조항을 직접 포함한다."}
+ },
+ "j0118": {
+  "correctness": {"score": 5, "reason": "마감일시 2026년 8월 12일 15:00을 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 날짜와 시각을 모두 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context 입찰일정의 '전자입찰서 접수마감일시 2026. 08. 12. 15:00'과 일치한다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 용역 공고의 입찰일정을 직접 포함한다."}
+ },
+ "j0119": {
+  "correctness": {"score": 5, "reason": "마감일시 2026년 8월 12일 15:00을 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 날짜와 시각을 모두 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 '전자입찰서 접수마감일시 2026. 08. 12. 15:00'에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 용역 공고의 입찰일정 표를 직접 포함한다."}
+ },
+ "j0120": {
+  "correctness": {"score": 0, "reason": "기대 답변인 착공일로부터 120일을 제시하지 못하고 답변을 거부했다."},
+  "answer_coverage": {"score": 0, "reason": "공사기간에 관한 정보가 전혀 포함되지 않았다."},
+  "faithfulness": {"score": 5, "reason": "context에 공사기간 정보가 없으므로 확인되지 않는다는 답변은 context와 어긋나는 환각이 없다."},
+  "context_relevance": {"score": 2, "reason": "context는 같은 공고의 참가자격·보험료 정산 등만 담고 있어 질문에 필요한 공사기간 정보가 없다."}
+ }
+}

@@ -1,0 +1,182 @@
+{
+ "j0071": {
+  "correctness": {
+   "score": 0,
+   "reason": "답변이 계약기간(계약체결일로부터 365일)을 제시하지 못하고 질문 키워드 조각만 나열했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기대 답변의 계약기간 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변은 의미 없는 키워드 조각이며 context에 근거한 내용이 아니다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context에 SRT 코일스프링 입찰명만 있고 계약기간은 없으며 대부분 다른 공고 내용이다."
+  }
+ },
+ "j0072": {
+  "correctness": {
+   "score": 0,
+   "reason": "사업기간 60일을 제시하지 못하고 질문 키워드 조각만 반복했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기대 답변의 핵심 값(착공일로부터 60일)이 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변이 context의 '착공일로부터 60일간'을 쓰지 않고 무의미한 문구를 생성했다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 해당 공사의 사업기간(착공일로부터 60일간)이 있으나 다른 공고 내용도 섞여 있다."
+  }
+ },
+ "j0073": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 387,660원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기초금액의 주된 값이 포함되어 있고 괄호 속 동복/하복 내역은 부차적이다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변이 context의 '사업비: 약 39만 원 (387,660원)'과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 필요한 금액이 있으나 기초금액 표기나 원문 맥락 없이 요약 한 줄만 있다."
+  }
+ },
+ "j0074": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 180일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "180일은 포함했으나 '착공일로부터'라는 기산점이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 180 일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고의 공사기간이 있으나 송림리 사업 등 다른 공고 내용도 섞여 있다."
+  }
+ },
+ "j0075": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 102,000,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기초금액의 주된 값이 포함되어 있고 추정가격·부가세 내역은 부차적이다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변이 context의 '사업비: 약 1.0억 원 (102,000,000원)'과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 필요한 금액이 있으나 기초금액 표기나 원문 맥락 없이 요약 한 줄만 있다."
+  }
+ },
+ "j0076": {
+  "correctness": {
+   "score": 5,
+   "reason": "과업기간 365일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "365일은 포함했으나 '착수일로부터'라는 기산점이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '과업기간: 착수일로부터365 일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 용역 공고이며 과업기간 정보를 포함한다."
+  }
+ },
+ "j0077": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 285,125,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 금액이 빠짐없이 포함되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변이 context의 '사업비: 약 2.9억 원 (285,125,000원)'과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 필요한 금액이 있으나 기초금액 표기나 원문 맥락 없이 요약 한 줄만 있다."
+  }
+ },
+ "j0078": {
+  "correctness": {
+   "score": 0,
+   "reason": "마감일시(2026년 8월 12일 15:00) 대신 투찰 기준에 관한 무관한 문장을 답했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기대 답변의 마감일시 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변에 인용된 '추정단가를 기준으로 투찰' 문구는 context에서 확인되지 않는다."
+  },
+  "context_relevance": {
+   "score": 2,
+   "reason": "context는 대부분 다른 입찰(AI기반 그룹웨어 등) 내용이며 해당 용역의 마감일시가 없다."
+  }
+ },
+ "j0079": {
+  "correctness": {
+   "score": 1,
+   "reason": "'2026'이라는 연도만 제시해 마감일시의 핵심(8월 12일 15:00)이 빠졌다."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "월·일·시각이 모두 누락되어 핵심 정보가 거의 없다."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "'2026'은 context에 있으나 잘린 값이라 context의 마감일시를 제대로 반영하지 못했다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 전자입찰서 접수마감일시 2026. 08. 12. 15:00이 있으나 다른 입찰 내용이 많이 섞여 있다."
+  }
+ },
+ "j0080": {
+  "correctness": {
+   "score": 0,
+   "reason": "공사기간(착공일로부터 120일)을 제시하지 않고 문서 비교 불가라는 엉뚱한 답을 했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기대 답변의 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "문서 A/B 비교 언급은 context와 무관한 내용이다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context는 충전인프라·관정개발 등 다른 공고뿐이며 용화지구 마을회관 리모델링 공사 정보가 없다."
+  }
+ }
+}

@@ -1,0 +1,182 @@
+{
+ "j0011": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 '착공일로부터 120일'을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 120일을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 120일'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공고문으로 질문의 값이 명시된 항목을 그대로 포함한다."
+  }
+ },
+ "j0012": {
+  "correctness": {
+   "score": 5,
+   "reason": "값 100,000,000원이 기대 주된 값과 같고 라벨(사업비) 차이는 감점하지 않는다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 100,000,000원을 포함한다(규칙4)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '충청남도 아산시'라는 기관명은 context에서 확인되지 않는다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 기대 금액이 들어 있으나 사업비 한 줄뿐이고 사업명이 없어 질문의 사업과의 연결을 확인할 수 없다."
+  }
+ },
+ "j0013": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 60일이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 60일을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공고문으로 질문의 값이 명시된 항목을 그대로 포함한다."
+  }
+ },
+ "j0014": {
+  "correctness": {
+   "score": 5,
+   "reason": "과업기간 365일이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 365일을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '과업기간: 착수일로부터 365일'에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공고문으로 질문의 값이 명시된 항목을 그대로 포함한다."
+  }
+ },
+ "j0015": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027.2.22., 하복 2027.5.10. 납품기한이 모두 정확하다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "두 주된 값을 모두 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 특수조건 제3조와 납품기한 항목에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공고문으로 질문의 값이 명시된 항목을 그대로 포함한다."
+  }
+ },
+ "j0016": {
+  "correctness": {
+   "score": 5,
+   "reason": "낙찰하한율 86.245%가 정확하다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 86.245%를 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '낙찰하한율: 86.245%'와 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공고문으로 질문의 값이 명시된 항목을 그대로 포함한다."
+  }
+ },
+ "j0017": {
+  "correctness": {
+   "score": 5,
+   "reason": "계약기간 420일이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 420일을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '계약기간: 계약체결일로부터 420일'에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공고문으로 질문의 값이 명시된 항목을 그대로 포함한다."
+  }
+ },
+ "j0018": {
+  "correctness": {
+   "score": 5,
+   "reason": "더 큰 쪽으로 영남영농조합법인을 고르고 두 금액도 정확하다(규칙5)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "선택 대상과 두 금액을 모두 포함한다(규칙5)."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "금액 두 개는 context에 있으나 어느 금액이 어느 기관인지는 context에 없어 귀속은 추론이다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context에 두 예산 금액만 있고 기관명이 없어 비교에 필요한 정보가 일부 부족하다."
+  }
+ },
+ "j0019": {
+  "correctness": {
+   "score": 5,
+   "reason": "값 285,125,000원이 기대 주된 값과 같고 라벨(사업비) 차이는 감점하지 않는다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 285,125,000원을 포함한다(규칙1, 규칙4)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '충청남도 서천군 농업기술센터'라는 기관명은 context에서 확인되지 않는다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 기대 금액이 들어 있으나 사업비 한 줄뿐이고 사업명이 없어 질문의 사업과의 연결을 확인할 수 없다."
+  }
+ },
+ "j0020": {
+  "correctness": {
+   "score": 5,
+   "reason": "값 26,750,000원이 기대 주된 값과 같고 라벨(사업비) 차이는 감점하지 않는다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 26,750,000원을 포함한다(규칙4)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '충청북도 영동군'이라는 기관명은 context에서 확인되지 않는다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 기대 금액이 들어 있으나 사업비 한 줄뿐이고 사업명이 없어 질문의 사업과의 연결을 확인할 수 없다."
+  }
+ }
+}

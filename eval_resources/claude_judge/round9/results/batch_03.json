@@ -1,0 +1,182 @@
+{
+ "j0021": {
+  "correctness": {
+   "score": 5,
+   "reason": "규칙5: 더 큰 쪽으로 영남영농조합법인을 고르고 두 예산 608,881,900원과 245,339,600원을 모두 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "규칙3: 선택 대상과 두 금액이라는 주된 포인트가 모두 들어 있다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "두 예산은 context에서 직접 확인되지만 차액과 약 60% 비율은 답변이 계산한 추론이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 두 업체의 히트펌프 공고서와 예산이 모두 포함되어 질문에 충분히 관련된다."
+  }
+ },
+ "j0022": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간을 착공일로부터 60일로 기대 답변과 동일하게 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 60일이 빠짐없이 포함되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 사업명과 공사기간이 명시되어 있다."
+  }
+ },
+ "j0023": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간을 착공일로부터 180일로 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 180일이 포함되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '라. 공사기간: 착공일로부터 180일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공사 공고문으로 공사명과 공사기간을 포함한다."
+  }
+ },
+ "j0024": {
+  "correctness": {
+   "score": 5,
+   "reason": "규칙4: 기초금액 390,000원은 기대 답변의 금390,000원과 같은 값이다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 기초금액이 포함되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 금 390,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 용역의 견적제출 공고로 기초금액을 명시한다."
+  }
+ },
+ "j0025": {
+  "correctness": {
+   "score": 5,
+   "reason": "규칙4: 기초금액 33,690,000원은 기대 값과 같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 기초금액이 포함되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 금33,690,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업명과 추정금액·기초금액이 명시되어 있다."
+  }
+ },
+ "j0026": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 100,000,000원을 기대 답변과 동일하게 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 기초금액이 포함되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 공고 목록 표에서 1지역 기초금액 100,000,000이 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "필요한 값은 표에 있으나 context의 문서는 도로조명 유지보수공사 공고라 다른 내용이 섞여 있다."
+  }
+ },
+ "j0027": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 120일을 정확히 제시했으며 '착공일로부터' 생략은 값에 영향이 없다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 120일이 포함되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 120일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 사업명과 공사기간이 명시되어 있다."
+  }
+ },
+ "j0028": {
+  "correctness": {
+   "score": 5,
+   "reason": "규칙1·2: 주된 값인 기초금액 285,125,000원이 맞고 괄호 안 한글 금액 표기는 부차 정보다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "규칙3: 주된 값인 기초금액이 포함되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액과 부가가치세 25,920,454원 모두 context의 기초금액 표에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 기초금액과 내역 표가 포함되어 있다."
+  }
+ },
+ "j0029": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간을 착공일로부터 180일로 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 180일이 포함되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '라. 공사기간: 착공일로부터 180일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공사 공고문으로 공사명과 공사기간을 포함한다."
+  }
+ },
+ "j0030": {
+  "correctness": {
+   "score": 5,
+   "reason": "마감일시 2026년 8월 12일 15:00을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 날짜와 시각이 모두 포함되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 일정표 '전자입찰서 접수마감일시 2026. 08. 12. 15:00'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 용역 공고의 입찰 일정표를 포함한다."
+  }
+ }
+}

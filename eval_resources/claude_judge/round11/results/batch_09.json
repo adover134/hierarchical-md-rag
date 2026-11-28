@@ -1,0 +1,362 @@
+{
+ "j0161": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 60일이 맞으며 '사업기간' 표기는 감점하지 않는다(규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '착공일로부터 60일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 공사기간 표가 포함되어 있다."
+  }
+ },
+ "j0162": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027년 2월 22일, 하복 2027년 5월 10일이 모두 맞다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "두 납품기한이 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 납품기한 조항에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "신목중학교 공고의 납품기한 조항이 포함되어 있다."
+  }
+ },
+ "j0163": {
+  "correctness": {
+   "score": 5,
+   "reason": "33,690,000원이 기초금액과 같고 '사업비' 라벨과 '약 3,369만 원' 병기는 감점하지 않는다(규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '충청북도 영동군'은 context에 없는 정보다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "필요한 금액은 있으나 사업명이나 출처가 없는 한 줄뿐이다."
+  }
+ },
+ "j0164": {
+  "correctness": {
+   "score": 5,
+   "reason": "55,800,000원이 사업예산과 같고 부가세 포함 누락은 부차 정보다(규칙1, 규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 들어 있고 부가세 포함 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업예산 : 55,800,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 사업 공고의 사업예산 항목이 포함되어 있다."
+  }
+ },
+ "j0165": {
+  "correctness": {
+   "score": 5,
+   "reason": "예산 245,339,600원이 정확하다(규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 예산 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 물품 구매 공고의 예산 항목이 포함되어 있다."
+  }
+ },
+ "j0166": {
+  "correctness": {
+   "score": 5,
+   "reason": "55,800,000원이 사업예산과 같고 '사업비' 라벨은 감점하지 않는다(규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '울산광역시사회복지협의회'는 context에 없는 정보다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "필요한 금액은 있으나 사업명이나 출처가 없는 한 줄뿐이다."
+  }
+ },
+ "j0167": {
+  "correctness": {
+   "score": 0,
+   "reason": "답변 거부이므로 0점이다(규칙6)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "답변 거부이므로 0점이다(규칙6)."
+  },
+  "faithfulness": {
+   "score": 0,
+   "reason": "N/A(거부 답변) 주장이 없어 채점 대상이 아니다(규칙6)."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 '설치대수 : 240kW 파워뱅크 1기, 디스펜서 2기'가 그대로 있다."
+  }
+ },
+ "j0168": {
+  "correctness": {
+   "score": 5,
+   "reason": "과업기간 365일이 정확하다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '과업기간: 착수일로부터 365일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 감리용역 공고의 과업기간 항목이 포함되어 있다."
+  }
+ },
+ "j0169": {
+  "correctness": {
+   "score": 0,
+   "reason": "30,627,273원은 추정가격이고 기초금액 33,690,000원과 다르므로 핵심 값이 틀렸다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값 33,690,000원이 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 2,
+   "reason": "30,627,273원은 context에 있지만 추정가격 값을 사업비로 잘못 옮겼다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 기초금액 33,690,000원이 포함되어 있다."
+  }
+ },
+ "j0170": {
+  "correctness": {
+   "score": 5,
+   "reason": "285,125,000원이 기초금액과 같고 '사업비' 라벨은 감점하지 않는다(규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 금285,125,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공사 공고의 기초금액 항목이 포함되어 있다."
+  }
+ },
+ "j0171": {
+  "correctness": {
+   "score": 5,
+   "reason": "예산 245,339,600원이 정확하다(규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 예산 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 물품 구매 공고의 예산 항목이 포함되어 있다."
+  }
+ },
+ "j0172": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업예산 99,000,000원이 정확하다(규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업예산: 금 99,000,000원(금구천구백만원 / 부가가치세 포함)'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 구매 공고의 사업예산 항목이 포함되어 있다."
+  }
+ },
+ "j0173": {
+  "correctness": {
+   "score": 0,
+   "reason": "답변 거부이므로 0점이다(규칙6)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "답변 거부이므로 0점이다(규칙6)."
+  },
+  "faithfulness": {
+   "score": 0,
+   "reason": "N/A(거부 답변) 주장이 없어 채점 대상이 아니다(규칙6)."
+  },
+  "context_relevance": {
+   "score": 2,
+   "reason": "context는 다른 공고의 낙찰하한율 89.745%와 일반 조항뿐이고 해당 입찰이나 86.245%는 없다."
+  }
+ },
+ "j0174": {
+  "correctness": {
+   "score": 0,
+   "reason": "어느 공사가 더 큰지 답하지 않고 무관한 안내 문구를 내놓아 주된 사실이 없다(규칙5, 규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "선택 대상과 두 기초금액이 모두 빠졌다(규칙3, 규칙5)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "문구는 context에 있으나 이를 사업비라고 한 주장은 context가 뒷받침하지 않는다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 건축 368,467,000원과 통신 24,867,000원 기초금액이 모두 있다."
+  }
+ },
+ "j0175": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 365일이 맞으며 '사업기간' 표기는 감점하지 않는다(규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '착수일로부터365 일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 감리용역 공고의 과업기간 항목이 포함되어 있다."
+  }
+ },
+ "j0176": {
+  "correctness": {
+   "score": 0,
+   "reason": "금액 대신 '2027학년도, 교복, 하복'이라는 문구를 내놓아 핵심 값 387,660원이 없다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "주된 값 387,660원이 답변에 없다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "문구 조각은 context에 있으나 이를 사업비라고 한 주장은 context가 뒷받침하지 않는다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 한림디자인고 기초금액 387,660원이 있으나 다른 학교 공고도 섞여 있다."
+  }
+ },
+ "j0177": {
+  "correctness": {
+   "score": 0,
+   "reason": "날짜 대신 '2027학년도, 교복, 동복, 하복'이라는 문구를 내놓아 두 납품기한이 모두 없다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "두 납품기한이 모두 빠졌다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "문구 조각은 context에 있으나 이를 기한이라고 한 주장은 context가 뒷받침하지 않는다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context는 서야고와 청주하이텍고 공고뿐이고 신목중학교 내용이 없다."
+  }
+ },
+ "j0178": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 120일이 정확하다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '착공일로부터120 일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공사 공고의 공사기간 항목이 포함되어 있다."
+  }
+ },
+ "j0179": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 390,000원이 정확하다(규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 금 390,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 용역 공고의 기초금액 항목이 포함되어 있다."
+  }
+ },
+ "j0180": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 26,750,000원이 정확하다(규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 답변에 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액 금26,750,000 원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 사업 공고의 기초금액 항목이 포함되어 있다."
+  }
+ }
+}

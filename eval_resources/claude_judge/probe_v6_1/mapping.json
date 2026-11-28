@@ -1,0 +1,204 @@
+{
+ "p0001": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m5",
+  "repeat": 1,
+  "kind": "감점된 단축 경로",
+  "source_round": "round23",
+  "source_item": "j0055"
+ },
+ "p0002": {
+  "id": "m19",
+  "system": "current_default",
+  "kind": "다른 기관·다른 사업",
+  "note": "n20(비교 문항)의 context",
+  "dataset": "new20",
+  "source_round": "probe_verify2",
+  "source_item": "p0006"
+ },
+ "p0003": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n15",
+  "repeat": 1,
+  "kind": "감점된 단축 경로",
+  "source_round": "round23",
+  "source_item": "j0063"
+ },
+ "p0004": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20",
+  "id": "m5",
+  "repeat": 1,
+  "kind": "감점된 단축 경로",
+  "source_round": "round23",
+  "source_item": "j0020"
+ },
+ "p0005": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m3",
+  "repeat": 1,
+  "kind": "감점된 단축 경로",
+  "source_round": "round23",
+  "source_item": "j0015"
+ },
+ "p0006": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n6",
+  "repeat": 1,
+  "kind": "감점된 단축 경로",
+  "source_round": "round23",
+  "source_item": "j0073"
+ },
+ "p0007": {
+  "id": "n18",
+  "system": "current_default",
+  "kind": "같은 기관·다른 금액",
+  "note": "n19(다른 조합)의 context",
+  "dataset": "new20_v2",
+  "source_round": "probe_verify2",
+  "source_item": "p0002"
+ },
+ "p0008": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m7",
+  "repeat": 1,
+  "kind": "감점된 단축 경로",
+  "source_round": "round23",
+  "source_item": "j0057"
+ },
+ "p0009": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20_v2",
+  "id": "n18",
+  "repeat": 1,
+  "kind": "감점된 단축 경로",
+  "source_round": "round23",
+  "source_item": "j0013"
+ },
+ "p0010": {
+  "id": "n15",
+  "system": "current_multi_agent",
+  "kind": "같은 기관·같은 금액",
+  "note": "1지역 질문에 3지역 공고",
+  "dataset": "new20_v2",
+  "source_round": "probe_verify2",
+  "source_item": "p0015"
+ },
+ "p0011": {
+  "id": "m8",
+  "system": "current_default",
+  "kind": "다른 기관·다른 사업",
+  "note": "m7의 context",
+  "dataset": "new20",
+  "source_round": "probe_verify2",
+  "source_item": "p0010"
+ },
+ "p0012": {
+  "id": "n18",
+  "system": "current_multi_agent",
+  "kind": "다른 기관·다른 사업",
+  "note": "n15의 context",
+  "dataset": "new20_v2",
+  "source_round": "probe_verify2",
+  "source_item": "p0008"
+ },
+ "p0013": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20",
+  "id": "m14",
+  "repeat": 1,
+  "kind": "감점된 단축 경로",
+  "source_round": "round23",
+  "source_item": "j0075"
+ },
+ "p0014": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20",
+  "id": "m3",
+  "repeat": 1,
+  "kind": "감점된 단축 경로",
+  "source_round": "round23",
+  "source_item": "j0062"
+ },
+ "p0015": {
+  "run": "eval_20261128",
+  "system": "current_multi_agent",
+  "dataset": "new20_v2",
+  "id": "n3",
+  "repeat": 1,
+  "kind": "감점된 단축 경로",
+  "source_round": "round23",
+  "source_item": "j0051"
+ },
+ "p0016": {
+  "id": "n4",
+  "system": "current_default",
+  "kind": "다른 학교의 같은 종류",
+  "note": "n5(다른 학교)의 context",
+  "dataset": "new20_v2",
+  "source_round": "probe_verify2",
+  "source_item": "p0007"
+ },
+ "p0017": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n1",
+  "repeat": 1,
+  "kind": "감점된 단축 경로",
+  "source_round": "round23",
+  "source_item": "j0077"
+ },
+ "p0018": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20_v2",
+  "id": "n18",
+  "repeat": 1,
+  "kind": "감점된 단축 경로",
+  "source_round": "round23",
+  "source_item": "j0011"
+ },
+ "p0019": {
+  "id": "n15",
+  "system": "current_default",
+  "kind": "같은 기관·같은 금액",
+  "note": "1지역 질문에 2지역 공고",
+  "dataset": "new20_v2",
+  "source_round": "probe_verify2",
+  "source_item": "p0011"
+ },
+ "p0020": {
+  "run": "eval_20261128",
+  "system": "current_default",
+  "dataset": "new20",
+  "id": "m14",
+  "repeat": 1,
+  "kind": "감점된 단축 경로",
+  "source_round": "round23",
+  "source_item": "j0016"
+ },
+ "p0021": {
+  "id": "m13",
+  "system": "current_default",
+  "kind": "값이 같은 다른 사업",
+  "note": "n13의 context",
+  "dataset": "new20",
+  "source_round": "probe_verify2",
+  "source_item": "p0003"
+ }
+}

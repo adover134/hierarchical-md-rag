@@ -1,0 +1,62 @@
+{
+ "j0041": {
+  "correctness": {"score": 5, "reason": "기대 답변과 동일하게 사업기간을 착공일로부터 60일간으로 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심 포인트인 기산점(착공일)과 기간(60일)을 모두 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 '라. 사업기간: 착공일로부터 60일간'에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 공사의 입찰 사항을 담고 있어 질문에 완전히 관련되고 답에 필요한 정보를 충분히 포함한다."}
+ },
+ "j0042": {
+  "correctness": {"score": 5, "reason": "공사기간 90일을 정확히 제시했고 부가 정보도 틀린 내용이 없다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심인 공사기간 90일을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "공사기간, 사업명, 등록개시, 마감 및 개찰 일시가 모두 context의 입찰 사항 표에서 확인된다."},
+  "context_relevance": {"score": 4, "reason": "해당 공고의 공사기간이 포함되어 있으나 임금체불 조례, 노무비 관리 등 질문과 무관한 내용이 많이 섞여 있다."}
+ },
+ "j0043": {
+  "correctness": {"score": 5, "reason": "계약기간을 계약체결일로부터 420일로 기대 답변과 동일하게 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기산점과 기간을 모두 포함해 기대 답변의 핵심을 빠짐없이 담았다."},
+  "faithfulness": {"score": 5, "reason": "context의 '계약기간 계약체결일로부터 420 일'에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 입찰의 입찰사항 표로 구성되어 질문에 정확히 관련된다."}
+ },
+ "j0044": {
+  "correctness": {"score": 5, "reason": "공사기간 90일을 기대 답변과 동일하게 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 핵심 정보인 90일을 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 입찰 사항 표에 '공사 기간: 90 일'이 명시되어 있다."},
+  "context_relevance": {"score": 4, "reason": "해당 공고의 공사기간이 여러 번 포함되어 있으나 중복된 표 추출과 보험료 정산 등 불필요한 내용이 많다."}
+ },
+ "j0045": {
+  "correctness": {"score": 5, "reason": "공사기간을 60일로 정확히 제시해 기대 답변과 의미가 일치한다."},
+  "answer_coverage": {"score": 4, "reason": "기간 60일은 포함했으나 기산점인 '착공일로부터'라는 표현이 누락되었다."},
+  "faithfulness": {"score": 5, "reason": "context의 '공사기간 착공일로부터 60 일'에 근거한다."},
+  "context_relevance": {"score": 4, "reason": "해당 사업의 공사기간 정보가 충분히 있으나 A값 내역과 낙찰 하한율 등 질문과 무관한 내용이 섞여 있다."}
+ },
+ "j0046": {
+  "correctness": {"score": 5, "reason": "기초금액 390,000원을 기대 답변과 동일하게 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심인 기초금액 금액을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 '기초금액 금 390,000 원'에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "기초금액이 포함된 견적 사항이 있으나 안전보건관리계획서 양식 등 무관한 내용이 상당 부분을 차지한다."}
+ },
+ "j0047": {
+  "correctness": {"score": 4, "reason": "총 기초금액 387,660원과 동복 264,660원은 정확하나 하복 금액을 제시하지 않았다."},
+  "answer_coverage": {"score": 4, "reason": "기대 답변의 세부 항목 중 하복 123,000원이 누락되었다."},
+  "faithfulness": {"score": 5, "reason": "제시한 총액과 동복 금액이 모두 context의 기초금액 항목에서 확인된다."},
+  "context_relevance": {"score": 4, "reason": "기초금액 정보가 충분히 포함되어 있으나 서약서, 위임장, 평가표 등 무관한 붙임 내용이 많다."}
+ },
+ "j0048": {
+  "correctness": {"score": 5, "reason": "납품기한 2026년 12월 31일을 기대 답변과 동일하게 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심인 납품기한을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "납품기한, 분할납품 가능, 납품장소가 모두 context의 견적제출 사항에서 확인된다."},
+  "context_relevance": {"score": 4, "reason": "납품기한이 명확히 포함되어 있으나 참가자격, 수의계약 확인서 등 질문과 무관한 내용이 다수 포함되어 있다."}
+ },
+ "j0049": {
+  "correctness": {"score": 5, "reason": "예산 245,339,600원(부가세 포함)을 정확히 제시해 기대 답변과 의미가 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "금액과 부가세 포함 여부를 모두 담아 핵심 정보를 빠짐없이 포함했으며 한글 금액 표기 생략은 의미상 차이가 없다."},
+  "faithfulness": {"score": 5, "reason": "context의 '예산 : 일금이억사천오백삼십삼만구천육백원정(\\245,339,600원, 부가세 포함)'에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "예산 정보가 여러 번 포함되어 있으나 입찰보증금, 입찰무효 등 무관한 내용과 깨진 표 추출이 섞여 있다."}
+ },
+ "j0050": {
+  "correctness": {"score": 5, "reason": "기초금액 33,690,000원을 기대 답변과 동일하게 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심인 기초금액을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 '기초금액 금33,690,000 원'에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "기초금액이 포함된 사업 개요 표가 있으나 보험료 정산 안내 등 무관한 내용과 중복 추출이 많다."}
+ }
+}

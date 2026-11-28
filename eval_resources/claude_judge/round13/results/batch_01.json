@@ -1,0 +1,62 @@
+{
+ "j0001": {
+  "correctness": {"score": 5, "reason": "주된 값 50,000,000원과 일치하며 '사업비' 라벨 차이와 부가세 내역 누락은 감점하지 않는다(규칙2, 규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 50,000,000원이 답변에 포함되어 있고 괄호 안 내역 누락은 감점 대상이 아니다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context에서 확인되지만 '전북대학교 산학협력단'이라는 기관명은 context에 없는 추가 주장이다."},
+  "context_relevance": {"score": 3, "reason": "context에 금액은 있으나 사업명·기관 등 질문 대상 사업임을 확인할 정보가 없어 부분적으로만 충분하다."}
+ },
+ "j0002": {
+  "correctness": {"score": 5, "reason": "공사기간 착공일로부터 120일로 기대 답변과 정확히 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 120일(착공일로부터)이 빠짐없이 포함되어 있다."},
+  "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 120일'에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "해당 사업 공고문으로 사업명과 공사기간이 명시되어 답변에 필요한 정보를 충분히 포함한다."}
+ },
+ "j0003": {
+  "correctness": {"score": 5, "reason": "주된 값 26,750,000원과 일치하며 '사업비' 라벨 차이는 감점하지 않는다(규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 26,750,000원이 답변에 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context에서 확인되지만 '충청북도 영동군'이라는 기관명은 context에 없는 추가 주장이다."},
+  "context_relevance": {"score": 3, "reason": "context에 금액은 있으나 사업명 등 질문 대상 사업임을 확인할 정보가 없어 부분적으로만 충분하다."}
+ },
+ "j0004": {
+  "correctness": {"score": 5, "reason": "2026년 10월 20일(화)~10월 22일(수), 3일간으로 기대 답변과 정확히 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "시작일, 종료일, 3일간이라는 주된 포인트를 모두 포함한다."},
+  "faithfulness": {"score": 5, "reason": "context의 '행 사 기 간: 2026년 10월 20일(화) ~ 10월 22일(수), 3일간'에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "해당 행사 용역 공고문으로 건명과 행사 기간이 명시되어 있다."}
+ },
+ "j0005": {
+  "correctness": {"score": 5, "reason": "선택한 대상(한서대학교 산업디자인 개발 프로젝트)이 기대 답변과 일치하며 괄호 안 금액 누락은 감점하지 않는다(규칙5, 규칙2)."},
+  "answer_coverage": {"score": 5, "reason": "주된 사실인 더 큰 사업의 선택이 포함되어 있고 괄호 안 금액은 부차 정보다(규칙5, 규칙3)."},
+  "faithfulness": {"score": 3, "reason": "context에는 220,000,000원과 150,000,000원만 있고 각 금액이 어느 사업인지 명시되지 않아 사업과 금액의 연결은 추론이다."},
+  "context_relevance": {"score": 3, "reason": "비교에 필요한 두 금액은 있으나 사업명이 없어 어느 사업의 예산인지 확인할 정보가 부족하다."}
+ },
+ "j0006": {
+  "correctness": {"score": 5, "reason": "동복 2027년 2월 19일(금), 하복 2027년 5월 7일(금)로 기대 답변과 정확히 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "동복과 하복 납품기한 두 주된 값을 모두 포함한다."},
+  "faithfulness": {"score": 5, "reason": "context의 납품기한 항목과 계약 특수조건 제1조에서 두 날짜가 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "해당 학교 교복 구매 공고문으로 납품기한이 명시되어 답변에 충분하다."}
+ },
+ "j0007": {
+  "correctness": {"score": 5, "reason": "공사기간 60일로 기대 답변의 주된 값과 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 60일이 포함되어 있고 '착공일로부터' 기산점 생략은 사소하다."},
+  "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 60일'에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "해당 사업 공고문으로 사업명과 공사기간이 명시되어 있다."}
+ },
+ "j0008": {
+  "correctness": {"score": 5, "reason": "동복 2027년 2월 22일(월), 하복 2027년 5월 10일(월)로 기대 답변과 정확히 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "동복과 하복 납품기한 두 주된 값을 모두 포함한다."},
+  "faithfulness": {"score": 5, "reason": "context의 납품기한 항목과 계약 특수조건 제3조에서 두 날짜가 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "해당 학교 교복 구매 공고문으로 납품기한이 명시되어 답변에 충분하다."}
+ },
+ "j0009": {
+  "correctness": {"score": 5, "reason": "주된 값 33,690,000원과 일치하며 '사업비' 라벨 차이는 감점하지 않는다(규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 33,690,000원이 답변에 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context에서 확인되지만 '충청북도 영동군'이라는 기관명은 context에 없는 추가 주장이다."},
+  "context_relevance": {"score": 3, "reason": "context에 금액은 있으나 사업명 등 질문 대상 사업임을 확인할 정보가 없어 부분적으로만 충분하다."}
+ },
+ "j0010": {
+  "correctness": {"score": 5, "reason": "주된 값 631,400,000원과 일치하며 '사업비' 라벨 차이와 부가세 표기 누락은 감점하지 않는다(규칙2, 규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 631,400,000원이 답변에 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context에서 확인되지만 '(주)한성케미칼'이라는 주체는 context에 없고 질문에서 가져온 것이다."},
+  "context_relevance": {"score": 3, "reason": "context에 금액은 있으나 사업명 등 질문 대상 사업임을 확인할 정보가 없어 부분적으로만 충분하다."}
+ }
+}

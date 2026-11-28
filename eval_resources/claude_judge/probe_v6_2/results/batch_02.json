@@ -1,0 +1,182 @@
+{
+ "p0011": {
+  "correctness": {
+   "score": 5,
+   "reason": "The answer gives the contract period as 420 days, which matches the expected answer and the verified source."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "The answer leaves out the starting point, 'from the contract signing date', which is in the expected answer."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The context states directly that the contract period is 420 days from the contract signing date."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified SRT notice and contains the contract period."
+  }
+ },
+ "p0012": {
+  "correctness": {
+   "score": 5,
+   "reason": "The answer gives 245,339,600 won, which is the same amount as the expected budget."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "The answer includes the key amount, and the missing note that VAT is included is a minor detail in parentheses."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The context states '약 2.5억 원 (245,339,600원)' word for word."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified Ssoyu Farm heat pump notice and contains the budget amount."
+  }
+ },
+ "p0013": {
+  "correctness": {
+   "score": 4,
+   "reason": "The answer correctly gives one 240kW power bank and two dispensers, but it adds a combined total of 3 units that the source document does not state."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "The answer includes both expected items: one power bank and two dispensers."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "Most of the answer is in the context, but the total of 3 units is the model's own inference."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified Uiseong Yeogaek notice and contains the installation count."
+  }
+ },
+ "p0014": {
+  "correctness": {
+   "score": 5,
+   "reason": "The answer gives a lower limit of 86.245%, which matches the expected answer exactly."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "The answer contains the one key value the question asks for."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The context states directly that the lower limit is 86.245%."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified 3rd-round 2026 notice and contains the lower limit."
+  }
+ },
+ "p0015": {
+  "correctness": {
+   "score": 1,
+   "reason": "The answer gives August 17, which is wrong; the expected deadline is August 12, 2026 at 15:00."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "The answer does not contain the correct deadline date, so the key information is missing."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "The answer contradicts the context, which clearly gives 2026. 08. 12. 15:00."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified Holic Design notice and contains the submission deadline."
+  }
+ },
+ "p0016": {
+  "correctness": {
+   "score": 5,
+   "reason": "The answer gives a construction period of 90 days, which matches the expected answer."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "The answer includes the key value of 90 days."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The 90-day period and all the extra details in the answer can be confirmed in the context table."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified Okcheon notice and contains the construction period."
+  }
+ },
+ "p0017": {
+  "correctness": {
+   "score": 5,
+   "reason": "The answer gives 365 days, which matches the expected answer."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "The answer leaves out the starting point, 'from the start date of work'."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The context states directly that the work period is 365 days from the start date."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified Yeongdong notice and contains the work period."
+  }
+ },
+ "p0018": {
+  "correctness": {
+   "score": 1,
+   "reason": "The answer gives 707,250,000 won, which differs from the expected 770,250,000 won."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "The answer does not contain the correct estimated amount."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "The answer contradicts the context, which states 770,250,000 won."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified Jeju racecourse notice and contains the main value, 770,250,000 won."
+  }
+ },
+ "p0019": {
+  "correctness": {
+   "score": 1,
+   "reason": "The answer gives 282,081,000 won, which differs from the expected 228,081,000 won."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "The answer does not contain the correct base amount."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "The answer contradicts the context, which states 228,081,000 won."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "The context comes from the verified Sanghwado notice and contains the amount, 228,081,000 won."
+  }
+ },
+ "p0020": {
+  "correctness": {
+   "score": 5,
+   "reason": "The answer gives 100,000,000 won, which matches the expected base amount."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "The answer includes the key amount of 100,000,000 won."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "The answer matches the retrieved context's value of 100,000,000 won."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "The context comes from the Region 3 notice, not the verified Region 1 notice (No. 2026-2777), so it does not count even though the value is the same."
+  }
+ }
+}

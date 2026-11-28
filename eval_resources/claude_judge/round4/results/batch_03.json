@@ -1,0 +1,182 @@
+{
+ "j0021": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 55,800,000원을 정확히 제시했으며 부가세 포함 여부는 부차 정보다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 금액을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액이 context의 사업비 줄과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 필요한 금액은 있으나 사업명이나 금액 항목명(기초금액/예산) 표기가 없는 짧은 요약뿐이다."
+  }
+ },
+ "j0022": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 228,081,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 금액을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액이 context의 사업비 줄과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 필요한 금액은 있으나 사업명이나 금액 항목명(기초금액/예산) 표기가 없는 짧은 요약뿐이다."
+  }
+ },
+ "j0023": {
+  "correctness": {
+   "score": 0,
+   "reason": "기대 답변은 파워뱅크 2기·디스펜서 5기인데 답변은 확인되지 않는다고 답변을 거부했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "설치대수 정보를 전혀 포함하지 않았다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에 온양교통 공사의 설치대수가 명시되어 있는데도 문서에서 확인되지 않는다고 하여 context를 무시했다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고의 설치대수가 직접 포함되어 있으나 아산여객·동양교통 등 다른 공고 내용도 섞여 있다."
+  }
+ },
+ "j0024": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 99,000,000원을 정확히 제시했으며 한글 금액과 부가세 표기는 부차 정보다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 금액을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액이 context의 사업비 줄과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 필요한 금액은 있으나 사업명이나 금액 항목명(기초금액/예산) 표기가 없는 짧은 요약뿐이다."
+  }
+ },
+ "j0025": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 50,000,000원을 정확히 제시했으며 추정가격·부가세 내역은 부차 정보다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 금액을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액이 context의 사업비 줄과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 필요한 금액은 있으나 사업명이나 금액 항목명(기초금액/예산) 표기가 없는 짧은 요약뿐이다."
+  }
+ },
+ "j0026": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 608,881,900원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 금액을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액이 context의 사업비 줄과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 필요한 금액은 있으나 사업명이나 금액 항목명(기초금액/예산) 표기가 없는 짧은 요약뿐이다."
+  }
+ },
+ "j0027": {
+  "correctness": {
+   "score": 0,
+   "reason": "기대 답변은 계약체결일로부터 420일인데 답변은 의미 없는 문자열로 기간을 전혀 제시하지 못했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "계약기간 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "'srt, 구매'라는 답은 context의 어떤 계약기간 내용에도 근거하지 않는 무의미한 생성이다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context는 대부분 선문대학교 입찰 문서이고 SRT 팬터그래프 집전판은 입찰명 한 줄만 있으며 계약기간 정보가 없다."
+  }
+ },
+ "j0028": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 50,000,000원을 정확히 제시했으며 추정가격·부가가치세 내역은 부차 정보다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 금액을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액이 context의 사업비 줄과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 필요한 금액은 있으나 사업명이나 금액 항목명(기초금액/예산) 표기가 없는 짧은 요약뿐이다."
+  }
+ },
+ "j0029": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 33,690,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 금액을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액이 context의 사업비 줄과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 필요한 금액은 있으나 사업명이나 금액 항목명(기초금액/예산) 표기가 없는 짧은 요약뿐이다."
+  }
+ },
+ "j0030": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 228,081,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 금액을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액이 context의 사업비 줄과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 필요한 금액은 있으나 사업명이나 금액 항목명(기초금액/예산) 표기가 없는 짧은 요약뿐이다."
+  }
+ }
+}

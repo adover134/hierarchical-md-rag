@@ -1,0 +1,182 @@
+{
+ "j0071": {
+  "correctness": {
+   "score": 5,
+   "reason": "계약체결일로부터 365일이라는 기대 답변의 주된 값을 정확히 제시했고 괄호 안 내용 누락은 감점 대상이 아니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "핵심 계약기간은 포함했으나 단가발주 시 발주일로부터 180일 이내라는 부가 조건이 누락되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context의 '계약기간: 계약체결일로부터 365일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 공고(SRT 코일스프링 5품목 구매) 문서로 계약기간 정보를 완전히 포함한다."
+  }
+ },
+ "j0072": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업기간 60일을 정확히 제시하여 기대 답변(착공일로부터 60일간)과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 묻는 일수인 60일이라는 핵심 정보를 빠짐없이 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업기간: 착공일로부터 60일간'에 직접 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 삼산면 지하수 관정개발 공사 공고 문서로 사업기간 정보를 포함한다."
+  }
+ },
+ "j0073": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업비 명칭으로 표기했으나 값 387,660원이 기대 답변의 기초금액과 같아 정확하다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "기초금액 총액은 포함했으나 동복·하복 세부 금액 내역은 누락되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context의 '사업비: 약 39만 원 (387,660원)'과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 학교 공고의 금액을 담고 있으나 동복·하복 내역 등 세부 정보는 부족하다."
+  }
+ },
+ "j0074": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 180일을 정확히 제시하여 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 묻는 공사기간 일수를 빠짐없이 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 180일'에 직접 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 서천읍 화성2리 마을만들기사업(토목) 공고 문서로 공사기간 정보를 포함한다."
+  }
+ },
+ "j0075": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업비 명칭이지만 값 102,000,000원이 기대 답변의 기초금액과 같다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "기초금액 총액은 포함했으나 추정가격과 부가가치세 내역이 누락되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업비: 약 1.0억 원 (102,000,000원)'과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고의 금액은 담고 있으나 추정가격·부가세 등 세부 정보는 없다."
+  }
+ },
+ "j0076": {
+  "correctness": {
+   "score": 5,
+   "reason": "과업기간 착수일로부터 365일로 기대 답변과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 정보를 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '과업기간: 착수일로부터 365일'에 직접 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 영동 스마트복합쉼터 감리용역 공고 문서로 과업기간 정보를 포함한다."
+  }
+ },
+ "j0077": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업비 명칭이지만 값 285,125,000원이 기대 답변의 기초금액과 같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기초금액 값을 빠짐없이 포함했으며 괄호 안은 한글 금액 표기에 불과하다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업비: 약 2.9억 원 (285,125,000원)'과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 송림리 마을만들기사업 공고의 금액 정보를 담고 있어 답변에 충분하다."
+  }
+ },
+ "j0078": {
+  "correctness": {
+   "score": 5,
+   "reason": "2026. 08. 12. 15:00으로 기대 답변과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "마감일시라는 핵심 정보를 빠짐없이 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 입찰일정표 '전자입찰서 접수마감일시 2026. 08. 12. 15:00'에 직접 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 홀릭디자인 공고 문서로 입찰일정 정보를 완전히 포함한다."
+  }
+ },
+ "j0079": {
+  "correctness": {
+   "score": 5,
+   "reason": "2026년 8월 12일 15:00으로 기대 답변과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "마감일시라는 핵심 정보를 빠짐없이 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 입찰일정표 내용에 직접 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 홀릭디자인 공고 문서로 입찰일정 정보를 완전히 포함한다."
+  }
+ },
+ "j0080": {
+  "correctness": {
+   "score": 5,
+   "reason": "착공일로부터 120일로 기대 답변과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 정보를 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 120일'에 직접 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 용화지구 마을회관 리모델링 공사(전기) 공고 문서로 공사기간 정보를 포함한다."
+  }
+ }
+}

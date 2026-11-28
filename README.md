@@ -1,7 +1,7 @@
 # hierarchical-md-rag
 
-> **`main` branch 안내**: 이 branch에는 `multi_agent` 답변 방식과 평가 도구가 없다(`two_stage`만).
-> 아래 설명 중 `multi_agent`, Gradio의 `multi_agent` 고정, 평가 명령은 `multi-agent` branch 기준이다.
+> **`main` branch 안내**: 이 branch에는 `multi_agent` 답변 방식이 없다(`two_stage`만). 채점 도구와 문서는 있다.
+> 아래 설명 중 `multi_agent`, Gradio의 `multi_agent` 고정은 `multi-agent` branch 기준이다. 비용 측정 script도 `multi-agent` branch에 있다.
 > 이 branch의 Gradio는 저장소 기본값(`two_stage`)을 따른다.
 
 공공기관 입찰공고문에서 금액, 기간, 수량 같은 값을 **질문으로 찾는** RAG 시스템이다.
@@ -117,7 +117,7 @@ python scripts/gradio_app.py
 
 답은 local 모델이 만들고 **채점은 항상 Claude**가 한다(별도 API 키 없음).
 채점자는 지시 파일과 memory가 붙지 않는 격리 호출(`claude -p`)이다.
-평가 도구는 `multi-agent` branch에 있다.
+채점 도구는 두 branch에 있다. `multi_agent` 방식의 실행과 비용 측정은 `multi-agent` branch에서 한다.
 
 | 항목 | 현재 방식(1.4.1) |
 |---|---|
@@ -144,6 +144,7 @@ python scripts/eval_history.py --run-id <run-id> --commit <답변을 만든 comm
 python scripts/judge_report_html.py --round-dir eval_resources/claude_judge/<round>
 ```
 
+채점자와 검증자의 지시문은 `.claude/agents/`의 `rag-judge.md`, `rag-verifier.md`에 있다.
 지시문, 채점 기준 전문, 알려진 한계는 [채점 규칙](docs/judge_rules.md)에 있다.
 
 ## 문서 읽는 순서
@@ -161,6 +162,7 @@ python scripts/judge_report_html.py --round-dir eval_resources/claude_judge/<rou
 | 9 | [용어집](docs/09_용어집.md) | 문서에 나온 말의 뜻 |
 | 필요할 때 | [채점 규칙](docs/judge_rules.md) | 채점 기준 전문, 채점자가 받는 것, 알려진 한계 |
 | 필요할 때 | [질의 비용 측정 방법](docs/11_비용측정.md) | 비용을 재는 방법, 요금 계산식, 개발 환경(GPU 메모리 8GB) |
+| 필요할 때 | [채점기 시험](docs/12_채점기_시험.md) | 채점 기준이나 지시문을 바꾸기 전에 하는 시험, 통과 기준, 실행 방법 |
 | 요약 | [발표.html](docs/발표.html) | 브라우저에서 여는 슬라이드 요약(← → 키) |
 | 기록 | [`EXPERIMENTS.md`](EXPERIMENTS.md) | 실험 전 과정과 측정값 |
 | 기록 | [채점기 개선](docs/judge_improvement.md), [버그 수정](docs/BUGFIXES.md) | 채점과 수정의 상세 기록 |
@@ -178,7 +180,7 @@ python scripts/judge_report_html.py --round-dir eval_resources/claude_judge/<rou
 
 | 버전 | 바뀐 것 |
 |---|---|
-| 1.4.1 | 채점기: 질문만 받은 원본 검증, 격리 채점, 추가 기준 5개(`v6.2`), 문서 MRR 자리에 nDCG@N, chunk Recall은 chunk ID로 대조. 답변 code와 DB는 그대로다 |
+| 1.4.1 | 채점기: 질문만 받은 원본 검증, 격리 채점, 추가 기준 5개(`v6.2`), 문서 MRR 자리에 nDCG@N, chunk Recall은 chunk ID로 대조. 채점 agent file(`.claude/agents/`)과 [채점기 시험](docs/12_채점기_시험.md). 답변 code와 DB는 그대로다 |
 | 1.4.0 | 채점기: 팀 rubric + 추가 기준 4개, 채점 context에 chunk 머리글, chunk를 보지 않는 답은 chunk Recall에서 제외, 문항별 HTML 보고서. 목록 답이 잘리던 후처리를 고치고, 질의 비용 측정을 넣었다 |
 | 1.3.2 | 채운 metadata를 덮어쓰지 않는다(`build_metadata.py`는 채운 값이 있으면 멈추고, build는 CSV가 있으면 metadata 단계를 건너뛴다). build 순서를 끝까지 돌려 확인했다 |
 | 1.3.1 | parser(계층 추출)의 기본 모델을 `gpt-oss:20b`로 바꿨다. 전처리에서 LLM이 쓰이는 곳을 [DB 구축](docs/04_DB구축.md)에 그림으로 넣었다 |
@@ -188,4 +190,4 @@ python scripts/judge_report_html.py --round-dir eval_resources/claude_judge/<rou
 
 ## branch
 
-`multi-agent`(GitHub 기본, 최신: multi-agent, 평가 도구, 결과 문서), `main`(`two_stage` 경로만, 같은 문서 포함).
+`multi-agent`(GitHub 기본: `multi_agent` 답변 방식, 비용 측정과 비교 실험 도구 포함), `main`(`two_stage` 경로만, 채점 도구와 문서 포함).

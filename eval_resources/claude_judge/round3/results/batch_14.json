@@ -1,0 +1,182 @@
+{
+ "j0131": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변이 기대 답변의 핵심 값을 정확히 제시한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문 대상 공고와 정답 값이 명확히 포함되어 있다."
+  }
+ },
+ "j0132": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변이 기대 답변의 핵심 값을 정확히 제시한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context의 표에 해당 공고와 기초금액 100,000,000원이 명시되어 있다."
+  }
+ },
+ "j0133": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변이 기대 답변의 핵심 값을 정확히 제시한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문 대상 공고와 정답 값이 명확히 포함되어 있다."
+  }
+ },
+ "j0134": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변이 기대 답변의 핵심 값을 정확히 제시한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문 대상 공고와 정답 값이 명확히 포함되어 있다."
+  }
+ },
+ "j0135": {
+  "correctness": {
+   "score": 5,
+   "reason": "예산 608,881,900원을 정확히 제시했으며 한글 금액 표기 생략은 감점 사유가 아니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문 대상 공고와 정답 값이 명확히 포함되어 있다."
+  }
+ },
+ "j0136": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 50,000,000원을 정확히 제시했고 괄호 안 세부는 부차적이다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문 대상 공고와 정답 값이 명확히 포함되어 있다."
+  }
+ },
+ "j0137": {
+  "correctness": {
+   "score": 5,
+   "reason": "한서대학교 용역이 더 크다는 결론이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "결론은 맞지만 괄호 안 두 예산 금액을 제시하지 않았다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "두 사업의 예산(220,000,000원과 150,000,000원)이 context에 있어 결론이 근거를 가진다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "두 사업 예산이 모두 있으나 문서 조각이 뒤섞여 어느 예산이 어느 사업인지 다소 불분명하다."
+  }
+ },
+ "j0138": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변이 기대 답변의 핵심 값을 정확히 제시한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문 대상 공고와 정답 값이 명확히 포함되어 있다."
+  }
+ },
+ "j0139": {
+  "correctness": {
+   "score": 5,
+   "reason": "예산 245,339,600원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문 대상 공고와 정답 값이 명확히 포함되어 있다."
+  }
+ },
+ "j0140": {
+  "correctness": {
+   "score": 0,
+   "reason": "기초금액 387,660원 대신 의미 없는 문자열을 답했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기대 답변의 금액 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변은 context의 어떤 금액 정보에도 근거하지 않는 무의미한 내용이다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context는 서야고·청주하이텍고 교복 공고로 한림디자인고 정보가 없다."
+  }
+ }
+}

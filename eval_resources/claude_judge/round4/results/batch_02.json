@@ -1,0 +1,182 @@
+{
+ "j0011": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 245,339,600원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 금액은 포함했으나 괄호 속 부가 정보(부가세 포함 여부/추정가격·부가세 내역)는 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 사업비 줄에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 질문의 금액 한 줄만 담고 있어 답을 주지만 문서·항목명 확인 정보가 없어 다소 부족하다."
+  }
+ },
+ "j0013": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 245,339,600원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 금액은 포함했으나 괄호 속 부가 정보(부가세 포함 여부/추정가격·부가세 내역)는 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 사업비 줄에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 질문의 금액 한 줄만 담고 있어 답을 주지만 문서·항목명 확인 정보가 없어 다소 부족하다."
+  }
+ },
+ "j0015": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 770,250,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 금액은 포함했으나 괄호 속 부가 정보(부가세 포함 여부/추정가격·부가세 내역)는 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 사업비 줄에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 질문의 금액 한 줄만 담고 있어 답을 주지만 문서·항목명 확인 정보가 없어 다소 부족하다."
+  }
+ },
+ "j0016": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 102,000,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 금액은 포함했으나 괄호 속 부가 정보(부가세 포함 여부/추정가격·부가세 내역)는 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 사업비 줄에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 질문의 금액 한 줄만 담고 있어 답을 주지만 문서·항목명 확인 정보가 없어 다소 부족하다."
+  }
+ },
+ "j0018": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 26,750,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 금액을 빠짐없이 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 사업비 줄에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 질문의 금액 한 줄만 담고 있어 답을 주지만 문서·항목명 확인 정보가 없어 다소 부족하다."
+  }
+ },
+ "j0020": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 47,820,800원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 금액은 포함했으나 괄호 속 부가 정보(부가세 포함 여부/추정가격·부가세 내역)는 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 사업비 줄에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 질문의 금액 한 줄만 담고 있어 답을 주지만 문서·항목명 확인 정보가 없어 다소 부족하다."
+  }
+ },
+ "j0012": {
+  "correctness": {
+   "score": 0,
+   "reason": "'srt, 구매'라는 무의미한 답으로 계약기간 365일을 전혀 제시하지 못했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "계약기간 365일과 단가발주 180일 정보가 모두 누락되었다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에 계약기간 365일이 명시되어 있는데 답변은 이를 무시한 무의미한 문자열이다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 코일스프링 입찰의 계약기간(365일, 단가발주 180일)이 있으나 다른 SRT 입찰 내용도 섞여 있다."
+  }
+ },
+ "j0014": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 180일이라는 핵심 값을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "180일은 포함했으나 '착공일로부터'라는 기산점이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "180일은 context의 '공사기간: 착공일로부터 180일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 공사기간이 명시되어 있으나 서약서·입찰일정 등 불필요한 내용도 많다."
+  }
+ },
+ "j0017": {
+  "correctness": {
+   "score": 0,
+   "reason": "'2026년'이라는 답은 기대 값 60일과 전혀 다르다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "착공일로부터 60일이라는 핵심 정보가 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에 공사기간 60일이 여러 번 나오는데 답변은 이를 무시하고 사업명의 연도만 가져왔다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 공사기간 60일이 명확히 있으나 A값 등 중복·불필요한 내용이 많다."
+  }
+ },
+ "j0019": {
+  "correctness": {
+   "score": 0,
+   "reason": "'섬박람회, 대비, 주요, 편의시설'이라는 무의미한 답으로 60일을 제시하지 못했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "사업기간 60일 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에 사업기간 60일이 있는데 답변은 공사명 단어만 나열해 context 내용을 무시했다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 삼산면 공사의 사업기간 60일이 있으나 화정면·영동군 등 다른 공사 내용이 섞여 있다."
+  }
+ }
+}

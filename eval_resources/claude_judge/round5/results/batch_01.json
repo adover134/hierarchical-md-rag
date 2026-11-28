@@ -1,0 +1,182 @@
+{
+ "j0001": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 예산 608,881,900원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 값인 예산 금액을 빠짐없이 포함했다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '두산에너빌리티 (주)'라는 주체는 context에 없다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 해당 금액이 있으나 어느 사업의 금액인지 식별 정보가 없다."
+  }
+ },
+ "j0002": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 예산 245,339,600원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 값인 예산 금액을 빠짐없이 포함했다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '두산에너빌리티 (주)'라는 주체는 context에 없다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 해당 금액이 있으나 어느 사업의 금액인지 식별 정보가 없다."
+  }
+ },
+ "j0003": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업기간 60일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 값인 60일을 포함했다(착공일 기준 표현만 생략)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '착공일로부터 60일간'에 직접 근거한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "사업기간 정보가 있으나 낙찰·자격 등 불필요한 내용이 많다."
+  }
+ },
+ "j0004": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 228,081,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 값인 금액을 포함했다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 발주기관 명칭은 context에 없다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context가 '사업비' 한 줄뿐이라 기초금액인지와 어느 사업인지 확인되지 않는다."
+  }
+ },
+ "j0005": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 90일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 값인 90일을 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사 기간: 90일'에 직접 근거한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "공사기간 정보가 있으나 기타사항 등 불필요한 내용이 많다."
+  }
+ },
+ "j0006": {
+  "correctness": {
+   "score": 5,
+   "reason": "납품기한 2026년 12월 31일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 값인 납품기한을 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '납품기한 : 2026. 12. 31.'에 직접 근거한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "납품기한 정보가 있으나 참가자격 등 불필요한 내용이 많다."
+  }
+ },
+ "j0007": {
+  "correctness": {
+   "score": 5,
+   "reason": "파워뱅크 2기와 디스펜서 5기를 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 두 항목을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "설치대수는 context에 있으나 '총 7기' 합산은 context에 없는 추론이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공고의 설치대수를 직접 포함한다."
+  }
+ },
+ "j0008": {
+  "correctness": {
+   "score": 5,
+   "reason": "82.495% 이상, 최저가순 적격심사, 85점 이상 기준을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 조건을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 낙찰자 결정 조항과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 입찰의 낙찰자 결정 기준을 직접 포함한다."
+  }
+ },
+ "j0009": {
+  "correctness": {
+   "score": 5,
+   "reason": "행사 기간 2026년 10월 20일~22일, 3일간을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "시작일, 종료일, 일수를 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 행사 기간 항목과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 행사의 기간을 직접 포함한다."
+  }
+ },
+ "j0010": {
+  "correctness": {
+   "score": 5,
+   "reason": "마감일시 2026년 8월 12일 15:00을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 값인 마감일시를 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 입찰일정 표와 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 용역의 입찰 일정을 직접 포함한다."
+  }
+ }
+}

@@ -1,0 +1,182 @@
+{
+ "j0021": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 55,800,000원은 검증된 사업예산과 같고, 괄호 안의 부가세 포함 여부는 감점하지 않습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 묻는 핵심 값인 사업예산 금액이 답변에 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 '사업비: 약 5,580만 원 (55,800,000원)'에서 바로 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 공고(울산광역시사회복지협의회)와 같은 문서이며 답에 필요한 금액을 담고 있습니다."
+  }
+ },
+ "j0022": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 228,081,000원은 원문의 기초금액과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 유일한 핵심인 기초금액이 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context에 그대로 적혀 있습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 상화도 공고 문서이며 필요한 금액을 담고 있습니다."
+  }
+ },
+ "j0023": {
+  "correctness": {
+   "score": 4,
+   "reason": "파워뱅크 2기와 디스펜서 5기는 정확하지만, 종류가 다른 설비를 더해 '총 7기'라고 한 것은 부정확할 수 있습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "파워뱅크 2기와 디스펜서 5기가 모두 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "설치대수는 context에 근거하지만, '총 7기'는 context에 없는 추론입니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 온양교통 공고 문서이며 설치대수가 명시되어 있습니다."
+  }
+ },
+ "j0024": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 99,000,000원은 원문의 사업예산과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 묻는 사업예산 금액이 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context에서 바로 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 선문대학교 반도체소재공학과 공고 문서이며 필요한 금액을 담고 있습니다."
+  }
+ },
+ "j0025": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 50,000,000원은 기초금액과 같고, 괄호 안의 추정가격과 부가세가 빠진 것은 감점하지 않습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 값인 기초금액이 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context에 그대로 적혀 있습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "공고명은 다르지만 검증 결과상 같은 공고(R26BK01672864-000)의 문서이며 필요한 금액을 담고 있습니다."
+  }
+ },
+ "j0026": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 608,881,900원은 원문의 예산과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 묻는 예산 금액이 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context에서 바로 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 영남영농조합법인 공고 문서(두산에너빌리티)이며 필요한 금액을 담고 있습니다."
+  }
+ },
+ "j0027": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 '계약체결일로부터 420일'은 기대 답변과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 내용을 빠짐없이 담고 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "계약기간은 context의 입찰사항에 그대로 적혀 있습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 SRT 팬터그래프 공고 문서이며 계약기간이 명시되어 있습니다."
+  }
+ },
+ "j0028": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 50,000,000원은 기초금액과 같고, 괄호 안의 세부 금액이 빠진 것은 감점하지 않습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 값인 기초금액이 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context에서 바로 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 GPU그래픽카드 공고 문서이며 필요한 금액을 담고 있습니다."
+  }
+ },
+ "j0029": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 33,690,000원은 원문의 기초금액과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 묻는 기초금액이 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context에 그대로 적혀 있습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 영동군 양안이골소하천 공고 문서이며 필요한 금액을 담고 있습니다."
+  }
+ },
+ "j0030": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 228,081,000원은 원문의 기초금액과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심인 기초금액이 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context에서 바로 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 상화도 공고 문서이며 필요한 금액을 담고 있습니다."
+  }
+ }
+}

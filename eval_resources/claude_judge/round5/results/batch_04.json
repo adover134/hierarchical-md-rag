@@ -1,0 +1,182 @@
+{
+ "j0031": {
+  "correctness": {
+   "score": 5,
+   "reason": "착공일로부터 60일로 기대 답변과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 내용을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고 문서로 공사기간 정보가 명확히 포함되어 있다."
+  }
+ },
+ "j0032": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 387,660원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값은 있으나 동복·하복 내역은 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액이 context의 사업비 값과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context가 정답 금액을 담고 있으나 '사업비'로만 표기되어 질문의 금액 항목명과 직접 대응되지 않는다."
+  }
+ },
+ "j0033": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 120일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "기간 값은 맞으나 '착공일로부터'라는 기산점이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 120일'에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공사 공고 문서로 공사기간 정보가 명확히 포함되어 있다."
+  }
+ },
+ "j0034": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 추정금액 770,250,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값은 있으나 추정가격·부가가치세 내역은 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액이 context의 사업비 값과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context가 정답 금액을 담고 있으나 '사업비'로만 표기되어 질문의 금액 항목명과 직접 대응되지 않는다."
+  }
+ },
+ "j0035": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 계약체결일로부터 365일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "단가발주 180일 조건이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 계약기간 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 입찰 공고로 계약기간 정보가 명확히 포함되어 있다."
+  }
+ },
+ "j0036": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 631,400,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값은 있으나 부가가치세 포함 여부는 언급하지 않았다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액이 context의 사업비 값과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context가 정답 금액을 담고 있으나 '사업비'로만 표기되어 질문의 금액 항목명과 직접 대응되지 않는다."
+  }
+ },
+ "j0037": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 50,000,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값은 있으나 추정가격·부가세 내역은 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액이 context의 사업비 값과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context가 정답 금액을 담고 있으나 '사업비'로만 표기되어 질문의 금액 항목명과 직접 대응되지 않는다."
+  }
+ },
+ "j0038": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027년 2월 19일, 하복 2027년 5월 7일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "동복과 하복 납품기한을 모두 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 납품기한 항목과 계약특수조건 제1조에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고 문서로 납품기한 정보가 여러 곳에 명확히 포함되어 있다."
+  }
+ },
+ "j0039": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 47,820,800원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값은 있으나 추정가격·부가가치세 내역은 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액이 context의 사업비 값과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context가 정답 금액을 담고 있으나 '사업비'로만 표기되어 질문의 금액 항목명과 직접 대응되지 않는다."
+  }
+ },
+ "j0040": {
+  "correctness": {
+   "score": 5,
+   "reason": "240kW 파워뱅크 1기, 디스펜서 2기로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "설치대수의 두 항목을 모두 포함한다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "설치대수는 context에 있으나 '설치되었습니다'라는 완료 표현은 context에 없는 사소한 추론이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고 문서로 설치대수 정보가 명확히 포함되어 있다."
+  }
+ }
+}

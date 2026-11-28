@@ -1,0 +1,182 @@
+{
+ "j0091": {
+  "correctness": {
+   "score": 1,
+   "reason": "'2026'만 제시해 마감일시 2026년 8월 12일 15:00를 답하지 못했다."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "월·일·시각이 모두 빠졌다."
+  },
+  "faithfulness": {
+   "score": 2,
+   "reason": "연도는 context와 모순되지 않지만 사실상 유의미한 근거 진술이 없다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "마감일시가 context에 있으나 다른 사업(AI 그룹웨어) 문서도 섞여 있다."
+  }
+ },
+ "j0092": {
+  "correctness": {
+   "score": 5,
+   "reason": "2026. 08. 12. 15:00으로 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 값을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "마감일시가 context에 직접 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 용역의 입찰일정을 충분히 담고 있다."
+  }
+ },
+ "j0093": {
+  "correctness": {
+   "score": 0,
+   "reason": "공사기간 대신 표 조각 문자열을 출력해 90일을 답하지 못했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "90일 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "문자열은 context 조각이지만 질문에 대한 근거 있는 답이 아니다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공사의 공사기간 90일이 포함되어 있으나 본소(전기) 공사 정보가 섞여 있다."
+  }
+ },
+ "j0094": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업예산 55,800,000원을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함했고 부가세 포함 표기는 부차적이다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "사업예산 55,800,000원이 context에 직접 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 사업예산이 직접 포함되어 있다."
+  }
+ },
+ "j0095": {
+  "correctness": {
+   "score": 0,
+   "reason": "'2026'은 틀렸고 동복 2027년 2월 19일, 하복 2027년 5월 7일을 답하지 못했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "동복·하복 납품기한이 모두 누락됐다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context의 납품기한(2027년)과 맞지 않는 값이다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "서야고 계약특수조건에 납품기한이 있으나 청주하이텍고 문서가 섞여 있다."
+  }
+ },
+ "j0096": {
+  "correctness": {
+   "score": 5,
+   "reason": "낙찰하한율 86.245%를 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 값을 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "86.245%가 context에 직접 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "낙찰하한율이 포함되어 있으나 청렴계약 문구 등 불필요한 내용이 많다."
+  }
+ },
+ "j0097": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 47,820,800원을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "괄호 밖 핵심 값을 포함했고 괄호 안 내역은 부차적이다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액 47,820,800원이 context에 직접 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 구매의 기초금액이 직접 포함되어 있다."
+  }
+ },
+ "j0098": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업기간 60일을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "60일은 있으나 기산점(착공일로부터)이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "사업기간 60일이 context에 직접 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 사업기간이 직접 포함되어 있다."
+  }
+ },
+ "j0099": {
+  "correctness": {
+   "score": 4,
+   "reason": "기준 내용은 맞으나 '예정가격'을 '예상가격'으로 잘못 표기했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "82.495%, 최저가 순 적격심사, 85점 이상을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "내용은 context에 있으나 용어 하나가 context와 다르게 바뀌었다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 낙찰자 결정 기준이 직접 포함되어 있다."
+  }
+ },
+ "j0100": {
+  "correctness": {
+   "score": 0,
+   "reason": "서식의 자리표시자 '000,000,000원'을 답해 기초금액 390,000원과 다르다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기초금액 390,000원이 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "자리표시자는 context에 있으나 계약금액 서식란이지 기초금액이 아니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 기초금액 390,000원이 직접 포함되어 있다."
+  }
+ }
+}

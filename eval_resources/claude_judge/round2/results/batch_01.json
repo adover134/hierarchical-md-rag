@@ -1,0 +1,62 @@
+{
+ "j0001": {
+  "correctness": {"score": 5, "reason": "예산 608,881,900원(부가세 포함)을 기대 답변과 동일하게 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "한글 금액 표기는 없지만 같은 금액과 부가세 포함 여부라는 핵심 정보를 모두 담았다."},
+  "faithfulness": {"score": 5, "reason": "금액과 부가세 포함 여부가 context의 예산 항목에서 그대로 확인된다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 공고문의 예산 항목을 직접 포함하여 질문에 충분히 답할 수 있다."}
+ },
+ "j0002": {
+  "correctness": {"score": 5, "reason": "예산 245,339,600원(부가세 포함)을 기대 답변과 동일하게 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "한글 금액 표기는 없지만 같은 금액과 부가세 포함 여부라는 핵심 정보를 모두 담았다."},
+  "faithfulness": {"score": 5, "reason": "금액과 부가세 포함 여부가 context의 예산 항목에서 그대로 확인된다."},
+  "context_relevance": {"score": 5, "reason": "context가 쏘유팜 공고문의 예산 항목을 직접 포함하여 질문에 충분히 답할 수 있다."}
+ },
+ "j0003": {
+  "correctness": {"score": 5, "reason": "사업기간 착공일로부터 60일간을 기대 답변과 동일하게 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 핵심 포인트인 60일간을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 '라. 사업기간: 착공일로부터 60일간' 문장에 그대로 근거한다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 공사 공고문이며 사업기간 항목을 직접 포함한다."}
+ },
+ "j0004": {
+  "correctness": {"score": 5, "reason": "기초금액 228,081,000원을 정확히 제시했고 덧붙인 추정금액과 순공사원가도 정확하다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심인 기초금액을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "기초금액, 추정금액, 순공사원가가 모두 context에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "context가 상화도 관정개발 공사 공고문이며 기초금액 항목을 직접 포함한다."}
+ },
+ "j0005": {
+  "correctness": {"score": 5, "reason": "공사기간 90일을 기대 답변과 동일하게 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심 포인트인 90일을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 입찰에 부치는 사항 표에 '공사 기간: 90일'로 명시되어 있다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 공사의 견적제출 안내 공고이며 공사기간 정보를 직접 포함한다."}
+ },
+ "j0006": {
+  "correctness": {"score": 5, "reason": "납품기한 2026년 12월 31일을 기대 답변과 동일하게 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심 포인트인 납품기한 날짜를 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 '바. 납품기한 : 2026. 12. 31.' 항목에 그대로 근거한다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 식자재 구매 공고이며 납품기한 항목을 직접 포함한다."}
+ },
+ "j0007": {
+  "correctness": {"score": 5, "reason": "240kW 파워뱅크 2기와 디스펜서 5기를 기대 답변과 동일하게 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "파워뱅크와 디스펜서 수량이라는 두 핵심 포인트를 모두 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 '설치대수 : 240kW 파워뱅크 2기, 디스펜서 5기' 항목에 그대로 근거한다."},
+  "context_relevance": {"score": 5, "reason": "context가 온양교통 충전인프라 공사 안내서이며 설치대수 정보를 직접 포함한다."}
+ },
+ "j0008": {
+  "correctness": {"score": 0, "reason": "답변이 '다음과 같습니다'에서 끝나 낙찰자 결정 기준 내용을 전혀 제시하지 않았다."},
+  "answer_coverage": {"score": 0, "reason": "82.495%, 최저가격 입찰자순 적격심사, 종합평점 85점 이상 등 핵심 포인트가 하나도 없다."},
+  "faithfulness": {"score": 1, "reason": "환각은 없지만 context에 있는 결정 기준을 전혀 활용하지 않아 사실상 context를 반영하지 못했다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 입찰 공고의 낙찰자 결정 항목을 직접 포함하여 답변에 필요한 정보가 충분하다."}
+ },
+ "j0009": {
+  "correctness": {"score": 5, "reason": "행사 기간 2026년 10월 20일(화)~10월 22일(수)을 정확히 제시했다."},
+  "answer_coverage": {"score": 4, "reason": "시작일과 종료일은 포함했으나 '3일간'이라는 부가 정보가 빠졌다."},
+  "faithfulness": {"score": 5, "reason": "context의 '행 사 기 간: 2026년 10월 20일(화) ~ 10월 22일(수), 3일간'에 그대로 근거한다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 행사 용역 공고이며 행사 기간 항목을 직접 포함한다."}
+ },
+ "j0010": {
+  "correctness": {"score": 5, "reason": "전자입찰서 접수 마감일시 2026년 8월 12일 15:00을 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심인 마감 날짜와 시각을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 입찰일정 표에 '전자입찰서 접수마감일시 2026. 08. 12. 15:00'으로 명시되어 있다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 용역 입찰공고이며 입찰일정 표를 직접 포함한다."}
+ }
+}

@@ -1,0 +1,62 @@
+{
+  "j0031": {
+    "correctness": {"score": 0, "reason": "낙찰하한율 86.245%를 제시하지 않고 비교 답변 생략 문구로 사실상 답변을 거부했다."},
+    "answer_coverage": {"score": 0, "reason": "기대 답변의 핵심 값인 낙찰하한율이 전혀 언급되지 않았다."},
+    "faithfulness": {"score": 0, "reason": "context의 낙찰자 결정 조항을 무시하고 질문과 무관한 문서 A/B 비교 문구를 냈다."},
+    "context_relevance": {"score": 3, "reason": "해당 공고 문서이고 낙찰하한율 조항도 있으나 그 값이 89.745%로 기대 값 86.245%와 달라 핵심 정보가 부족하다."}
+  },
+  "j0032": {
+    "correctness": {"score": 0, "reason": "기초금액 대신 사업명 단어를 나열한 무의미한 답으로 100,000,000원을 제시하지 못했다."},
+    "answer_coverage": {"score": 0, "reason": "기대 답변의 핵심 금액이 전혀 포함되지 않았다."},
+    "faithfulness": {"score": 1, "reason": "사업명 단어만 context에서 따왔을 뿐 금액으로서 근거가 없는 답이다."},
+    "context_relevance": {"score": 5, "reason": "context가 1지역 단가계약의 기초금액 100,000,000원을 직접 포함한다."}
+  },
+  "j0033": {
+    "correctness": {"score": 5, "reason": "주된 값인 예산 245,339,600원을 정확히 제시했다."},
+    "answer_coverage": {"score": 5, "reason": "핵심 금액이 포함되었고 한글 금액 표기와 부가세 포함 여부는 부차적이다."},
+    "faithfulness": {"score": 5, "reason": "245,339,600원이 context의 쏘유팜 항목에서 직접 확인된다."},
+    "context_relevance": {"score": 4, "reason": "필요한 금액이 있으나 다른 수요자의 히트펌프 금액이 함께 섞여 있다."}
+  },
+  "j0034": {
+    "correctness": {"score": 5, "reason": "240kW 파워뱅크 1기, 디스펜서 2기로 기대 답변과 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "파워뱅크와 디스펜서 수량 두 항목을 모두 포함했다."},
+    "faithfulness": {"score": 5, "reason": "context의 설치대수 항목에서 그대로 확인된다."},
+    "context_relevance": {"score": 5, "reason": "context가 의성여객 충전인프라 공사의 설치대수를 직접 포함한다."}
+  },
+  "j0035": {
+    "correctness": {"score": 5, "reason": "기초금액 33,690,000원을 정확히 제시했다."},
+    "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 핵심 값이 포함되었다."},
+    "faithfulness": {"score": 5, "reason": "context에 '기초금액: 금33,690,000원'으로 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "context가 양안이골소하천 사업의 금액 정보를 직접 포함한다."}
+  },
+  "j0036": {
+    "correctness": {"score": 0, "reason": "사업예산 대신 '선문대학교, 교육용'이라는 무의미한 답으로 99,000,000원을 제시하지 못했다."},
+    "answer_coverage": {"score": 0, "reason": "기대 답변의 핵심 금액이 전혀 포함되지 않았다."},
+    "faithfulness": {"score": 1, "reason": "사업명 단어만 context에서 따왔을 뿐 예산으로서 근거가 없는 답이다."},
+    "context_relevance": {"score": 5, "reason": "context가 '라. 사업예산: 금 99,000,000원'을 직접 포함한다."}
+  },
+  "j0037": {
+    "correctness": {"score": 5, "reason": "공사기간 착공일로부터 120일로 기대 답변과 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "기산점(착공일)과 일수를 모두 포함했다."},
+    "faithfulness": {"score": 5, "reason": "context의 공사기간 항목 '착공일로부터120 일'에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "context가 해당 공사(전기)의 공사기간을 직접 포함한다."}
+  },
+  "j0038": {
+    "correctness": {"score": 5, "reason": "계약체결일로부터 420일로 기대 답변과 일치한다."},
+    "answer_coverage": {"score": 5, "reason": "기산점과 일수를 모두 포함했다."},
+    "faithfulness": {"score": 5, "reason": "context의 계약기간 항목에서 그대로 확인된다."},
+    "context_relevance": {"score": 5, "reason": "context가 해당 입찰의 계약기간을 직접 포함한다."}
+  },
+  "j0039": {
+    "correctness": {"score": 5, "reason": "주된 값인 기초금액 102,000,000원을 정확히 제시했다."},
+    "answer_coverage": {"score": 5, "reason": "주된 값이 포함되었고 괄호 속 추정가격·부가가치세 내역은 부차적이다."},
+    "faithfulness": {"score": 5, "reason": "102,000,000원이 context의 '다. 기초금액' 항목에서 직접 확인된다."},
+    "context_relevance": {"score": 5, "reason": "context가 G-램프사업단 공고의 기초금액과 그 내역을 직접 포함한다."}
+  },
+  "j0040": {
+    "correctness": {"score": 4, "reason": "60일이라는 값은 맞지만 문장이 중복·깨져 있고 '공사기간'을 '사업기간'으로 표현했다."},
+    "answer_coverage": {"score": 4, "reason": "핵심 일수 60일은 포함했으나 기산점인 '착공일로부터'가 빠졌다."},
+    "faithfulness": {"score": 4, "reason": "60일은 context의 공사기간 항목에 근거하나 '사업기간'이라는 표현은 context와 다르다."},
+    "context_relevance": {"score": 5, "reason": "context가 2026년 임도구조개량사업의 공사기간을 직접 포함한다."}
+  }
+}

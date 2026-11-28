@@ -1,0 +1,62 @@
+{
+ "j0031": {
+  "correctness": {"score": 5, "reason": "공사기간을 착공일로부터 60일로 기대 답변과 정확히 일치하게 답했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 핵심 정보인 착공일로부터 60일을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 60일'에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "해당 공사 공고문의 입찰 부치는 사항이 검색되어 답에 필요한 정보가 충분하다."}
+ },
+ "j0032": {
+  "correctness": {"score": 4, "reason": "총 기초금액 387,660원과 동복 264,660원은 정확하나 하복 금액을 제시하지 않았다."},
+  "answer_coverage": {"score": 4, "reason": "기대 답변의 하복 123,000원 항목 하나가 누락되었다."},
+  "faithfulness": {"score": 5, "reason": "제시한 금액은 모두 context의 기초금액 항목에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "해당 교복 구매 공고의 기초금액 항목이 포함되어 질문에 완전히 부합한다."}
+ },
+ "j0033": {
+  "correctness": {"score": 5, "reason": "공사기간 120일은 기대 답변의 핵심 값과 일치한다."},
+  "answer_coverage": {"score": 4, "reason": "기간 값은 맞지만 기산점인 '착공일로부터'라는 표현이 빠졌다."},
+  "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 120일'에 근거한다."},
+  "context_relevance": {"score": 5, "reason": "해당 공사 공고문의 사업 개요가 검색되어 답에 필요한 정보를 포함한다."}
+ },
+ "j0034": {
+  "correctness": {"score": 5, "reason": "추정금액 770,250,000원과 추정가격 700,227,273원을 정확히 제시했다."},
+  "answer_coverage": {"score": 4, "reason": "기대 답변의 부가가치세 70,022,727원 내역이 누락되었다."},
+  "faithfulness": {"score": 5, "reason": "제시한 금액이 context의 추정금액 항목에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "해당 통신공사 공고의 추정금액 항목이 포함되어 질문에 정확히 관련된다."}
+ },
+ "j0035": {
+  "correctness": {"score": 4, "reason": "계약체결일로부터 365일은 정확하나 단가발주 조건을 생략해 정보가 불완전하다."},
+  "answer_coverage": {"score": 3, "reason": "기대 답변의 두 요소 중 '단가발주는 발주일로부터 180일 이내' 조건이 누락되었다."},
+  "faithfulness": {"score": 5, "reason": "context의 계약기간 항목에서 직접 확인되는 내용이다."},
+  "context_relevance": {"score": 5, "reason": "해당 입찰 공고의 계약기간 항목이 포함되어 답에 필요한 정보가 충분하다."}
+ },
+ "j0036": {
+  "correctness": {"score": 5, "reason": "기초금액 631,400,000원(부가가치세 포함)으로 기대 답변과 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "금액과 부가세 포함 여부를 모두 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 '기초금액: 금 육억삼천일백사십만원(631,400,000원, 부가가치세 포함)'에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "해당 사업 공고의 기초금액 항목이 검색되어 질문에 완전히 부합한다."}
+ },
+ "j0037": {
+  "correctness": {"score": 5, "reason": "기초금액 50,000,000원은 기대 답변의 핵심 값과 일치한다."},
+  "answer_coverage": {"score": 4, "reason": "기대 답변의 추정가격과 부가세 내역이 누락되었다."},
+  "faithfulness": {"score": 5, "reason": "context의 공사금액 항목 '기초금액: 50,000,000'에 근거한다."},
+  "context_relevance": {"score": 5, "reason": "해당 공사 견적 공고의 공사금액 항목이 포함되어 질문에 정확히 관련된다."}
+ },
+ "j0038": {
+  "correctness": {"score": 5, "reason": "동복 2027년 2월 19일, 하복 2027년 5월 7일로 기대 답변과 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "동복과 하복 납품기한을 모두 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 납품기한 항목과 특수조건 제1조에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "해당 학교 교복 구매 공고의 납품기한 정보가 충분히 포함되어 있다."}
+ },
+ "j0039": {
+  "correctness": {"score": 5, "reason": "기초금액 47,820,800원은 기대 답변의 핵심 값과 일치한다."},
+  "answer_coverage": {"score": 4, "reason": "기대 답변의 추정가격과 부가가치세 내역이 누락되었다."},
+  "faithfulness": {"score": 5, "reason": "context의 '기초금액: 금47,820,800원'에서 직접 확인된다."},
+  "context_relevance": {"score": 5, "reason": "해당 관급자재 구매 공고의 기초금액 항목이 포함되어 질문에 정확히 관련된다."}
+ },
+ "j0040": {
+  "correctness": {"score": 2, "reason": "'총 3기'는 파워뱅크 1기와 디스펜서 2기를 합산한 것으로 종류가 다른 설비를 뭉뚱그려 기대 답변의 의미를 왜곡했다."},
+  "answer_coverage": {"score": 2, "reason": "240kW 파워뱅크 1기와 디스펜서 2기라는 구성 내역이 모두 누락되었다."},
+  "faithfulness": {"score": 3, "reason": "context에는 '240kW 파워뱅크 1기, 디스펜서 2기'만 있고 '총 3기'는 답변이 임의로 합산한 추론이다."},
+  "context_relevance": {"score": 5, "reason": "해당 사업 공고의 설치대수 항목이 포함되어 답에 필요한 정보가 충분하다."}
+ }
+}

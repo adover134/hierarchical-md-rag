@@ -1,0 +1,182 @@
+{
+ "j0051": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 사업비 값 78,364,000원이 기대 답변의 기초금액 주된 값과 같아 추가 기준 3에 따라 정확하다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 괄호 밖 핵심 값인 금액을 빠짐없이 포함했고 괄호 안 내역은 평가 대상이 아니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액 78,364,000원은 context의 사업비 줄에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context가 헤르스 가스감지기 구매설치의 금액을 담고 있으나 사업비로만 표기되어 기초금액임을 직접 확인할 근거는 부족하다."
+  }
+ },
+ "j0052": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 사업비 값 285,125,000원이 기대 답변의 기초금액 주된 값과 같아 추가 기준 3에 따라 정확하다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 괄호 밖 핵심 값인 금액을 빠짐없이 포함했고 괄호 안 내역은 평가 대상이 아니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액 285,125,000원은 context의 사업비 줄에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context가 송림리 마을만들기사업의 금액을 담고 있으나 사업비로만 표기되어 기초금액임을 직접 확인할 근거는 부족하다."
+  }
+ },
+ "j0053": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 사업비 값 50,000,000원이 기대 답변의 기초금액 주된 값과 같아 추가 기준 3에 따라 정확하다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 괄호 밖 핵심 값인 금액을 빠짐없이 포함했고 괄호 안 내역은 평가 대상이 아니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액 50,000,000원은 context의 사업비 줄에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context가 전주사랑의집 타일공사의 금액을 담고 있으나 사업비로만 표기되어 기초금액임을 직접 확인할 근거는 부족하다."
+  }
+ },
+ "j0054": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 사업비 값 387,660원이 기대 답변의 기초금액 주된 값과 같아 추가 기준 3에 따라 정확하다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 괄호 밖 핵심 값인 금액을 빠짐없이 포함했고 괄호 안 내역은 평가 대상이 아니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액 387,660원은 context의 사업비 줄에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context가 한림디자인고 교복 구매의 금액을 담고 있으나 사업비로만 표기되어 기초금액임을 직접 확인할 근거는 부족하다."
+  }
+ },
+ "j0055": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 사업비 값 26,750,000원이 기대 답변의 기초금액 주된 값과 같아 추가 기준 3에 따라 정확하다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 괄호 밖 핵심 값인 금액을 빠짐없이 포함했고 괄호 안 내역은 평가 대상이 아니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액 26,750,000원은 context의 사업비 줄에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context가 고양골소하천 정비관리사업의 금액을 담고 있으나 사업비로만 표기되어 기초금액임을 직접 확인할 근거는 부족하다."
+  }
+ },
+ "j0056": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 사업비 값 47,820,800원이 기대 답변의 기초금액 주된 값과 같아 추가 기준 3에 따라 정확하다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 괄호 밖 핵심 값인 금액을 빠짐없이 포함했고 괄호 안 내역은 평가 대상이 아니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액 47,820,800원은 context의 사업비 줄에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context가 태화종합시장 데크플레이트 구매의 금액을 담고 있으나 사업비로만 표기되어 기초금액임을 직접 확인할 근거는 부족하다."
+  }
+ },
+ "j0058": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 사업비 값 33,690,000원이 기대 답변의 기초금액 주된 값과 같아 추가 기준 3에 따라 정확하다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 괄호 밖 핵심 값인 금액을 빠짐없이 포함했고 괄호 안 내역은 평가 대상이 아니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액 33,690,000원은 context의 사업비 줄에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context가 양안이골소하천 정비관리사업의 금액을 담고 있으나 사업비로만 표기되어 기초금액임을 직접 확인할 근거는 부족하다."
+  }
+ },
+ "j0057": {
+  "correctness": {
+   "score": 5,
+   "reason": "낙찰하한율 86.245%를 기대 답변과 동일하게 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 유일한 핵심 값인 86.245%를 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '낙찰하한율: 86.245%' 문장에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고의 낙찰하한율이 여러 번 포함되어 충분하지만 청렴계약·보증금 등 불필요한 내용도 많다."
+  }
+ },
+ "j0059": {
+  "correctness": {
+   "score": 4,
+   "reason": "파워뱅크 1기와 디스펜서 2기는 정확하나 둘을 합쳐 '총 3기'라고 한 것은 기대 답변에 없는 부정확한 합산이다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "240kW 파워뱅크 1기와 디스펜서 2기를 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "설치대수는 context에서 확인되지만 '총 3기'는 context에 없는 추론이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 설치대수가 공고개요에 명시되어 질문에 충분히 관련된다."
+  }
+ },
+ "j0060": {
+  "correctness": {
+   "score": 4,
+   "reason": "120일은 맞지만 기대 답변의 괄호 밖 사실인 기산점 '착공일로부터'가 빠졌다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "핵심 값 120일은 포함했으나 '착공일로부터'라는 사소한 항목이 누락되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 120일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공사의 공사기간이 포함되어 충분하나 유의사항·참가자격 등 불필요한 내용이 많다."
+  }
+ }
+}

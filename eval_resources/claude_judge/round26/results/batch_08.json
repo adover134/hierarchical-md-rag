@@ -1,0 +1,182 @@
+{
+ "j0071": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변은 기대 답변의 주된 값인 계약체결일로부터 365일을 정확히 제시했으며, 빠진 단가발주 180일은 괄호 안 값이라 감점하지 않는다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "단가발주는 발주일로부터 180일 이내라는 부가 정보가 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "계약기간 365일은 검증 공고 R26BK01672897-000 문서에 그대로 적혀 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 공고의 context에 계약기간 365일과 단가발주 180일이 모두 들어 있다."
+  }
+ },
+ "j0072": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업기간 60일이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 묻는 일수인 60일을 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업기간: 착공일로부터 60일간'에 근거한 답이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 삼산면 공고 문서에 사업기간이 명시되어 있다."
+  }
+ },
+ "j0073": {
+  "correctness": {
+   "score": 5,
+   "reason": "context가 '사업비'라는 이름을 썼지만 금액 387,660원이 기대 답변의 기초금액과 같아 정답으로 본다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "동복 264,660원과 하복 123,000원의 세부 금액이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 사업비 387,660원과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 한림디자인고 공고의 context에 주된 값인 387,660원이 있다."
+  }
+ },
+ "j0074": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 180일이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 묻는 일수인 180일을 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 180일'에 근거한 답이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 화성2리 공고 문서에 공사기간이 명시되어 있다."
+  }
+ },
+ "j0075": {
+  "correctness": {
+   "score": 5,
+   "reason": "102,000,000원이 기대 답변의 기초금액과 같아, '사업비'라는 명칭 차이는 감점하지 않는다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "추정가격 92,727,273원과 부가가치세 9,272,727원의 세부 내역이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 사업비 102,000,000원과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 G램프사업단 공고의 context에 주된 값 102,000,000원이 있다."
+  }
+ },
+ "j0076": {
+  "correctness": {
+   "score": 5,
+   "reason": "과업기간 '착수일로부터 365일'이 기대 답변과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 정보를 모두 담았다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 과업기간 항목에서 그대로 확인되는 내용이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 영동군 공고 문서에 과업기간이 명시되어 있다."
+  }
+ },
+ "j0077": {
+  "correctness": {
+   "score": 5,
+   "reason": "285,125,000원이 기대 답변의 기초금액과 같아, '사업비'라는 명칭 차이는 감점하지 않는다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "괄호 안의 한글 표기는 같은 금액을 다르게 쓴 것뿐이라 핵심 정보가 모두 포함됐다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 사업비 285,125,000원과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 송림리 공고의 context에 주된 값 285,125,000원이 있다."
+  }
+ },
+ "j0078": {
+  "correctness": {
+   "score": 5,
+   "reason": "2026년 8월 12일 15:00이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 마감일시를 빠짐없이 제시했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context 입찰일정표의 전자입찰서 접수마감일시에 근거한 답이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 홀릭디자인 공고 문서에 접수마감일시가 명시되어 있다."
+  }
+ },
+ "j0079": {
+  "correctness": {
+   "score": 5,
+   "reason": "2026년 8월 12일 15:00이 기대 답변과 정확히 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 정보를 모두 담았다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context 입찰일정표의 값과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 공고 문서에 접수마감일시가 명시되어 있다."
+  }
+ },
+ "j0080": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 '착공일로부터 120일'이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 정보를 모두 담았다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 공사기간 항목에서 그대로 확인되는 내용이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 (전기) 공고 R26BK01672932-000 문서에 공사기간이 명시되어 있다."
+  }
+ }
+}

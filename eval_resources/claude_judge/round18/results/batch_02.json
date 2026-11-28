@@ -1,0 +1,62 @@
+{
+ "j0011": {
+  "correctness": {"score": 5, "reason": "답변의 50,000,000원이 기대 주된 값과 같으며 사업비라는 이름 차이는 감점하지 않는다(규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 50,000,000원이 들어 있고 추정가격·부가가치세 내역 누락은 감점하지 않는다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "기관명은 문서 이름에, 금액 '약 5,000만 원 (50,000,000원)'은 context 본문에 그대로 있다."},
+  "context_relevance": {"score": 5, "reason": "해당 사업 문서에서 질문한 금액 한 줄만 검색되어 답변에 필요한 정보를 충분히 담고 있다."}
+ },
+ "j0012": {
+  "correctness": {"score": 5, "reason": "2026년 10월 20일(화)~10월 22일(수), 3일간으로 기대 답변과 완전히 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "시작일, 종료일, 3일간이라는 주된 포인트를 모두 포함한다."},
+  "faithfulness": {"score": 5, "reason": "context의 '행 사 기 간: 2026년 10월 20일(화) ~ 10월 22일(수), 3일간'에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "행사 기간이 명시된 입찰 사항이 포함되어 있으나 참가 자격·제출 서류 등 불필요한 내용도 많다."}
+ },
+ "j0013": {
+  "correctness": {"score": 5, "reason": "답변의 47,820,800원이 기대 주된 값과 같으며 사업비라는 이름 차이는 감점하지 않는다(규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 47,820,800원이 들어 있고 괄호 안 내역 누락은 감점하지 않는다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "기관명은 문서 이름에, 금액은 context 본문 '사업비: 약 4,782만 원 (47,820,800원)'에 그대로 있다."},
+  "context_relevance": {"score": 5, "reason": "해당 사업 문서에서 질문한 금액만 검색되어 답변에 필요한 정보를 충분히 담고 있다."}
+ },
+ "j0014": {
+  "correctness": {"score": 5, "reason": "2026년 8월 12일 15:00으로 기대 답변과 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "날짜와 시각이라는 주된 포인트를 모두 포함한다."},
+  "faithfulness": {"score": 5, "reason": "context 입찰일정의 '전자입찰서 접수마감일시, 일정: 2026. 08. 12. 15:00'에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "입찰일정 절이 포함되어 답을 주지만 참가자격·기타사항 등 무관한 내용도 상당하다."}
+ },
+ "j0015": {
+  "correctness": {"score": 5, "reason": "과업기간 365일이라는 주된 값이 기대 답변과 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 365일을 포함하며 '착수일로부터'라는 기산점 표현만 생략되었으나 핵심 포인트는 빠지지 않았다."},
+  "faithfulness": {"score": 5, "reason": "context의 '과업기간: 착수일로부터 365일'에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "과업기간이 명시된 입찰 사항이 포함되어 있으나 참가자격·유의사항 등 불필요한 내용도 많다."}
+ },
+ "j0016": {
+  "correctness": {"score": 5, "reason": "답변의 245,339,600원이 기대 주된 값과 같으며 사업비라는 이름 차이와 '약 2.5억' 병기는 감점하지 않는다(규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 245,339,600원이 들어 있고 부가세 포함 표기 누락은 감점하지 않는다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "기관명은 문서 이름에, 금액은 context 본문 '사업비: 약 2.5억 원 (245,339,600원)'에 그대로 있다."},
+  "context_relevance": {"score": 5, "reason": "해당 사업 문서에서 질문한 예산 값만 검색되어 답변에 충분하다."}
+ },
+ "j0017": {
+  "correctness": {"score": 5, "reason": "답변의 285,125,000원이 기대 주된 값과 같으며 사업비라는 이름 차이는 감점하지 않는다(규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 285,125,000원이 들어 있고 한글 금액 표기 누락은 감점하지 않는다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "기관명은 문서 이름에, 금액은 context 본문 '사업비: 약 2.9억 원 (285,125,000원)'에 그대로 있다."},
+  "context_relevance": {"score": 5, "reason": "해당 사업 문서에서 질문한 금액만 검색되어 답변에 충분하다."}
+ },
+ "j0018": {
+  "correctness": {"score": 5, "reason": "착공일로부터 60일로 기대 답변과 완전히 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "기산점과 60일이라는 주된 포인트를 모두 포함한다."},
+  "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 60일'에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "공사기간이 명시된 입찰 사항이 포함되어 있으나 A값·노무비·유의사항 등 불필요한 내용도 많다."}
+ },
+ "j0019": {
+  "correctness": {"score": 5, "reason": "답변의 102,000,000원이 기대 주된 값과 같으며 사업비라는 이름 차이는 감점하지 않는다(규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 102,000,000원이 들어 있고 추정가격·부가가치세 내역 누락은 감점하지 않는다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "기관명은 문서 이름에, 금액은 context 본문 '사업비: 약 1.0억 원 (102,000,000원)'에 그대로 있다."},
+  "context_relevance": {"score": 5, "reason": "해당 사업 문서에서 질문한 금액만 검색되어 답변에 충분하다."}
+ },
+ "j0020": {
+  "correctness": {"score": 5, "reason": "착공일로부터 120일로 기대 답변과 완전히 일치한다."},
+  "answer_coverage": {"score": 5, "reason": "기산점과 120일이라는 주된 포인트를 모두 포함한다."},
+  "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 120일'에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "공사기간이 명시된 입찰 사항이 포함되어 있으나 참가자격·유의사항·공고 안내 등 불필요한 내용도 많다."}
+ }
+}

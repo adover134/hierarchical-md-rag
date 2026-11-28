@@ -1,0 +1,842 @@
+{
+ "j0001": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m11",
+  "repeat": 1
+ },
+ "j0002": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n18",
+  "repeat": 1
+ },
+ "j0003": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m7",
+  "repeat": 1
+ },
+ "j0004": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m10",
+  "repeat": 1
+ },
+ "j0005": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m20",
+  "repeat": 1
+ },
+ "j0006": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m8",
+  "repeat": 1
+ },
+ "j0007": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m3",
+  "repeat": 1
+ },
+ "j0008": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m15",
+  "repeat": 1
+ },
+ "j0009": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n16",
+  "repeat": 1
+ },
+ "j0010": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m10",
+  "repeat": 1
+ },
+ "j0011": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n10",
+  "repeat": 1
+ },
+ "j0012": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n9",
+  "repeat": 1
+ },
+ "j0013": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n13",
+  "repeat": 1
+ },
+ "j0014": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n6",
+  "repeat": 1
+ },
+ "j0015": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m5",
+  "repeat": 1
+ },
+ "j0016": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n2",
+  "repeat": 1
+ },
+ "j0017": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m4",
+  "repeat": 1
+ },
+ "j0018": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m19",
+  "repeat": 1
+ },
+ "j0019": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m17",
+  "repeat": 1
+ },
+ "j0020": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m5",
+  "repeat": 1
+ },
+ "j0021": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n15",
+  "repeat": 1
+ },
+ "j0022": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n15",
+  "repeat": 1
+ },
+ "j0023": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n19",
+  "repeat": 1
+ },
+ "j0024": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n9",
+  "repeat": 1
+ },
+ "j0025": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n2",
+  "repeat": 1
+ },
+ "j0026": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m5",
+  "repeat": 1
+ },
+ "j0027": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n1",
+  "repeat": 1
+ },
+ "j0028": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n3",
+  "repeat": 1
+ },
+ "j0029": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n3",
+  "repeat": 1
+ },
+ "j0030": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n20",
+  "repeat": 1
+ },
+ "j0031": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n4",
+  "repeat": 1
+ },
+ "j0032": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m20",
+  "repeat": 1
+ },
+ "j0033": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n16",
+  "repeat": 1
+ },
+ "j0034": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n20",
+  "repeat": 1
+ },
+ "j0035": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m17",
+  "repeat": 1
+ },
+ "j0036": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m15",
+  "repeat": 1
+ },
+ "j0037": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n7",
+  "repeat": 1
+ },
+ "j0038": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n11",
+  "repeat": 1
+ },
+ "j0039": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m15",
+  "repeat": 1
+ },
+ "j0040": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n12",
+  "repeat": 1
+ },
+ "j0041": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m12",
+  "repeat": 1
+ },
+ "j0042": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n14",
+  "repeat": 1
+ },
+ "j0043": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n8",
+  "repeat": 1
+ },
+ "j0044": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n14",
+  "repeat": 1
+ },
+ "j0045": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n2",
+  "repeat": 1
+ },
+ "j0046": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n3",
+  "repeat": 1
+ },
+ "j0047": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n6",
+  "repeat": 1
+ },
+ "j0048": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m4",
+  "repeat": 1
+ },
+ "j0049": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n18",
+  "repeat": 1
+ },
+ "j0050": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n12",
+  "repeat": 1
+ },
+ "j0051": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m2",
+  "repeat": 1
+ },
+ "j0052": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n1",
+  "repeat": 1
+ },
+ "j0053": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n11",
+  "repeat": 1
+ },
+ "j0054": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m8",
+  "repeat": 1
+ },
+ "j0055": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n13",
+  "repeat": 1
+ },
+ "j0056": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n15",
+  "repeat": 1
+ },
+ "j0057": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m18",
+  "repeat": 1
+ },
+ "j0058": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m7",
+  "repeat": 1
+ },
+ "j0059": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m11",
+  "repeat": 1
+ },
+ "j0060": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m18",
+  "repeat": 1
+ },
+ "j0061": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n4",
+  "repeat": 1
+ },
+ "j0062": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m1",
+  "repeat": 1
+ },
+ "j0063": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m13",
+  "repeat": 1
+ },
+ "j0064": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n17",
+  "repeat": 1
+ },
+ "j0065": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n11",
+  "repeat": 1
+ },
+ "j0066": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m14",
+  "repeat": 1
+ },
+ "j0067": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n5",
+  "repeat": 1
+ },
+ "j0068": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n18",
+  "repeat": 1
+ },
+ "j0069": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m13",
+  "repeat": 1
+ },
+ "j0070": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m9",
+  "repeat": 1
+ },
+ "j0071": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n9",
+  "repeat": 1
+ },
+ "j0072": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n14",
+  "repeat": 1
+ },
+ "j0073": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m16",
+  "repeat": 1
+ },
+ "j0074": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n19",
+  "repeat": 1
+ },
+ "j0075": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n17",
+  "repeat": 1
+ },
+ "j0076": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m16",
+  "repeat": 1
+ },
+ "j0077": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m6",
+  "repeat": 1
+ },
+ "j0078": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m19",
+  "repeat": 1
+ },
+ "j0079": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m3",
+  "repeat": 1
+ },
+ "j0080": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m1",
+  "repeat": 1
+ },
+ "j0081": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n7",
+  "repeat": 1
+ },
+ "j0082": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n8",
+  "repeat": 1
+ },
+ "j0083": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m10",
+  "repeat": 1
+ },
+ "j0084": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m7",
+  "repeat": 1
+ },
+ "j0085": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m14",
+  "repeat": 1
+ },
+ "j0086": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m12",
+  "repeat": 1
+ },
+ "j0087": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m2",
+  "repeat": 1
+ },
+ "j0088": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m8",
+  "repeat": 1
+ },
+ "j0089": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n5",
+  "repeat": 1
+ },
+ "j0090": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m6",
+  "repeat": 1
+ },
+ "j0091": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n10",
+  "repeat": 1
+ },
+ "j0092": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n10",
+  "repeat": 1
+ },
+ "j0093": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m2",
+  "repeat": 1
+ },
+ "j0094": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n16",
+  "repeat": 1
+ },
+ "j0095": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m17",
+  "repeat": 1
+ },
+ "j0096": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n20",
+  "repeat": 1
+ },
+ "j0097": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m13",
+  "repeat": 1
+ },
+ "j0098": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n12",
+  "repeat": 1
+ },
+ "j0099": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m11",
+  "repeat": 1
+ },
+ "j0100": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n4",
+  "repeat": 1
+ },
+ "j0101": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n17",
+  "repeat": 1
+ },
+ "j0102": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n5",
+  "repeat": 1
+ },
+ "j0103": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m20",
+  "repeat": 1
+ },
+ "j0104": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n19",
+  "repeat": 1
+ },
+ "j0105": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n7",
+  "repeat": 1
+ },
+ "j0106": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m12",
+  "repeat": 1
+ },
+ "j0107": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m19",
+  "repeat": 1
+ },
+ "j0108": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n6",
+  "repeat": 1
+ },
+ "j0109": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m4",
+  "repeat": 1
+ },
+ "j0110": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n8",
+  "repeat": 1
+ },
+ "j0111": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m18",
+  "repeat": 1
+ },
+ "j0112": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m6",
+  "repeat": 1
+ },
+ "j0113": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m14",
+  "repeat": 1
+ },
+ "j0114": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m16",
+  "repeat": 1
+ },
+ "j0115": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20_v2",
+  "id": "n1",
+  "repeat": 1
+ },
+ "j0116": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m3",
+  "repeat": 1
+ },
+ "j0117": {
+  "run": "dbcmp4",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m1",
+  "repeat": 1
+ },
+ "j0118": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20",
+  "id": "m9",
+  "repeat": 1
+ },
+ "j0119": {
+  "run": "dbcmp3",
+  "system": "proc_on_team_db",
+  "dataset": "new20",
+  "id": "m9",
+  "repeat": 1
+ },
+ "j0120": {
+  "run": "dbcmp3",
+  "system": "proc_on_cur_db",
+  "dataset": "new20_v2",
+  "id": "n13",
+  "repeat": 1
+ }
+}

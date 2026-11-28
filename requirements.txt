@@ -21,6 +21,7 @@
 chromadb==1.5.9
 sentence-transformers==6.0.0
 pandas==3.0.2
+openpyxl==3.1.5  # pandas.read_excel의 .xlsx 엔진 — 존재 게이트 근거 파일(나라장터_RFP_메타데이터.xlsx) 읽기에 필요
 kiwipiepy==0.24.1
 PyYAML==6.0.3
 
@@ -35,6 +36,7 @@ pydantic==2.12.5
 
 # --- 문서 파싱 ---
 pymupdf==1.28.2
+olefile==0.47
 pymupdf4llm==0.0.17
 pillow==11.3.0
 

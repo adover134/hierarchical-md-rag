@@ -1,0 +1,62 @@
+{
+ "j0021": {
+  "correctness": {"score": 5, "reason": "기초금액 100,000,000원을 기대 답변과 동일하게 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 핵심 정보인 기초금액을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "1지역 기초금액 100,000,000원이 context 표에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "필요한 표가 포함되어 있으나 다른 지역 항목과 도로조명 문서 메타데이터 등 불필요한 내용이 섞여 있다."}
+ },
+ "j0022": {
+  "correctness": {"score": 5, "reason": "기초금액 100,000,000원을 기대 답변과 동일하게 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 핵심 정보인 기초금액을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "1지역 기초금액 100,000,000원이 context 표에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "필요한 표가 포함되어 있으나 다른 지역 항목과 도로조명 문서 메타데이터 등 불필요한 내용이 섞여 있다."}
+ },
+ "j0023": {
+  "correctness": {"score": 5, "reason": "예산 608,881,900원(부가세 포함)을 기대 답변과 의미상 동일하게 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "금액과 부가세 포함 여부라는 핵심 정보를 모두 담았고 한글 금액 표기 생략은 의미 차이가 없다."},
+  "faithfulness": {"score": 5, "reason": "예산 608,881,900원(부가세 포함)이 context 사업 개요에 그대로 나온다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 공고문 자체로 질문에 필요한 예산 정보를 충분히 포함한다."}
+ },
+ "j0024": {
+  "correctness": {"score": 5, "reason": "기초금액 금26,750,000원을 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심 정보인 기초금액을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "기초금액 금26,750,000원이 context의 입찰 사항에 직접 나온다."},
+  "context_relevance": {"score": 5, "reason": "context가 고양골소하천 정비관리사업 공고로 필요한 금액 정보를 명확히 포함한다."}
+ },
+ "j0025": {
+  "correctness": {"score": 5, "reason": "공사기간 착공일로부터 60일을 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심 정보를 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "공사기간 착공일로부터 60일이 context에 직접 명시되어 있다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 사업 공고로 공사기간 정보를 명확히 포함한다."}
+ },
+ "j0026": {
+  "correctness": {"score": 5, "reason": "기초금액 47,820,800원을 정확히 제시했다."},
+  "answer_coverage": {"score": 4, "reason": "기초금액은 포함했으나 기대 답변의 추정가격 43,473,455원과 부가가치세 4,347,345원 내역이 누락되었다."},
+  "faithfulness": {"score": 5, "reason": "기초금액 47,820,800원이 context에 직접 명시되어 있다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 구매 공고의 기초금액과 세부 내역을 충분히 포함한다."}
+ },
+ "j0027": {
+  "correctness": {"score": 5, "reason": "기초금액 285,125,000원을 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심 금액을 포함했고 한글 금액 표기 생략은 의미 차이가 없다."},
+  "faithfulness": {"score": 5, "reason": "기초금액 금285,125,000원이 context의 견적 사항에 직접 나온다."},
+  "context_relevance": {"score": 4, "reason": "필요한 기초금액 정보가 있으나 입찰참가자격·하도급 등 질문과 무관한 내용이 많이 포함되어 있다."}
+ },
+ "j0028": {
+  "correctness": {"score": 5, "reason": "기초금액 금390,000원을 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심 정보를 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "기초금액 금 390,000원이 context에 직접 명시되어 있다."},
+  "context_relevance": {"score": 4, "reason": "필요한 기초금액 정보가 있으나 안전보건관리 서약서 등 무관한 내용이 상당 부분을 차지한다."}
+ },
+ "j0029": {
+  "correctness": {"score": 5, "reason": "기초금액 390,000원을 정확히 제시했고 덧붙인 임차대수 정보도 정확하다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심 정보인 기초금액을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "기초금액과 임차대수(21인승 중형버스 이상 1대, 운전기사 1명)가 모두 context에서 확인된다."},
+  "context_relevance": {"score": 4, "reason": "필요한 기초금액 정보가 있으나 안전보건관리 서약서 등 무관한 내용이 상당 부분을 차지한다."}
+ },
+ "j0030": {
+  "correctness": {"score": 4, "reason": "영남영농조합법인이 더 크다는 결론과 두 예산 및 차액은 정확하나 '약 1.25배 더 높다'는 비율 설명이 틀렸다(실제 약 2.48배)."},
+  "answer_coverage": {"score": 5, "reason": "더 큰 곳과 두 기관의 예산 금액을 모두 포함했다."},
+  "faithfulness": {"score": 4, "reason": "두 예산 금액은 context에서 확인되나 context에 없는 비율 계산을 덧붙였고 그 값이 부정확하다."},
+  "context_relevance": {"score": 4, "reason": "두 공고문이 모두 포함되어 비교에 충분하나 진주올팜과 전북대 구매 공고 등 불필요한 내용이 섞여 있다."}
+ }
+}

@@ -1,0 +1,128 @@
+{
+ "p0031": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변에 기대 답변과 같은 240kW 파워뱅크 2기와 디스펜서 5기가 정확히 들어 있습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심인 장비 두 종류의 대수를 빠짐없이 담았습니다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "대수는 context에 있지만 '총 7기'라는 합계는 원문에 없는 추론입니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 온양교통 공고와 같은 문서이고 설치대수가 직접 적혀 있습니다."
+  }
+ },
+ "p0032": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 631,400,000원은 검증 결과의 기초금액과 같으며, 괄호 안 부가세 포함 여부는 감점하지 않습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 값인 기초금액 631,400,000원이 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 0,
+   "reason": "context는 울산 사회복지협의회 해외연수 문서(5,580만 원)라서 답변 금액에 대한 근거가 전혀 없습니다."
+  },
+  "context_relevance": {
+   "score": 0,
+   "reason": "검색된 문서는 기관도 본문도 질문과 무관한 다른 사업의 문서입니다."
+  }
+ },
+ "p0033": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 기초금액 387,660원이 기대 답변의 주된 값과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "동복 264,660원과 하복 123,000원으로 나뉜 세부 금액이 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액이 context의 사업비 387,660원과 바로 일치합니다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 검증된 한림디자인고 공고와 같은 문서이지만 금액 요약만 있고 동·하복 세부 내역은 없습니다."
+  }
+ },
+ "p0034": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 245,339,600원은 검증 결과의 쏘유팜 예산과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 값인 예산 금액이 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 0,
+   "reason": "context에는 영남영농조합법인의 608,881,900원만 있어 답변 금액에 대한 근거가 없습니다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "검색된 문서는 같은 기관의 다른 농가(영남영농조합법인) 공고라서 질문한 사업의 정보가 없습니다."
+  }
+ },
+ "p0035": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 60일이 기대 답변의 '착공일로부터 60일간'과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기간 60일이라는 핵심 정보를 담았습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '사업기간: 착공일로부터 60일간'이 직접 적혀 있습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 삼산면 공고와 같은 문서이고 사업기간이 들어 있습니다."
+  }
+ },
+ "p0036": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변에 기대 답변과 같은 240kW 파워뱅크 1기와 디스펜서 2기가 들어 있습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "장비 두 종류의 대수를 모두 담았습니다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "대수는 context에 있지만 '총 3기'라는 합계는 원문에 없는 추론입니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 의성여객 공고와 같은 문서이고 설치대수가 직접 적혀 있습니다."
+  }
+ },
+ "p0037": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 계약기간이 기대 답변의 '계약체결일로부터 420일'과 같습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 정보를 빠짐없이 담았습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '계약기간: 계약체결일로부터 420일'이 직접 적혀 있습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 SRT 팬터그래프 공고와 같은 문서이고 계약기간이 들어 있습니다."
+  }
+ }
+}

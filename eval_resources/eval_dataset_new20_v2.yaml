@@ -1,0 +1,210 @@
+# eval_dataset_new20.yaml(m1~m20)이 multi_agent 브랜치 디버깅 과정에서 반복 튜닝의
+# 대상이 됐으므로, 그 결과가 이 특정 20문항에 과적합된 게 아닌지 확인하기 위해 완전히
+# 새로 작성한 20문항 평가셋. eval_dataset_new20.yaml/new8.yaml/57docs.yaml/
+# variance_probe.yaml 네 파일이 이미 쓴 문서는 하나도 겹치지 않게, 코퍼스(57개 문서) 중
+# 이 세션에서 처음 다루는 20개 문서에서 문항을 뽑았다.
+# 모든 expected_answer와 chunk_uids는 data_index/chroma_B에 색인된 실제 청크 원문에서
+# 직접 확인한 값이다(vector_store.collection.get(include=["metadatas","documents"])로 검증).
+# query_type: single_doc(한 문서 안에서 답변) / multi_doc(여러 문서 종합 비교)
+
+- id: n1
+  question: "송림리 마을만들기사업(건축,기계)의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 금285,125,000원(금이억팔천오백일십이만오천원)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "(긴급)송림리 마을만들기사업(건축,기계)_충청남도 서천군 농업기술센터"
+    chunk_uids:
+      - "8e54b1332e5a2415_1"
+
+- id: n2
+  question: "2026년 임도구조개량사업의 공사기간은 며칠인가요?"
+  expected_answer: "착공일로부터 60일입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "2026년 임도구조개량사업_충청북도 영동군"
+    chunk_uids:
+      - "f9071e2db9ed7d22_1"
+
+- id: n3
+  question: "2026학년도 덕적초중고등학교(도서지역) 통학버스 임차 용역의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 금390,000원입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "2026학년도 덕적초중고(도서지역) 통학버스 임차용역 소액수의 견적제출 공고_인천광역시교육청 덕적고등학교"
+    chunk_uids:
+      - "57eb577e21cabc07_2"
+
+- id: n4
+  question: "2027학년도 신목중학교 교복(동복 및 하복) 구매의 납품기한은 언제까지인가요?"
+  expected_answer: "동복은 2027년 2월 22일(월), 하복은 2027년 5월 10일(월)까지입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "2027년도 신목중학교 교복구매_서울특별시강서교육청 신목중학교"
+    chunk_uids:
+      - "ec6ddda0b02b1c97_2"
+
+- id: n5
+  question: "2027학년도 서야고등학교 교복(동복 및 하복) 구매의 납품기한은 언제인가요?"
+  expected_answer: "동복은 2027년 2월 19일(금), 하복은 2027년 5월 7일(금)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "2027학년도 서야고등학교 교복(동복 및 하복)구매 2단계입찰[규격-가격분리동시]재공고_충청남도교육청 서야고등학교"
+    chunk_uids:
+      - "967a1361805258b8_1"
+
+- id: n6
+  question: "2027학년도 한림디자인고등학교 교복(동·하복) 학교주관구매의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 금387,660원(동복 264,660원, 하복 123,000원)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "2027학년도 한림디자인고등학교 교복(동, 하복) 학교주관구매 선정 입찰 재공고_충청북도교육청 한림디자인고등학교"
+    chunk_uids:
+      - "08480e9f6af199bf_1"
+
+- id: n7
+  question: "SRT 코일스프링 5품목 구매 입찰의 계약기간은 얼마인가요?"
+  expected_answer: "계약체결일로부터 365일(단가발주는 발주일로부터 180일 이내)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "SRT 코일스프링 5품목 구매_주식회사 에스알"
+    chunk_uids:
+      - "6dc32db2a771613f_1"
+
+- id: n8
+  question: "SRT 팬터그래프 집전판 구매 입찰의 계약기간은 얼마인가요?"
+  expected_answer: "계약체결일로부터 420일입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "SRT 팬터그래프 집전판 구매_주식회사 에스알"
+    chunk_uids:
+      - "a70fc5a1a865ba03_1"
+
+- id: n9
+  question: "고양골소하천 정비관리사업의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 금26,750,000원입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "고양골소하천 정비관리사업_충청북도 영동군"
+    chunk_uids:
+      - "35969ac638a5906d_1"
+
+- id: n10
+  question: "선문대학교 반도체소재공학과 교육용 실습기자재 구매의 사업예산은 얼마인가요?"
+  expected_answer: "사업예산은 금99,000,000원(금구천구백만원, 부가가치세 포함)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "선문대학교 반도체소재공학과 교육용 실습기자재 구매_선문대학교"
+    chunk_uids:
+      - "65d38aaeb51a2224_1"
+
+- id: n11
+  question: "섬박람회 대비 주요 섬 편의시설 등 정비사업(화정면 상화도 지하수 관정개발 공사)의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 228,081,000원입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "섬박람회 대비 주요 섬 편의시설 등 정비사업(화정면 상화도 지하수 관정개발 공사)_전남광주통합특별시 여수시 상하수도사업단"
+    chunk_uids:
+      - "1e72ee019c86980b_1"
+
+- id: n12
+  question: "양안이골소하천 정비관리사업의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 금33,690,000원입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "양안이골소하천 정비관리사업_충청북도 영동군"
+    chunk_uids:
+      - "74a6d4c41438acfa_1"
+
+- id: n13
+  question: "용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)의 공사기간은 며칠인가요?"
+  expected_answer: "착공일로부터 120일입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "용화지구 취약지역 생활여건 개조사업 마을회관 리모델링 공사(전기)[민간입찰 대행]_충청북도 영동군"
+    chunk_uids:
+      - "47c6e263ac571951_1"
+
+- id: n14
+  question: "지역농업개발센터 시설개선 공사(안남·청산분소)(건축)의 공사기간은 며칠인가요?"
+  expected_answer: "공사기간은 90일입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "지역농업개발센터 시설개선 공사(안남·청산분소)(건축)_충청북도 옥천군 농업기술센터"
+    chunk_uids:
+      - "ec04c5bc09596ba0_1"
+
+- id: n15
+  question: "2026년 하반기 교통신호기 유지보수공사 단가계약(1지역)의 기초금액은 얼마인가요?"
+  expected_answer: "기초금액은 100,000,000원입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "2026년 하반기 도로조명 유지보수공사 단가계약(1지역)_충청남도 아산시"
+    chunk_uids:
+      - "3b093584899e1efa_1"
+
+- id: n16
+  question: "무공해차 충전인프라 보급 사업(14_온양교통_공사)의 설치대수는 몇 기인가요?"
+  expected_answer: "240kW 파워뱅크 2기, 디스펜서 5기입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "무공해차 충전인프라 보급 사업_14_온양교통_공사_엘에스이링크㈜"
+    chunk_uids:
+      - "edc1c27a7209ccc1_1"
+
+- id: n17
+  question: "무공해차 충전인프라 보급 사업(16_의성여객_공사)의 설치대수는 몇 기인가요?"
+  expected_answer: "240kW 파워뱅크 1기, 디스펜서 2기입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "무공해차 충전인프라 보급 사업_16_의성여객_공사_엘에스이링크㈜"
+    chunk_uids:
+      - "957b1d1c201a3845_1"
+
+- id: n18
+  question: "쏘유팜 히트펌프 물품 구매의 예산은 얼마인가요?"
+  expected_answer: "예산은 일금이억사천오백삼십삼만구천육백원정(245,339,600원, 부가세 포함)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "쏘유팜 히트펌프 물품 구매_두산에너빌리티 (주)"
+    chunk_uids:
+      - "ca8e61a7d88d8bc6_0"
+
+- id: n19
+  question: "영남영농조합법인 히트펌프 물품 구매의 예산은 얼마인가요?"
+  expected_answer: "예산은 일금육억팔백팔십팔만일천구백원정(608,881,900원, 부가세 포함)입니다."
+  query_type: single_doc
+  ground_truth:
+    sources:
+      - "영남영농조합법인 히트펌프 물품 구매_두산에너빌리티 (주)"
+    chunk_uids:
+      - "e0fe195ce8e6a45d_0"
+
+- id: n20
+  question: "쏘유팜과 영남영농조합법인의 히트펌프 물품 구매 중 예산이 더 큰 곳은 어디인가요?"
+  expected_answer: "영남영농조합법인(608,881,900원)이 쏘유팜(245,339,600원)보다 예산이 더 큽니다."
+  query_type: multi_doc
+  ground_truth:
+    sources:
+      - "쏘유팜 히트펌프 물품 구매_두산에너빌리티 (주)"
+      - "영남영농조합법인 히트펌프 물품 구매_두산에너빌리티 (주)"
+    chunk_uids:
+      - "ca8e61a7d88d8bc6_0"
+      - "e0fe195ce8e6a45d_0"

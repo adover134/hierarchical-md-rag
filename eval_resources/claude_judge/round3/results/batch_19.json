@@ -1,0 +1,182 @@
+{
+ "j0181": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 102,000,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "괄호 속 세부 내역 외의 핵심 값을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 102,000,000 원'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 기초금액 항목이 context에 그대로 들어 있다."
+  }
+ },
+ "j0182": {
+  "correctness": {
+   "score": 0,
+   "reason": "기초금액 50,000,000원을 제시하지 못하고 건명을 사업비라고 잘못 답했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기대 답변의 핵심 값이 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "건명 문구는 context에 있지만 이를 사업비로 제시한 것은 context와 어긋난다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "GPU그래픽카드 공고의 기초금액이 context에 있으나 선문대 등 무관한 문서가 많이 섞여 있다."
+  }
+ },
+ "j0183": {
+  "correctness": {
+   "score": 5,
+   "reason": "행사 기간 2026년 10월 20일~22일, 3일간을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 모든 정보를 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 행사기간 항목과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 행사 용역 공고의 행사기간이 context에 명확히 있다."
+  }
+ },
+ "j0184": {
+  "correctness": {
+   "score": 0,
+   "reason": "기초금액 대신 의미 없는 키워드 나열을 사업비로 답했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기초금액 228,081,000원이 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "키워드는 공사명에서 따왔지만 이를 사업비로 제시한 것은 근거 없는 내용이다."
+  },
+  "context_relevance": {
+   "score": 2,
+   "reason": "공사명은 있으나 해당 공사의 기초금액은 없고 영동군 등 무관한 공고가 대부분이다."
+  }
+ },
+ "j0185": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업예산이 더 큰 사업으로 한서대학교 프로젝트를 정확히 지목했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 답인 더 큰 사업을 제시했고 괄호 속 금액은 부차 정보다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 220,000,000원과 150,000,000원 비교로 뒷받침된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "두 사업의 예산이 모두 있으나 다른 사업의 55,800,000원 등 불필요한 내용도 섞여 있다."
+  }
+ },
+ "j0186": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027.2.19.(금), 하복 2027.5.7.(금) 납품기한을 모두 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "두 납품기한을 빠짐없이 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 납품기한 항목 및 계약특수조건과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 교복 구매 공고의 납품기한이 context에 여러 번 명시되어 있다."
+  }
+ },
+ "j0187": {
+  "correctness": {
+   "score": 5,
+   "reason": "240kW 파워뱅크 1기, 디스펜서 2기를 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 모든 항목을 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 설치대수 항목과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 설치대수가 context에 명확히 있다."
+  }
+ },
+ "j0188": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 228,081,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 값을 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 228,081,000 원'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공사 공고의 기초금액이 context에 명확히 있다."
+  }
+ },
+ "j0189": {
+  "correctness": {
+   "score": 0,
+   "reason": "기초금액 대신 'g램프'라는 무의미한 값을 사업비로 답했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기초금액 50,000,000원이 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "'g램프'를 사업비로 제시한 것은 context에 근거가 없다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "GPU그래픽카드 공고의 기초금액이 context에 있으나 계산용클러스터 노드 공고 등 다른 공고도 섞여 있다."
+  }
+ },
+ "j0190": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 631,400,000원(부가가치세 포함)을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 값을 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 기초금액 문구를 그대로 옮겼다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "기초금액이 context에 있으나 평가표 등 불필요한 내용이 많다."
+  }
+ }
+}

@@ -1,0 +1,182 @@
+{
+ "j0041": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 608,881,900원이 기대 답변 및 검증 결과의 예산과 일치하고, 괄호 안의 부가세 포함 표기가 빠진 것은 감점 대상이 아닙니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 값인 예산 608,881,900원이 빠짐없이 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액이 context의 '사업비: 약 6.1억 원 (608,881,900원)'에서 그대로 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 검증된 공고(영남영농조합법인 히트펌프, 두산에너빌리티)에서 왔고 예산 값이 들어 있습니다."
+  }
+ },
+ "j0042": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 과업기간 365일이 기대 답변의 '착수일로부터 365일'과 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "핵심인 365일은 들어 있으나 기산점인 '착수일로부터'가 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '과업기간: 착수일로부터 365일'이 직접 적혀 있습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 검증된 영동군 공고 본문이고 과업기간 정보가 들어 있습니다."
+  }
+ },
+ "j0043": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 계약기간 420일이 기대 답변의 '계약체결일로부터 420일'과 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "420일은 들어 있으나 기산점인 '계약체결일로부터'가 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '계약기간: 계약체결일로부터 420일'이 직접 나옵니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 검증된 에스알의 SRT 팬터그래프 집전판 공고이고 계약기간이 들어 있습니다."
+  }
+ },
+ "j0044": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 78,364,000원이 기대 답변의 기초금액과 일치하고, 괄호 안의 세부 내역이 빠진 것은 감점 대상이 아닙니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 78,364,000원이 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액이 context의 사업비 78,364,000원과 같습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 검증된 주식회사 헤르스 공고에서 왔고 해당 금액이 들어 있습니다."
+  }
+ },
+ "j0045": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 50,000,000원이 기대 답변의 기초금액과 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 50,000,000원이 들어 있고, 괄호 안의 추정가격과 부가세는 필수 항목이 아닙니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액이 context의 사업비 50,000,000원과 같습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 검증된 전주사랑의집 공고에서 왔고 해당 금액이 들어 있습니다."
+  }
+ },
+ "j0046": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 240kW 파워뱅크 1기와 디스펜서 2기가 기대 답변과 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "두 장비의 수량이 모두 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '설치대수 : 240kW 파워뱅크 1기, 디스펜서 2기'와 일치합니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 검증된 엘에스이링크 의성여객 공고 본문이고 설치대수가 들어 있습니다."
+  }
+ },
+ "j0047": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 390,000원이 기대 답변의 기초금액과 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 390,000원이 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액이 context의 사업비 390,000원과 같습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 검증된 덕적고등학교 공고에서 왔고 해당 금액이 들어 있습니다."
+  }
+ },
+ "j0048": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 99,000,000원이 기대 답변의 사업예산과 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 99,000,000원이 들어 있고, 괄호 안의 한글 금액과 부가세 표기는 필수 항목이 아닙니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액이 context의 사업비 99,000,000원과 같습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 검증된 선문대학교 반도체소재공학과 공고에서 왔고 해당 금액이 들어 있습니다."
+  }
+ },
+ "j0049": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 낙찰하한율 86.245%가 기대 답변과 정확히 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 유일한 핵심 값이 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '낙찰하한율: 86.245%'가 직접 적혀 있습니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 검증된 질병관리청 수도권질병대응센터 공고이고 낙찰하한율이 들어 있습니다."
+  }
+ },
+ "j0050": {
+  "correctness": {
+   "score": 4,
+   "reason": "기준의 구성 요소는 맞지만 '예정가격'을 '예산'으로 잘못 적은 사소한 부정확이 있습니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "82.495% 이상, 최저가격 순 적격심사, 종합평점 85점 이상이 모두 들어 있습니다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "대부분 context에 근거하지만, context의 '예정가격'을 '예산'으로 바꿔 적어 원문과 어긋납니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 검증된 에스알의 SRT 감속기 모터피니언 기어 공고이고 낙찰자 결정 기준 원문이 들어 있습니다."
+  }
+ }
+}

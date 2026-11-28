@@ -1,0 +1,182 @@
+{
+ "j0171": {
+  "correctness": {
+   "score": 0,
+   "reason": "'사업기간은 공사'라는 무의미한 답으로 90일을 제시하지 못했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "공사기간 90일이 전혀 포함되지 않았다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에 있는 90일 값을 쓰지 않고 무의미한 문자열만 출력했다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "공사기간 90일이 포함되어 있으나 다른 공사(본소 전기, 장성경찰서) 내용이 섞여 있다."
+  }
+ },
+ "j0172": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 90일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 공사 기간 90일이 명시되어 있고 덧붙인 항목도 사업명에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "필요 정보가 있으나 기타사항 등 불필요한 내용이 다수 포함되어 있다."
+  }
+ },
+ "j0173": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 33,690,000원으로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context 표에 기초금액 금33,690,000원이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 금액 표가 직접 포함되어 있다."
+  }
+ },
+ "j0174": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 착공일로부터 60일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 공사기간 착공일로부터 60일이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "필요 정보가 있으나 중복된 유의사항 등 불필요한 내용이 많다."
+  }
+ },
+ "j0175": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 102,000,000원으로 주된 값과 일치한다(괄호 내 세부는 부차적)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 기초금액을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 기초금액 102,000,000원이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "기초금액은 있으나 건명이 '실험실습기자재(컴퓨터 및 워크스테이션) 구매'로 표기되고 불필요한 서약서 내용이 섞여 있다."
+  }
+ },
+ "j0176": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업예산 금99,000,000원(부가세 포함)으로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 사업예산 항목과 정확히 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "사업예산 항목이 context에 직접 포함되어 있다."
+  }
+ },
+ "j0177": {
+  "correctness": {
+   "score": 0,
+   "reason": "설치대수를 문서에서 확인되지 않는다고 답해 사실상 답변 거부이다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "파워뱅크 2기, 디스펜서 5기 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에 설치대수가 명시되어 있는데 확인되지 않는다고 답해 context와 어긋난다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 '설치대수 : 240kW 파워뱅크 2기, 디스펜서 5기'가 직접 포함되어 있다."
+  }
+ },
+ "j0178": {
+  "correctness": {
+   "score": 0,
+   "reason": "'2027학년도, 교복, 하복'이라는 무의미한 답으로 기초금액 387,660원을 제시하지 못했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기초금액 값이 전혀 포함되지 않았다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에 있는 기초금액을 쓰지 않고 단어 조각만 출력했다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 기초금액 금387,660원이 직접 포함되어 있다."
+  }
+ },
+ "j0179": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 착공일로부터 120일로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 공사기간 착공일로부터 120일이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공고의 입찰 사항이 직접 포함되어 있다."
+  }
+ },
+ "j0180": {
+  "correctness": {
+   "score": 5,
+   "reason": "2026년 10월 20일(화)~10월 22일(수), 3일간으로 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 값을 빠짐없이 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 행사 기간 항목과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "행사 기간 정보가 context에 직접 포함되어 있다."
+  }
+ }
+}

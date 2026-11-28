@@ -1,0 +1,62 @@
+{
+ "j0051": {
+  "correctness": {"score": 3, "reason": "240kW 파워뱅크 1기는 맞지만 디스펜서 2기를 명시하지 않고 '총 3기'라는 기대 답변에 없는 합산 표현을 썼다."},
+  "answer_coverage": {"score": 3, "reason": "기대 답변의 두 요소 중 디스펜서 2기가 누락되었다."},
+  "faithfulness": {"score": 3, "reason": "파워뱅크 1기는 context에 있으나 '총 3기'는 context에 없는 추론이며 '설치되어 있습니다'도 설치 예정 대수를 잘못 표현했다."},
+  "context_relevance": {"score": 5, "reason": "해당 공사 견적 안내서가 검색되어 설치대수 정보를 직접 포함한다."}
+ },
+ "j0052": {
+  "correctness": {"score": 5, "reason": "사업예산 55,800,000원(부가세 포함)을 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 핵심 값을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 '사업예산 : 55,800,000원 / 부가세포함'과 일치한다."},
+  "context_relevance": {"score": 5, "reason": "해당 해외연수 사업 공고가 검색되어 사업예산 정보를 직접 포함한다."}
+ },
+ "j0053": {
+  "correctness": {"score": 5, "reason": "기초금액 228,081,000원을 정확히 제시했다."},
+  "answer_coverage": {"score": 5, "reason": "질문이 요구한 기초금액을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 '기초금액: 228,081,000원'과 일치한다."},
+  "context_relevance": {"score": 5, "reason": "해당 공사 입찰 공고가 검색되어 기초금액을 직접 포함한다."}
+ },
+ "j0054": {
+  "correctness": {"score": 0, "reason": "공사기간 120일을 제시하지 못하고 의미 없는 문자열만 출력했다."},
+  "answer_coverage": {"score": 0, "reason": "기대 답변의 핵심인 '착공일로부터 120일'이 전혀 없다."},
+  "faithfulness": {"score": 0, "reason": "context에 명시된 공사기간을 무시하고 '사업기간은 공사'라는 무의미한 내용을 냈다."},
+  "context_relevance": {"score": 4, "reason": "해당 공사(건축) 공고가 검색되어 공사기간 120일을 포함하나 전기 공사 공고 표도 섞여 있다."}
+ },
+ "j0055": {
+  "correctness": {"score": 0, "reason": "기초금액 102,000,000원을 제시하지 못하고 의미 없는 문자열만 출력했다."},
+  "answer_coverage": {"score": 0, "reason": "기대 답변의 핵심 값인 기초금액이 전혀 없다."},
+  "faithfulness": {"score": 0, "reason": "context에 있는 금액 정보를 무시하고 '사업비는 g램프사업단'이라는 무의미한 내용을 냈다."},
+  "context_relevance": {"score": 3, "reason": "해당 문서의 '기초금액: 102,000,000 원'이 포함되어 있으나 CPU 서버 공고 등 다른 공고와 섞여 어느 건인지 구분이 어렵다."}
+ },
+ "j0056": {
+  "correctness": {"score": 5, "reason": "기초금액 285,125,000원을 정확히 제시했고 괄호 안 한글 표기는 부차적이다."},
+  "answer_coverage": {"score": 5, "reason": "괄호 밖 주된 값인 기초금액을 빠짐없이 포함했다."},
+  "faithfulness": {"score": 5, "reason": "context의 '기초금액: 금 285,125,000 원'과 일치한다."},
+  "context_relevance": {"score": 5, "reason": "해당 사업 견적 공고가 검색되어 기초금액을 직접 포함한다."}
+ },
+ "j0057": {
+  "correctness": {"score": 0, "reason": "어느 사업의 예산이 더 큰지 답하지 못하고 의미 없는 문자열만 출력했다."},
+  "answer_coverage": {"score": 0, "reason": "비교 결론과 두 사업의 예산 금액이 모두 없다."},
+  "faithfulness": {"score": 0, "reason": "'사업비는 중심, B 문서는'은 context 내용과 무관한 무의미한 출력이다."},
+  "context_relevance": {"score": 2, "reason": "한서대학교 공고 일부만 있고 두 사업의 예산 금액과 자카르타 소비재전 공고는 없으며 선문대학교 문서가 대부분이다."}
+ },
+ "j0058": {
+  "correctness": {"score": 0, "reason": "계약기간 365일을 제시하지 못하고 의미 없는 문자열만 출력했다."},
+  "answer_coverage": {"score": 0, "reason": "기대 답변의 핵심인 '계약체결일로부터 365일'이 전혀 없다."},
+  "faithfulness": {"score": 0, "reason": "'사업기간은 srt, 구매'는 context에 근거하지 않은 무의미한 출력이다."},
+  "context_relevance": {"score": 1, "reason": "코일스프링 입찰명만 한 줄 있고 계약기간 정보는 없으며 대전시립요양원, 선문대학교 등 무관한 문서가 대부분이다."}
+ },
+ "j0059": {
+  "correctness": {"score": 0, "reason": "공사기간 120일을 제시하지 못하고 의미 없는 문자열만 출력했다."},
+  "answer_coverage": {"score": 0, "reason": "기대 답변의 핵심인 '착공일로부터 120일'이 전혀 없다."},
+  "faithfulness": {"score": 0, "reason": "context에 명시된 공사기간을 무시하고 '사업기간은 공사'라는 무의미한 내용을 냈다."},
+  "context_relevance": {"score": 4, "reason": "해당 공사(전기) 공고가 검색되어 공사기간 120일을 포함하나 건축 공사 공고 표도 섞여 있다."}
+ },
+ "j0060": {
+  "correctness": {"score": 0, "reason": "계약기간 420일을 제시하지 못하고 의미 없는 문자열만 출력했다."},
+  "answer_coverage": {"score": 0, "reason": "기대 답변의 핵심인 '계약체결일로부터 420일'이 전혀 없다."},
+  "faithfulness": {"score": 0, "reason": "context에 명시된 계약기간을 무시하고 '사업기간은 srt, 구매'라는 무의미한 내용을 냈다."},
+  "context_relevance": {"score": 4, "reason": "해당 입찰 공고의 '계약기간 계약체결일로부터 420 일'이 포함되어 있으나 선문대학교 문서 등 무관한 내용도 많다."}
+ }
+}

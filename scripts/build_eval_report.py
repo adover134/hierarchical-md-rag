@@ -37,7 +37,7 @@ def build_html(results: dict) -> str:
     pq = results["per_query"]
 
     # JSON 데이터를 inline으로 삽입
-    inline_data = json.dumps(pq, ensure_ascii=False)
+    inline_data = json.dumps(pq, ensure_ascii=False).replace("<", "\\u003c")
 
     # 레이턴시 평균 (Python 계산 → 정적 HTML로 임베드)
     _stages = ["analyze_query", "retrieve", "generate"]
@@ -76,6 +76,33 @@ def build_html(results: dict) -> str:
     def _clean_answer_for_display(value: object) -> str:
         # HTML 단계에서는 답변을 정제하지 않고 원문을 그대로 보여준다.
         return str(value or "").replace("\r\n", "\n").strip()
+
+    def _context_box(q: dict) -> str:
+        if "judge_context" not in q:
+            return ""
+        return ('<div class="answer-box context-box"><div class="box-label">채점 입력: 채점자가 받은 context</div>'
+                f'<div class="box-content">{_esc(q["judge_context"])}</div></div>')
+
+    def _verification_box(q: dict) -> str:
+        found = q.get("verification")
+        if not found:
+            return ""
+        lines = []
+        for notice in found.get("notices", []):
+            lines += [f"공고: {notice.get('file', '')} (공고번호 {notice.get('notice_no', '')})", f"특정한 이유: {notice.get('why', '')}"]
+            lines += [f'인용: "{quote}"' for quote in notice.get("quotes", [])]
+        lines += [f"검증자의 답: {found.get('answer', '')}", f"확인하지 못한 것: {found.get('unverified', '')}"]
+        return ('<div class="answer-box context-box"><div class="box-label">채점 입력: 원본 검증 결과</div>'
+                f'<div class="box-content">{_esc(chr(10).join(lines))}</div></div>')
+
+    meta = results.get("meta", {})
+    # 채점자가 함께 받은 것(기준, 지시문 등). meta에 있을 때만 보여준다.
+    _grading_info = "".join(
+        f'<details class="grading-info"><summary>{title}</summary><pre>{_esc(meta[key])}</pre></details>'
+        for key, title in (("rubric", "채점 입력: 채점 기준(rubric.md) 전문"), ("instruction", "채점 입력: subagent 지시문"),
+                           ("grader_note", "채점 입력: 지시문 밖에서 채점자에게 전달된 것"))
+        if meta.get(key)
+    )
 
     _top_k = int(S.get("top_k", 5) or 5)
     _static_cards: list[str] = []
@@ -116,6 +143,13 @@ def build_html(results: dict) -> str:
         remaining = max(len(retrieved_sources_all) - _top_k, 0)
         remaining_text = (
             f"<span style=\"color:var(--text2);font-size:0.78rem\">... +{remaining}개</span>" if remaining > 0 else ""
+        )
+
+        chunk_recall = q.get("recall_at_k_chunk")
+        chunk_recall_row = "" if "recall_at_k_chunk" not in q else (
+            "<span><strong>Recall@K (chunk):</strong> "
+            + ("해당 없음(chunk를 보지 않은 답)" if chunk_recall is None else f"{float(chunk_recall) * 100:.0f}%")
+            + "</span>"
         )
 
         ndcg = q.get("ndcg")
@@ -160,6 +194,7 @@ def build_html(results: dict) -> str:
           <span><strong>Hit (source):</strong> <span class="{hit_cls}">{hit_text}</span></span>
           <span><strong>Recall@K (source):</strong> {float(q.get("recall_at_k", 0.0) or 0.0) * 100:.0f}%</span>
           {ndcg_row}
+          {chunk_recall_row}
         </div>
         <div class="meta-row" style="flex-direction:column;gap:0.4rem">
           <span><strong>정답 문서:</strong> {gt_sources}</span>
@@ -178,6 +213,8 @@ def build_html(results: dict) -> str:
             <div class="box-content">{generated}</div>
           </div>
         </div>
+        {_verification_box(q)}
+        {_context_box(q)}
         <div class="judge-grid">
           <div class="judge-item">
             <div class="j-header">
@@ -299,6 +336,12 @@ def build_html(results: dict) -> str:
   .answer-box.expected .box-label {{ color: var(--green); }}
   .answer-box.generated .box-label {{ color: var(--accent); }}
 
+  .context-box {{ margin-bottom: 1rem; }}
+  .context-box .box-label {{ color: var(--yellow); }}
+  .grading-info {{ background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 0.75rem; }}
+  .grading-info summary {{ cursor: pointer; font-size: 0.85rem; }}
+  .grading-info pre {{ white-space: pre-wrap; word-break: break-word; font-size: 0.78rem; color: var(--text2); margin-top: 0.6rem; }}
+
   .judge-grid {{ display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.75rem; }}
   .judge-item {{ background: var(--surface2); border-radius: 8px; padding: 0.75rem; }}
   .judge-item .j-header {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }}
@@ -382,12 +425,13 @@ def build_html(results: dict) -> str:
 
   <div class="table-section">
     <h2>질문별 상세 결과</h2>
+    {_grading_info}
     <button class="expand-all" onclick="toggleAll()">전체 펼치기/접기</button>
     <div id="queryCards">{_static_query_cards_html}</div>
   </div>
 
   <div class="footer">
-    BiddingMate RAG Evaluation &mdash; Generated 2026-02-10 &mdash; LLM-as-Judge (gpt-5-mini) &mdash; 소요 시간: {results.get('meta',{}).get('elapsed_seconds',0)}초
+    BiddingMate RAG Evaluation &mdash; Generated {meta.get("generated", "2026-02-10")} &mdash; LLM-as-Judge ({_esc(meta.get("judge_model") or "gpt-5-mini")}) &mdash; 소요 시간: {meta.get('elapsed_seconds',0)}초
   </div>
 
 </div>
@@ -474,6 +518,11 @@ const cardDefs = [
       <div class="tt-kv"><strong>순위:</strong> 상위 K개 chunk에서 같은 문서는 한 번만 센다</div>
       <div class="tt-kv"><strong>가중치:</strong> i위 = 1/log2(i+1)</div>
       <span class="tt-formula">(정답이 있는 1~N위의 가중치 합) / (1~N위의 가중치 합)의 평균</span>`}}]),
+  ...(S.recall_at_k_chunk===undefined||S.recall_at_k_chunk===null?[]:[{{label:'Recall@5 (Chunk)',ko:`검색 재현율·chunk (${{S.num_chunk_labeled_queries}}문항)`,value:(S.recall_at_k_chunk*100).toFixed(0)+'%',max:'',color:'var(--cyan)',
+    tooltip:`<div class="tt-title">Recall@K (Chunk) · 검색 재현율 — chunk 단위</div>
+      <div class="tt-desc">정답 chunk 중 top-K 검색 결과에 든 비율의 평균</div>
+      <div class="tt-kv"><strong>제외:</strong> chunk를 보지 않고 만든 답(단축 경로)은 null로 두고 평균에서 뺀다</div>
+      <span class="tt-formula">mean(찾은 정답 chunk / 전체 정답 chunk)</span>`}}]),
   {{label:'Avg Latency',ko:'평균 응답시간',value:'{_lat_value}',max:'',color:'var(--cyan)',
     tooltip:`{_lat_tooltip}`}},
   {{label:'평가 건수',ko:'',value:S.num_evaluated+'/'+S.num_queries,max:'',color:'var(--text)',tooltip:null}},
@@ -581,7 +630,8 @@ new Chart(document.getElementById('distChart'), {{
 // --- Insights ---
 const perfect = PQ.filter(q=>(q.correctness?.score??0)===5).length;
 const weak = PQ.filter(q=>(q.correctness?.score??0)<=2).length;
-document.getElementById('insights').innerHTML = `
+if (!{json.dumps(meta.get("insights", True))}) document.getElementById('insights').remove();
+else document.getElementById('insights').innerHTML = `
   <h2>핵심 인사이트</h2>
   <div class="insight-item"><div class="insight-icon">✅</div><div class="insight-text"><strong>Faithfulness ${{S.avg_faithfulness}}/5</strong> <span>— 환각이 거의 없음. context에 없는 정보를 만들어내지 않음</span></div></div>
   <div class="insight-item"><div class="insight-icon">🎯</div><div class="insight-text"><strong>Correctness 만점 ${{perfect}}/${{PQ.length}}건</strong> <span>— single_doc 유형에서 특히 강함. 정답 청크가 검색되면 높은 정확도</span></div></div>
@@ -715,6 +765,7 @@ PQ.forEach(q => {{
         <span><strong>Hit (source):</strong> <span class="${{hit?'hit-yes':'hit-no'}}">${{hit?'Hit@'+hit:'MISS'}}</span></span>
         <span><strong>Recall@K (source):</strong> ${{(q.recall_at_k*100).toFixed(0)}}%</span>
         ${{q.ndcg===undefined||q.ndcg===null?'':`<span><strong>nDCG@N (source):</strong> ${{q.ndcg.toFixed(3)}}</span>`}}
+        ${{q.recall_at_k_chunk===undefined?'':`<span><strong>Recall@K (chunk):</strong> ${{q.recall_at_k_chunk===null?'해당 없음(chunk를 보지 않은 답)':(q.recall_at_k_chunk*100).toFixed(0)+'%'}}</span>`}}
       </div>
       <div class="meta-row" style="flex-direction:column;gap:0.4rem">
         <span><strong>정답 문서:</strong> ${{(q.ground_truth_sources||[]).map(s=>`<code style="font-size:0.76rem;background:rgba(59,130,246,0.1);color:#93c5fd;padding:0.1rem 0.4rem;border-radius:3px">${{s}}</code>`).join(' ')}}</span>

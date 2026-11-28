@@ -1,0 +1,182 @@
+{
+ "j0041": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 608,881,900원은 기대 답변의 예산 값과 같고, 빠진 부가세 포함 여부는 괄호 안 정보라 감점하지 않는다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "답변은 기대 답변의 핵심인 예산 금액을 담고 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 '사업비: 약 6.1억 원 (608,881,900원)'에서 그대로 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 공고(두산에너빌리티, 영남영농조합법인 히트펌프)의 문서이며 질문이 묻는 예산 값을 담고 있다."
+  }
+ },
+ "j0042": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 과업기간 365일은 기대 답변의 값과 같다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "답변은 365일을 제시했지만 기산점인 '착수일로부터'라는 표현을 빠뜨렸다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '과업기간: 착수일로부터 365일'이 직접 적혀 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 검증된 영동군 공고 문서로 과업기간을 담고 있지만 입찰참가자격, 유의사항 같은 불필요한 내용도 많다."
+  }
+ },
+ "j0043": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 계약기간 420일은 기대 답변의 값과 같다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "답변은 420일을 제시했지만 기산점인 '계약체결일로부터'를 빠뜨렸다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '계약기간: 계약체결일로부터 420일'이 직접 적혀 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 검증된 에스알 팬터그래프 집전판 공고로 계약기간을 담고 있지만 보증금, 기타사항 같은 불필요한 내용도 섞여 있다."
+  }
+ },
+ "j0044": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 78,364,000원은 기대 답변의 기초금액과 같고, 질문의 기초금액을 사업비로 부른 명칭 차이는 감점하지 않는다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "답변은 핵심 값인 기초금액을 담았고, 빠진 세부 내역은 괄호 안 정보다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 사업비 78,364,000원과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 헤르스 공고 문서이며 답에 필요한 금액을 담고 있다."
+  }
+ },
+ "j0045": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 50,000,000원은 기대 답변의 기초금액과 같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "답변은 핵심 값을 담았고, 빠진 추정가격과 부가세는 괄호 안 정보다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 사업비 50,000,000원에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 전주사랑의집 공고 문서이며 필요한 금액을 담고 있다."
+  }
+ },
+ "j0046": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 240kW 파워뱅크 1기와 디스펜서 2기는 기대 답변과 정확히 같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "답변은 두 장비의 설치대수를 모두 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '설치대수 : 240kW 파워뱅크 1기, 디스펜서 2기'가 직접 적혀 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 검증된 의성여객 공고로 설치대수를 담고 있지만 참가자격, 문의처 같은 부가 내용도 들어 있다."
+  }
+ },
+ "j0047": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 390,000원은 기대 답변의 기초금액과 같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "답변은 핵심 값인 기초금액을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 사업비 390,000원과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 덕적고등학교 공고 문서이며 필요한 금액을 담고 있다."
+  }
+ },
+ "j0048": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 99,000,000원은 기대 답변의 사업예산과 같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "답변은 핵심 금액을 담았고, 빠진 한글 금액과 부가세 포함 여부는 괄호 안 정보다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 금액은 context의 사업비 99,000,000원에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context는 검증된 선문대 반도체소재공학과 공고 문서이며 필요한 금액을 담고 있다."
+  }
+ },
+ "j0049": {
+  "correctness": {
+   "score": 5,
+   "reason": "생성 답변의 낙찰하한율 86.245%는 기대 답변과 같다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "답변은 핵심 값인 낙찰하한율을 담고 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '낙찰하한율: 86.245%'가 직접 적혀 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 검증된 질병관리청 3차 공고로 낙찰하한율을 담고 있지만 청렴계약, 보증금 같은 불필요한 내용도 많다."
+  }
+ },
+ "j0050": {
+  "correctness": {
+   "score": 4,
+   "reason": "답변은 82.495%, 최저가격 순 적격심사, 종합평점 85점 이상이라는 기준을 담았지만 기준 금액인 '예정가격'을 '예산'으로 잘못 썼다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "답변은 기대 답변의 기준 비율, 심사 순서, 통과 점수를 모두 포함한다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "답변 내용은 대부분 context에 근거하지만 context의 '예정가격'을 '예산'으로 바꿔 쓴 부정확한 표현이 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 검증된 에스알 감속기 모터피니언기어 공고로 낙찰자 결정 조항을 담고 있지만 청렴계약, 안내사항 같은 불필요한 내용도 섞여 있다."
+  }
+ }
+}

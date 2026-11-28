@@ -1,0 +1,182 @@
+{
+ "j0011": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 245,339,600원은 검증 결과의 예산과 같은 금액입니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "금액은 맞지만 기대 답변에 있는 부가세 포함 여부가 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액이 context의 사업비 245,339,600원과 그대로 일치합니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "같은 공고(두산에너빌리티 쏘유팜 히트펌프)의 context에 예산 금액이 들어 있습니다."
+  }
+ },
+ "j0012": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 계약체결일로부터 365일과 맞습니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "'계약체결일로부터'라는 기산점과 단가발주 180일 조건이 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 계약기간 365일 문구에 근거한 답변입니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "같은 에스알 공고의 context에 계약기간 전체 문구가 들어 있습니다."
+  }
+ },
+ "j0013": {
+  "correctness": {
+   "score": 5,
+   "reason": "답변의 245,339,600원은 검증 결과의 예산과 같은 금액입니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "금액은 맞지만 부가세 포함 여부가 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 금액이 context의 사업비와 그대로 일치합니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "같은 공고의 context에 예산 금액이 들어 있습니다."
+  }
+ },
+ "j0014": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 착공일로부터 180일로 기대 답변과 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 정보를 빠짐없이 담았습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '라. 공사기간: 착공일로부터 180일'에서 바로 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "같은 서천군 공고의 context에 공사기간이 명시되어 있습니다."
+  }
+ },
+ "j0015": {
+  "correctness": {
+   "score": 5,
+   "reason": "770,250,000원으로 추정금액과 같은 금액입니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "추정가격과 부가가치세로 나뉜 금액 구성이 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 사업비 770,250,000원에 근거한 답변입니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "같은 한국마사회제주경마장 공고의 context에 해당 금액이 들어 있습니다."
+  }
+ },
+ "j0016": {
+  "correctness": {
+   "score": 5,
+   "reason": "102,000,000원으로 기초금액과 같은 금액입니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "추정가격과 부가가치세로 나뉜 금액 구성이 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 사업비 102,000,000원과 그대로 일치합니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "같은 전북대 공고의 context에 해당 금액이 들어 있습니다."
+  }
+ },
+ "j0017": {
+  "correctness": {
+   "score": 5,
+   "reason": "착공일로부터 60일로 기대 답변과 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 정보를 빠짐없이 담았습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 공사기간 문구에서 바로 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "같은 영동군 공고의 context에 공사기간이 명시되어 있습니다."
+  }
+ },
+ "j0018": {
+  "correctness": {
+   "score": 5,
+   "reason": "26,750,000원으로 기초금액과 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 금액을 빠짐없이 담았습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 사업비 26,750,000원과 그대로 일치합니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "같은 영동군 고양골소하천 공고의 context에 해당 금액이 들어 있습니다."
+  }
+ },
+ "j0019": {
+  "correctness": {
+   "score": 5,
+   "reason": "착공일로부터 60일간으로 기대 답변과 일치합니다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 정보를 빠짐없이 담았습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '라. 사업기간: 착공일로부터 60일간'에서 바로 확인됩니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "같은 여수시 삼산면 공고의 context에 사업기간이 명시되어 있습니다."
+  }
+ },
+ "j0020": {
+  "correctness": {
+   "score": 5,
+   "reason": "47,820,800원으로 기초금액과 같은 금액입니다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "추정가격과 부가가치세로 나뉜 금액 구성이 빠졌습니다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 사업비 47,820,800원과 그대로 일치합니다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "같은 울산 중구 공고의 context에 해당 금액이 들어 있습니다."
+  }
+ }
+}

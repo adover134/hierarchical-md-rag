@@ -1,0 +1,62 @@
+{
+ "j0011": {
+  "correctness": {"score": 5, "reason": "생성 답변의 '착공일로부터 120일'이 기대 답변과 정확히 일치합니다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 기준 시점(착공일)과 기간(120일)을 모두 포함합니다."},
+  "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 120일'에서 직접 확인됩니다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 사업의 공고문으로 공사기간 정보를 명확히 포함합니다."}
+ },
+ "j0012": {
+  "correctness": {"score": 5, "reason": "기초금액 100,000,000원이 기대 답변과 일치합니다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 핵심 값인 기초금액을 빠짐없이 포함합니다."},
+  "faithfulness": {"score": 5, "reason": "context의 표에서 1지역 기초금액 100,000,000이 직접 확인됩니다."},
+  "context_relevance": {"score": 4, "reason": "필요한 표가 포함되어 있으나 다른 공고(도로조명) 헤더와 다른 지역 행 등 불필요한 내용이 섞여 있습니다."}
+ },
+ "j0013": {
+  "correctness": {"score": 5, "reason": "공사기간 60일이라는 핵심 값이 기대 답변과 일치합니다."},
+  "answer_coverage": {"score": 4, "reason": "기간은 맞지만 기대 답변의 기산점인 '착공일로부터'가 누락되었습니다."},
+  "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 60일'에 근거합니다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 사업 공고문으로 공사기간을 명확히 포함합니다."}
+ },
+ "j0014": {
+  "correctness": {"score": 5, "reason": "'착수일로부터 365일'이 기대 답변과 정확히 일치합니다."},
+  "answer_coverage": {"score": 5, "reason": "기산점과 기간을 모두 포함하여 누락이 없습니다."},
+  "faithfulness": {"score": 5, "reason": "context의 '과업기간: 착수일로부터 365일'에서 직접 확인됩니다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 감리용역 공고문으로 과업기간 정보를 포함합니다."}
+ },
+ "j0015": {
+  "correctness": {"score": 3, "reason": "동복 납품기한은 정확하나 하복 납품기한(2027년 5월 10일)을 제시하지 않아 핵심 정보의 절반만 맞습니다."},
+  "answer_coverage": {"score": 3, "reason": "질문이 동복과 하복을 모두 물었으나 하복 기한이 누락되어 핵심 포인트의 절반만 커버합니다."},
+  "faithfulness": {"score": 5, "reason": "언급된 동복 납품기한 2027년 2월 22일(월)은 context에서 직접 확인됩니다."},
+  "context_relevance": {"score": 5, "reason": "context에 동복과 하복 납품기한이 모두 명시되어 있어 답변에 필요한 정보를 충분히 포함합니다."}
+ },
+ "j0016": {
+  "correctness": {"score": 5, "reason": "낙찰하한율 86.245%가 기대 답변과 일치합니다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 핵심 값을 포함합니다."},
+  "faithfulness": {"score": 5, "reason": "context의 '낙찰하한율: 86.245%'에서 직접 확인됩니다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 입찰 공고로 낙찰하한율을 명확히 포함합니다."}
+ },
+ "j0017": {
+  "correctness": {"score": 5, "reason": "계약기간 420일이라는 핵심 값이 기대 답변과 일치합니다."},
+  "answer_coverage": {"score": 4, "reason": "기간은 맞지만 기대 답변의 기산점인 '계약체결일로부터'가 누락되었습니다."},
+  "faithfulness": {"score": 5, "reason": "context의 '계약기간: 계약체결일로부터 420일'에 근거합니다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 입찰 공고로 계약기간 정보를 명확히 포함합니다."}
+ },
+ "j0018": {
+  "correctness": {"score": 4, "reason": "영남영농조합법인이 더 크다는 결론과 두 금액은 정확하나 '약 60% 더 많은' 표현은 쏘유팜 대비 약 148% 많은 것이므로 부정확합니다."},
+  "answer_coverage": {"score": 5, "reason": "결론과 두 기관의 예산 금액을 모두 포함합니다."},
+  "faithfulness": {"score": 4, "reason": "두 예산 금액은 context에 있으나 차액과 비율은 context에 없는 계산이며 비율 표현에 오류가 있습니다."},
+  "context_relevance": {"score": 4, "reason": "두 공고의 예산이 모두 포함되어 있으나 진주올팜, 선문대 기자재 등 무관한 내용도 섞여 있습니다."}
+ },
+ "j0019": {
+  "correctness": {"score": 5, "reason": "기초금액 285,125,000원이 기대 답변과 일치합니다."},
+  "answer_coverage": {"score": 5, "reason": "핵심 금액을 포함하며 한글 금액 병기 누락은 의미상 차이가 없습니다."},
+  "faithfulness": {"score": 5, "reason": "context의 '기초금액: 금285,125,000원'에서 직접 확인됩니다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 공사 공고문으로 기초금액을 명확히 포함합니다."}
+ },
+ "j0020": {
+  "correctness": {"score": 5, "reason": "기초금액 26,750,000원이 기대 답변과 일치합니다."},
+  "answer_coverage": {"score": 5, "reason": "기대 답변의 유일한 핵심 값을 포함합니다."},
+  "faithfulness": {"score": 5, "reason": "context의 '기초금액: 금26,750,000원'에서 직접 확인됩니다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 사업 공고문으로 기초금액을 명확히 포함합니다."}
+ }
+}

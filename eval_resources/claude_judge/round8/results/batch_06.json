@@ -1,0 +1,182 @@
+{
+ "j0051": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027년 2월 19일(금), 하복 2027년 5월 7일(금)이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "두 납품기한을 모두 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "두 날짜 모두 context의 납품기한 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공고의 납품기한이 명시되어 있다."
+  }
+ },
+ "j0052": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 100,000,000원이 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 기초금액을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 공고 목록 표에 1지역 기초금액 100,000,000원이 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공고명과 기초금액이 명시되어 있다."
+  }
+ },
+ "j0053": {
+  "correctness": {
+   "score": 5,
+   "reason": "낙찰하한율 86.245%가 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 낙찰하한율 86.245%가 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문이 묻는 낙찰하한율이 직접 있다."
+  }
+ },
+ "j0054": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 78,364,000원이 맞으며 괄호 내역은 부차 정보다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 모두 context에 있으나 두 금액이 기초금액을 구성한다는 서술은 context(추정가격 기준 내역)와 다른 사소한 추론이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 기초금액과 내역이 직접 명시되어 있다."
+  }
+ },
+ "j0055": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 387,660원이 맞고 하복 내역 누락은 부차 정보다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "387,660원과 동복 264,660원 모두 context에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 학교의 기초금액이 명시되어 있다."
+  }
+ },
+ "j0056": {
+  "correctness": {
+   "score": 5,
+   "reason": "낙찰하한율 86.245%가 기대 답변과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 낙찰하한율 86.245%가 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문이 묻는 낙찰하한율이 직접 있다."
+  }
+ },
+ "j0057": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 285,125,000원이 맞으며 한글 병기는 표기 차이다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 기초금액 285,125,000원이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공사의 기초금액이 직접 있다."
+  }
+ },
+ "j0058": {
+  "correctness": {
+   "score": 5,
+   "reason": "55,800,000원이 맞으며 사업예산을 예산으로 부른 것은 감점하지 않는다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함한다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 사업예산 55,800,000원(부가세포함)이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 사업의 사업예산이 직접 있다."
+  }
+ },
+ "j0059": {
+  "correctness": {
+   "score": 5,
+   "reason": "예산 245,339,600원(부가세 포함)이 기대 답변과 일치한다(규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함한다(규칙1)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 예산 245,339,600원(부가세 포함)이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 물품 구매의 예산이 직접 있다."
+  }
+ },
+ "j0060": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 78,364,000원이 맞으며 괄호 내역은 부차 정보다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액과 가스감지기 66,440,000원 모두 context에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 기초금액과 내역이 직접 명시되어 있다."
+  }
+ }
+}

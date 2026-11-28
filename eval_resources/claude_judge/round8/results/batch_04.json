@@ -1,0 +1,182 @@
+{
+ "j0031": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 공사기간 착공일로부터 180일을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 180일이 답변에 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 180일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공사의 견적 공고 본문으로 공사기간이 명시되어 있다."
+  }
+ },
+ "j0032": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 100,000,000원을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 100,000,000원이 답변에 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context 표의 1지역 행 기초금액 100,000,000에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "필요한 표가 있으나 다른 지역 행과 보험료 등 질문과 무관한 내용도 섞여 있다."
+  }
+ },
+ "j0033": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 228,081,000원을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 228,081,000원이 답변에 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '※ 기초금액: 228,081,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공사 공고의 금액 정보가 담겨 있어 질문에 직접 관련된다."
+  }
+ },
+ "j0034": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 공사기간 착공일로부터 180일을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 180일이 답변에 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 180일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 공사의 공고 본문으로 공사기간이 명시되어 있다."
+  }
+ },
+ "j0035": {
+  "correctness": {
+   "score": 5,
+   "reason": "규칙5에 따라 주된 사실인 선택 대상(건축)과 그 값 368,467,000원이 맞다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "규칙5·규칙7에 따라 선택 대상과 그 값이 있으므로 통신 금액 누락은 감점하지 않는다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "건축 기초금액 368,467,000원과 통신 24,867,000원이 context에 있어 비교 결론이 근거를 갖는다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "건축·통신 두 공사의 기초금액이 모두 context에 포함되어 있다."
+  }
+ },
+ "j0037": {
+  "correctness": {
+   "score": 5,
+   "reason": "규칙5에 따라 주된 사실인 선택 대상(건축)과 그 값 368,467,000원이 맞다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "규칙5·규칙7에 따라 선택 대상과 그 값이 있으므로 통신 금액 누락은 감점하지 않는다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "건축 기초금액 368,467,000원과 통신 24,867,000원이 context에 있어 비교 결론이 근거를 갖는다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "건축·통신 두 공사의 기초금액이 모두 context에 포함되어 있다."
+  }
+ },
+ "j0036": {
+  "correctness": {
+   "score": 5,
+   "reason": "규칙1·규칙2에 따라 주된 값 99,000,000원이 맞고 괄호 안 부가세 포함 표기는 부차 정보다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "규칙3에 따라 주된 값이 포함되어 있어 괄호 안 내역 누락은 감점하지 않는다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업예산: 금 99,000,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 입찰 공고의 사업예산이 명시된 부분이 검색되었다."
+  }
+ },
+ "j0038": {
+  "correctness": {
+   "score": 5,
+   "reason": "규칙5에 따라 선택 대상 영남영농조합법인과 두 예산 값이 모두 맞다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "선택 대상과 두 예산 값이 모두 답변에 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "두 예산은 context에서 확인되나 차액과 약 60% 비율은 context에 없는 계산 추론이다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "두 업체의 예산이 있으나 진주올팜과 선문대 공고 등 무관한 문서도 섞여 있다."
+  }
+ },
+ "j0039": {
+  "correctness": {
+   "score": 5,
+   "reason": "규칙4에 따라 주된 값 390,000원이 기대 답변 '금390,000원'과 같은 값이다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 390,000원이 답변에 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 금 390,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 용역 견적 공고의 기초금액이 명시된 부분이 검색되었다."
+  }
+ },
+ "j0040": {
+  "correctness": {
+   "score": 5,
+   "reason": "규칙4에 따라 주된 값 33,690,000원이 기대 답변과 같은 값이다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 33,690,000원이 답변에 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 금33,690,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "해당 사업 공고의 금액 정보가 담겨 있어 질문에 직접 관련된다."
+  }
+ }
+}

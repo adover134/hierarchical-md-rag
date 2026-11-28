@@ -1,0 +1,62 @@
+{
+ "j0031": {
+  "correctness": {"score": 0, "reason": "답변이 비교 대상(건축)을 선택하지 않고 무관한 문구를 사업비로 제시해 주된 사실이 없다(규칙5)."},
+  "answer_coverage": {"score": 0, "reason": "선택 대상과 두 기초금액 368,467,000원·24,867,000원이 모두 빠졌다(규칙3, 규칙5)."},
+  "faithfulness": {"score": 1, "reason": "인용 문구는 context에 있으나 이를 사업비라고 주장한 것은 context와 맞지 않는다."},
+  "context_relevance": {"score": 3, "reason": "context에 두 공사 문서와 통신 기초금액 24,867,000원은 있으나 건축 기초금액은 없고 무관한 영동군 공사 표가 섞여 있다."}
+ },
+ "j0032": {
+  "correctness": {"score": 5, "reason": "주된 값 102,000,000원이 맞고 사업비 라벨 차이와 괄호 내역 누락은 감점하지 않는다(규칙2, 규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 102,000,000원이 포함되어 있고 추정가격·부가세 누락은 부차 정보다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context와 일치하나 '전북대학교 산학협력단'이라는 기관명은 context에 없다."},
+  "context_relevance": {"score": 4, "reason": "context에 필요한 금액은 있으나 사업명 없이 사업비 한 줄만 반복되어 해당 사업임을 확인할 근거가 부족하다."}
+ },
+ "j0033": {
+  "correctness": {"score": 5, "reason": "주된 값 33,690,000원이 맞고 사업비 라벨 차이는 감점하지 않는다(규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 33,690,000원이 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context와 일치하나 '충청북도 영동군'이라는 기관명은 context에 없다."},
+  "context_relevance": {"score": 4, "reason": "context에 필요한 금액은 있으나 사업명 없이 사업비 한 줄만 반복되어 해당 사업임을 확인할 근거가 부족하다."}
+ },
+ "j0034": {
+  "correctness": {"score": 5, "reason": "주된 값 102,000,000원이 맞고 사업비 라벨 차이와 괄호 내역 누락은 감점하지 않는다(규칙2, 규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 102,000,000원이 포함되어 있고 추정가격·부가세 누락은 부차 정보다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "답변 내용이 context의 사업비 문구와 그대로 일치한다."},
+  "context_relevance": {"score": 4, "reason": "context에 필요한 금액은 있으나 사업명 없이 사업비 한 줄만 반복되어 해당 사업임을 확인할 근거가 부족하다."}
+ },
+ "j0035": {
+  "correctness": {"score": 5, "reason": "주된 값 387,660원이 맞고 동복·하복 내역 누락과 사업비 라벨은 감점하지 않는다(규칙2, 규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 387,660원이 포함되어 있고 동복·하복 금액은 부차 정보다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "답변 내용이 context의 사업비 문구와 그대로 일치한다."},
+  "context_relevance": {"score": 4, "reason": "context에 필요한 금액은 있으나 사업명 없이 사업비 한 줄만 반복되어 해당 사업임을 확인할 근거가 부족하다."}
+ },
+ "j0036": {
+  "correctness": {"score": 5, "reason": "주된 값 55,800,000원이 맞고 사업비 라벨 차이는 감점하지 않는다(규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 55,800,000원이 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context와 일치하나 '울산광역시사회복지협의회'라는 기관명은 context에 없다."},
+  "context_relevance": {"score": 4, "reason": "context에 필요한 금액은 있으나 사업명 없이 사업비 한 줄만 반복되어 해당 사업임을 확인할 근거가 부족하다."}
+ },
+ "j0037": {
+  "correctness": {"score": 5, "reason": "동복 2027년 2월 22일(월), 하복 2027년 5월 10일(월) 두 주된 값이 모두 맞다(규칙2)."},
+  "answer_coverage": {"score": 5, "reason": "동복·하복 납품기한 두 포인트가 모두 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "두 납품기한 모두 context의 납품기한 및 제3조에서 직접 확인된다."},
+  "context_relevance": {"score": 4, "reason": "납품기한 정보가 충분히 들어 있으나 교복 사양·사후관리 등 불필요한 내용이 많이 섞여 있다."}
+ },
+ "j0038": {
+  "correctness": {"score": 0, "reason": "주된 값 90일이 없고 무관한 표 조각을 사업기간으로 제시했다(규칙2)."},
+  "answer_coverage": {"score": 0, "reason": "주된 값 90일이 답변에 전혀 없다(규칙3)."},
+  "faithfulness": {"score": 1, "reason": "인용 문구는 context에 있으나 이를 사업기간이라고 주장한 것은 context와 맞지 않는다."},
+  "context_relevance": {"score": 4, "reason": "context에 안남·청산분소(건축) 공사기간 90일이 있으나 본소(전기) 공사 표가 반복되어 섞여 있다."}
+ },
+ "j0039": {
+  "correctness": {"score": 5, "reason": "주된 값 26,750,000원이 맞고 사업비 라벨 차이는 감점하지 않는다(규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "주된 값 26,750,000원이 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 4, "reason": "금액은 context와 일치하나 '충청북도 영동군'이라는 기관명은 context에 없다."},
+  "context_relevance": {"score": 4, "reason": "context에 필요한 금액은 있으나 사업명 없이 사업비 한 줄만 반복되어 해당 사업임을 확인할 근거가 부족하다."}
+ },
+ "j0040": {
+  "correctness": {"score": 5, "reason": "240kW 파워뱅크 1기, 디스펜서 2기 주된 값이 모두 맞다(규칙2, 규칙4)."},
+  "answer_coverage": {"score": 5, "reason": "파워뱅크 1기와 디스펜서 2기 두 포인트가 모두 포함되어 있다(규칙3)."},
+  "faithfulness": {"score": 5, "reason": "답변 내용이 context의 설치대수 항목과 그대로 일치한다."},
+  "context_relevance": {"score": 5, "reason": "context가 해당 공고 문서로 설치대수를 명시적으로 포함하고 있다."}
+ }
+}

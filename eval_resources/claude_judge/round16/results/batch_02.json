@@ -1,0 +1,62 @@
+{
+  "j0011": {
+    "correctness": {"score": 5, "reason": "주된 값인 예정가격의 82.495% 이상, 최저가 순 적격심사, 종합평점 85점 이상을 모두 정확히 담았다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "기대 답변의 주된 포인트(82.495%, 최저가 순 적격심사, 85점)가 빠짐없이 들어 있다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "답변 내용이 context의 '8. 낙찰자 결정 가' 항목과 그대로 일치한다."},
+    "context_relevance": {"score": 5, "reason": "context에 해당 입찰의 낙찰자 결정 조항이 그대로 들어 있어 질문에 충분히 관련된다."}
+  },
+  "j0012": {
+    "correctness": {"score": 5, "reason": "공사기간 120일이라는 주된 값을 정확히 제시했다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값 120일이 들어 있고 '착공일로부터'라는 기산점 표현 누락은 사소하다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "context의 '공사기간: 착공일로부터 120일'에 직접 근거한다."},
+    "context_relevance": {"score": 5, "reason": "context에 해당 공사의 공고 본문과 공사기간이 명시되어 있다."}
+  },
+  "j0013": {
+    "correctness": {"score": 5, "reason": "기초금액의 주된 값 102,000,000원과 같은 값을 사업비라는 이름으로 제시했다(규칙2, 규칙4b)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값 102,000,000원이 들어 있고 괄호 안의 추정가격·부가가치세 누락은 감점하지 않는다(규칙3)."},
+    "faithfulness": {"score": 4, "reason": "금액은 context에 있으나 '전북대학교 산학협력단'이라는 기관명은 context에서 확인되지 않는다."},
+    "context_relevance": {"score": 4, "reason": "context가 정답 금액을 담고 있으나 사업명 등 식별 정보 없이 사업비 한 줄만 있다."}
+  },
+  "j0014": {
+    "correctness": {"score": 5, "reason": "기초금액의 주된 값 387,660원과 같은 값을 사업비라는 이름으로 제시했다(규칙2, 규칙4b)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값 387,660원이 들어 있고 동복·하복 내역 누락은 감점하지 않는다(규칙3)."},
+    "faithfulness": {"score": 4, "reason": "금액은 context에 있으나 '충청북도교육청 한림디자인고등학교'라는 기관 표기는 context에서 확인되지 않는다."},
+    "context_relevance": {"score": 4, "reason": "context가 정답 금액을 담고 있으나 사업명 등 식별 정보 없이 사업비 한 줄만 있다."}
+  },
+  "j0015": {
+    "correctness": {"score": 5, "reason": "기초금액 390,000원과 같은 값을 사업비라는 이름으로 제시했다(규칙2, 규칙4b)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값 390,000원이 답변에 들어 있다(규칙3)."},
+    "faithfulness": {"score": 4, "reason": "금액은 context에 있으나 '인천광역시교육청 덕적고등학교'라는 기관 표기는 context에서 확인되지 않는다."},
+    "context_relevance": {"score": 4, "reason": "context가 정답 금액을 담고 있으나 사업명 등 식별 정보 없이 사업비 한 줄만 있다."}
+  },
+  "j0016": {
+    "correctness": {"score": 5, "reason": "240kW 파워뱅크 1기와 디스펜서 2기라는 주된 값을 정확히 제시했다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "주된 포인트인 파워뱅크 1기와 디스펜서 2기가 모두 들어 있다(규칙3)."},
+    "faithfulness": {"score": 4, "reason": "설치대수는 context에 그대로 있으나 '총 3기'라는 합산은 종류가 다른 장비를 더한 추론이다."},
+    "context_relevance": {"score": 5, "reason": "context에 해당 공사의 공고개요와 설치대수가 명시되어 있다."}
+  },
+  "j0017": {
+    "correctness": {"score": 5, "reason": "82.495% 이상, 최저가 순 적격심사, 종합평점 85점 이상이라는 주된 값을 모두 정확히 담았다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "기대 답변의 주된 포인트가 모두 들어 있다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "낙찰 기준과 동일가격 시 추첨 규정이 모두 context의 '8. 낙찰자 결정' 항목에 근거한다."},
+    "context_relevance": {"score": 5, "reason": "context에 해당 입찰의 낙찰자 결정 조항이 그대로 들어 있다."}
+  },
+  "j0018": {
+    "correctness": {"score": 5, "reason": "2026년 10월 20일(화)부터 10월 22일(수)까지 3일간이라는 주된 값을 정확히 제시했다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "시작일, 종료일, 3일간이라는 포인트가 모두 들어 있다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "context의 '행 사 기 간: 2026년 10월 20일(화) ~ 10월 22일(수), 3일간'과 일치한다."},
+    "context_relevance": {"score": 5, "reason": "context에 해당 행사 용역 공고와 행사 기간이 명시되어 있다."}
+  },
+  "j0019": {
+    "correctness": {"score": 5, "reason": "사업예산의 주된 값 99,000,000원과 같은 값을 사업비라는 이름으로 제시했다(규칙2, 규칙4b)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값 99,000,000원이 들어 있고 괄호 안 한글 금액·부가세 포함 표기 누락은 감점하지 않는다(규칙3)."},
+    "faithfulness": {"score": 4, "reason": "금액은 context에 있으나 '선문대학교'라는 기관명은 context에서 확인되지 않는다."},
+    "context_relevance": {"score": 4, "reason": "context가 정답 금액을 담고 있으나 사업명 등 식별 정보 없이 사업비 한 줄만 있다."}
+  },
+  "j0020": {
+    "correctness": {"score": 5, "reason": "공사기간 90일이라는 주된 값을 정확히 제시했다(규칙2)."},
+    "answer_coverage": {"score": 5, "reason": "주된 값 90일이 답변에 들어 있다(규칙3)."},
+    "faithfulness": {"score": 5, "reason": "90일은 context의 '공사 기간: 90일'에 근거하며 덧붙인 목록도 사업명을 되풀이할 뿐 새 주장이 없다."},
+    "context_relevance": {"score": 5, "reason": "context에 해당 공사의 입찰 사항과 공사 기간이 명시되어 있다."}
+  }
+}

@@ -1,0 +1,182 @@
+{
+ "j0011": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 245,339,600원이 기대 답변과 일치하며 '사업비'라는 이름 차이는 감점하지 않는다(규칙2, 규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 245,339,600원이 답변에 포함되어 있고 괄호 안 부차 정보 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에서 직접 확인되나 '두산에너빌리티 (주)'이라는 기관명은 context에 없어 사소한 근거 없는 내용이 포함된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 질문이 묻는 금액이 들어 있으나 사업명 등 해당 공고임을 확인할 정보 없이 금액 한 줄만 반복된다."
+  }
+ },
+ "j0012": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 계약체결일로부터 365일이 기대 답변과 일치한다 (괄호 안 단가발주 180일은 부차 정보라 누락해도 감점하지 않음)(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 계약체결일로부터 365일이 답변에 빠짐없이 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 계약체결일로부터 365일은 context의 해당 공고 본문에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고 문서로 답이 명시되어 있으나 입찰참가자격 등 질문과 무관한 내용이 많이 포함된다."
+  }
+ },
+ "j0013": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 245,339,600원이 기대 답변과 일치하며 '사업비'라는 이름 차이는 감점하지 않는다(규칙2, 규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 245,339,600원이 답변에 포함되어 있고 괄호 안 부차 정보 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에서 직접 확인되나 '두산에너빌리티 (주)'이라는 기관명은 context에 없어 사소한 근거 없는 내용이 포함된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 질문이 묻는 금액이 들어 있으나 사업명 등 해당 공고임을 확인할 정보 없이 금액 한 줄만 반복된다."
+  }
+ },
+ "j0014": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 착공일로부터 180일이 기대 답변과 일치한다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 착공일로부터 180일이 답변에 빠짐없이 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 착공일로부터 180일은 context의 해당 공고 본문에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고 문서로 답이 명시되어 있으나 입찰참가자격 등 질문과 무관한 내용이 많이 포함된다."
+  }
+ },
+ "j0015": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 770,250,000원이 기대 답변과 일치하며 '사업비'라는 이름 차이는 감점하지 않는다(규칙2, 규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 770,250,000원이 답변에 포함되어 있고 괄호 안 부차 정보 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "금액은 context에서 직접 확인되고 '한국마사회제주경마장'은 질문에서 온 명칭이라 새로운 주장이 없다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 질문이 묻는 금액이 들어 있으나 사업명 등 해당 공고임을 확인할 정보 없이 금액 한 줄만 반복된다."
+  }
+ },
+ "j0016": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 102,000,000원이 기대 답변과 일치하며 '사업비'라는 이름 차이는 감점하지 않는다(규칙2, 규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 102,000,000원이 답변에 포함되어 있고 괄호 안 부차 정보 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에서 직접 확인되나 '전북대학교 산학협력단'이라는 기관명은 context에 없어 사소한 근거 없는 내용이 포함된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 질문이 묻는 금액이 들어 있으나 사업명 등 해당 공고임을 확인할 정보 없이 금액 한 줄만 반복된다."
+  }
+ },
+ "j0017": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 착공일로부터 60일이 기대 답변과 일치한다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 착공일로부터 60일이 답변에 빠짐없이 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 착공일로부터 60일은 context의 해당 공고 본문에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고 문서로 답이 명시되어 있으나 입찰참가자격 등 질문과 무관한 내용이 많이 포함된다."
+  }
+ },
+ "j0018": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 26,750,000원이 기대 답변과 일치하며 '사업비'라는 이름 차이는 감점하지 않는다(규칙2, 규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 26,750,000원이 답변에 포함되어 있고 괄호 안 부차 정보 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에서 직접 확인되나 '충청북도 영동군'이라는 기관명은 context에 없어 사소한 근거 없는 내용이 포함된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 질문이 묻는 금액이 들어 있으나 사업명 등 해당 공고임을 확인할 정보 없이 금액 한 줄만 반복된다."
+  }
+ },
+ "j0019": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 착공일로부터 60일간이 기대 답변과 일치한다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 착공일로부터 60일간이 답변에 빠짐없이 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변의 착공일로부터 60일간은 context의 해당 공고 본문에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고 문서로 답이 명시되어 있으나 입찰참가자격 등 질문과 무관한 내용이 많이 포함된다."
+  }
+ },
+ "j0020": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 47,820,800원이 기대 답변과 일치하며 '사업비'라는 이름 차이는 감점하지 않는다(규칙2, 규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 47,820,800원이 답변에 포함되어 있고 괄호 안 부차 정보 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에서 직접 확인되나 '울산광역시 중구'이라는 기관명은 context에 없어 사소한 근거 없는 내용이 포함된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 질문이 묻는 금액이 들어 있으나 사업명 등 해당 공고임을 확인할 정보 없이 금액 한 줄만 반복된다."
+  }
+ }
+}

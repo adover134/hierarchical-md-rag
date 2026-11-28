@@ -1,0 +1,30 @@
+[
+ {
+  "cost_usd": 0.23371619999999999,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ]
+ },
+ {
+  "cost_usd": 0.3559448,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ]
+ },
+ {
+  "cost_usd": 0.3595502,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ]
+ },
+ {
+  "cost_usd": 0.3683296,
+  "models": [
+   "claude-haiku-5-5",
+   "claude-opus-5-5"
+  ]
+ }
+]

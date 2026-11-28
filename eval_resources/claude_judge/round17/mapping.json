@@ -1,0 +1,786 @@
+{
+ "j0001": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m12",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0002": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m16",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0003": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m2",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m2",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0004": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m19",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m19",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0005": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m17",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0006": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m12",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0007": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m10",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0008": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m9",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0009": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m9",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0010": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n17",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0011": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m5",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m5",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0012": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n19",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n19",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0013": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n17",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0014": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n20",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n20",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0015": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m4",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0016": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n5",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0017": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n7",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n7",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0018": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n13",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0019": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n13",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0020": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m17",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0021": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m16",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0022": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n2",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n2",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0023": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n15",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n15",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0024": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m6",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0025": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m11",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m11",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0026": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m20",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m20",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0027": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n8",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0028": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n18",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n18",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0029": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m14",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m14",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0030": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n1",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n1",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0031": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n9",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n9",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0032": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m6",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0033": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n16",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0034": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n14",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0035": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m3",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m3",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0036": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n14",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0037": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m18",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m18",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0038": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n11",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n11",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0039": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m13",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0040": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n12",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n12",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0041": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n8",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0042": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n3",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n3",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0043": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m15",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m15",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0044": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m4",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0045": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m10",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0046": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n16",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0047": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n4",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0048": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n5",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0049": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n6",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n6",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0050": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m1",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0051": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m1",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0052": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m7",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m7",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0053": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n4",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0054": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m13",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0055": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20",
+    "id": "m8",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20",
+    "id": "m8",
+    "repeat": 1
+   }
+  ]
+ },
+ "j0056": {
+  "origins": [
+   {
+    "run": "eval_20261127",
+    "system": "current_default",
+    "dataset": "new20_v2",
+    "id": "n10",
+    "repeat": 1
+   },
+   {
+    "run": "eval_20261127",
+    "system": "current_multi_agent",
+    "dataset": "new20_v2",
+    "id": "n10",
+    "repeat": 1
+   }
+  ]
+ }
+}

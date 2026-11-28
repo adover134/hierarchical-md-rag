@@ -1,0 +1,282 @@
+{
+ "j0001": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n19",
+  "repeat": 1
+ },
+ "j0002": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n18",
+  "repeat": 1
+ },
+ "j0003": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m12",
+  "repeat": 1
+ },
+ "j0004": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n11",
+  "repeat": 1
+ },
+ "j0005": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n14",
+  "repeat": 1
+ },
+ "j0006": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m4",
+  "repeat": 1
+ },
+ "j0007": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n16",
+  "repeat": 1
+ },
+ "j0008": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m1",
+  "repeat": 1
+ },
+ "j0009": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m10",
+  "repeat": 1
+ },
+ "j0010": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m9",
+  "repeat": 1
+ },
+ "j0011": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n13",
+  "repeat": 1
+ },
+ "j0012": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n15",
+  "repeat": 1
+ },
+ "j0013": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n2",
+  "repeat": 1
+ },
+ "j0014": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m16",
+  "repeat": 1
+ },
+ "j0015": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n4",
+  "repeat": 1
+ },
+ "j0016": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m2",
+  "repeat": 1
+ },
+ "j0017": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n8",
+  "repeat": 1
+ },
+ "j0018": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n20",
+  "repeat": 1
+ },
+ "j0019": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n1",
+  "repeat": 1
+ },
+ "j0020": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n9",
+  "repeat": 1
+ },
+ "j0021": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m19",
+  "repeat": 1
+ },
+ "j0022": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m14",
+  "repeat": 1
+ },
+ "j0023": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m18",
+  "repeat": 1
+ },
+ "j0024": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n3",
+  "repeat": 1
+ },
+ "j0025": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m6",
+  "repeat": 1
+ },
+ "j0026": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n10",
+  "repeat": 1
+ },
+ "j0027": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n12",
+  "repeat": 1
+ },
+ "j0028": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m7",
+  "repeat": 1
+ },
+ "j0029": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m15",
+  "repeat": 1
+ },
+ "j0030": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m20",
+  "repeat": 1
+ },
+ "j0031": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m17",
+  "repeat": 1
+ },
+ "j0032": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n6",
+  "repeat": 1
+ },
+ "j0033": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m13",
+  "repeat": 1
+ },
+ "j0034": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m3",
+  "repeat": 1
+ },
+ "j0035": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n7",
+  "repeat": 1
+ },
+ "j0036": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m8",
+  "repeat": 1
+ },
+ "j0037": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m11",
+  "repeat": 1
+ },
+ "j0038": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n5",
+  "repeat": 1
+ },
+ "j0039": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20",
+  "id": "m5",
+  "repeat": 1
+ },
+ "j0040": {
+  "run": "dbcmp8",
+  "system": "proc_on_title_db",
+  "dataset": "new20_v2",
+  "id": "n17",
+  "repeat": 1
+ }
+}

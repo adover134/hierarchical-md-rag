@@ -1,0 +1,182 @@
+{
+ "j0141": {
+  "correctness": {
+   "score": 5,
+   "reason": "예산 245,339,600원을 정확히 제시해 기대 답변의 주된 값과 일치한다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 요구한 예산 금액을 빠짐없이 포함했고 부가세 포함 여부는 괄호 속 부가 정보이다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "245,339,600원은 쏘유팜 공고서 context에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "쏘유팜 공고서가 포함되어 답을 찾을 수 있으나 한성케미칼·전북대 등 무관한 문서도 섞여 있다."
+  }
+ },
+ "j0142": {
+  "correctness": {
+   "score": 5,
+   "reason": "계약기간 420일을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "핵심 값 420일은 있으나 기산점인 '계약체결일로부터'가 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "계약기간 420일은 context의 입찰사항에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "SRT 팬터그래프 집전판 입찰 공고의 계약기간 항목이 context에 포함되어 있다."
+  }
+ },
+ "j0143": {
+  "correctness": {
+   "score": 5,
+   "reason": "영남영농조합법인(608,881,900원)이 쏘유팜(245,339,600원)보다 크다는 결론과 두 금액이 모두 정확하다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "비교 결론과 양측 예산 금액을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "두 금액은 context에 있으나 '약 60% 더 많은'이라는 비율 표현은 context에 없는 추론이며 기준이 부정확하다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "두 공고서가 모두 포함되어 충분하나 진주올팜·선문대 등 불필요한 문서도 섞여 있다."
+  }
+ },
+ "j0144": {
+  "correctness": {
+   "score": 0,
+   "reason": "납품기한 날짜 대신 '2027학년도, 교복, 동복, 하복'이라는 무의미한 문자열을 답해 완전히 틀렸다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "동복·하복 납품기한 날짜가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "답변 문자열은 context의 단어 조각일 뿐 질문에 대한 근거 있는 진술이 아니다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context에는 서야고·청주하이텍고 교복 문서만 있고 신목중학교 문서는 없다."
+  }
+ },
+ "j0145": {
+  "correctness": {
+   "score": 0,
+   "reason": "설치대수를 '문서에서 확인되지 않습니다'라고 답해 사실상 답변을 거부했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "240kW 파워뱅크 1기, 디스펜서 2기 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에 의성여객 설치대수가 명시되어 있는데도 확인되지 않는다고 해 context와 모순된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "의성여객 공사 공고 개요와 설치대수가 context에 정확히 포함되어 있다."
+  }
+ },
+ "j0146": {
+  "correctness": {
+   "score": 0,
+   "reason": "기초금액을 '200%'라고 답해 기대 답변 26,750,000원과 완전히 다르다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기초금액 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "200%는 context의 보험료 정산 문구에서 따온 값으로 질문과 무관하게 오용되었다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context는 영동군 공사의 보험료 정산·노무비 안내뿐이며 고양골소하천 사업 정보는 없다."
+  }
+ },
+ "j0147": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 100,000,000원을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 요구한 기초금액을 빠짐없이 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "1지역 기초금액 100,000,000원이 context 표에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "아산시 교통신호기 유지보수 공고 표가 포함되어 질문에 충분히 관련된다."
+  }
+ },
+ "j0148": {
+  "correctness": {
+   "score": 0,
+   "reason": "'사업기간은 srt, 구매'라는 무의미한 답으로 계약기간 420일을 제시하지 못했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "계약기간 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 0,
+   "reason": "답변 내용이 context의 어떤 진술에도 근거하지 않는 무의미한 문자열이다."
+  },
+  "context_relevance": {
+   "score": 1,
+   "reason": "context에 SRT 입찰명만 있고 계약기간은 없으며 대부분 선문대 문서이다."
+  }
+ },
+ "j0149": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 390,000원을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "질문이 요구한 기초금액을 빠짐없이 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액 금 390,000원이 context에 여러 차례 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "덕적초중고 통학버스 임차 용역 공고가 context에 충분히 포함되어 있다."
+  }
+ },
+ "j0150": {
+  "correctness": {
+   "score": 5,
+   "reason": "계약체결일로부터 420일이라고 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기산점과 기간을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "계약기간 항목이 context에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "SRT 팬터그래프 집전판 입찰 공고의 입찰사항이 context에 포함되어 있다."
+  }
+ }
+}

@@ -1,0 +1,182 @@
+{
+ "j0061": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 사업예산 99,000,000원이 정확하며 괄호 안 부가세 포함 표기 누락은 부차 정보다(규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 모두 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '사업예산: 금 99,000,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "사업예산 항목이 있으나 입찰서 양식·제출서류 등 무관한 내용이 많다."
+  }
+ },
+ "j0062": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 추정금액 770,250,000원이 정확하고 추가한 추정가격도 맞다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있으며 부가가치세 내역 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "추정금액과 추정가격 모두 context에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 추정금액 항목이 반복적으로 명시되어 질문에 충분히 관련된다."
+  }
+ },
+ "j0063": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 기초금액 50,000,000원이 정확하다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있고 괄호 안 내역 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 50,000,000원'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "기초금액 항목이 있으나 서약서·청렴계약 등 무관한 내용이 상당하다."
+  }
+ },
+ "j0064": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 기초금액 100,000,000원이 정확하다(규칙2, 규칙4)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context 표에 1지역 기초금액 100,000,000이 명시되어 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context 표가 해당 공고의 기초금액을 직접 담고 있다."
+  }
+ },
+ "j0065": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027년 2월 19일, 하복 2027년 5월 7일 두 주된 값이 모두 정확하다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "두 주된 값이 모두 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "납품기한이 context의 공고 표와 계약특수조건 제1조에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 납품기한을 여러 곳에서 명확히 담고 있다."
+  }
+ },
+ "j0066": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 착공일로부터 60일이 정확하다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공사의 공고문으로 공사기간을 명시한다."
+  }
+ },
+ "j0067": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 기초금액 631,400,000원이 정확하다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '₩631,400,000원, 부가가치세 포함'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 사업의 기초금액을 명시하고 있다."
+  }
+ },
+ "j0068": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 기초금액 387,660원이 정확하고 추가한 동복 264,660원도 맞으며 하복 내역 누락은 부차 정보다(규칙1, 규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있고 하복 금액 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "387,660원과 동복 264,660원 모두 context에 그대로 있다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 교복 구매의 기초금액과 내역을 명시하고 있다."
+  }
+ },
+ "j0069": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 기초금액 50,000,000원이 정확하다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있고 괄호 안 내역 누락은 감점하지 않는다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 50,000,000'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 공사 공고의 금액 항목을 담고 있다."
+  }
+ },
+ "j0070": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 착수일로부터 365일이 정확하다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '과업기간: 착수일로부터 365일'에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 해당 감리용역 공고로 과업기간을 명시한다."
+  }
+ }
+}

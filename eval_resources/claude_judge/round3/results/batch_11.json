@@ -1,0 +1,182 @@
+{
+ "j0101": {
+  "correctness": {
+   "score": 0,
+   "reason": "답변이 기초금액 228,081,000원 대신 무의미한 키워드 나열을 제시해 완전히 틀렸다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "기대 답변의 기초금액 값이 전혀 포함되지 않았다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "키워드는 context에 있으나 금액 답변으로서 context에 근거하지 않는다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context에 대상 공고의 기초금액 228,081,000원이 있으나 다른 공고 내용도 많이 섞여 있다."
+  }
+ },
+ "j0102": {
+  "correctness": {
+   "score": 5,
+   "reason": "과업기간 착수일로부터 365일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 정보를 빠짐없이 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '과업기간: 착수일로부터 365일'과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "대상 공고의 과업기간이 포함되어 있으나 입찰참가자격 등 불필요한 내용도 많다."
+  }
+ },
+ "j0103": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 예산 608,881,900원(부가세 포함)을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "예산 금액과 부가세 포함 여부를 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 예산 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 대상 공고의 예산 정보를 충분히 담고 있다."
+  }
+ },
+ "j0104": {
+  "correctness": {
+   "score": 4,
+   "reason": "주된 값인 47,820,800원은 맞으나 기초금액을 '사업비'로 잘못 지칭했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 기초금액이 포함되었고 괄호 안 세부 내역은 부차적이다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "금액은 context의 기초금액 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 대상 공고의 기초금액과 세부 내역을 직접 담고 있다."
+  }
+ },
+ "j0105": {
+  "correctness": {
+   "score": 4,
+   "reason": "365일이라는 핵심 값은 맞으나 과업기간을 '사업기간'으로 부르고 문장이 중복되는 등 표현이 부정확하다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "365일은 포함했으나 '착수일로부터'라는 기산점이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "365일은 context의 과업기간 항목에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context가 대상 공고의 과업기간을 직접 포함하고 있다."
+  }
+ },
+ "j0106": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 47,820,800원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값을 포함했고 괄호 안 추정가격·부가가치세는 부차적이다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 기초금액 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "대상 공고의 기초금액이 있으나 청렴민원 안내 등 불필요한 내용도 섞여 있다."
+  }
+ },
+ "j0107": {
+  "correctness": {
+   "score": 4,
+   "reason": "608,881,900원은 맞으나 예산을 '사업비'로 지칭했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 예산 금액이 포함되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "금액은 context의 예산 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "대상 공고 예산이 있으나 다른 히트펌프·태양광·선문대 공고 등 무관한 내용이 많다."
+  }
+ },
+ "j0108": {
+  "correctness": {
+   "score": 4,
+   "reason": "285,125,000원은 맞으나 기초금액을 '사업비'로 지칭했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 285,125,000원이 포함되었다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "금액은 context의 기초금액 항목에서 직접 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "대상 공고 기초금액이 있으나 다른 공사 및 하도급 관련 내용이 많다."
+  }
+ },
+ "j0109": {
+  "correctness": {
+   "score": 0,
+   "reason": "설치대수를 답하지 않고 문서에서 확인되지 않는다며 사실상 답변을 거부했다."
+  },
+  "answer_coverage": {
+   "score": 0,
+   "reason": "파워뱅크 1기, 디스펜서 2기 정보가 전혀 없다."
+  },
+  "faithfulness": {
+   "score": 1,
+   "reason": "context에 설치대수가 명시되어 있는데도 없다고 답해 context와 어긋난다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 대상 공고의 설치대수가 직접 포함되어 있다."
+  }
+ },
+ "j0110": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 60일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "60일은 포함했으나 '착공일로부터'라는 기산점이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "대상 공고의 공사기간이 있으나 다른 내용도 섞여 있다."
+  }
+ }
+}

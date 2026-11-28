@@ -1,0 +1,182 @@
+{
+ "j0001": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 50,000,000원을 정확히 제시했고, 사업비라는 다른 이름을 쓴 것은 감점하지 않는다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "주된 값은 포함했으나 괄호 안의 추정가격과 부가가치세 내역은 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "답변 내용이 context의 '사업비: 약 5,000만 원 (50,000,000원)'과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "context는 검증된 공고 문서이고 금액을 담고 있으나, 추정가격과 부가세 같은 세부 정보 없이 요약 한 줄뿐이다."
+  }
+ },
+ "j0002": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 120일을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "기산점인 '착공일로부터'라는 표현이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 120일'에 근거한 답이다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "검증된 (건축) 공고 문서로 답이 들어 있으나, 유의사항 등 질문과 관련 없는 내용이 많다."
+  }
+ },
+ "j0003": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 26,750,000원과 같은 값을 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 핵심 값을 빠짐없이 담았다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 사업비 값과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 영동군 공고 문서이며 필요한 금액을 담고 있다."
+  }
+ },
+ "j0004": {
+  "correctness": {
+   "score": 5,
+   "reason": "행사 기간을 2026년 10월 20일부터 22일까지 3일간으로 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "날짜, 요일, 일수를 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '행 사 기 간' 항목과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 공고 문서로 행사 기간이 명시되어 있다."
+  }
+ },
+ "j0005": {
+  "correctness": {
+   "score": 5,
+   "reason": "한서대학교 용역의 사업예산이 더 크다는 비교 결과가 정확하다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "비교 결과를 담았고, 근거 금액이 없는 것은 감점하지 않는다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 220,000,000원과 150,000,000원을 비교한 결과에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "두 공고의 사업예산이 모두 context에 들어 있다."
+  }
+ },
+ "j0006": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027.2.19.(금), 하복 2027.5.7.(금)으로 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "동복과 하복의 납품기한을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 납품기한 항목과 계약특수조건 제1조에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 서야고 재공고 문서로 납품기한이 여러 번 명시되어 있다."
+  }
+ },
+ "j0007": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 60일을 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "기산점인 '착공일로부터'라는 표현이 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 60일'에 근거한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "검증된 영동군 공고 문서로 답이 들어 있으나, 하도급지킴이와 노무비 등 관련 없는 내용이 많다."
+  }
+ },
+ "j0008": {
+  "correctness": {
+   "score": 5,
+   "reason": "동복 2027.2.22.(월), 하복 2027.5.10.(월)으로 정확히 답했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "동복과 하복의 납품기한을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 납품기한 항목과 계약특수조건 제3조에 근거한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 신목중 공고 문서로 납품기한이 명시되어 있다."
+  }
+ },
+ "j0009": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 33,690,000원과 같은 값을 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "핵심 값을 빠짐없이 담았다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 사업비 값과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "검증된 영동군 공고 문서이며 필요한 금액을 담고 있다."
+  }
+ },
+ "j0010": {
+  "correctness": {
+   "score": 5,
+   "reason": "기초금액 631,400,000원을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 4,
+   "reason": "괄호 안의 '부가가치세 포함'이라는 정보가 빠졌다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 사업비 631,400,000원과 그대로 일치한다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "검증된 한성케미칼 공고 문서로 금액은 있으나, 부가세 포함 여부 같은 세부 정보가 없는 요약이다."
+  }
+ }
+}

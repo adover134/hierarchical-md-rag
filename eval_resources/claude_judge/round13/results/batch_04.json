@@ -1,0 +1,182 @@
+{
+ "j0031": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 240kW 파워뱅크 1기와 디스펜서 2기를 정확히 제시했고 '총 3기' 합산은 기대 값과 모순되지 않는다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 주된 포인트(파워뱅크 1기, 디스펜서 2기)가 모두 들어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "구성은 context에서 직접 확인되나 '총 3기'라는 합산은 context에 없는 추론이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공고의 설치대수가 명시되어 질문에 충분히 관련된다."
+  }
+ },
+ "j0032": {
+  "correctness": {
+   "score": 2,
+   "reason": "합계 7기는 2+5와 일치하나 주된 값인 240kW 파워뱅크 2기와 디스펜서 5기의 구성이 모두 빠져 기대 답변과 일부만 맞는다(규칙2, 규칙7)."
+  },
+  "answer_coverage": {
+   "score": 1,
+   "reason": "주된 포인트인 파워뱅크 2기·디스펜서 5기 구분이 전혀 언급되지 않고 합계만 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "context의 파워뱅크 2기와 디스펜서 5기를 더한 추론값으로 환각은 없으나 합산은 context에 직접 나오지 않는다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 해당 공고의 설치대수가 명시되어 질문에 충분히 관련된다."
+  }
+ },
+ "j0033": {
+  "correctness": {
+   "score": 5,
+   "reason": "더 큰 쪽으로 영남영농조합법인을 고르고 두 금액도 기대 답변과 일치하며 '사업비' 라벨 차이는 감점하지 않는다(규칙4b, 규칙5)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "선택 대상과 두 예산 값이 모두 포함되어 있다(규칙3, 규칙5)."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "두 금액은 context에 있으나 어느 금액이 어느 기관의 것인지 context에 나오지 않아 기관 대응은 추론이다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "두 예산 금액은 있으나 기관명이 없어 비교 대상 식별에 필요한 정보가 부족하다."
+  }
+ },
+ "j0034": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 공사기간 60일이 맞다(규칙2)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 포인트 60일이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context에 '공사기간: 착공일로부터 60일'이 직접 있다."
+  },
+  "context_relevance": {
+   "score": 4,
+   "reason": "해당 공고의 공사기간이 명시되어 있으나 하도급지킴이·노무비 등 무관한 내용이 많이 섞여 있다."
+  }
+ },
+ "j0035": {
+  "correctness": {
+   "score": 5,
+   "reason": "금액 100,000,000원이 기대 기초금액과 같고 '사업비' 라벨 차이는 감점하지 않는다(규칙4a, 규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 100,000,000원이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '충청남도 아산시'라는 기관명은 context에 없는 정보다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context는 '사업비' 한 줄만 반복되어 금액은 있으나 사업명·기관 식별 정보와 '기초금액' 라벨이 없어 핵심 확인 정보가 일부 부족하다."
+  }
+ },
+ "j0036": {
+  "correctness": {
+   "score": 5,
+   "reason": "더 큰 쪽으로 장애인승강기 설치공사(건축)를 정확히 골랐고 괄호 안 금액 누락과 '사업비' 라벨은 감점하지 않는다(규칙1, 규칙4b, 규칙5)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 사실인 선택 대상이 포함되어 있고 괄호 안 금액은 부차 정보다(규칙1, 규칙3, 규칙7)."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "두 기초금액은 context에 있으나 어느 금액이 건축·통신인지 context에 나오지 않아 선택은 추론에 기대고 있다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "두 기초금액은 있으나 공사 구분(건축/통신)이 없어 비교에 필요한 식별 정보가 부족하다."
+  }
+ },
+ "j0037": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 387,660원이 일치하고 괄호 안 동·하복 내역 누락과 '사업비' 라벨은 감점하지 않는다(규칙1, 규칙2, 규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 387,660원이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '충청북도교육청'이라는 기관명은 context에 없다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context는 '사업비' 한 줄만 반복되어 금액은 있으나 사업명·기관 식별 정보와 '기초금액' 라벨이 없어 핵심 확인 정보가 일부 부족하다."
+  }
+ },
+ "j0038": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 285,125,000원이 일치하고 '사업비' 라벨 차이는 감점하지 않는다(규칙2, 규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 285,125,000원이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '충청남도 서천군 농업기술센터'라는 기관명은 context에 없다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context는 '사업비' 한 줄만 반복되어 금액은 있으나 사업명·기관 식별 정보와 '기초금액' 라벨이 없어 핵심 확인 정보가 일부 부족하다."
+  }
+ },
+ "j0039": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 78,364,000원이 일치하고 괄호 안 추정가격·구성 내역 누락은 감점하지 않는다(규칙1, 규칙2, 규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 78,364,000원이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '주식회사 헤르스'라는 기관명은 context에 없다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context는 '사업비' 한 줄만 반복되어 금액은 있으나 사업명·기관 식별 정보와 '기초금액' 라벨이 없어 핵심 확인 정보가 일부 부족하다."
+  }
+ },
+ "j0040": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 631,400,000원이 일치하고 '사업비' 라벨 차이는 감점하지 않는다(규칙2, 규칙4b)."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값 631,400,000원이 포함되어 있다(규칙3)."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "금액은 context에 있으나 '(주)한성케미칼'이라는 기관명은 context에 없다."
+  },
+  "context_relevance": {
+   "score": 3,
+   "reason": "context는 '사업비' 한 줄만 반복되어 금액은 있으나 사업명·기관 식별 정보와 '기초금액' 라벨이 없어 핵심 확인 정보가 일부 부족하다."
+  }
+ }
+}

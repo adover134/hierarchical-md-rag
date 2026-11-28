@@ -1,0 +1,182 @@
+{
+ "j0011": {
+  "correctness": {
+   "score": 5,
+   "reason": "행사 기간 2026년 10월 20일~22일, 3일간을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 시작일, 종료일, 기간을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '행 사 기 간: 2026년 10월 20일(화) ~ 10월 22일(수), 3일간'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문에 필요한 값이 명시되어 있어 답변에 충분하다."
+  }
+ },
+ "j0012": {
+  "correctness": {
+   "score": 3,
+   "reason": "240kW 파워뱅크 1기는 맞지만 주된 값인 디스펜서 2기를 명시하지 않아 규칙2에 따라 최대 3점이다."
+  },
+  "answer_coverage": {
+   "score": 3,
+   "reason": "주된 포인트 3개 중 디스펜서 2기가 빠져 규칙3에 따라 낮췄다."
+  },
+  "faithfulness": {
+   "score": 4,
+   "reason": "파워뱅크 1기는 context에 있으나 '총 3기'는 context에 없는 합산 추론이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 설치대수(240kW 파워뱅크 1기, 디스펜서 2기)가 명시되어 있다."
+  }
+ },
+ "j0013": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값인 기초금액 102,000,000원이 정확하며 괄호 안 내역 누락은 규칙2에 따라 감점하지 않는다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있고 부차 정보 누락은 규칙3에 따라 감점하지 않는다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '기초금액: 102,000,000원'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문에 필요한 값이 명시되어 있어 답변에 충분하다."
+  }
+ },
+ "j0014": {
+  "correctness": {
+   "score": 5,
+   "reason": "주된 값 387,660원이 정확하고 함께 적은 동복 264,660원도 맞아 규칙2에 따라 5점이다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값이 포함되어 있고 하복 금액 누락은 부차 정보라 규칙3에 따라 감점하지 않는다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "기초금액 387,660원과 동복 264,660원 모두 context에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문에 필요한 값이 명시되어 있어 답변에 충분하다."
+  }
+ },
+ "j0015": {
+  "correctness": {
+   "score": 5,
+   "reason": "공사기간 120일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 120일이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '공사기간: 착공일로부터 120일'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문에 필요한 값이 명시되어 있어 답변에 충분하다."
+  }
+ },
+ "j0016": {
+  "correctness": {
+   "score": 5,
+   "reason": "예산 245,339,600원이 한글 금액 표기와 같은 값이라 규칙4(a)에 따라 정확하다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 예산 금액이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '예산: ...(245,339,600원, 부가세 포함)'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문에 필요한 값이 명시되어 있어 답변에 충분하다."
+  }
+ },
+ "j0017": {
+  "correctness": {
+   "score": 2,
+   "reason": "주된 값인 240kW 파워뱅크 2기와 디스펜서 5기를 제시하지 않고 합계 7기만 답해 핵심 값이 빠졌다."
+  },
+  "answer_coverage": {
+   "score": 2,
+   "reason": "주된 포인트 3개(240kW, 2기, 5기)가 모두 빠지고 합계만 있어 일부만 언급한 수준이다."
+  },
+  "faithfulness": {
+   "score": 3,
+   "reason": "'7기'는 context에 직접 없고 2기와 5기를 합산한 추론이다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 설치대수(240kW 파워뱅크 2기, 디스펜서 5기)가 명시되어 있다."
+  }
+ },
+ "j0018": {
+  "correctness": {
+   "score": 5,
+   "reason": "사업예산이 더 큰 쪽으로 한서대학교 용역을 선택하고 두 금액도 정확해 규칙5에 따라 5점이다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "선택 대상과 두 사업의 예산을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "두 예산과 계약 종료일 모두 context에서 확인된다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 두 사업의 사업예산이 모두 들어 있어 비교에 충분하다."
+  }
+ },
+ "j0019": {
+  "correctness": {
+   "score": 5,
+   "reason": "납품기한 2026년 12월 31일을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "주된 값인 납품기한이 포함되어 있다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 '납품기한 : 2026. 12. 31.'과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문에 필요한 값이 명시되어 있어 답변에 충분하다."
+  }
+ },
+ "j0020": {
+  "correctness": {
+   "score": 5,
+   "reason": "행사 기간 2026년 10월 20일~22일, 3일간을 정확히 제시했다."
+  },
+  "answer_coverage": {
+   "score": 5,
+   "reason": "기대 답변의 시작일, 종료일, 기간을 모두 포함했다."
+  },
+  "faithfulness": {
+   "score": 5,
+   "reason": "context의 행사 기간 항목과 일치한다."
+  },
+  "context_relevance": {
+   "score": 5,
+   "reason": "context에 질문에 필요한 값이 명시되어 있어 답변에 충분하다."
+  }
+ }
+}
