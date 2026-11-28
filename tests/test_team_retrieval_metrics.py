@@ -26,6 +26,16 @@ def test_chunk_recall_is_the_share_of_labelled_chunks_in_the_top_k():
     assert team_retrieval_metrics(docs, GT, 5)["chunk_recall"] == 0.5
 
 
+def test_chunk_recall_is_null_for_an_answer_that_uses_no_chunks():
+    row = team_retrieval_metrics([_doc("step2_audited_가 공사_가 기관.md")], GT, 5, uses_chunks=False)
+    assert row["chunk_recall"] is None
+    assert row["source_recall"] == 1.0 and row["source_hit_position"] == 1
+
+
+def test_chunk_recall_is_zero_when_a_chunk_search_finds_nothing():
+    assert team_retrieval_metrics([], GT, 5)["chunk_recall"] == 0.0
+
+
 def test_chunk_recall_is_none_without_labels():
     row = team_retrieval_metrics([_doc("가 공사_가 기관", "h_1")], {"sources": ["가 공사_가 기관"]}, 5)
     assert row["chunk_recall"] is None

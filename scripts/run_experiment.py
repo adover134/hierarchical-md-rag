@@ -424,8 +424,12 @@ def _chunk_lookup(chunks: list[dict]) -> dict[str, dict]:
     return {c["id"]: c for c in chunks}
 
 
-def team_retrieval_metrics(docs: list[dict], ground_truth: dict, k: int) -> dict[str, Any]:
-    """팀 평가 코드의 검색 지표(문서 Recall@K, 문서 순위, chunk Recall@K). chunk 라벨이 없으면 chunk Recall은 None이다."""
+def team_retrieval_metrics(docs: list[dict], ground_truth: dict, k: int, uses_chunks: bool = True) -> dict[str, Any]:
+    """팀 평가 코드의 검색 지표(문서 Recall@K, 문서 순위, chunk Recall@K).
+
+    chunk를 보지 않고 만든 답(단축 경로)은 chunk 단위 채점 대상이 아니므로 chunk Recall이 None이다.
+    chunk 라벨이 없어도 None이다. 문서 단위 지표는 모든 답에 계산한다.
+    """
     from src.evaluation import metrics as M
 
     gt_sources = ground_truth.get("sources", [])
@@ -435,7 +439,7 @@ def team_retrieval_metrics(docs: list[dict], ground_truth: dict, k: int) -> dict
     return {
         "source_hit_position": M.calculate_hit_position(retrieved_for_metrics, gt_sources) if gt_sources else None,
         "source_recall": M.calculate_recall_at_k(retrieved_for_metrics, gt_sources, k=k) if gt_sources else None,
-        "chunk_recall": M.calculate_recall_at_k_chunk(docs, labels, k=k),
+        "chunk_recall": M.calculate_recall_at_k_chunk(docs, labels, k=k) if uses_chunks else None,
     }
 
 
@@ -492,7 +496,8 @@ def cmd_evaluate(cfg: dict, args: argparse.Namespace) -> None:
             kv_pos = M.calculate_key_value_hit_position(texts, key_values) if key_values else None
             labelled = chunk_labels.get(rec["id"], {})
             retrieval = team_retrieval_metrics(docs, {**{key: labelled.get(key, []) for key in ("chunk_uids", "chunk_orders")},
-                                                      "sources": gt_sources}, k)
+                                                      "sources": gt_sources}, k,
+                                               uses_chunks=not rec.get("csv_short_circuit", False))
             header_meta = [lookup.get(str(d.get("chunk_id")), {}) for d in docs]
 
             row = {
