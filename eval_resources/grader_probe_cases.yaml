@@ -1,0 +1,104 @@
+# 채점기 시험 사례(scripts/judge_probe.py). 채점기를 시험하는 항목이며 그 점수는 답의 점수가 아니다.
+#   context_swaps: 답은 두고 context만 바꾼다(context_from 항목의 것, 또는 적어 둔 context) -> Context relevance 3점 이하여야 한다
+#   altered_answers: 답의 값만 틀리게 바꾼다 -> Correctness와 Faithfulness가 3점 이하여야 한다
+#   keep_deducted: 감점이 남아야 한다고 판단한 항목과 축(m1은 원문에 없는 '예산')
+context_swaps:
+- id: m8
+  system: current_default
+  kind: 다른 기관·다른 사업 (m7의 context)
+  context_from:
+    id: m7
+    system: current_default
+- id: m13
+  system: current_default
+  kind: 값이 같은 다른 사업 (n13의 context)
+  context_from:
+    id: n13
+    system: current_default
+- id: m19
+  system: current_default
+  kind: 다른 기관·다른 사업 (n20(비교 문항)의 context)
+  context_from:
+    id: n20
+    system: current_default
+- id: n4
+  system: current_default
+  kind: 다른 학교의 같은 종류 (n5(다른 학교)의 context)
+  context_from:
+    id: n5
+    system: current_default
+- id: n15
+  system: current_default
+  kind: 같은 기관·같은 금액 (1지역 질문에 2지역 공고)
+  context: |-
+    사업비: 약 1.0억 원 (100,000,000원)
+
+    [2026년 하반기 도로조명 유지보수공사 단가계약(2지역) - step2_audited_2026년 하반기 도로조명 유지보수공사 단가계약(2지역)_충청남도 아산시.md] | project=충청남도 아산시
+    사업비: 약 1.0억 원 (100,000,000원)
+- id: n15
+  system: current_multi_agent
+  kind: 같은 기관·같은 금액 (1지역 질문에 3지역 공고)
+  context: |-
+    사업비: 약 1.0억 원 (100,000,000원)
+
+    [2026년 하반기 도로조명 유지보수공사 단가계약(3지역) - step2_audited_2026년 하반기 도로조명 유지보수공사 단가계약(3지역)_충청남도 아산시.md] | project=충청남도 아산시
+    사업비: 약 1.0억 원 (100,000,000원)
+- id: n18
+  system: current_default
+  kind: 같은 기관·다른 금액 (n19(다른 조합)의 context)
+  context_from:
+    id: n19
+    system: current_default
+- id: n18
+  system: current_multi_agent
+  kind: 다른 기관·다른 사업 (n15의 context)
+  context_from:
+    id: n15
+    system: current_multi_agent
+altered_answers:
+- id: m3
+  system: current_default
+  replace:
+  - - 약 7.7억 원 (770,250,000원)
+    - 약 7.1억 원 (707,250,000원)
+- id: m4
+  system: current_default
+  replace:
+  - - 2026년 12월 31일
+    - 2026년 11월 30일
+- id: m9
+  system: current_default
+  replace:
+  - - 8월 12일 15:00
+    - 8월 17일 15:00
+- id: m10
+  system: current_default
+  replace:
+  - - 10월 20일(화)부터 10월 22일(수)
+    - 10월 27일(화)부터 10월 29일(목)
+- id: m17
+  system: current_default
+  replace:
+  - - 착공일로부터 60일
+    - 착공일로부터 90일
+- id: n9
+  system: current_default
+  replace:
+  - - 약 2,675만 원 (26,750,000원)
+    - 약 2,975만 원 (29,750,000원)
+- id: n11
+  system: current_default
+  replace:
+  - - 약 2.3억 원 (228,081,000원)
+    - 약 2.8억 원 (282,081,000원)
+- id: n19
+  system: current_default
+  replace:
+  - - 약 6.1억 원 (608,881,900원)
+    - 약 6.8억 원 (680,881,900원)
+keep_deducted:
+- id: m1
+  system: current_default
+  axes:
+  - correctness
+  - faithfulness

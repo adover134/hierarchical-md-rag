@@ -3,7 +3,7 @@
 생성은 로컬 gpt-oss:20b가 하고, 채점은 항상 Claude가 한다(별도 API 키 없이 서브에이전트가 채점). 이 스크립트는 그 중간 단계다.
 
   export  저장된 답변(`<run>/<system>_raw.json`)을 시스템·실행 식별 없이 섞어 배치 파일로 내보낸다. 루브릭(`rubric.md`)과 매핑도 함께 쓴다.
-          루브릭은 팀 rubric(`src/evaluation/llm_judge.py`)에 추가 기준 5개를 붙인 것이다(docs/judge_rules.md).
+          루브릭은 팀 rubric(`src/evaluation/llm_judge.py`)에 추가 기준 5개를 붙인 것으로, `.claude/agents/rag-judge.md`에 있다.
           서브에이전트는 배치 파일마다 채점해 `results/batch_XX.json`을 쓴다.
   import  결과를 검증하고 `run_experiment.py evaluate`가 읽는 캐시(`<run>/judge_cache/<system>/…json`)로 옮긴다.
           기존 gpt-oss 채점 캐시는 `judge_cache_gptoss_ref/`로 옮겨 참고용으로 남기고, 기존 summary.json도 `summary_gptoss_ref.json`으로 둔다.
@@ -26,6 +26,10 @@ from typing import Any
 
 import yaml
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from judge_agents import judge_sections  # noqa: E402
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 RUNS_DIR = REPO_ROOT / "eval_resources" / "experiment_runs"
 DATASETS = ("eval_resources/eval_dataset_new20.yaml", "eval_resources/eval_dataset_new20_v2.yaml")
@@ -33,33 +37,10 @@ AXES = ("correctness", "answer_coverage", "faithfulness", "context_relevance")
 # 큰 번호는 프로젝트 버전이 바뀔 때만 올리고, 같은 프로젝트 버전 안의 변경은 소수점 뒤를 올린다.
 RUBRIC_VERSION = "v6.2"
 
-EXTRA_CRITERIA = """
-
-## 추가 기준
-1. Correctness는 기대 답변의 주된 값(괄호 밖의 값과 사실)으로 판단한다.
-   괄호 안의 값이 빠지거나 달라도 Correctness를 깎지 않는다.
-   괄호 밖의 값과 사실은 모두 있어야 한다.
-2. 비교 질문의 답은 비교 결과다. 비교의 근거가 된 값이 답변에 없어도
-   Correctness와 Answer coverage를 깎지 않는다.
-3. 질문이 묻는 금액의 이름과 답변이나 context가 쓴 이름이 달라도(예: 기초금액을 사업비로)
-   값이 같으면 Correctness, Answer coverage, Context relevance를 깎지 않는다.
-4. 질문에 적힌 사업 이름과 context의 공고명이나 문서 이름이 달라도, 그것만으로 다른 문서나 다른 사업이라고
-   판단하지 않는다. 답변이 문서나 context의 공고명, 기관명을 쓴 것도 감점하지 않는다.
-   공고명 말고도 다른 문서임을 보여 주는 내용(질문과 다른 기관, 질문과 무관한 본문)이 있으면 그 내용으로 판단한다.
-   이 기준은 네 축 모두에 적용한다.
-5. Context relevance는 기대 답변에서 context 방향으로 판단한다.
-   질문의 공고(검증 결과의 공고)에서 온 context에 기대 답변의 주된 값(괄호 밖의 값과 사실)이 있으면 5점이고,
-   함께 있는 다른 내용은 깎지 않는다. 확인되지 않는 정도에 따라 깎는다.
-   다른 공고의 context는 값이 같아도 인정하지 않는다.
-"""
-
 
 def rubric_text() -> str:
-    """채점자가 읽는 `rubric.md`: 팀 rubric 그대로에 승인받은 추가 기준 5개만 붙인다."""
-    sys.path.insert(0, str(REPO_ROOT))
-    from src.evaluation.llm_judge import JUDGE_SYSTEM_PROMPT
-
-    return JUDGE_SYSTEM_PROMPT + EXTRA_CRITERIA
+    """채점자가 읽는 `rubric.md`: `.claude/agents/rag-judge.md`의 루브릭 부분(팀 rubric 그대로 + 승인받은 추가 기준 5개)."""
+    return judge_sections()[0]
 
 
 def chunk_metadata(db_path: Path) -> dict[str, dict]:

@@ -22,10 +22,9 @@ from typing import Callable
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from claude_judge import AXES, validate_results  # noqa: E402
+from judge_agents import judge_sections  # noqa: E402
 
-BASE_INSTRUCTION = ("당신은 RAG 답변 채점자다.\n"
-                    "입력은 항목의 JSON 목록이다. 모든 항목을 위 루브릭대로 채점한다.\n"
-                    "결과는 item_id를 키로, 값은 루브릭의 JSON 형식으로 낸다.")
+BASE_INSTRUCTION = judge_sections()[1]  # .claude/agents/rag-judge.md
 
 
 def system_prompt(round_dir: Path) -> str:
